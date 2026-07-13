@@ -4,12 +4,15 @@
   "description": "Virtual Marketer - High-performance static HTML website",
   "main": "scripts/build.js",
   "scripts": {
-    "dev": "node scripts/dev.js",
+    "dev": "node server.js",
+    "start": "node server.js",
     "build": "node scripts/build.js",
+    "seo": "node scripts/seo-optimize.js",
     "optimize": "node scripts/optimize.js",
     "clean": "rm -rf dist/",
     "analyze": "node scripts/analyze.js",
-    "test": "node scripts/test.js"
+    "prebuild": "npm run clean",
+    "postbuild": "npm run seo"
   },
   "keywords": ["static", "site", "performance", "optimization"],
   "author": "Virtual Marketer",
