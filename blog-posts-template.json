@@ -1,0 +1,82 @@
+{
+  "posts": [
+    {
+      "title": "AI-Regulierung in Deutschland 2026: Compliance für KI-Marketinglösungen",
+      "slug": "ai-regulierung-deutschland-2026-compliance",
+      "date": "2026-07-14",
+      "updated": "2026-07-14",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Erfahren Sie, wie deutsche und EU-Regulierungen die KI-Marketingindustrie 2026 beeinflussen und wie Sie compliant bleiben.",
+      "keywords": "AI-Regulierung, GDPR, Deutschland, Compliance, Generative AI",
+      "content": "<h2>Einführung</h2><p>Die Regulierung von künstlicher Intelligenz in Deutschland und der EU wird immer strenger. Unternehmen, die KI-Marketinglösungen einsetzen, müssen diese neuen Anforderungen verstehen.</p><h2>Der AI Act der EU</h2><p>Der AI Act klassifiziert KI-Systeme nach Risikostufen...</p>",
+      "featuredImage": true
+    },
+    {
+      "title": "Multimodale KI im Marketing: Text, Bild und Video vereint",
+      "slug": "multimodale-ki-marketing-2026",
+      "date": "2026-07-15",
+      "updated": "2026-07-15",
+      "author": "Virtual Marketer Team",
+      "category": "AI-Trends",
+      "description": "Multimodale AI-Modelle revolutionieren das Marketing. Erfahren Sie, wie Sie Text, Bilder und Videos zusammen nutzen.",
+      "keywords": "Multimodale KI, Marketing Automation, Generative AI, Content Creation",
+      "content": "<h2>Was ist Multimodale KI?</h2><p>Multimodale KI-Systeme können gleichzeitig mit Text, Bildern, Videos und Audio arbeiten...</p>",
+      "featuredImage": true
+    },
+    {
+      "title": "E-Commerce ROI mit AI-Produktbeschreibungen: Fallstudie 2026",
+      "slug": "ecommerce-roi-ai-produktbeschreibungen-2026",
+      "date": "2026-07-16",
+      "updated": "2026-07-16",
+      "author": "Virtual Marketer Team",
+      "category": "Use Cases",
+      "description": "Case Study: Wie ein E-Commerce-Unternehmen mit KI-Produktbeschreibungen 40% mehr Conversions erreichte.",
+      "keywords": "E-Commerce, Produktbeschreibungen, AI, ROI, Fallstudie",
+      "content": "<h2>Das Problem</h2><p>Ein führender deutscher E-Commerce-Shop hatte tausende Produkte mit manuell verfassten Beschreibungen...</p>",
+      "featuredImage": true
+    },
+    {
+      "title": "Voice Search Optimization für die KI-Ära",
+      "slug": "voice-search-optimization-2026",
+      "date": "2026-07-17",
+      "updated": "2026-07-17",
+      "author": "Virtual Marketer Team",
+      "category": "SEO",
+      "description": "Voice Search wird 2026 dominanter. Optimieren Sie Ihre Website für Alexa, Google Assistant und Siri.",
+      "keywords": "Voice Search, SEO 2026, Voice Assistant, Sprachsuche",
+      "content": "<h2>Die Voice Search Revolution</h2><p>Über 50% der Suchanfragen erfolgen jetzt über Sprachassistenten...</p>",
+      "featuredImage": true
+    },
+    {
+      "title": "Generative AI für Kundenpersonalisierung: Best Practices",
+      "slug": "generative-ai-kundenpersonalisierung",
+      "date": "2026-07-18",
+      "updated": "2026-07-18",
+      "author": "Virtual Marketer Team",
+      "category": "Marketing",
+      "description": "Nutzen Sie Generative AI für persönliche Kundenbeziehungen im Großmaßstab.",
+      "keywords": "Personalisierung, Generative AI, Customer Experience, Marketing Automation",
+      "content": "<h2>Warum Personalisierung jetzt kritisch ist</h2><p>Kunden erwarten personalisierte Erlebnisse – aber die manuelle Personalisierung skaliert nicht...</p>",
+      "featuredImage": true
+    },
+    {
+      "title": "AI in Higher Education: Virtuelle Lernassistenten 2026",
+      "slug": "ai-higher-education-lernassistenten",
+      "date": "2026-07-19",
+      "updated": "2026-07-19",
+      "author": "Virtual Marketer Team",
+      "category": "Bildung",
+      "description": "Wie deutsche Universitäten KI-Lernassistenten einsetzen, um Studierenden zu helfen.",
+      "keywords": "Education, AI, Lernassistenten, Hochschulen, Deutschland",
+      "content": "<h2>Die Zukunft des Lernens</h2><p>Virtuelle Lernassistenten bieten 24/7 Unterstützung für Studierende...</p>",
+      "featuredImage": true
+    }
+  ],
+  "schedule": {
+    "weekOfJuly14": ["ai-regulierung-deutschland-2026-compliance", "multimodale-ki-marketing-2026"],
+    "weekOfJuly21": ["ecommerce-roi-ai-produktbeschreibungen-2026", "voice-search-optimization-2026"],
+    "weekOfJuly28": ["generative-ai-kundenpersonalisierung"],
+    "weekOfAugust4": ["ai-higher-education-lernassistenten"]
+  }
+}
