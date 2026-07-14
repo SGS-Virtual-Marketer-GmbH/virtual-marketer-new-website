@@ -65,8 +65,14 @@ function serveFile(filePath, req, res) {
     const acceptEncoding = req.headers['accept-encoding'] || '';
 
     // Cache settings
+    // Note: this is the *local dev* server (server.js) — production caching
+    // is governed by docker/nginx.conf instead, which does cache HTML briefly.
+    // Here, HTML is deliberately never cached so `npm run build` output is
+    // always visible on the next reload without manual cache-busting.
     if (filePath.match(/\.(css|js|woff|woff2|ttf|png|jpg|jpeg|gif|webp)$/i)) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     } else {
       res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
     }
@@ -142,7 +148,14 @@ const server = http.createServer((req, res) => {
   metrics.requests++;
 
   // Handle root and trailing slash
-  let urlPath = req.url.split('?')[0]; // Remove query string
+  // Decode first: many filenames on disk are literal WordPress-export
+  // artifacts like "style.css?ver=7.0.1.css" (the "?" is part of the
+  // filename, not a query string) — the HTML references them as
+  // "style.css%3Fver=7.0.1.css". Order matters: split off any real query
+  // string FIRST (on the still-encoded "?"), then decode — decoding first
+  // would turn "%3F" into "?" and the split would strip it right back off,
+  // silently 404-ing every such asset.
+  let urlPath = decodeURIComponent(req.url.split('?')[0]);
   if (urlPath === '/') {
     urlPath = '/index.html';
   } else if (!path.extname(urlPath) && !urlPath.endsWith('/')) {

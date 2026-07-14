@@ -7,6 +7,10 @@ Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
 Disallow: /blog/page/
+Disallow: /tag/
+Disallow: /category/
+Disallow: /author/
+Disallow: /login/
 
 Sitemap: https://virtual-marketer.de/sitemap.xml
 Sitemap: https://virtual-marketer.de/sitemap_index.xml

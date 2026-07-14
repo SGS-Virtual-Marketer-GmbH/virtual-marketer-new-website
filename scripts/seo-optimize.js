@@ -73,6 +73,34 @@ const pageMetadata = {
     keywords: 'Impressum, Kontakt, Rechtliche Informationen',
     type: 'policy',
     geo: { country: 'DE' }
+  },
+  '/faqs/': {
+    title: 'Häufig gestellte Fragen (FAQ) | Virtual Marketer',
+    description: 'Antworten auf häufige Fragen zu Virtual Marketer: Passt die KI-Lösung zu Ihrem Unternehmen, Onboarding-Dauer, Kosten und Pakete.',
+    keywords: 'FAQ, Häufige Fragen, Virtual Marketer, KI Marketing',
+    type: 'website',
+    geo: { country: 'DE' }
+  },
+  '/modell-anfragen/': {
+    title: 'Custom KI-Modell anfragen | Virtual Marketer',
+    description: 'Fordern Sie ein individuelles KI-Modell für Ihr Unternehmen an. Maßgeschneiderte Marketing-Automatisierung von Virtual Marketer.',
+    keywords: 'Custom KI Modell, Modell anfragen, KI Individuallösung',
+    type: 'product',
+    geo: { country: 'DE' }
+  },
+  '/virtual-marketer-demo/': {
+    title: 'Demo buchen | Virtual Marketer',
+    description: 'Buchen Sie eine unverbindliche Demo und erleben Sie Virtual Marketer live in Aktion — Ihre KI-Marketinglösung aus Deutschland.',
+    keywords: 'Demo buchen, Virtual Marketer testen, KI Marketing Demo',
+    type: 'website',
+    geo: { country: 'DE' }
+  },
+  '/nutzungsbedingungen/': {
+    title: 'Nutzungsbedingungen | Virtual Marketer',
+    description: 'Nutzungsbedingungen für die Verwendung der Virtual Marketer Plattform und Services.',
+    keywords: 'Nutzungsbedingungen, AGB, Virtual Marketer',
+    type: 'policy',
+    geo: { country: 'DE' }
   }
 };
 

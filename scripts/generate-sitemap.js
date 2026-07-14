@@ -37,7 +37,7 @@ const REDIRECT_SLUGS = new Set(['home']);
 // the original WordPress scrape (e.g. /blog/page/2/) — excluded from the
 // sitemap to avoid duplicate-content signals; still reachable, just not
 // submitted for indexing.
-const EXCLUDE_PATH_PREFIXES = ['/blog/page/'];
+const EXCLUDE_PATH_PREFIXES = ['/blog/page/', '/tag/', '/category/', '/author/', '/login/'];
 
 // Priority + change frequency rules
 function priorityFor(urlPath) {
@@ -104,6 +104,10 @@ Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
 Disallow: /blog/page/
+Disallow: /tag/
+Disallow: /category/
+Disallow: /author/
+Disallow: /login/
 
 Sitemap: ${BASE_URL}/sitemap.xml
 Sitemap: ${BASE_URL}/sitemap_index.xml

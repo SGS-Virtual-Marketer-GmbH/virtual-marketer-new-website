@@ -109,6 +109,36 @@
       "description": "Warum spezialisierte, fein-abgestimmte kleine Sprachmodelle für hochvolumige Marketingaufgaben oft günstiger und zuverlässiger sind als generische Großmodelle.",
       "keywords": "Fine-Tuning, Kleine Sprachmodelle, Kosteneffizienz, Open-Source LLMs, Custom AI",
       "contentFile": "fine-tuning-kleinerer-modelle-kosteneffizienz.html"
+    },
+    {
+      "title": "Google & Meta Ads mit KI: Automatisierte Anzeigentexte, die konvertieren",
+      "slug": "google-meta-ads-ki-anzeigentexte",
+      "date": "2026-10-06",
+      "author": "Virtual Marketer Team",
+      "category": "Use Cases",
+      "description": "Wie KI-generierte, produktdaten-basierte Anzeigentexte für Google RSA und Meta Ads skalieren, ohne Markenkonsistenz oder Compliance zu gefährden.",
+      "keywords": "KI Werbetexte, Google Ads Automatisierung, Meta Ads KI, Anzeigentexte generieren",
+      "contentFile": "google-meta-ads-ki-anzeigentexte.html"
+    },
+    {
+      "title": "Markenkonsistenz bei KI-Content in großem Maßstab: Governance-Frameworks für 2026",
+      "slug": "ki-content-governance-markenkonsistenz",
+      "date": "2026-10-13",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Warum KI-Content-Skalierung eine Governance-Frage ist: risikobasierte Freigabeprozesse, Stichprobenprüfung und versionierte Brand-Voice-Richtlinien.",
+      "keywords": "KI Content Governance, Markenkonsistenz, Brand Voice, KI Qualitätssicherung",
+      "contentFile": "ki-content-governance-markenkonsistenz.html"
+    },
+    {
+      "title": "Von der Anfrage zum Custom-Modell: So entsteht Ihr individuelles KI-Modell bei Virtual Marketer",
+      "slug": "custom-ki-modell-anfrage-prozess",
+      "date": "2026-10-20",
+      "author": "Virtual Marketer Team",
+      "category": "Use Cases",
+      "description": "Was nach einer Modellanfrage passiert: Erstgespräch, Daten-Assessment, Pilotphase und Rollout — ein transparenter Blick auf den Weg zu Ihrem Custom-KI-Modell.",
+      "keywords": "Custom KI Modell, Individuelles KI Modell, Modell anfragen, KI Onboarding",
+      "contentFile": "custom-ki-modell-anfrage-prozess.html"
     }
   ]
 }

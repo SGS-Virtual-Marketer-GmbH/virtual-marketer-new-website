@@ -1,0 +1,240 @@
+/* Virtual Marketer — AI Features Showcase
+   Reuses the site's own brand system: Montserrat, heading #1b1d21,
+   gradient #00deff -> #7141b1 (matched from wp-content/themes/engitech/style.css) */
+
+.vmaf-section {
+  padding: 90px 20px;
+  background: #f7f8fd;
+  font-family: "Montserrat", sans-serif;
+}
+
+.vmaf-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.vmaf-eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7141b1;
+  background: rgba(113, 65, 177, 0.08);
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.vmaf-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 56px;
+}
+
+.vmaf-header h2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  color: #1b1d21;
+  font-size: 36px;
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+
+.vmaf-header p {
+  color: #5a5f6e;
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---- Feature grid ---- */
+.vmaf-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+@media (max-width: 900px) {
+  .vmaf-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .vmaf-grid { grid-template-columns: 1fr; }
+}
+
+.vmaf-card {
+  background: #fff;
+  border: 1px solid #edeef5;
+  border-radius: 16px;
+  padding: 28px 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vmaf-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(20, 20, 43, 0.08);
+}
+
+.vmaf-card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #00deff 0%, #7141b1 100%);
+  color: #fff;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+.vmaf-card h3 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  color: #1b1d21;
+  font-size: 19px;
+  margin: 0 0 10px;
+}
+
+.vmaf-card p {
+  color: #5a5f6e;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 14px;
+}
+
+.vmaf-card a.vmaf-card-link {
+  color: #7141b1;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+.vmaf-card a.vmaf-card-link:hover { text-decoration: underline; }
+
+/* ---- Live demo widget ---- */
+.vmaf-demo {
+  background: #14142b;
+  border-radius: 20px;
+  padding: 44px;
+  color: #fff;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .vmaf-demo { grid-template-columns: 1fr; padding: 28px; }
+}
+
+.vmaf-demo-intro .vmaf-eyebrow {
+  color: #9efbd3;
+  background: rgba(158, 251, 211, 0.12);
+}
+
+.vmaf-demo-intro h3 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  margin: 14px 0 14px;
+  color: #fff;
+}
+
+.vmaf-demo-intro p {
+  color: #b9bad0;
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0 0 24px;
+}
+
+.vmaf-demo-cta {
+  display: inline-block;
+  padding: 13px 26px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #00deff 0%, #7141b1 100%);
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.vmaf-demo-form label {
+  display: block;
+  font-size: 13px;
+  color: #b9bad0;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.vmaf-demo-form input,
+.vmaf-demo-form select {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 8px;
+  border: 1px solid #33334d;
+  background: #1e1e38;
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.vmaf-demo-form button {
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #00deff 0%, #7141b1 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+}
+.vmaf-demo-form button:active { transform: scale(0.98); }
+
+.vmaf-demo-output {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 10px;
+  background: #1e1e38;
+  border: 1px solid #33334d;
+  min-height: 96px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #e8e8f5;
+}
+
+.vmaf-demo-output .vmaf-output-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7de3c8;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.vmaf-demo-output .vmaf-placeholder { color: #6d6e88; }
+
+.vmaf-demo-disclaimer {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #6d6e88;
+}
+
+.vmaf-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: #7de3c8;
+  vertical-align: text-bottom;
+  animation: vmaf-blink 0.9s step-end infinite;
+}
+
+@keyframes vmaf-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

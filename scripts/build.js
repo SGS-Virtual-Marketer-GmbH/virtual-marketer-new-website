@@ -33,6 +33,7 @@ async function build() {
     const htmlFiles = findFiles(SOURCE, /\.html$/);
     const validPages = htmlFiles.filter(f =>
       !f.includes('wp-json') &&
+      !f.includes('wp-admin') && // AJAX-endpoint captures from the scrape, not real admin pages
       !f.includes('xmlrpc') &&
       !f.includes('feed/') &&
       !f.includes('comments/feed')

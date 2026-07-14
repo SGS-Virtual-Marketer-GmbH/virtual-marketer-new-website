@@ -57,6 +57,15 @@ The WordPress installation exposed `/wp-admin/`, `/wp-login.php`, `/wp-json/*`, 
 ### 2.5 Dotfile / backup-file protection
 `docker/nginx.conf` denies any request for dotfiles (`location ~ /\. { deny all; }`) and common backup/source extensions (`.bak`, `.sql`, `.log`, `.env`), preventing accidental exposure if such a file is ever mistakenly placed in `dist/`.
 
+### 2.6 Two site-wide bugs found and fixed while adding the AI Features section
+
+Testing the new homepage/product-page section surfaced two pre-existing bugs affecting the *entire* site, not just the new content — worth flagging explicitly since they were silent:
+
+1. **Versioned asset URLs 404'd in local dev.** WordPress exports assets as e.g. `style.css?ver=7.0.1.css` — the literal `?` is part of the *filename* on disk, but the HTML references it URL-encoded (`style.css%3Fver=7.0.1.css`). `server.js` split on `?` to strip real query strings but never decoded `%3F` back to a literal `?`, so it never matched the file on disk — every such asset (a large fraction of the theme's CSS/JS, including all of Font Awesome) silently 404'd in local dev. Fixed in `server.js` by decoding *after* stripping any genuine query string (order matters — decoding first turns `%3F` into `?`, which then gets incorrectly stripped by a subsequent split).
+2. **A stuck loading-screen overlay.** The theme's "royal_preloader" overlay sets `body{visibility:hidden}` and expects a bundled jQuery plugin to reveal the page on `window.load`. That reveal doesn't reliably fire in this static export, so the site could get stuck showing a blank/covered page indefinitely. Since this is now a static site — there's no real "loading" work happening — `scripts/fix-preloader.js` neutralizes the mechanism outright with a CSS override (`body{visibility:visible!important}` + hiding `#royal_preloader`) injected into every page, rather than trying to reproduce the legacy plugin's exact timing.
+
+Both were caught by actually loading the built site and checking computed styles / network responses, not just reading the config — see `scripts/fix-preloader.js` and the `server.js` comment at the URL-decoding line for the full explanation.
+
 ---
 
 ## 3. Content Supply Chain

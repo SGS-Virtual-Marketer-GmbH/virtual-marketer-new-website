@@ -465,7 +465,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   font-display: swap;
   src: url(../../../../wp-content/fonts/roboto/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmUiAo.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}</style><noscript><style> .wpb_animate_when_almost_visible { opacity: 1; }</style></noscript></head>
+}</style><noscript><style> .wpb_animate_when_almost_visible { opacity: 1; }</style></noscript><!-- vm-fix-preloader:start -->
+<style>
+  #royal_preloader{display:none!important}
+  /* The theme hides <body> itself (anti-flash-of-unstyled-content), not just
+     #page — and since visibility is inherited, anything appended as a body
+     child OUTSIDE #page (e.g. content injected right before </body>) stays
+     hidden even after #page is forced visible. Un-hide body itself so both
+     #page and any sibling content are visible. */
+  body{visibility:visible!important}
+  #page{visibility:visible!important;opacity:1!important}
+</style>
+<!-- vm-fix-preloader:end -->
+</head>
 <body data-cmplz=1 class="archive paged author author-virtualmarketer author-3 paged-3 author-paged-3 wp-theme-engitech theme-engitech select-core-1.6 woocommerce-no-js royal_preloader woocommerce-active wpb-js-composer js-comp-ver-6.7.0 vc_responsive elementor-default elementor-kit-41 engitech-theme-ver-1.6.1 wordpress-version-7.0.1">
 <!-- GTM Container placement set to automatic -->
 <!-- Google Tag Manager (noscript) -->
