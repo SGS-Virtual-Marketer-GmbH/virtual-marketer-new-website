@@ -1,0 +1,114 @@
+{
+  "posts": [
+    {
+      "title": "Agentic AI für automatisierte Marketing-Kampagnen",
+      "slug": "agentic-ai-marketing-kampagnen",
+      "date": "2026-07-21",
+      "author": "Virtual Marketer Team",
+      "category": "AI-Trends",
+      "description": "Wie autonome KI-Agenten Marketing-Kampagnen selbstständig planen, testen und optimieren – und warum Marketing Automation im Schnitt 5,44 USD pro investiertem Dollar zurückbringt.",
+      "keywords": "Agentic AI, Marketing Automation, Kampagnenmanagement, KI Marketing Deutschland",
+      "contentFile": "agentic-ai-marketing-kampagnen.html"
+    },
+    {
+      "title": "SEO im Zeitalter der KI-Suche: Von Keywords zu E-E-A-T",
+      "slug": "seo-im-zeitalter-der-ki-suche",
+      "date": "2026-07-28",
+      "author": "Virtual Marketer Team",
+      "category": "SEO",
+      "description": "Generative Engine Optimization (GEO) erklärt: Wie Sie Inhalte für ChatGPT, Perplexity, Claude und Google AI Overviews sichtbar machen statt nur für klassische Rankings.",
+      "keywords": "Generative Engine Optimization, GEO, KI-Suche, E-E-A-T, Google AI Overviews",
+      "contentFile": "seo-im-zeitalter-der-ki-suche.html"
+    },
+    {
+      "title": "KI-gesteuerte Personalisierung vs. Datenschutz: GDPR-konform in 2026",
+      "slug": "personalisierung-vs-datenschutz-gdpr-2026",
+      "date": "2026-08-04",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Wie sich KI-Personalisierung und DSGVO/EU AI Act miteinander vereinbaren lassen: Erste-Partei-Daten, Consent-Management, Edge-Verarbeitung und synthetische Trainingsdaten.",
+      "keywords": "Personalisierung, Datenschutz, DSGVO, EU AI Act, Erste-Partei-Daten",
+      "contentFile": "personalisierung-vs-datenschutz-gdpr-2026.html"
+    },
+    {
+      "title": "RAG für E-Commerce Produktbeschreibungen: Intelligente Texte, mehr Conversions",
+      "slug": "rag-fuer-ecommerce-produktbeschreibungen",
+      "date": "2026-08-11",
+      "author": "Virtual Marketer Team",
+      "category": "Use Cases",
+      "description": "Wie Retrieval-Augmented Generation faktenbasierte, einzigartige Produktbeschreibungen in großem Maßstab erzeugt – ohne Halluzinationen und ohne Duplicate Content.",
+      "keywords": "RAG, Retrieval-Augmented Generation, Produktbeschreibungen, E-Commerce, KI-Texte",
+      "contentFile": "rag-fuer-ecommerce-produktbeschreibungen.html"
+    },
+    {
+      "title": "Multimodale KI im Einzelhandel: Text, Bild und Video vereint",
+      "slug": "multimodale-ki-im-einzelhandel",
+      "date": "2026-08-18",
+      "author": "Virtual Marketer Team",
+      "category": "Use Cases",
+      "description": "Visual Search, automatische Bildverschlagwortung und KI-generierte Produktbilder: Wie multimodale KI-Modelle Kataloge, Suche und Content-Produktion im Handel verändern.",
+      "keywords": "Multimodale KI, Visual Search, Retail, Bildanalyse, KI-Videos",
+      "contentFile": "multimodale-ki-im-einzelhandel.html"
+    },
+    {
+      "title": "Voice Marketing & Conversational AI: Der nächste E-Commerce-Channel",
+      "slug": "voice-marketing-conversational-ai",
+      "date": "2026-08-25",
+      "author": "Virtual Marketer Team",
+      "category": "Use Cases",
+      "description": "Warum Sprachsuche und Voicebots für deutsche Online-Shops relevant werden, wie sich Voice Search von Textsuche unterscheidet und wie Sie Ihren Shop optimieren.",
+      "keywords": "Voice Search, Conversational AI, Sprachsuche, Voicebots, Chatbots",
+      "contentFile": "voice-marketing-conversational-ai.html"
+    },
+    {
+      "title": "Neural Search & Ranking für E-Commerce: Die Zukunft der Produktsuche",
+      "slug": "neural-search-ranking-ecommerce",
+      "date": "2026-09-01",
+      "author": "Virtual Marketer Team",
+      "category": "Use Cases",
+      "description": "Wie semantische, vektorbasierte Suche Zero-Result-Searches reduziert und Kunden auch bei umgangssprachlichen, ungenauen Suchanfragen zum passenden Produkt führt.",
+      "keywords": "Neural Search, Semantic Search, E-Commerce, Produktsuche, Vektorsuche",
+      "contentFile": "neural-search-ranking-ecommerce.html"
+    },
+    {
+      "title": "KI-gesteuerte Predictive Analytics für Universitäten: Studienerfolg vorhersagen",
+      "slug": "predictive-analytics-universitaeten",
+      "date": "2026-09-08",
+      "author": "Virtual Marketer Team",
+      "category": "Bildung",
+      "description": "Wie deutsche Hochschulen mit Frühwarnsystemen Studienabbrüche früher erkennen – und warum Datenschutz, Bias-Prüfung und menschliche Entscheidungshoheit zentral bleiben.",
+      "keywords": "Predictive Analytics, Hochschulen, Student Success, Studienabbruch, Deutschland",
+      "contentFile": "predictive-analytics-universitaeten.html"
+    },
+    {
+      "title": "Synthetische Daten für Marketing-Training: Datenschutz durch KI",
+      "slug": "synthetische-daten-marketing-training",
+      "date": "2026-09-15",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Wie künstlich generierte Datensätze KI-Modelltraining im Marketing beschleunigen, ohne echte Kundendaten zu verwenden – und wo die Grenzen synthetischer Daten liegen.",
+      "keywords": "Synthetische Daten, Synthetic Data, Privacy-First AI, Trainingsdaten, DSGVO",
+      "contentFile": "synthetische-daten-marketing-training.html"
+    },
+    {
+      "title": "Real-Time Marketing mit Edge AI: Kampagnen im Moment der Wahrheit",
+      "slug": "real-time-marketing-edge-ai",
+      "date": "2026-09-22",
+      "author": "Virtual Marketer Team",
+      "category": "AI-Trends",
+      "description": "Warum Personalisierungsentscheidungen in Millisekunden fallen müssen – und wie Edge AI Latenz eliminiert, bevor die Seite überhaupt geladen ist.",
+      "keywords": "Edge AI, Real-Time Marketing, Instant Personalization, Edge Computing",
+      "contentFile": "real-time-marketing-edge-ai.html"
+    },
+    {
+      "title": "Fine-Tuning kleinerer KI-Modelle statt GPT-4: Kosteneffizienz 2026",
+      "slug": "fine-tuning-kleinerer-modelle-kosteneffizienz",
+      "date": "2026-09-29",
+      "author": "Virtual Marketer Team",
+      "category": "AI-Trends",
+      "description": "Warum spezialisierte, fein-abgestimmte kleine Sprachmodelle für hochvolumige Marketingaufgaben oft günstiger und zuverlässiger sind als generische Großmodelle.",
+      "keywords": "Fine-Tuning, Kleine Sprachmodelle, Kosteneffizienz, Open-Source LLMs, Custom AI",
+      "contentFile": "fine-tuning-kleinerer-modelle-kosteneffizienz.html"
+    }
+  ]
+}

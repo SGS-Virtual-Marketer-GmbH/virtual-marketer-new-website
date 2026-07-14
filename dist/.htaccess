@@ -1,0 +1,46 @@
+# Virtual Marketer Static Site
+# Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/json
+</IfModule>
+
+# Caching
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpg|jpeg|png|gif|ico|css|js|woff|woff2)$">
+    Header set Cache-Control "max-age=31536000, public"
+  </FilesMatch>
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "max-age=3600, public"
+  </FilesMatch>
+</IfModule>
+
+# Rewrite rules for clean URLs
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # If it's not a file or directory
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # Try to serve index.html for directories
+  RewriteRule ^(.*)$ index.html [L]
+</IfModule>
+
+# Security
+<FilesMatch "\.(php|phtml|pht|phps|php3|php4|php5|php6|php7|phps|shtml|phar)$">
+  Deny from all
+</FilesMatch>
+
+# HTTPS redirect (uncomment if needed)
+# <IfModule mod_ssl.c>
+#   RewriteEngine On
+#   RewriteCond %{HTTPS} off
+#   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>

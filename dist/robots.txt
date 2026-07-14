@@ -1,0 +1,12 @@
+# Virtual Marketer - robots.txt (auto-generated, see scripts/generate-sitemap.js)
+User-agent: *
+Allow: /
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /wp-includes/
+Disallow: /wp-content/plugins/
+Disallow: /wp-json/
+Disallow: /blog/page/
+
+Sitemap: https://virtual-marketer.de/sitemap.xml
+Sitemap: https://virtual-marketer.de/sitemap_index.xml
