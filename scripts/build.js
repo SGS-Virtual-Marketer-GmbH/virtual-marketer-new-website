@@ -81,6 +81,32 @@ async function build() {
     }
     console.log(`  ✓ Processed ${cssFiles.length} CSS files`);
 
+    // Copy JavaScript
+    // Note: these files don't end in a literal ".js" — wget preserved the
+    // WordPress version query string as part of the filename without
+    // re-appending an extension (unlike CSS, where --adjust-extension
+    // appended a trailing ".css" after the query string). So a plain
+    // /\.js$/ pattern matches zero files; this was a real bug that meant
+    // build.js silently never copied ANY JavaScript, breaking every bit of
+    // site interactivity (mobile menu, sliders, WooCommerce, popups, form
+    // validation) despite dozens of <script src="..."> tags referencing
+    // these files in the HTML.
+    console.log('📜 Processing JavaScript...');
+    const jsFiles = findFiles(SOURCE, /\.js(\?|$)/i);
+
+    for (const jsFile of jsFiles) {
+      const relativePath = jsFile.replace(SOURCE, '');
+      const destPath = path.join(DIST, relativePath);
+      const destJsDir = path.dirname(destPath);
+
+      if (!fs.existsSync(destJsDir)) {
+        fs.mkdirSync(destJsDir, { recursive: true });
+      }
+
+      fs.copyFileSync(jsFile, destPath);
+    }
+    console.log(`  ✓ Processed ${jsFiles.length} JavaScript files`);
+
     // Copy images and assets
     console.log('🖼️  Processing images and assets...');
     const assetExtensions = /\.(jpg|jpeg|png|gif|webp|svg|woff|woff2|ttf|eot)$/i;
