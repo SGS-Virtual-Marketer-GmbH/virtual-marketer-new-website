@@ -19,6 +19,11 @@ const DIST_BLOG = path.join(ROOT, 'dist/blog');
 const CONTENT_DIR = path.join(ROOT, 'content/blog');
 const POSTS_JSON = path.join(ROOT, 'blog-posts.json');
 const BASE_URL = 'https://virtual-marketer.de';
+// See the matching comment in scripts/seo-optimize.js: virtual-marketer.ai
+// is the (not yet built) English counterpart site. hreflang="en" here
+// points at it in advance; harmless until that site exists, but it must
+// reciprocally link back to virtual-marketer.de once it does.
+const EN_BASE_URL = 'https://virtual-marketer.ai';
 
 const CATEGORY_LABELS = {
   'AI-Trends': 'AI-Trends',
@@ -91,6 +96,7 @@ function pageShell({ title, description, keywords, slug, date, updated, category
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <link rel="canonical" href="${url}">
 <link rel="alternate" hreflang="de" href="${url}">
+<link rel="alternate" hreflang="en" href="${EN_BASE_URL}/blog/${slug}/">
 <link rel="alternate" hreflang="x-default" href="${url}">
 
 <meta property="og:type" content="article">
@@ -205,6 +211,9 @@ function generateArchive(posts) {
 <title>Blog | Virtual Marketer - KI &amp; Marketing Insights</title>
 <meta name="description" content="Erfahren Sie alles über KI, Machine Learning und moderne Marketingstrategien. Artikel, Tipps und Best Practices von Virtual Marketer.">
 <link rel="canonical" href="${BASE_URL}/blog/">
+<link rel="alternate" hreflang="de" href="${BASE_URL}/blog/">
+<link rel="alternate" hreflang="en" href="${EN_BASE_URL}/blog/">
+<link rel="alternate" hreflang="x-default" href="${BASE_URL}/blog/">
 <link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
 <link rel="stylesheet" href="/${THEME_CSS.style}">
 <script type="application/ld+json">${JSON.stringify({
