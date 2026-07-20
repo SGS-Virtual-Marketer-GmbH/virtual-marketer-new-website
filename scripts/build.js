@@ -36,7 +36,23 @@ async function build() {
       !f.includes('wp-admin') && // AJAX-endpoint captures from the scrape, not real admin pages
       !f.includes('xmlrpc') &&
       !f.includes('feed/') &&
-      !f.includes('comments/feed')
+      !f.includes('comments/feed') &&
+      // WordPress's "shortlink" format (/?p=NNNN) redirects to a page/post's
+      // real canonical URL, but wget's mirror captured 53 of these as their
+      // own files instead of following through. They're duplicate copies of
+      // content that already exists at a clean URL elsewhere in the scrape
+      // (e.g. index.html?p=60.html duplicates /impressum/), never linked
+      // from real navigation, not in sitemap.xml — and at least one
+      // (?p=58103) is outright malformed, with two different pages' <head>
+      // content merged into a single file. Excluding by filename pattern
+      // rather than fixing content, since there's nothing to fix: the
+      // canonical version already exists and is copied separately.
+      !/index\.html\?p=\d+\.html$/.test(f) &&
+      // wget captured both /virtual-marketer-demo (no trailing slash) and
+      // /virtual-marketer-demo/ (trailing slash) as separate near-identical
+      // files. Keep only the directory form (.../virtual-marketer-demo/index.html)
+      // to match the URL structure every other page on the site uses.
+      f !== path.join(SOURCE, 'virtual-marketer-demo.html')
     );
 
     let pagesCount = 0;

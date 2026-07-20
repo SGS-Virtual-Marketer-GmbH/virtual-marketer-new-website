@@ -145,10 +145,26 @@ function injectInto(filePath, section) {
   const endIdx = html.indexOf(END_MARKER);
   if (startIdx !== -1 && endIdx !== -1) {
     html = html.slice(0, startIdx) + section + html.slice(endIdx + END_MARKER.length);
-  } else if (html.includes('</body>')) {
-    html = html.replace('</body>', `${section}\n</body>`);
   } else {
-    html += section;
+    // lastIndexOf, not indexOf/.replace(): scripts/fix-preloader.js (which
+    // runs before this one) injects a CSS comment into <head> that contains
+    // the literal documentation text "</body>)" as an example. A plain
+    // .replace('</body>', ...) matches THAT first occurrence instead of the
+    // real closing tag at the end of the document — which is exactly what
+    // happened here: the whole section landed inside an unclosed CSS
+    // comment inside a <style> tag and was never parsed as HTML at all.
+    // Prefer inserting right before the page's <footer id="site-footer">
+    // so the new section reads as real page content, not something tacked
+    // on after the footer/copyright line. Falls back to end-of-body (still
+    // correct, just visually lower) if a page doesn't have this footer id.
+    const footerIdx = html.indexOf('<footer id="site-footer"');
+    const bodyCloseIdx = html.lastIndexOf('</body>');
+    const anchorIdx = footerIdx !== -1 ? footerIdx : bodyCloseIdx;
+    if (anchorIdx !== -1) {
+      html = html.slice(0, anchorIdx) + section + '\n' + html.slice(anchorIdx);
+    } else {
+      html += section;
+    }
   }
 
   fs.writeFileSync(filePath, html);

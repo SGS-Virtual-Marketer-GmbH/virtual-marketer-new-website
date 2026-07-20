@@ -28,6 +28,34 @@ const CATEGORY_LABELS = {
   'Bildung': 'Bildung',
 };
 
+// The scraped WordPress theme CSS files keep their version query string
+// baked into the on-disk filename (e.g. "style.css?ver=7.0.1.css" — a wget
+// artifact, not a real query string). Hardcoding that suffix here previously
+// caused these 15 generated pages (14 posts + the /blog/ archive) to
+// reference a non-existent plain "style.css" and silently render with zero
+// theme CSS. Resolving the real filename from disk means this keeps working
+// even if a future re-scrape bumps the theme version.
+function resolveThemeAsset(cleanRelPath) {
+  const dir = path.dirname(path.join(ROOT, 'dist', cleanRelPath));
+  const base = path.basename(cleanRelPath);
+  if (!fs.existsSync(dir)) return cleanRelPath;
+  const match = fs.readdirSync(dir).find(f => f === base || f.startsWith(`${base}?`));
+  const resolved = match ? path.join(path.dirname(cleanRelPath), match) : cleanRelPath;
+  // The "?" here is a literal character in the on-disk filename (a wget
+  // artifact), not a query-string separator — it must be percent-encoded
+  // in the href/src attribute or the browser (and server.js) will treat
+  // everything after it as a real query string and 404. This matches how
+  // the original WordPress export itself encodes these same references
+  // (e.g. src="...jquery.min.js%3Fver=3.7.1").
+  return resolved.replace(/\?/g, '%3F');
+}
+
+const THEME_CSS = {
+  bootstrap: resolveThemeAsset('wp-content/themes/engitech/css/bootstrap.css'),
+  fontAwesome: resolveThemeAsset('wp-content/themes/engitech/css/font-awesome.min.css'),
+  style: resolveThemeAsset('wp-content/themes/engitech/style.css'),
+};
+
 function formatDateDE(dateStr) {
   const d = new Date(dateStr);
   return new Intl.DateTimeFormat('de-DE', { year: 'numeric', month: 'long', day: 'numeric' }).format(d);
@@ -82,9 +110,9 @@ function pageShell({ title, description, keywords, slug, date, updated, category
 
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/bootstrap.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/font-awesome.min.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/style.css">
+<link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
+<link rel="stylesheet" href="/${THEME_CSS.fontAwesome}">
+<link rel="stylesheet" href="/${THEME_CSS.style}">
 <style>
   .vm-post{max-width:820px;margin:0 auto;padding:48px 20px 80px}
   .vm-post .vm-meta{color:#6b7280;font-size:14px;margin-bottom:8px}
@@ -108,7 +136,7 @@ function pageShell({ title, description, keywords, slug, date, updated, category
 <body class="vm-static-blog">
 
 <header class="vm-header-simple">
-  <a href="/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer" height="40"></a>
+  <a href="/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none"></a>
   <nav>
     <a href="/ki-loesungen/">Lösungen</a>
     <a href="/blog/">Blog</a>
@@ -177,8 +205,8 @@ function generateArchive(posts) {
 <title>Blog | Virtual Marketer - KI &amp; Marketing Insights</title>
 <meta name="description" content="Erfahren Sie alles über KI, Machine Learning und moderne Marketingstrategien. Artikel, Tipps und Best Practices von Virtual Marketer.">
 <link rel="canonical" href="${BASE_URL}/blog/">
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/bootstrap.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/style.css">
+<link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
+<link rel="stylesheet" href="/${THEME_CSS.style}">
 <script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -189,7 +217,7 @@ function generateArchive(posts) {
 </head>
 <body>
 <header class="vm-header-simple" style="max-width:1140px;margin:0 auto;padding:24px 20px;display:flex;align-items:center;justify-content:space-between;">
-  <a href="/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer" height="40"></a>
+  <a href="/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none"></a>
   <nav>
     <a href="/ki-loesungen/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Lösungen</a>
     <a href="/blog/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Blog</a>
