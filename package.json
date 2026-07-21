@@ -7,7 +7,7 @@
     "dev": "node server.js",
     "start": "node server.js",
     "clean": "rm -rf dist-tmp",
-    "build": "node scripts/build.js && node scripts/fix-shortlinks.js && node scripts/fix-preloader.js && node scripts/generate-blog-posts.js && node scripts/inject-ai-features.js && node scripts/inject-language-switcher.js && node scripts/fix-legal-content.js && node scripts/fix-broken-links.js && node scripts/generate-404.js && node scripts/optimize.js && node scripts/seo-optimize.js && node scripts/generate-sitemap.js",
+    "build": "node scripts/build.js && node scripts/fix-shortlinks.js && node scripts/fix-preloader.js && node scripts/generate-blog-posts.js && node scripts/inject-ai-features.js && node scripts/generate-feature-pages.js && node scripts/inject-language-switcher.js && node scripts/fix-legal-content.js && node scripts/fix-broken-links.js && node scripts/generate-404.js && node scripts/optimize.js && node scripts/seo-optimize.js && node scripts/generate-sitemap.js",
     "analyze": "node scripts/analyze.js",
     "optimize": "node scripts/optimize.js"
   },

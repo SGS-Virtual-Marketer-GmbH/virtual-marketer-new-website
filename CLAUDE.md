@@ -38,12 +38,33 @@ project.
 5. Propose target audience, business/EBIT impact framing, and SEO/search-intent research
    for the feature before building a subpage — don't assume it matches the in-app copy's
    framing 1:1, since website visitors search differently than logged-in users read.
-6. Mirror `ProductPage.tsx`'s visual anatomy and this site's existing look (see
-   `SEO_GEO_GUIDE.md`, `assets/ai-features.css`) — keep it on-brand and consistent, but
-   make it richer/more interactive for a public marketing audience (animation, live demo
-   widgets), since this is a landing page, not an in-app help panel.
+6. Use the **real product brand/CI colors** — `vm-red #94152b` (`vm-red-dark #700f2b`) and
+   `vm-blue #66a3ce` (`vm-blue-light #a3cce9`), from `vm-customer-web-ui/tailwind.config.js`.
+   Do not invent a separate palette for the marketing site (the old "AI Features" showcase
+   did this — `#7141b1`/`#00deff` — and it's being retired for exactly this reason). Mirror
+   `ProductPage.tsx`'s anatomy (icon + title + tagline + CTA → hero → value bullets / how-it-
+   works → FAQ) but make it richer/more interactive for a public marketing audience
+   (animation, live demo widgets), since this is a landing page, not an in-app help panel.
 7. Keep it mobile-first — verify with the preview tools' responsive presets before calling
    a feature page done.
+8. Interactive demos are **scripted/simulated by default** (no real backend calls) — this
+   is deliberate, not a shortcut: it's safe (no load, no cost, no failure modes to handle)
+   and fully controllable for a polished animation. Only build a genuinely live demo when a
+   feature has a public, stateless, safe-to-call-anonymously endpoint (e.g. Coding API's
+   "try it live" — it already has one). Never claim a scripted demo is live; the copy should
+   read as illustrative, not as "this is hitting our real servers."
+9. **Build one feature page at a time, end to end** (research → copy → demo → mobile check →
+   review), never several in parallel — confirm each is done before starting the next.
+
+## Data residency / hosting location (for privacy policy, FAQ, and any page mentioning where data lives)
+
+Virtual Marketer does **not** default to "your data is always processed in Germany."
+The actual policy: **each customer contract can specify where their data is stored and
+processed** (e.g. Germany-only or another EU data center), but absent such an agreement,
+Virtual Marketer chooses a cost-efficient hosting location rather than defaulting to the
+most expensive (German) one. Reflect this accurately everywhere data location comes up:
+offer EU/Germany-only hosting as a configurable option customers can request, never as an
+unconditional guarantee baked into marketing copy or the privacy policy.
 
 ## Build & verify
 
