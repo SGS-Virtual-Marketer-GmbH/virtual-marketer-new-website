@@ -79,7 +79,7 @@ const pageMetadata = {
   },
   '/impressum/': {
     title: 'Impressum | Virtual Marketer',
-    description: 'Impressum und Kontaktinformation von Virtual Marketer GmbH.',
+    description: 'Impressum und Kontaktinformation von SGS Virtual Marketer GmbH.',
     keywords: 'Impressum, Kontakt, Rechtliche Informationen',
     type: 'policy',
     geo: { country: 'DE' }
@@ -126,6 +126,8 @@ function generateStructuredData(path, meta) {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     'name': 'Virtual Marketer',
+    'legalName': 'SGS Virtual Marketer GmbH',
+    'foundingDate': '2022',
     'url': baseUrl,
     'logo': `${baseUrl}/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png`,
     'description': 'KI-Marketinglösung für automatisierte Content-Generierung',
@@ -251,104 +253,43 @@ function generateGeoTags(meta) {
 }
 
 /**
- * Generate sitemap.xml
+ * Strip legacy WordPress/Yoast tags that would otherwise duplicate what we
+ * inject below (canonical, hreflang, og:*, twitter:*, description/keywords
+ * meta) — Yoast's originals are relative-path or otherwise stale, and
+ * leaving both in produces invalid duplicate meta the crawler has to guess
+ * between. Only operates within <head>, so it can't touch body content
+ * (e.g. the language-switcher widget's <a hreflang="de"> links).
  */
-function generateSitemap() {
-  const baseUrl = 'https://virtual-marketer.de';
-  const now = new Date().toISOString().split('T')[0];
+function stripLegacyHeadTags(html) {
+  const headEndIdx = html.indexOf('</head>');
+  if (headEndIdx === -1) return html;
 
-  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n';
-  xml += '         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n';
+  let head = html.substring(0, headEndIdx);
+  const rest = html.substring(headEndIdx);
 
-  // Add pages
-  Object.entries(pageMetadata).forEach(([path, meta]) => {
-    const priority = path === '/' ? 1.0 : 0.8;
-    xml += `  <url>\n`;
-    xml += `    <loc>${baseUrl}${path}</loc>\n`;
-    xml += `    <lastmod>${now}</lastmod>\n`;
-    xml += `    <changefreq>${path === '/' ? 'weekly' : 'monthly'}</changefreq>\n`;
-    xml += `    <priority>${priority}</priority>\n`;
-    if (meta.image) {
-      xml += `    <image:image>\n`;
-      xml += `      <image:loc>${baseUrl}${meta.image}</image:loc>\n`;
-      xml += `    </image:image>\n`;
-    }
-    xml += `  </url>\n`;
-  });
+  head = head.replace(/<link[^>]*rel=["']canonical["'][^>]*>\s*/gi, '');
+  head = head.replace(/<link[^>]*rel=["']alternate["'][^>]*hreflang=[^>]*>\s*/gi, '');
+  head = head.replace(/<link[^>]*hreflang=[^>]*rel=["']alternate["'][^>]*>\s*/gi, '');
+  head = head.replace(/<meta[^>]*(?:property|name)=["'](?:og|twitter):[a-zA-Z:_]+["'][^>]*>\s*/gi, '');
+  head = head.replace(/<meta[^>]*name=["']description["'][^>]*>\s*/gi, '');
+  head = head.replace(/<meta[^>]*name=["']keywords["'][^>]*>\s*/gi, '');
 
-  xml += '</urlset>';
-
-  return xml;
+  return head + rest;
 }
 
-/**
- * Generate updated robots.txt with sitemap
- */
-function generateRobotsTxt() {
-  return `# Virtual Marketer - robots.txt
-User-agent: *
-Allow: /
-Disallow: /wp-admin/
-Disallow: /wp-login.php
-Disallow: /wp-includes/
-Disallow: /wp-content/plugins/
-Disallow: /wp-json/
-
-Crawl-delay: 0
-
-Sitemap: https://virtual-marketer.de/sitemap.xml
-Sitemap: https://virtual-marketer.de/sitemap_index.xml
-
-# Google-specific
-User-agent: Googlebot
-Allow: /
-
-User-agent: Googlebot-Image
-Allow: /wp-content/uploads/
-
-# Search engines
-User-agent: Bingbot
-Allow: /
-
-User-agent: Slurp
-Allow: /
-`;
-}
-
-/**
- * Generate sitemap index for Google News, Images, etc.
- */
-function generateSitemapIndex() {
-  const baseUrl = 'https://virtual-marketer.de';
-  const now = new Date().toISOString().split('T')[0];
-
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <sitemap>
-    <loc>${baseUrl}/sitemap.xml</loc>
-    <lastmod>${now}</lastmod>
-  </sitemap>
-</sitemapindex>`;
+function findAllHtmlFiles(dir, results = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) findAllHtmlFiles(full, results);
+    else if (entry.name === 'index.html') results.push(full);
+  }
+  return results;
 }
 
 // Main execution
 console.log('📋 Generating SEO metadata...\n');
 
-// Create sitemaps
-console.log('1️⃣  Creating sitemap.xml');
-fs.writeFileSync(path.join(DIST, 'sitemap.xml'), generateSitemap());
-console.log('   ✓ sitemap.xml generated');
-
-console.log('2️⃣  Creating sitemap_index.xml');
-fs.writeFileSync(path.join(DIST, 'sitemap_index.xml'), generateSitemapIndex());
-console.log('   ✓ sitemap_index.xml generated');
-
-console.log('3️⃣  Updating robots.txt');
-fs.writeFileSync(path.join(DIST, 'robots.txt'), generateRobotsTxt());
-console.log('   ✓ robots.txt updated with sitemaps\n');
-
-console.log('4️⃣  Injecting SEO headers into HTML pages\n');
+console.log('1️⃣  Injecting SEO headers into known pages\n');
 
 // Update HTML files with SEO metadata
 let updatedCount = 0;
@@ -363,6 +304,7 @@ Object.entries(pageMetadata).forEach(([pagePath, meta]) => {
   }
 
   let html = fs.readFileSync(htmlPath, 'utf-8');
+  html = stripLegacyHeadTags(html);
 
   // Inject meta tags
   const headEnd = html.indexOf('</head>');
@@ -400,16 +342,70 @@ Object.entries(pageMetadata).forEach(([pagePath, meta]) => {
   console.log(`   ✓ ${pagePath.padEnd(40)} - Optimized`);
 });
 
+// Every other page (legacy blog posts, tag/category/author archives, etc.)
+// isn't in the hardcoded pageMetadata map above, but still needs a
+// canonical + hreflang set — otherwise it ships with only Yoast's stale
+// relative canonical and no international tags at all. Reuses whatever
+// <title>/<meta description> the page already has rather than requiring
+// per-page copy.
+console.log('\n2️⃣  Adding canonical/hreflang to remaining pages\n');
+
+const knownPaths = new Set(Object.keys(pageMetadata).map(p =>
+  p === '/' ? path.join(DIST, 'index.html') : path.join(DIST, p.replace(/\/$/, '/index.html'))
+));
+
+let lightweightCount = 0;
+for (const file of findAllHtmlFiles(DIST)) {
+  if (knownPaths.has(file)) continue; // already fully handled above
+
+  let html = fs.readFileSync(file, 'utf-8');
+  if (/rel=["']canonical["']/.test(html) && /hreflang=["']x-default["']/.test(html)) {
+    continue; // already has its own canonical + hreflang (new blog posts, etc)
+  }
+
+  const headEnd = html.indexOf('</head>');
+  if (headEnd === -1) continue;
+
+  const relDir = path.relative(DIST, path.dirname(file)).split(path.sep).join('/');
+  const pagePath = relDir ? `/${relDir}/` : '/';
+
+  const titleMatch = html.match(/<title>([^<]*)<\/title>/);
+  const title = titleMatch ? titleMatch[1].trim() : 'Virtual Marketer';
+  const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["']/i);
+  const description = descMatch ? descMatch[1] : 'Virtual Marketer - KI-Marketinglösung aus Deutschland.';
+  const hasOgImage = /property=["']og:image["']/i.test(html);
+
+  html = stripLegacyHeadTags(html);
+  const newHeadEnd = html.indexOf('</head>');
+
+  let injection = '\n\n  <!-- SEO: canonical + hreflang (auto) -->\n';
+  injection += `  <meta name="description" content="${description}">\n`;
+  injection += `  <link rel="canonical" href="https://virtual-marketer.de${pagePath}">\n`;
+  injection += `  <link rel="alternate" hreflang="de" href="https://virtual-marketer.de${pagePath}">\n`;
+  injection += `  <link rel="alternate" hreflang="en" href="${EN_BASE_URL}${pagePath}">\n`;
+  injection += `  <link rel="alternate" hreflang="x-default" href="https://virtual-marketer.de${pagePath}">\n`;
+  if (!hasOgImage) {
+    injection += `  <meta property="og:type" content="article">\n`;
+    injection += `  <meta property="og:title" content="${title}">\n`;
+    injection += `  <meta property="og:description" content="${description}">\n`;
+    injection += `  <meta property="og:image" content="https://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png">\n`;
+  }
+
+  html = html.substring(0, newHeadEnd) + injection + html.substring(newHeadEnd);
+  fs.writeFileSync(file, html);
+  lightweightCount++;
+}
+console.log(`   ✓ Added canonical/hreflang to ${lightweightCount} additional page(s)\n`);
+
 console.log(`\n✅ SEO Optimization Complete!\n`);
-console.log(`Updated ${updatedCount} pages with:`);
+console.log(`Updated ${updatedCount + lightweightCount} pages with:`);
 console.log('  • Meta descriptions');
 console.log('  • Open Graph tags (Facebook, LinkedIn)');
 console.log('  • Twitter Card metadata');
-console.log('  • Schema.org structured data (Organization, Product, etc)');
+console.log('  • Schema.org structured data (Organization, Product, etc) on key pages');
 console.log('  • Geo-targeting tags (Geo.placename, ICBM, etc)');
 console.log('  • Canonical tags');
-console.log('  • Hreflang tags');
-console.log('  • Dynamic sitemaps\n');
+console.log('  • Hreflang tags\n');
 
 console.log('📊 SEO Improvements:');
 console.log('  ✓ Better Google/Bing indexing');

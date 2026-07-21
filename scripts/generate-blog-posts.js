@@ -178,7 +178,7 @@ function pageShell({ title, description, keywords, slug, date, updated, category
 </main>
 
 <footer class="vm-footer-simple">
-  &copy; 2026 Virtual Marketer GmbH &middot;
+  &copy; 2026 SGS Virtual Marketer GmbH &middot;
   <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> &middot;
   <a href="/impressum/">Impressum</a>
 </footer>
@@ -241,7 +241,7 @@ function generateArchive(posts) {
   ${cards}
 </main>
 <footer style="max-width:1140px;margin:40px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
-  &copy; 2026 Virtual Marketer GmbH &middot;
+  &copy; 2026 SGS Virtual Marketer GmbH &middot;
   <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> &middot;
   <a href="/impressum/">Impressum</a>
 </footer>
