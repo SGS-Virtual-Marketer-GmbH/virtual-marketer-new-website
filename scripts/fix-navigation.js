@@ -47,6 +47,20 @@ const SOLUTIONS = [
   { href: '/ki-loesungen/mail-generator/', label: 'KI-E-Mail-Generator' },
 ];
 
+const SOLUTIONS_EN = [
+  { href: '/en/solutions/ai-agents/', label: 'AI Agents for Marketing &amp; Ads' },
+  { href: '/en/solutions/coding-api/', label: 'Coding API &amp; MCP Server' },
+  { href: '/en/solutions/ai-product-photos/', label: 'AI Product Photos &amp; Virtual Try-On' },
+  { href: '/en/solutions/feed-enhance/', label: 'AI Feed Enhance' },
+  { href: '/en/solutions/ai-text-generator/', label: 'AI Text Generation' },
+  { href: '/en/solutions/ai-image-generator/', label: 'AI Image Generation' },
+  { href: '/en/solutions/ai-video-generator/', label: 'AI Video Generation' },
+  { href: '/en/solutions/ai-seo-content/', label: 'AI SEO Content' },
+  { href: '/en/solutions/campaign-builder/', label: 'AI Campaign Builder' },
+  { href: '/en/solutions/internal-linking/', label: 'Internal Linking' },
+  { href: '/en/solutions/ai-email-generator/', label: 'AI Email Generator' },
+];
+
 const DROPDOWN_STYLE = `<style>
   .vm-solutions-dd{position:relative;display:inline-block;font-family:inherit;}
   .vm-solutions-dd summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:4px;padding:0;color:inherit;font:inherit;}
@@ -63,13 +77,17 @@ const DROPDOWN_STYLE = `<style>
   }
 </style>`;
 
-function buildDropdown() {
-  const items = SOLUTIONS.map((s) => `      <li><a href="${s.href}">${s.label}</a></li>`).join('\n');
+function buildDropdown(lang) {
+  const list = lang === 'en' ? SOLUTIONS_EN : SOLUTIONS;
+  const label = lang === 'en' ? 'Solutions' : 'Lösungen';
+  const allHref = lang === 'en' ? '/en/solutions/' : '/ki-loesungen/';
+  const allLabel = lang === 'en' ? 'All solutions at a glance &rarr;' : 'Alle Lösungen im Überblick &rarr;';
+  const items = list.map((s) => `      <li><a href="${s.href}">${s.label}</a></li>`).join('\n');
   return `<details class="vm-solutions-dd">
-    <summary>Lösungen</summary>
+    <summary>${label}</summary>
     <ul class="vm-solutions-list">
 ${items}
-      <li class="vm-solutions-all"><a href="/ki-loesungen/">Alle Lösungen im Überblick &rarr;</a></li>
+      <li class="vm-solutions-all"><a href="${allHref}">${allLabel}</a></li>
     </ul>
   </details>${DROPDOWN_STYLE}`;
 }
@@ -92,15 +110,18 @@ function findHtmlFiles(dir, results = []) {
 // on the hub page's own self-link — matched loosely on both counts.
 const LEGACY_BLOCK = /<li[^>]*\bmenu-item-58027\b[^>]*><a href="[^"]*\/ki-loesungen\/"[^>]*>Lösungen<\/a>\s*<ul class="sub-menu">[\s\S]*?<\/ul>\s*<\/li>/g;
 const SIMPLE_LINK = /<a href="[^"]*\/ki-loesungen\/"[^>]*>Lösungen<\/a>/;
+const SIMPLE_LINK_EN = /<a href="[^"]*\/en\/solutions\/"[^>]*>Solutions<\/a>/;
 
 function main() {
-  console.log('\n🧭 Unifying "Lösungen" navigation across all pages...\n');
+  console.log('\n🧭 Unifying solutions navigation across all pages...\n');
 
-  const dropdown = buildDropdown();
+  const dropdown = buildDropdown('de');
+  const dropdownEn = buildDropdown('en');
   const legacyReplacement = `<li class="menu-item vm-solutions-menu-item">${dropdown}</li>`;
 
   let legacyFixed = 0;
   let simpleFixed = 0;
+  let simpleFixedEn = 0;
 
   for (const file of findHtmlFiles(DIST)) {
     let html = fs.readFileSync(file, 'utf-8');
@@ -109,6 +130,9 @@ function main() {
     if (html.includes('menu-item-58027')) {
       html = html.replace(LEGACY_BLOCK, legacyReplacement);
       legacyFixed++;
+    } else if (SIMPLE_LINK_EN.test(html)) {
+      html = html.replace(SIMPLE_LINK_EN, dropdownEn);
+      simpleFixedEn++;
     } else if (SIMPLE_LINK.test(html)) {
       html = html.replace(SIMPLE_LINK, dropdown);
       simpleFixed++;
@@ -118,7 +142,8 @@ function main() {
   }
 
   console.log(`  ✓ Replaced stale legacy dropdown on ${legacyFixed} page(s)`);
-  console.log(`  ✓ Added missing dropdown to ${simpleFixed} page(s)\n`);
+  console.log(`  ✓ Added missing DE dropdown to ${simpleFixed} page(s)`);
+  console.log(`  ✓ Added missing EN dropdown to ${simpleFixedEn} page(s)\n`);
 }
 
 main();
