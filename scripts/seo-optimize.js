@@ -44,8 +44,8 @@ const pageMetadata = {
   },
   '/ki-loesungen/': {
     title: 'KI-Lösungen für Marketing | Virtual Marketer',
-    description: 'Custom KI Modelle für E-Commerce, Retail, Universitäten. Text Generation, Interaktive Lösungen, CSS Price Comparison.',
-    keywords: 'KI Lösungen, Custom AI, Marketing Automation, Deutschland',
+    description: 'KI-Agenten, Coding-API, Produktfotos, Feed-Veredelung, Text-, Bild- & Videogenerierung und mehr — alle Virtual Marketer KI-Lösungen im Überblick.',
+    keywords: 'KI Lösungen, KI Agenten, Produktfotos KI, Feed Optimierung, Custom AI, Marketing Automation, Deutschland',
     type: 'product',
     geo: { country: 'DE' }
   },
