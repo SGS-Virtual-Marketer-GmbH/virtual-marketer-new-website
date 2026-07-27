@@ -34,6 +34,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { DEMO_STYLE, DEMO_ENGINE_JS, buildDemo } = require('./feature-demos.js');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -61,6 +62,8 @@ const UI = {
     forWhom: 'Für wen', forWhomTitle: 'Für wen sich das lohnt',
     impactLabel: 'Business Impact',
     liveDemoLabel: 'Live-Demo', liveDemoTitle: 'So funktioniert’s &#8211; zum Ausprobieren',
+    productDemoLabel: 'Produkt-Demo', productDemoTitle: 'So sieht es im Produkt aus',
+    productDemoNote: 'Simulierte Vorschau mit Beispieldaten &#8211; keine echten Konten oder Server-Aufrufe.',
     back: 'Zurück', next: 'Weiter', restart: 'Von vorn',
     valueLabel: 'Ihr Mehrwert', valueTitle: 'Was Sie davon haben',
     howLabel: 'Ablauf', howTitle: 'So funktioniert’s',
@@ -74,6 +77,8 @@ const UI = {
     forWhom: 'Who it’s for', forWhomTitle: 'Who this is built for',
     impactLabel: 'Business impact',
     liveDemoLabel: 'Live demo', liveDemoTitle: 'How it works &#8211; try it yourself',
+    productDemoLabel: 'Product demo', productDemoTitle: 'Inside the product',
+    productDemoNote: 'Simulated preview with example data &#8211; no real accounts or server calls.',
     back: 'Back', next: 'Next', restart: 'Start over',
     valueLabel: 'Business value', valueTitle: 'What you get',
     howLabel: 'How it works', howTitle: 'How it works',
@@ -124,6 +129,7 @@ function footer(lang) {
 const FEATURES = [
   {
     slug: 'produktfotos-ki',
+    demoView: 'staging',
     slugEn: 'ai-product-photos',
     heroImage: '/product-pages/staging-hero.jpg',
     de: {
@@ -269,6 +275,8 @@ const FEATURES = [
   },
   {
     slug: 'agenten',
+    heroImage: '/product-pages/agents2-hero.jpg',
+    demoView: 'agents2',
     slugEn: 'ai-agents',
     heroIcon: 'agent',
     heroCaption: 'Virtual Marketer Agents 2.0',
@@ -399,6 +407,8 @@ const FEATURES = [
   },
   {
     slug: 'coding-api',
+    heroImage: '/product-pages/coding-hero.jpg',
+    demoView: 'coding',
     slugEn: 'coding-api',
     heroIcon: 'code',
     heroCaption: 'Coding API & MCP',
@@ -525,6 +535,7 @@ const FEATURES = [
   },
   {
     slug: 'feed-veredelung',
+    demoView: 'feedEnhance',
     slugEn: 'feed-enhance',
     heroImage: '/product-pages/feedenhance-hero.jpg',
     de: {
@@ -644,6 +655,8 @@ const FEATURES = [
   },
   {
     slug: 'texte-generieren',
+    heroImage: '/product-pages/single-hero.jpg',
+    demoView: 'single',
     slugEn: 'ai-text-generator',
     heroIcon: 'text',
     heroCaption: 'Text Generator',
@@ -759,6 +772,8 @@ const FEATURES = [
   },
   {
     slug: 'bilder-generieren',
+    heroImage: '/product-pages/image-hero.jpg',
+    demoView: 'image',
     slugEn: 'ai-image-generator',
     heroIcon: 'picture',
     heroCaption: 'Image Generator',
@@ -867,6 +882,8 @@ const FEATURES = [
   },
   {
     slug: 'videos-generieren',
+    heroImage: '/product-pages/video-hero.jpg',
+    demoView: 'video',
     slugEn: 'ai-video-generator',
     heroIcon: 'play',
     heroCaption: 'Video Generator',
@@ -979,6 +996,8 @@ const FEATURES = [
   },
   {
     slug: 'seo-content',
+    heroImage: '/product-pages/content-hero.jpg',
+    demoView: 'content',
     slugEn: 'ai-seo-content',
     heroIcon: 'seo',
     heroCaption: 'Content Generator',
@@ -1085,6 +1104,8 @@ const FEATURES = [
   },
   {
     slug: 'kampagnen-builder',
+    heroImage: '/product-pages/campaign-hero.jpg',
+    demoView: 'campaign',
     slugEn: 'campaign-builder',
     heroIcon: 'megaphone',
     heroCaption: 'Campaign Builder',
@@ -1199,6 +1220,8 @@ const FEATURES = [
   },
   {
     slug: 'interne-verlinkung',
+    heroImage: '/product-pages/linkinator-hero.jpg',
+    demoView: 'linkinator',
     slugEn: 'internal-linking',
     heroIcon: 'link',
     heroCaption: 'Linkinator',
@@ -1263,6 +1286,8 @@ const FEATURES = [
   },
   {
     slug: 'mail-generator',
+    heroImage: '/product-pages/email-hero.jpg',
+    demoView: 'mail',
     slugEn: 'ai-email-generator',
     heroIcon: 'mail',
     heroCaption: 'Mail Generator (Beta)',
@@ -1321,6 +1346,340 @@ const FEATURES = [
       ],
     },
   },
+  {
+    slug: 'social-publisher',
+    slugEn: 'social-publisher',
+    heroImage: '/product-pages/social-hero.jpg',
+    demoView: 'socialPublisher',
+    de: {
+      seo: {
+        title: 'KI Social Publisher — LinkedIn-Beiträge planen & autonom veröffentlichen',
+        description: 'Persona-gesteuerte LinkedIn-Beiträge nach festem Zeitplan oder durch autonomes Themen-Scanning — standardmäßig mit menschlicher Freigabe.',
+        keywords: 'LinkedIn Beiträge automatisch posten, Social Media KI Tool, LinkedIn Automatisierung, KI Social Media Planer, Social Posts KI generieren',
+      },
+      eyebrow: 'KI Social Publisher',
+      tagline: 'Deine LinkedIn-Präsenz im Autopilot.',
+      intro: 'VM Social Publisher erstellt eine konsistente Persona für deine Marke und schreibt und illustriert LinkedIn-Beiträge nach festem Zeitplan oder durch autonomes Scannen deiner Themen-Nische &#8211; immer mit deinem Referenzbild für visuelle Konsistenz und standardmäßig mit Freigabe-Pflicht.',
+      audiences: [
+        { label: 'Marketing-Teams ohne Zeit fürs tägliche Posten', detail: 'Regelmäßige, markenkonforme Beiträge, ohne jeden Tag selbst zu texten.' },
+        { label: 'Gründer:innen &amp; Personal Brands', detail: 'Sichtbar bleiben auf LinkedIn, während das Tagesgeschäft läuft.' },
+        { label: 'Agenturen', detail: 'Eine Persona pro Kunde, Freigabe-Workflow inklusive.' },
+      ],
+      valueBullets: [
+        'Wiederverwendbare Personas: Name, Hintergrundinfo, Referenzbild und Wahl des Textmodells',
+        'Feste wöchentliche Zeitfenster oder autonomes stündliches Themen-Scanning mit Relevanz-Schwelle',
+        'Optionale Beschränkung auf ein aktives Zeitfenster nach Wochentag und Stunde',
+        'Auto-Publish ist standardmäßig aus &#8211; Beiträge warten auf deine Freigabe',
+        'Ein Klick für „Jetzt generieren&#8220; und „Jetzt veröffentlichen&#8220; zur manuellen Kontrolle',
+        'Optionales sichtbares Wasserzeichen auf generierten Bildern',
+      ],
+      howTo: [
+        'LinkedIn einmalig unter Einstellungen &rarr; Konnektoren &rarr; Zugriff verbinden.',
+        'Persona erstellen &#8211; Name, Hintergrundinfo und Referenzbild festlegen (oder aus deinem LinkedIn-Profil importieren).',
+        'Zeitplan erstellen: feste Zeiten oder autonomes Scanning, optional mit aktivem Zeitfenster.',
+        'Generierte Beiträge im Tab „Beiträge&#8220; oder unter Einstellungen &rarr; Konnektoren &rarr; Freigaben prüfen und veröffentlichen.',
+      ],
+      faq: [
+        { q: 'Werden Beiträge automatisch veröffentlicht?', a: 'Nur wenn du Auto-Publish für einen Zeitplan aktivierst. Standardmäßig wartet jeder generierte Beitrag auf deine Freigabe.' },
+        { q: 'Kann ich auch manuell posten?', a: 'Ja &#8211; nutze „Jetzt generieren&#8220; mit einer Persona und optionalem Thema, dann „Jetzt veröffentlichen&#8220;, wenn du bereit bist.' },
+        { q: 'Welche Plattformen werden unterstützt?', a: 'Aktuell LinkedIn; weitere Plattformen sind geplant.' },
+      ],
+    },
+    en: {
+      seo: {
+        title: 'AI Social Publisher — Schedule & Autonomously Publish LinkedIn Posts',
+        description: 'Persona-driven LinkedIn posts on a fixed schedule or via autonomous topic scanning — with human approval built in by default.',
+        keywords: 'auto post LinkedIn AI, social media AI tool, LinkedIn automation, AI social media scheduler, generate social posts AI',
+      },
+      eyebrow: 'AI Social Publisher',
+      tagline: 'Your LinkedIn presence, on autopilot.',
+      intro: 'VM Social Publisher creates a consistent persona for your brand, then writes and illustrates LinkedIn posts on a fixed schedule or by autonomously scanning your topic niche &#8211; always with your reference image for visual consistency, and approval-gated by default.',
+      audiences: [
+        { label: 'Marketing teams without time to post daily', detail: 'Regular, on-brand posts without writing them yourself every day.' },
+        { label: 'Founders &amp; personal brands', detail: 'Stay visible on LinkedIn while the day-to-day business runs.' },
+        { label: 'Agencies', detail: 'One persona per client, approval workflow included.' },
+      ],
+      valueBullets: [
+        'Reusable personas: name, background info, reference image and choice of text model',
+        'Fixed weekly time slots, or autonomous hourly topic scanning with a relevance threshold',
+        'Optional active-window gating by weekday and hour',
+        'Auto-publish is off by default &#8211; posts wait for your approval',
+        "One-click 'Generate now' and 'Publish now' for manual control anytime",
+        'Optional visible watermark on generated images',
+      ],
+      howTo: [
+        'Connect LinkedIn once in Settings &rarr; Connectors &rarr; Access.',
+        'Create a persona &#8211; give it a name, background info and a reference image (or import from your LinkedIn profile).',
+        'Create a schedule: fixed times or autonomous scanning, plus an optional active window.',
+        'Review generated posts in the Posts tab or in Settings &rarr; Connectors &rarr; Approvals, then publish.',
+      ],
+      faq: [
+        { q: 'Do posts publish automatically?', a: 'Only if you turn on Auto-publish for a schedule. By default, every generated post waits for your approval.' },
+        { q: 'Can I post manually too?', a: "Yes &#8211; use 'Generate now' with any persona and an optional topic, then 'Publish now' when you're ready." },
+        { q: 'Which platforms are supported?', a: 'LinkedIn today; more platforms are planned.' },
+      ],
+    },
+  },
+  {
+    slug: 'bulk-texte',
+    slugEn: 'bulk-text-generator',
+    heroImage: '/product-pages/bulk-hero.jpg',
+    demoView: 'bulk',
+    de: {
+      seo: {
+        title: 'Produkttexte in Masse generieren — KI Bulk-Generator für CSV & Excel',
+        description: 'Hunderte Produkttexte in einem Durchlauf: CSV oder Excel hochladen, Spalten zuordnen, generieren, als CSV exportieren — in deiner Markensprache.',
+        keywords: 'Produkttexte in Masse generieren, Bulk KI Texte, CSV Produktbeschreibungen KI, Produkttexte automatisch erstellen, Excel Texte generieren',
+      },
+      eyebrow: 'KI Bulk-Generator',
+      tagline: 'Content-Produktion skalieren.',
+      intro: 'CSV- oder Excel-Datei hochladen, Spalten zuordnen und Texte für jede Zeile generieren &#8211; mit Fortschritt, Wiederholungen und CSV-Export.',
+      audiences: [
+        { label: 'Shops mit großem Sortiment', detail: 'Hunderte Produktbeschreibungen pro Durchlauf statt einzeln von Hand.' },
+        { label: 'Marktplatz-Händler', detail: 'Ein Dateiformat rein, fertige Texte als CSV zurück in jedes System.' },
+        { label: 'Agenturen mit Katalog-Projekten', detail: 'Kundenkataloge in der jeweiligen Markensprache abarbeiten.' },
+      ],
+      valueBullets: [
+        'Hunderte Texte pro Durchlauf',
+        'Spalten-Mapping für jedes Dateiformat',
+        'Sicher: einzelne Zeilen testen vor dem Volllauf',
+      ],
+      howTo: [
+        'CSV/XLSX hochladen.',
+        'Eingabespalten zuordnen.',
+        'Testzeile ausführen, dann Batch starten.',
+        'Ergebnisse als CSV exportieren.',
+      ],
+      faq: [
+        { q: 'Was passiert bei Fehlern?', a: 'Fehlgeschlagene Zeilen werden markiert und können einzeln wiederholt werden.' },
+      ],
+    },
+    en: {
+      seo: {
+        title: 'AI Bulk Text Generator — Product Copy for Whole Spreadsheets',
+        description: 'Hundreds of product texts in one batch: upload CSV or Excel, map your columns, generate, export as CSV — in your brand voice.',
+        keywords: 'bulk product descriptions AI, CSV product copy generator, batch AI text generation, generate product texts from spreadsheet',
+      },
+      eyebrow: 'AI Bulk Generator',
+      tagline: 'Scale your content production.',
+      intro: 'Upload a CSV or Excel file, map your columns, and generate texts for every row &#8211; with progress tracking, retries and CSV export.',
+      audiences: [
+        { label: 'Shops with large catalogs', detail: 'Hundreds of product descriptions per batch instead of one by one.' },
+        { label: 'Marketplace sellers', detail: 'One file format in, finished texts back out as CSV for any system.' },
+        { label: 'Agencies with catalog projects', detail: 'Work through client catalogs in each client&rsquo;s brand voice.' },
+      ],
+      valueBullets: [
+        'Hundreds of texts per batch',
+        'Column mapping for any file layout',
+        'Safe: test single rows before the full run',
+      ],
+      howTo: [
+        'Upload CSV/XLSX.',
+        'Map the input columns.',
+        'Run a test row, then start the batch.',
+        'Export results as CSV.',
+      ],
+      faq: [
+        { q: 'What happens on errors?', a: 'Failed rows are marked and can be retried individually.' },
+      ],
+    },
+  },
+  {
+    slug: 'ki-dateien',
+    slugEn: 'ai-files',
+    heroImage: '/product-pages/files-hero.jpg',
+    demoView: 'files',
+    de: {
+      seo: {
+        title: 'KI-Dateiablage — Berichte & Präsentationen Ihrer KI-Agenten an einem Ort',
+        description: 'Alles, was Ihre virtuellen Mitarbeiter erstellen — Berichte, Präsentationen, Notizen — durchsuchbar an einem Ort, inkl. Vollbild-Präsentationsmodus.',
+        keywords: 'KI Berichte Ablage, KI Agent Ergebnisse verwalten, automatische Reports KI, KI Präsentationen erstellen, Dokumente KI Agenten',
+      },
+      eyebrow: 'Dateien &amp; Berichte',
+      tagline: 'Jeder Bericht, einen Klick entfernt.',
+      intro: 'Die Dateien-Ansicht sammelt alles, was Ihre virtuellen Mitarbeiter produzieren &#8211; Berichte, Präsentationen und Notizen &#8211; in einer durchsuchbaren Ablage. Ordner durchstöbern, Berichte formatiert lesen, Präsentationen im Vollbild-Folienmodus abspielen und eigene Notizen direkt neben den Agenten-Ergebnissen führen.',
+      audiences: [
+        { label: 'Teams mit laufenden KI-Agenten', detail: 'Morgendliche Reports und Audits landen automatisch sortiert in der Ablage.' },
+        { label: 'Führungskräfte', detail: 'Agenten-Präsentationen direkt im Vollbild vorführen, ohne Umweg über andere Tools.' },
+        { label: 'Agenturen', detail: 'Arbeitsergebnisse pro Konto gebündelt, jederzeit als Download teilbar.' },
+      ],
+      valueBullets: [
+        'Alle Agenten-Ergebnisse an einem Ort: Berichte, Präsentationen, Notizen und mehr',
+        'Ordnerbaum und Typ-Filter &#8211; jedes Dokument in Sekunden gefunden',
+        'Eine Suche über Ihre Dateien UND Ihre generierten Produktbilder',
+        'Präsentationsmodus: Vollbild-Folien mit Tastatur-Navigation',
+        'Eigene Markdown-Notizen schreiben und bearbeiten, alles jederzeit herunterladen',
+      ],
+      howTo: [
+        'Dateien öffnen &#8211; alles, was Ihre Agenten gespeichert haben, ist bereits da.',
+        'Ordnerbaum durchstöbern oder nach Typ filtern (Berichte, Präsentationen, Notizen).',
+        'Datei anklicken zum Lesen; Präsentationen lassen sich im Vollbild abspielen.',
+        'Die Suche findet Dateien und generierte Bilder in einem Durchgang.',
+        'Mit „Neue Notiz&#8220; eigene Notizen anlegen &#8211; sie liegen direkt neben den Agenten-Dateien.',
+      ],
+      faq: [
+        { q: 'Woher kommen die Dateien?', a: 'Ihre Virtual-Marketer-Agenten speichern ihre Arbeitsergebnisse &#8211; Berichte, Präsentationen, Notizen &#8211; automatisch hier. Eigene Notizen können Sie zusätzlich anlegen und bearbeiten.' },
+        { q: 'Kann ich Dateien herunterladen?', a: 'Ja, jede Datei lässt sich mit einem Klick herunterladen. Außerdem können Sie Dateien umbenennen, zwischen Ordnern verschieben und Überflüssiges löschen.' },
+        { q: 'Was deckt die Suche ab?', a: 'Ein Suchfeld durchsucht Ihre Dateiablage und die mit VM Product Staging generierten Produktbilder &#8211; die Ergebnisse erscheinen nebeneinander.' },
+      ],
+    },
+    en: {
+      seo: {
+        title: 'AI Files — Your AI Agents&rsquo; Reports & Presentations in One Place',
+        description: 'Everything your virtual employees produce — reports, presentations, notes — searchable in one library, incl. full-screen presentation mode.',
+        keywords: 'AI agent reports library, manage AI agent output, automatic AI reports, AI presentations, AI agent documents',
+      },
+      eyebrow: 'Files &amp; Reports',
+      tagline: 'Every report, one click away.',
+      intro: 'The Files view collects everything your virtual employees produce &#8211; reports, presentations and notes &#8211; in one searchable library. Browse folders, read reports with rich formatting, play presentations in full-screen slide mode and keep your own notes right next to the agent output.',
+      audiences: [
+        { label: 'Teams running AI agents', detail: 'Morning reports and audits land in the library automatically, already organized.' },
+        { label: 'Executives', detail: 'Play agent-built presentations full-screen, no detour through other tools.' },
+        { label: 'Agencies', detail: 'Deliverables bundled per account, downloadable and shareable anytime.' },
+      ],
+      valueBullets: [
+        'All agent output in one place: reports, presentations, notes and more',
+        'Folder tree and type filters to find any document in seconds',
+        'One search across your files AND your generated product images',
+        'Presentation mode: full-screen slides with keyboard navigation',
+        'Write and edit your own markdown notes, download everything anytime',
+      ],
+      howTo: [
+        'Open Files &#8211; everything your agents have saved is already there.',
+        'Browse the folder tree or filter by type (reports, presentations, notes).',
+        'Click a file to read it; presentations can be played full-screen.',
+        'Use the search box to search files and generated images at once.',
+        "Create your own notes with 'New note' &#8211; they live alongside the agent files.",
+      ],
+      faq: [
+        { q: 'Where do the files come from?', a: 'Your Virtual Marketer agents save their work results &#8211; reports, presentations, notes &#8211; here automatically. You can also create and edit your own notes.' },
+        { q: 'Can I download files?', a: 'Yes, every file can be downloaded with one click. You can also rename files, move them between folders and delete what you no longer need.' },
+        { q: 'What does the search cover?', a: 'One search box covers your file library and the product images generated with VM Product Staging &#8211; results are shown side by side.' },
+      ],
+    },
+  },
+  {
+    slug: 'feed-optimierung',
+    slugEn: 'feed-optimizer',
+    heroImage: '/product-pages/feedopt-hero.jpg',
+    demoView: 'feed',
+    de: {
+      seo: {
+        title: 'Feed-Optimizer — Produktbeschreibungen aus dem Shopping-Feed im Batch verbessern',
+        description: 'Shopping-Feed laden, Produkte filtern, Beschreibungen im Batch mit Ihren VM-Modellen neu schreiben und als CSV exportieren.',
+        keywords: 'Produktbeschreibungen optimieren KI, Shopping Feed Beschreibungen verbessern, Feed Texte KI, Google Shopping Feed optimieren',
+      },
+      eyebrow: 'Feed-Optimierung',
+      tagline: 'Bessere Beschreibungen, schnell.',
+      intro: 'Der Feed-Optimizer lädt deinen Shopping-Feed, filtert Produkte und schreibt Beschreibungen im Batch mit deinen VM-Modellen um.',
+      audiences: [
+        { label: 'Shops mit bestehendem Google-Shopping-Feed', detail: 'Schwache Herstellertexte gezielt neu schreiben, ohne das Feed-Setup anzufassen.' },
+        { label: 'E-Commerce-Teams', detail: 'Nach Kategorie oder Marke filtern und genau die Produkte verbessern, die es brauchen.' },
+      ],
+      valueBullets: [
+        'Filter nach Kategorie, Marke, Verfügbarkeit u.m.',
+        'Batch-Verarbeitung mit Fortschritt und Abbruch',
+        'CSV-Export der neuen Beschreibungen',
+      ],
+      howTo: [
+        'Feed-URL in den Einstellungen hinterlegen.',
+        'Produkte laden und filtern.',
+        'Zeilen auswählen und verarbeiten.',
+        'CSV herunterladen.',
+      ],
+      faq: [
+        { q: 'Volles Feed-Management gewünscht?', a: 'Nutze VM Feed Enhance für Import, Regeln, AI-Veredelung und einen gehosteten Ausgabe-Feed.' },
+      ],
+    },
+    en: {
+      seo: {
+        title: 'Feed Optimizer — Batch-Improve Product Descriptions from Your Shopping Feed',
+        description: 'Load your shopping feed, filter products, rewrite their descriptions in batches with your VM models and export as CSV.',
+        keywords: 'optimize product descriptions AI, improve shopping feed descriptions, feed copy AI, optimize Google Shopping feed',
+      },
+      eyebrow: 'Feed Optimization',
+      tagline: 'Better descriptions, fast.',
+      intro: 'The Feed Optimizer loads your shopping feed, lets you filter products and rewrites their descriptions in batches with your VM models.',
+      audiences: [
+        { label: 'Shops with an existing Google Shopping feed', detail: 'Rewrite weak manufacturer copy without touching your feed setup.' },
+        { label: 'E-commerce teams', detail: 'Filter by category or brand and improve exactly the products that need it.' },
+      ],
+      valueBullets: [
+        'Filter by category, brand, availability and more',
+        'Batch processing with progress and cancel',
+        'CSV export of the new descriptions',
+      ],
+      howTo: [
+        'Set your feed URL in Settings.',
+        'Load and filter products.',
+        'Select rows and process.',
+        'Download the CSV.',
+      ],
+      faq: [
+        { q: 'Need full feed management?', a: 'Use VM Feed Enhance for import, rules, AI enrichment and a hosted output feed.' },
+      ],
+    },
+  },
+  {
+    slug: 'chat-insights',
+    slugEn: 'chat-insights',
+    heroImage: '/product-pages/qaagent-hero.jpg',
+    demoView: 'agent',
+    de: {
+      seo: {
+        title: 'Chat-Insights — Kundengespräche Ihres Chat-Agenten analysieren',
+        description: 'Session-Protokolle Ihres Chat-Agenten mit Stimmungs- und Themenanalyse — sehen, was Kunden wirklich fragen, und Lücken in Katalog & Content erkennen.',
+        keywords: 'Chatbot Analyse, Chat Auswertung KI, Kundenfragen analysieren, Sentiment Analyse Chatbot, Chatbot Insights',
+      },
+      eyebrow: 'Chat-Insights',
+      tagline: 'Wissen, was Kunden fragen.',
+      intro: 'Der Agent-Viewer lädt die Session-Logs deines Chat-Agenten und analysiert Stimmung und Themen &#8211; du siehst, was Kunden wirklich wollen.',
+      audiences: [
+        { label: 'Shops mit Virtual-Marketer-Chat-Agent', detail: 'Aus echten Kundengesprächen lernen, statt zu raten.' },
+        { label: 'Produkt- &amp; Content-Teams', detail: 'Häufige Fragen zeigen, welche Infos auf Produktseiten fehlen.' },
+      ],
+      valueBullets: [
+        'Vollständige Gesprächsprotokolle',
+        'Stimmungs- &amp; Themenanalyse',
+        'Lücken in Katalog und Content erkennen',
+      ],
+      howTo: [
+        'Viewer öffnen.',
+        'Session auswählen.',
+        'Analyse lesen.',
+      ],
+      faq: [
+        { q: 'Woher kommen die Sessions?', a: 'Aus deinem Virtual-Marketer-Chat-Agent-Deployment.' },
+      ],
+    },
+    en: {
+      seo: {
+        title: 'Chat Insights — Analyze Your Chat Agent&rsquo;s Customer Conversations',
+        description: 'Your chat agent&rsquo;s session logs with sentiment and topic analysis — see what customers really ask and spot gaps in catalog & content.',
+        keywords: 'chatbot analytics, AI chat analysis, analyze customer questions, chatbot sentiment analysis, chatbot insights',
+      },
+      eyebrow: 'Chat Insights',
+      tagline: 'Know what your customers ask.',
+      intro: 'The Agent Viewer pulls your chat agent session logs and analyzes sentiment and topics so you see what customers really want.',
+      audiences: [
+        { label: 'Shops running the Virtual Marketer chat agent', detail: 'Learn from real customer conversations instead of guessing.' },
+        { label: 'Product &amp; content teams', detail: 'Frequent questions reveal what information your product pages are missing.' },
+      ],
+      valueBullets: [
+        'Full session transcripts',
+        'Sentiment &amp; topic analysis',
+        'Spot gaps in your catalog and content',
+      ],
+      howTo: [
+        'Open the viewer.',
+        'Pick a session.',
+        'Read the analysis.',
+      ],
+      faq: [
+        { q: 'Where do sessions come from?', a: 'From your Virtual Marketer chat agent deployment.' },
+      ],
+    },
+  },
 ];
 
 function icon(name, className = '') {
@@ -1352,6 +1711,12 @@ function pagePath(f, lang) {
 function pageShell(f, lang) {
   const c = f[lang];
   const t = UI[lang];
+  // Auto-playing product-UI animation (ported from the product repo's /tools/*
+  // demo engine — see scripts/feature-demos.js). Complements the interactive
+  // step-through wizard (c.demo): the wizard explains the flow, this one shows
+  // the product working.
+  const animDemo = f.demoView ? buildDemo(f.demoView, lang) : null;
+  const animSteps = animDemo ? JSON.stringify(animDemo.steps).replace(/</g, '\\u003c') : null;
   const url = `${BASE_URL}${pagePath(f, lang)}`;
   const altUrl = `${BASE_URL}${pagePath(f, lang === 'en' ? 'de' : 'en')}`;
   const heroAbs = f.heroImage ? `${BASE_URL}${f.heroImage}` : `${BASE_URL}/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png`;
@@ -1512,7 +1877,9 @@ function pageShell(f, lang) {
     .vm-fp .value-grid{grid-template-columns:1fr;}
     .vm-fp .demo{padding:22px;}
     .vm-fp .demo-step-btn{min-width:80px;font-size:12px;}
+    .vm-fp .vmd-stage{padding:16px;}
   }
+${animDemo ? DEMO_STYLE : ''}
 </style>
 </head>
 <body class="vm-static-blog">
@@ -1526,7 +1893,7 @@ ${header(lang)}
       <p class="intro">${c.intro}</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="${demoBookHref}">${t.demoBook}</a>
-        ${c.demo ? `<a class="btn btn-ghost" href="#demo">${t.liveDemo}</a>` : ''}
+        ${c.demo ? `<a class="btn btn-ghost" href="#demo">${t.liveDemo}</a>` : animDemo ? `<a class="btn btn-ghost" href="#produkt-demo">${t.liveDemo}</a>` : ''}
       </div>
     </div>
     ${heroVisualHtml}
@@ -1567,6 +1934,16 @@ ${header(lang)}
     </div>
   </section>` : ''}
 
+  ${animDemo ? `<section id="produkt-demo" aria-labelledby="pdemo-h">
+    <p class="section-label">${t.productDemoLabel}</p>
+    <h2 class="section-title" id="pdemo-h">${t.productDemoTitle}</h2>
+    <div class="vmd-window">
+      <div class="vmd-titlebar"><span class="vmd-dot"></span><span class="vmd-dot"></span><span class="vmd-dot"></span><span class="vmd-titletext">${animDemo.title}</span></div>
+      <div class="vmd-stage" id="vmdemo">${animDemo.html}</div>
+    </div>
+    <p class="vmd-demonote">${t.productDemoNote}</p>
+  </section>` : ''}
+
   <section aria-labelledby="value-h">
     <p class="section-label">${t.valueLabel}</p>
     <h2 class="section-title" id="value-h">${t.valueTitle}</h2>
@@ -1599,6 +1976,7 @@ ${footer(lang)}
   var panels = document.querySelectorAll('.demo-panel');
   var prevBtn = document.getElementById('demo-prev');
   var nextBtn = document.getElementById('demo-next');
+  if (!prevBtn || !nextBtn) return; // page has no step-through wizard
   var current = 0;
 
   function show(i){
@@ -1626,6 +2004,7 @@ ${footer(lang)}
   });
 })();
 </script>
+${animDemo ? `<script>${DEMO_ENGINE_JS}vmDemo('vmdemo', ${animSteps}, ${animDemo.loopPause || 3800});</script>` : ''}
 </body>
 </html>`.replace(/"__RESTART__"/, JSON.stringify(t.restart)).replace(/"__NEXT__"/, JSON.stringify(t.next));
 }
@@ -1644,12 +2023,28 @@ function injectHubGrid(lang) {
   if (!fs.existsSync(hubPath)) return false;
   let hub = fs.readFileSync(hubPath, 'utf-8');
   const marker = lang === 'en' ? '<h2 id="vmaf-heading-en">' : '<h2 id="vmaf-heading">';
-  const anchor = hub.includes(marker) ? marker : (hub.includes('</main>') ? '</main>' : null);
+  // Anchor preference: explicit marker → </main> → before the site footer →
+  // </body>. The DE hub is a raw WordPress/Elementor export with neither a
+  // marker nor a <main> element, so without the footer/body fallbacks the grid
+  // silently never appeared there (only the EN hub, a hand-built page, got it).
+  const FOOTER = '<footer id="site-footer"';
+  const anchor = hub.includes(marker) ? marker
+    : hub.includes('</main>') ? '</main>'
+    : hub.includes(FOOTER) ? FOOTER
+    : hub.includes('</body>') ? '</body>'
+    : null;
   if (!anchor) return false;
 
   const cards = FEATURES.map((f) => hubCard(f, lang)).join('');
+  // When injected via the footer/body fallback the section sits on the dark
+  // pre-footer area of the Elementor page — give it a light panel so the
+  // heading and cards stay readable.
+  const onDark = anchor === FOOTER || anchor === '</body>';
+  const sectionStyle = onDark
+    ? 'max-width:1140px;margin:0 auto;padding:40px 24px 48px;background:#f4f1f1;border-radius:20px 20px 0 0;'
+    : 'max-width:1140px;margin:48px auto;padding:0 20px;';
   const section = `
-<section class="vm-fp-callout" style="max-width:1140px;margin:48px auto;padding:0 20px;">
+<section class="vm-fp-callout" style="${sectionStyle}">
   <style>
     .vm-fp-callout-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
     .vm-fp-callout-card{display:flex;flex-direction:column;gap:6px;background:#fff;border:1px solid #e7dfe0;border-left:4px solid #94152b;border-radius:12px;padding:18px 20px;text-decoration:none;color:#241417;transition:transform .15s ease,box-shadow .15s ease;}
@@ -1665,7 +2060,7 @@ function injectHubGrid(lang) {
 `;
   hub = hub.includes('vm-fp-callout')
     ? hub.replace(/<section class="vm-fp-callout"[\s\S]*?<\/section>\s*/, section)
-    : (anchor === marker ? hub.replace(marker, section + marker) : hub.replace('</main>', section + '</main>'));
+    : hub.replace(anchor, section + anchor);
   fs.writeFileSync(hubPath, hub);
   return true;
 }

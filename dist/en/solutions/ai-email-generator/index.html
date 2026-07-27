@@ -18,14 +18,14 @@
 <meta property="og:title" content="AI Email Generator — Write and Send via Your Own SMTP">
 <meta property="og:description" content="Generate a marketing email, preview it and send it through your own SMTP — all in one place (Beta).">
 <meta property="og:url" content="https://virtual-marketer.de/en/solutions/ai-email-generator/">
-<meta property="og:image" content="https://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png">
+<meta property="og:image" content="https://virtual-marketer.de/product-pages/email-hero.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
 <meta name="geo.placename" content="Germany">
 <meta name="geo.country" content="DE">
 <meta name="ICBM" content="51.1657, 10.4515">
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"AI Email Generator — Write and Send via Your Own SMTP","description":"Generate a marketing email, preview it and send it through your own SMTP — all in one place (Beta).","image":"https://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png","brand":{"@type":"Brand","name":"Virtual Marketer"},"offers":{"@type":"AggregateOffer","priceCurrency":"EUR","availability":"https://schema.org/InStock"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"AI Email Generator — Write and Send via Your Own SMTP","description":"Generate a marketing email, preview it and send it through your own SMTP — all in one place (Beta).","image":"https://virtual-marketer.de/product-pages/email-hero.jpg","brand":{"@type":"Brand","name":"Virtual Marketer"},"offers":{"@type":"AggregateOffer","priceCurrency":"EUR","availability":"https://schema.org/InStock"}}</script>
 
 <link rel="stylesheet" href="/wp-content/themes/engitech/css/bootstrap.css%3Fver=4.0.css">
 <link rel="stylesheet" href="/wp-content/themes/engitech/css/font-awesome.min.css%3Fver=7.0.1.css">
@@ -134,7 +134,101 @@
     .vm-fp .value-grid{grid-template-columns:1fr;}
     .vm-fp .demo{padding:22px;}
     .vm-fp .demo-step-btn{min-width:80px;font-size:12px;}
+    .vm-fp .vmd-stage{padding:16px;}
   }
+
+  .vmd-window { --vm-gray-300:#d9cfd0; --vm-gray-400:#a99a9c; --vm-gray-600:#5a5052; --vm-gray-700:#4a4143; --vm-gray-800:#362a2d;
+    background: #fff; border: 1px solid var(--vm-gray-300); border-radius: 16px; overflow: hidden; box-shadow: 0 24px 60px -24px rgba(36,20,23,0.35); }
+  .vmd-titlebar { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--vm-gray-100); border-bottom: 1px solid var(--vm-gray-200); }
+  .vmd-dot { width: 11px; height: 11px; border-radius: 999px; background: var(--vm-gray-300); }
+  .vmd-dot:nth-child(1) { background: #f87171; } .vmd-dot:nth-child(2) { background: #fbbf24; } .vmd-dot:nth-child(3) { background: #34d399; }
+  .vmd-titletext { margin-left: 10px; font-size: 12.5px; font-weight: 600; color: var(--vm-gray-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .vmd-stage { padding: 22px; min-height: 300px; font-size: 14px; text-align: left; }
+  .vmd-demonote { font-size: 13px; color: var(--vm-gray-500); margin: 10px 2px 0; }
+
+  .vmd { transition: opacity 0.45s ease, transform 0.45s ease; }
+  .vmd:not(.vmd-on) { opacity: 0; transform: translateY(8px); pointer-events: none; }
+  .vmd-instant { transition: none; }
+
+  .vmd-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--vm-gray-500); margin: 0 0 6px; }
+  .vmd-input { background: var(--vm-gray-100); border: 1px solid var(--vm-gray-300); border-radius: 10px; padding: 10px 14px; color: var(--vm-gray-800); min-height: 20px; line-height: 1.5; }
+  .vmd-typing::after { content: "▍"; color: var(--vm-red); animation: vmdBlink 0.8s step-start infinite; }
+  @keyframes vmdBlink { 50% { opacity: 0; } }
+
+  .vmd-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--vm-red); color: #fff; font-weight: 700; border-radius: 10px; padding: 9px 20px; font-size: 14px; }
+  .vmd-btn.vmd-busy::before { content: ""; width: 12px; height: 12px; border-radius: 999px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; animation: vmdSpin 0.7s linear infinite; }
+  @keyframes vmdSpin { to { transform: rotate(360deg); } }
+  .vmd-btn-ghost { background: #fff; color: var(--vm-gray-700); border: 1px solid var(--vm-gray-300); }
+
+  .vmd-chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--vm-gray-300); background: #fff; color: var(--vm-gray-600); border-radius: 999px; padding: 6px 14px; font-weight: 600; font-size: 13px; transition: all 0.3s ease; }
+  .vmd-chip.vmd-chip-on { border-color: var(--vm-red); color: var(--vm-red); background: rgba(148,21,43,0.06); }
+  .vmd-chip .vmd-primarytag { display: none; font-size: 10px; font-weight: 800; color: #fff; background: var(--vm-red); border-radius: 999px; padding: 1px 7px; }
+  .vmd-chip.vmd-chip-primary .vmd-primarytag { display: inline; }
+
+  .vmd-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .vmd-grid2 { grid-template-columns: 1fr; } }
+  .vmd-card { background: var(--vm-gray-100); border: 1px solid var(--vm-gray-200); border-radius: 12px; padding: 14px; }
+  .vmd-card-title { display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: var(--vm-gray-800); font-size: 13px; margin-bottom: 8px; }
+  .vmd-line { height: 9px; border-radius: 6px; background: var(--vm-gray-300); margin: 7px 0; overflow: hidden; position: relative; }
+  .vmd-line.vmd-shimmer::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent); animation: vmdShimmer 1.1s ease infinite; }
+  @keyframes vmdShimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+  .vmd-text { color: var(--vm-gray-700); line-height: 1.5; font-size: 13px; }
+  .vmd-strike { text-decoration: line-through; color: var(--vm-gray-500); }
+  .vmd-new { color: var(--vm-gray-800); font-weight: 600; }
+
+  .vmd-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; border-radius: 999px; padding: 3px 10px; background: rgba(52,211,153,0.15); color: #047857; }
+  .vmd-badge-blue { background: rgba(102,163,206,0.15); color: #1d4ed8; }
+  .vmd-badge-red { background: rgba(148,21,43,0.08); color: var(--vm-red); }
+
+  .vmd-msg { max-width: 85%; border-radius: 14px; padding: 10px 14px; margin: 8px 0; line-height: 1.5; font-size: 13.5px; }
+  .vmd-msg-user { background: var(--vm-red); color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+  .vmd-msg-bot { background: var(--vm-gray-100); border: 1px solid var(--vm-gray-200); color: var(--vm-gray-800); border-bottom-left-radius: 4px; }
+  .vmd-tool { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; color: var(--vm-gray-600); background: var(--vm-gray-100); border: 1px dashed var(--vm-gray-400); border-radius: 999px; padding: 4px 12px; margin: 4px 0; }
+  .vmd-tool::before { content: "⚙"; }
+
+  .vmd-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .vmd-table th { text-align: left; color: var(--vm-gray-500); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 8px; border-bottom: 1px solid var(--vm-gray-300); }
+  .vmd-table td { padding: 7px 8px; border-bottom: 1px solid var(--vm-gray-200); color: var(--vm-gray-700); }
+  .vmd-cell-miss { color: var(--vm-gray-400); font-style: italic; }
+  .vmd-cell-fill { color: #047857; font-weight: 600; animation: vmdPop 0.4s ease; }
+  @keyframes vmdPop { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  .vmd-progress { height: 8px; border-radius: 999px; background: var(--vm-gray-200); overflow: hidden; }
+  .vmd-progress > span { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--vm-red); transition: width 1.1s ease; }
+
+  .vmd-imgbox { border-radius: 12px; border: 1px solid var(--vm-gray-200); height: 130px; background: linear-gradient(135deg, #a3cce9 0%, #66a3ce 45%, #94152b 130%); position: relative; overflow: hidden; transition: filter 1.2s ease; }
+  .vmd-imgbox.vmd-blur { filter: blur(14px) saturate(0.4); }
+  .vmd-imgbox::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 68% 32%, rgba(255,255,255,0.55), transparent 42%); }
+  .vmd-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.9); left: 4%; transition: left 2.6s linear; }
+
+  .vmd-email { border: 1px solid var(--vm-gray-200); border-radius: 12px; overflow: hidden; background: #fff; }
+  .vmd-email-head { background: var(--vm-gray-100); border-bottom: 1px solid var(--vm-gray-200); padding: 10px 14px; font-size: 13px; color: var(--vm-gray-700); }
+  .vmd-email-body { padding: 14px; }
+  .vmd-cta { display: inline-block; background: var(--vm-red); color: #fff; font-weight: 700; font-size: 12.5px; border-radius: 8px; padding: 8px 18px; margin-top: 8px; }
+
+  .vmd-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .vmd-cal-day { background: var(--vm-gray-100); border: 1px solid var(--vm-gray-200); border-radius: 8px; padding: 6px 4px; text-align: center; font-size: 11px; color: var(--vm-gray-500); min-height: 44px; }
+  .vmd-cal-slot { margin-top: 4px; height: 8px; border-radius: 4px; background: var(--vm-gray-300); transition: background 0.4s ease; }
+  .vmd-cal-day.vmd-slot-on .vmd-cal-slot { background: var(--vm-blue); }
+  .vmd-cal-day.vmd-slot-done .vmd-cal-slot { background: #34d399; }
+
+  .vmd-code { background: #1a202c; border-radius: 12px; padding: 14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; line-height: 1.65; color: #e2e8f0; overflow-x: auto; }
+  .vmd-code .c-key { color: #a3cce9; } .vmd-code .c-str { color: #fbbf24; } .vmd-code .c-cmt { color: #718096; }
+
+  .vmd-avatars { display: flex; gap: 10px; }
+  .vmd-avatar { width: 44px; height: 44px; border-radius: 999px; background: linear-gradient(135deg, var(--vm-gray-300), var(--vm-gray-400)); border: 2px solid transparent; transition: border-color 0.3s ease, transform 0.3s ease; }
+  .vmd-avatar.vmd-picked { border-color: var(--vm-red); transform: scale(1.1); }
+
+  .vmd-flow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .vmd-arrow { color: var(--vm-gray-400); font-size: 18px; }
+
+  .vmd-linkword { border-bottom: 2px solid transparent; transition: all 0.3s ease; }
+  .vmd-linkword.vmd-linked { color: var(--vm-red); border-bottom-color: var(--vm-red); font-weight: 600; }
+
+  .vmd-senti { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 700; border-radius: 999px; padding: 2px 9px; }
+  .vmd-senti-pos { background: rgba(52,211,153,0.15); color: #047857; }
+  .vmd-senti-neu { background: var(--vm-gray-200); color: var(--vm-gray-600); }
+
 </style>
 </head>
 <body class="vm-static-blog">
@@ -188,10 +282,10 @@
       <p class="intro">Generate a marketing email with your VM mail model, preview it and send it through your own SMTP &#8211; all in one place.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="/en/demo/">Book a demo</a>
-        
+        <a class="btn btn-ghost" href="#produkt-demo">Try the live demo</a>
       </div>
     </div>
-    <div class="hero-image hero-visual"><div class="hero-visual-icon"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 6 8 7 8-7"/></svg></div><span class="hero-visual-caption">Mail Generator (Beta)</span></div>
+    <div class="hero-image"><img src="/product-pages/email-hero.jpg" alt="AI Email Generator — Write and Send via Your Own SMTP" loading="eager"></div>
   </section>
 
   <section aria-labelledby="audience-h">
@@ -206,6 +300,30 @@
   
 
   
+
+  <section id="produkt-demo" aria-labelledby="pdemo-h">
+    <p class="section-label">Product demo</p>
+    <h2 class="section-title" id="pdemo-h">Inside the product</h2>
+    <div class="vmd-window">
+      <div class="vmd-titlebar"><span class="vmd-dot"></span><span class="vmd-dot"></span><span class="vmd-dot"></span><span class="vmd-titletext">Virtual Marketer — Email Marketing</span></div>
+      <div class="vmd-stage" id="vmdemo">
+          <p class="vmd-label">Briefing</p>
+          <div class="vmd-input"><span id="em-brief"></span></div>
+          <div class="vmd-email vmd" id="em-mail" style="margin-top:14px;">
+            <div class="vmd-email-head"><strong>Subject:</strong> <span id="em-subj"></span></div>
+            <div class="vmd-email-body">
+              <div class="vmd-imgbox vmd-blur" id="em-hero" style="height:78px;"></div>
+              <div id="em-body" style="margin-top:10px;"><div class="vmd-line vmd-shimmer " style="width:92%"></div><div class="vmd-line vmd-shimmer " style="width:78%"></div><div class="vmd-line vmd-shimmer " style="width:85%"></div></div>
+              <span class="vmd-cta vmd" id="em-cta">Discover now</span>
+            </div>
+          </div>
+          <div class="vmd" id="em-push" style="margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span class="vmd-btn" id="em-pushbtn">Push as draft</span>
+            <span class="vmd-badge" id="em-pushed" style="visibility:hidden;">✓ Draft in your email provider — sending stays with you</span>
+          </div></div>
+    </div>
+    <p class="vmd-demonote">Simulated preview with example data &#8211; no real accounts or server calls.</p>
+  </section>
 
   <section aria-labelledby="value-h">
     <p class="section-label">Business value</p>
@@ -247,6 +365,7 @@
   var panels = document.querySelectorAll('.demo-panel');
   var prevBtn = document.getElementById('demo-prev');
   var nextBtn = document.getElementById('demo-next');
+  if (!prevBtn || !nextBtn) return; // page has no step-through wizard
   var current = 0;
 
   function show(i){
@@ -274,6 +393,64 @@
   });
 })();
 </script>
+<script>
+function vmDemo(rootId, steps, loopPause) {
+  var root = document.getElementById(rootId);
+  if (!root) return;
+  var initial = root.innerHTML;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var timer = null;
+  function q(sel) { return root.querySelector(sel); }
+  function apply(step, instant, next) {
+    var el = step.s ? q(step.s) : null;
+    var done = function () { if (!instant) timer = setTimeout(next, 0); };
+    if (step.t === 'wait') { done(); return; }
+    if (!el) { done(); return; }
+    if (step.t === 'text') { el.textContent = step.x; done(); return; }
+    if (step.t === 'show') { el.classList.add('vmd-on'); done(); return; }
+    if (step.t === 'hide') { el.classList.remove('vmd-on'); done(); return; }
+    if (step.t === 'class') { el.classList.add(step.x); done(); return; }
+    if (step.t === 'style') { el.style[step.k] = step.x; done(); return; }
+    if (step.t === 'type') {
+      if (instant) { el.textContent = step.x; return; }
+      el.textContent = '';
+      el.classList.add('vmd-typing');
+      var i = 0;
+      var tick = function () {
+        el.textContent = step.x.slice(0, ++i);
+        if (i < step.x.length) timer = setTimeout(tick, 24);
+        else { el.classList.remove('vmd-typing'); timer = setTimeout(next, 0); }
+      };
+      tick();
+      return;
+    }
+    done();
+  }
+  function runFrom(i) {
+    if (i >= steps.length) {
+      timer = setTimeout(function () { root.innerHTML = initial; runFrom(0); }, loopPause || 3800);
+      return;
+    }
+    timer = setTimeout(function () { apply(steps[i], false, function () { runFrom(i + 1); }); }, steps[i].d == null ? 400 : steps[i].d);
+  }
+  if (reduced) {
+    root.querySelectorAll('.vmd').forEach(function (el) { el.classList.add('vmd-instant'); });
+    steps.forEach(function (s) { apply(s, true, function () {}); });
+    return;
+  }
+  if ('IntersectionObserver' in window) {
+    var started = false;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && !started) { started = true; io.disconnect(); runFrom(0); }
+      });
+    }, { threshold: 0.25 });
+    io.observe(root);
+  } else {
+    runFrom(0);
+  }
+}
+vmDemo('vmdemo', [{"t":"type","s":"#em-brief","x":"Announce the new spring collection, 15% welcome discount.","d":500},{"t":"show","s":"#em-mail","d":600},{"t":"type","s":"#em-subj","x":"Spring is here — 15% off everything new 🌱","d":500},{"t":"class","s":"#em-hero","x":"vmd-unblur","d":400},{"t":"style","s":"#em-hero","k":"filter","x":"none","d":0},{"t":"text","s":"#em-body","x":"Three paragraphs of on-brand copy, responsive HTML, a correct unsubscribe link — all generated and editable before pushing.","d":900},{"t":"show","s":"#em-cta","d":400},{"t":"show","s":"#em-push","d":600},{"t":"class","s":"#em-pushbtn","x":"vmd-busy","d":700},{"t":"style","s":"#em-pushed","k":"visibility","x":"visible","d":1200}], 3800);</script>
 <!-- vm-lang-switch:start -->
 <style>
   #vm-lang-switch{position:fixed;top:16px;right:16px;z-index:99998;display:flex;align-items:center;gap:6px;background:#ffffffee;backdrop-filter:blur(6px);border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.08)}

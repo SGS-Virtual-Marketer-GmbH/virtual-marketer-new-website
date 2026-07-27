@@ -433,6 +433,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://virtual-marketer.de/en/solutions/ai-files/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://virtual-marketer.de/en/solutions/ai-image-generator/</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
@@ -463,7 +469,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://virtual-marketer.de/en/solutions/bulk-text-generator/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://virtual-marketer.de/en/solutions/campaign-builder/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/en/solutions/chat-insights/</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -481,7 +499,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://virtual-marketer.de/en/solutions/feed-optimizer/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://virtual-marketer.de/en/solutions/internal-linking/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/en/solutions/social-publisher/</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -523,7 +553,25 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://virtual-marketer.de/ki-loesungen/bulk-texte/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/ki-loesungen/chat-insights/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://virtual-marketer.de/ki-loesungen/coding-api/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/ki-loesungen/feed-optimierung/</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -547,6 +595,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://virtual-marketer.de/ki-loesungen/ki-dateien/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://virtual-marketer.de/ki-loesungen/mail-generator/</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
@@ -560,6 +614,12 @@
   </url>
   <url>
     <loc>https://virtual-marketer.de/ki-loesungen/seo-content/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/ki-loesungen/social-publisher/</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
