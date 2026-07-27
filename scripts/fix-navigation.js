@@ -45,6 +45,11 @@ const SOLUTIONS = [
   { href: '/ki-loesungen/kampagnen-builder/', label: 'KI-Kampagnen-Builder' },
   { href: '/ki-loesungen/interne-verlinkung/', label: 'Interne Verlinkung' },
   { href: '/ki-loesungen/mail-generator/', label: 'KI-E-Mail-Generator' },
+  { href: '/ki-loesungen/social-publisher/', label: 'KI Social Publisher' },
+  { href: '/ki-loesungen/bulk-texte/', label: 'KI Bulk-Generator' },
+  { href: '/ki-loesungen/ki-dateien/', label: 'Dateien &amp; Berichte' },
+  { href: '/ki-loesungen/feed-optimierung/', label: 'Feed-Optimizer' },
+  { href: '/ki-loesungen/chat-insights/', label: 'Chat-Insights' },
 ];
 
 const SOLUTIONS_EN = [
@@ -59,6 +64,11 @@ const SOLUTIONS_EN = [
   { href: '/en/solutions/campaign-builder/', label: 'AI Campaign Builder' },
   { href: '/en/solutions/internal-linking/', label: 'Internal Linking' },
   { href: '/en/solutions/ai-email-generator/', label: 'AI Email Generator' },
+  { href: '/en/solutions/social-publisher/', label: 'AI Social Publisher' },
+  { href: '/en/solutions/bulk-text-generator/', label: 'AI Bulk Generator' },
+  { href: '/en/solutions/ai-files/', label: 'Files &amp; Reports' },
+  { href: '/en/solutions/feed-optimizer/', label: 'Feed Optimizer' },
+  { href: '/en/solutions/chat-insights/', label: 'Chat Insights' },
 ];
 
 const DROPDOWN_STYLE = `<style>
