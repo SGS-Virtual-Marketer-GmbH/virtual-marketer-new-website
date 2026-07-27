@@ -1731,7 +1731,11 @@ function pageShell(f, lang) {
     description: c.seo.description,
     image: heroAbs,
     brand: { '@type': 'Brand', name: 'Virtual Marketer' },
-    offers: { '@type': 'AggregateOffer', priceCurrency: 'EUR', availability: 'https://schema.org/InStock' },
+    // No `offers`/AggregateOffer: Virtual Marketer doesn't publish fixed
+    // pricing for any of these — every engagement is an individually
+    // quoted B2B contract (see the "individuelles Angebot" homepage copy).
+    // A fake EUR AggregateOffer with availability "InStock" would claim
+    // purchasable, priced, in-stock retail goods that don't exist.
   };
 
   // All 16 products now ship real hero artwork (synced from the product

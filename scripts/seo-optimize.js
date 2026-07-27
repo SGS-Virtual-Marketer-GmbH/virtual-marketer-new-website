@@ -154,14 +154,21 @@ function generateStructuredData(path, meta) {
     'url': baseUrl,
     'logo': `${baseUrl}/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png`,
     'description': 'KI-Marketinglösung für automatisierte Content-Generierung',
-    'sameAs': [
-      'https://www.linkedin.com/company/virtual-marketer',
-      'https://twitter.com/virtual_marketer',
-      'https://www.instagram.com/virtualmarketer'
-    ],
-    'contact': {
+    // No `sameAs` social links: the ones previously here (LinkedIn/Twitter/
+    // Instagram URLs) don't appear anywhere else on the real site — no
+    // footer/header social icon links to them anywhere in the scraped
+    // WordPress content — meaning they were invented rather than sourced
+    // from a real, verified account. Fabricated structured data is worse
+    // than none: better to omit until real, confirmed account URLs exist.
+    // Same reasoning for `contactPoint`: no phone number is published
+    // anywhere on the real site (confirmed against /impressum/, which only
+    // lists an email address) — the placeholder '+49-xxx-xxxxxxx' that used
+    // to be here was never a real number. Property name also corrected from
+    // the non-standard `contact` to schema.org's actual `contactPoint`
+    // (the wrong name meant this block was likely being silently ignored
+    // by anything validating against the real schema.org vocabulary).
+    'contactPoint': {
       '@type': 'ContactPoint',
-      'telephone': '+49-xxx-xxxxxxx',
       'contactType': 'Sales',
       'email': 'info@virtual-marketer.de'
     },
@@ -204,11 +211,13 @@ function generateStructuredData(path, meta) {
       'url': url,
       'image': meta.image ? `${baseUrl}${meta.image}` : null,
       'brand': { '@type': 'Brand', 'name': 'Virtual Marketer' },
-      'offers': {
-        '@type': 'AggregateOffer',
-        'priceCurrency': 'EUR',
-        'availability': 'https://schema.org/InStock'
-      }
+      // No `offers`/AggregateOffer block: Virtual Marketer doesn't publish
+      // fixed pricing or sell fixed-inventory goods — every engagement is
+      // an individually quoted B2B contract (see the honest "individuelles
+      // Angebot" copy that replaced fabricated homepage pricing text
+      // earlier in this project). Declaring a EUR AggregateOffer with
+      // availability "InStock" implied purchasable, priced, in-stock
+      // retail goods that don't exist — fabricated data, not a real offer.
     };
   } else if (meta.type === 'blog') {
     pageSchema = {
@@ -255,8 +264,11 @@ function generateOpenGraph(path, meta) {
     <meta property="twitter:title" content="${meta.title}">
     <meta property="twitter:description" content="${meta.description}">
     <meta property="twitter:image" content="${meta.image ? baseUrl + meta.image : baseUrl + '/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png'}">
-    <meta property="twitter:creator" content="@virtual_marketer">
   `.trim();
+  // No twitter:creator: "@virtual_marketer" wasn't a verified real account
+  // (same reasoning as the removed Organization sameAs links above) —
+  // omitting is safer than guessing a handle that may not exist or may
+  // belong to someone else entirely.
 }
 
 /**

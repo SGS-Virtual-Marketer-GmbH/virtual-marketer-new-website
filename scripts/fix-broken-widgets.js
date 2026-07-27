@@ -144,6 +144,32 @@ const HERO_TRUST_PANEL = `<div class="vm-hero-trust">
   .vm-hero-trust li::before{content:"\\2713";position:absolute;left:0;top:0;color:#94152b;font-weight:700;}
 </style>`;
 
+// Real FAQ content for /faqs/, replacing 10 items of unedited Engitech
+// theme demo Q&A (generic web-agency/SEO-consultant questions, several
+// answers literally identical "Google has said for years that the most
+// important single factor..." filler text). These 10 answers only state
+// facts already established and verified elsewhere in this project: no
+// fixed/published pricing (see the "individuelles Angebot" homepage copy),
+// the data-residency policy (see datenschutzerklaerung), the real count and
+// nature of the 16 solutions (see dist/ki-loesungen/), the real booking
+// widget's actual hours, and the real contact channels (contact form +
+// email — no phone number is published anywhere on the real site, so none
+// is invented here either). Onboarding duration and price are deliberately
+// left non-specific ("depends on scope, discussed in the demo") rather
+// than inventing numbers that were never provided.
+const REAL_FAQS = [
+  { q: 'Passt Virtual Marketer zu meinem Unternehmen?', a: 'Virtual Marketer eignet sich für Unternehmen jeder Größe, die Marketing-Prozesse mit KI automatisieren möchten – von der Produktbeschreibung bis zur Kampagnensteuerung. In einem unverbindlichen Demo-Gespräch prüfen wir gemeinsam, welche unserer Lösungen zu Ihren Zielen und Ihrer Datenbasis passen.' },
+  { q: 'Wie lange dauert das Onboarding?', a: 'Die Onboarding-Dauer hängt vom Umfang ab – von einzelnen Lösungen bis zur vollständigen Integration in Ihre bestehenden Systeme. Den konkreten Zeitplan für Ihr Unternehmen besprechen wir im Erstgespräch nach der Demo.' },
+  { q: 'Was kostet Virtual Marketer?', a: 'Wir bieten keine Standardpakete zu Festpreisen, sondern erstellen für jedes Unternehmen ein individuelles Angebot – abhängig von den gewählten Lösungen, dem Datenvolumen und dem Integrationsaufwand.' },
+  { q: 'Welche KI-Lösungen bietet Virtual Marketer an?', a: 'Aktuell 16 Lösungen entlang der gesamten Marketing-Wertschöpfungskette – u. a. KI-Agenten, Coding-API, Produktfotos &amp; Virtual Try-On, Feed-Veredelung sowie Text-, Bild- und Videogenerierung. Alle Lösungen im Überblick finden Sie unter „Lösungen" in der Navigation.' },
+  { q: 'Was ist ein Custom-KI-Modell und wie unterscheidet es sich von einem generischen Chatbot?', a: 'Statt eines generischen KI-Modells trainieren wir ein individuelles Modell auf Ihre Markenstimme, Ihre Produktdaten und Ihre Tonalität – kein Prompt-Wrapper, sondern ein System, das Ihr Unternehmen tatsächlich versteht.' },
+  { q: 'Wo werden meine Daten gespeichert und verarbeitet?', a: 'Der genaue Speicherort wird individuell vertraglich festgelegt. Auf Wunsch verarbeiten wir Ihre Daten ausschließlich in Deutschland oder anderen EU-Rechenzentren; ohne gesonderte Vereinbarung wählen wir einen kosteneffizienten Standort. Details finden Sie in unserer Datenschutzerklärung.' },
+  { q: 'Ist Virtual Marketer DSGVO-konform?', a: 'Ja. Wir verarbeiten personenbezogene Daten ausschließlich auf Basis der DSGVO und des EU AI Act, mit vertraglich geregelten Auftragsverarbeitern. Details, inklusive der eingesetzten Unterauftragsverarbeiter, finden Sie in unserer Datenschutzerklärung.' },
+  { q: 'Wie kann ich eine Demo buchen?', a: 'Über unseren Buchungskalender wählen Sie direkt einen freien Termin (Montag bis Freitag, 14:00–20:00 Uhr) – die Bestätigung erfolgt per E-Mail-Link. Alternativ erreichen Sie uns über unser Kontaktformular oder per E-Mail.' },
+  { q: 'Bietet Virtual Marketer eine API für Entwickler?', a: 'Ja, unsere Coding-API bindet Virtual Marketer Senior und Virtual Marketer Junior direkt in Ihre bestehenden Entwicklungsprozesse ein – mit einem einheitlichen Guthabenmodell statt komplexer Tarifstruktur.' },
+  { q: 'Wie erreiche ich den Kundensupport?', a: 'Am schnellsten über unser Kontaktformular oder per E-Mail an info@virtual-marketer.de. Wir melden uns zeitnah zurück.' },
+];
+
 function main() {
   console.log('\n🧹 Cleaning up broken/dead widgets and scrape debris...\n');
 
@@ -161,6 +187,7 @@ function main() {
   let absoluteAssetUrlsFixed = 0;
   let staleLogoJsonLdFixed = 0;
   let faqsThemeDemoRemoved = 0;
+  let faqsRealContentApplied = 0;
   let filesChanged = 0;
 
   for (const file of files) {
@@ -271,6 +298,21 @@ function main() {
         html = html.slice(0, heading.start) + html.slice(carousel.end);
         faqsThemeDemoRemoved++;
       }
+
+      // 12. The 10 accordion Q&As themselves are also unedited theme demo
+      // content (generic web-agency/SEO questions, several answers are
+      // literally identical filler text) — replace with REAL_FAQS above,
+      // in document order, preserving the exact wrapper markup so the
+      // existing accordion CSS/JS keeps working unchanged.
+      let faqIdx = 0;
+      const accItemRe = /<div class="acc-item">\s*<span class="acc-toggle" data-default="(yes)?">[^<]*?\s*<i class="down[^>]*><\/i><i class="up[^>]*><\/i><\/span>\s*<div class="acc-content">\s*(?:<p>)?.*?(?:<\/p>)?\s*<\/div>\s*<\/div>/gs;
+      const newHtml = html.replace(accItemRe, (match, isDefault) => {
+        if (faqIdx >= REAL_FAQS.length) return match; // more matches than real content — leave extras untouched rather than guess
+        const { q, a } = REAL_FAQS[faqIdx++];
+        faqsRealContentApplied++;
+        return `<div class="acc-item">\n\t\t\t\t<span class="acc-toggle" data-default="${isDefault || ''}">${q} <i class="down flaticon-download-arrow"></i><i class="up flaticon-up-arrow"></i></span>\n\t\t\t\t<div class="acc-content">\n\t\t\t\t\t<p>${a}</p>\t\t\t\t</div>\n\t\t\t</div>`;
+      });
+      if (faqIdx === REAL_FAQS.length) html = newHtml; // only commit if we replaced exactly the expected count — a partial match means the page structure shifted and blind replacement could be wrong
     }
 
     if (html !== before) {
@@ -289,6 +331,7 @@ function main() {
   console.log(`  ✓ Rewrote absolute same-domain asset URLs to relative: ${absoluteAssetUrlsFixed} occurrence(s)`);
   console.log(`  ✓ Fixed stale/broken logo URL in Organization JSON-LD: ${staleLogoJsonLdFixed} occurrence(s)`);
   console.log(`  ✓ Removed unedited Engitech theme demo content from /faqs/: ${faqsThemeDemoRemoved} page(s)`);
+  console.log(`  ✓ Replaced unedited FAQ questions/answers with real content: ${faqsRealContentApplied} item(s)`);
   console.log(`  ✓ ${filesChanged} file(s) changed\n`);
 }
 
