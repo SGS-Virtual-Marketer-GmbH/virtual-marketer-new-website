@@ -148,6 +148,7 @@ function pageShell({ title, description, keywords, slug, date, updated, category
     <a href="/blog/">Blog</a>
     <a href="https://api.virtual-marketer.de/documentation/">API</a>
     <a href="/modell-anfragen/">Modell anfragen</a>
+    <a href="/kontakt/">Kontakt</a>
     <a href="https://login.virtual-marketer.de/">Login</a>
   </nav>
 </header>
@@ -231,6 +232,7 @@ function generateArchive(posts) {
     <a href="/blog/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Blog</a>
     <a href="https://api.virtual-marketer.de/documentation/" style="margin-left:24px;color:#1f2937;text-decoration:none;">API</a>
     <a href="/modell-anfragen/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Modell anfragen</a>
+    <a href="/kontakt/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Kontakt</a>
     <a href="https://login.virtual-marketer.de/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Login</a>
   </nav>
 </header>

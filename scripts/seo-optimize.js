@@ -40,6 +40,7 @@ const DE_TO_EN = {
   '/management/': '/en/about/',
   '/modell-anfragen/': '/en/request-custom-model/',
   '/virtual-marketer-demo/': '/en/demo/',
+  '/kontakt/': '/en/contact/',
 };
 
 function hreflangBlock(pagePath) {

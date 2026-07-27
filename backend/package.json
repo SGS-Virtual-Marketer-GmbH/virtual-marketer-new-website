@@ -5,7 +5,8 @@
   "description": "Booking + contact-form API: slot-locked demo scheduling, email verification via confirmation link, SMTP notifications.",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "node --test"
   },
   "dependencies": {
     "better-sqlite3": "^11.3.0",

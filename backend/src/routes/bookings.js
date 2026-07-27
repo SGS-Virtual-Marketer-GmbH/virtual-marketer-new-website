@@ -7,7 +7,7 @@ const slots = require('../slots');
 const tokens = require('../tokens');
 const mailer = require('../mailer');
 const { copy, confirmPageHtml } = require('../emails');
-const { isValidEmail, cleanString, cleanOptionalString, cleanLocale } = require('../validate');
+const { isValidEmail, normalizeEmail, cleanString, cleanOptionalString, cleanLocale } = require('../validate');
 const { submitLimiter, confirmLimiter, availabilityLimiter } = require('../rateLimit');
 
 const router = express.Router();
@@ -63,7 +63,7 @@ router.get('/availability', availabilityLimiter, (req, res) => {
 router.post('/', submitLimiter, express.json({ limit: '10kb' }), async (req, res) => {
   const body = req.body || {};
   const name = cleanString(body.name, { max: 200 });
-  const email = isValidEmail(body.email) ? body.email.trim() : null;
+  const email = isValidEmail(body.email) ? normalizeEmail(body.email) : null;
   const company = cleanOptionalString(body.company, { max: 200 });
   const message = cleanOptionalString(body.message, { max: 2000 });
   const locale = cleanLocale(body.locale);

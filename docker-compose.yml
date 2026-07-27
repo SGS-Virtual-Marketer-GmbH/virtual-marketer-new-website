@@ -50,6 +50,9 @@ services:
       # must persist across image rebuilds and must never end up inside a
       # git-tracked directory.
       - vm-api-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
     security_opt:
       - no-new-privileges:true
     cap_drop:

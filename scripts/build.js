@@ -124,8 +124,17 @@ async function build() {
     console.log(`  ✓ Processed ${jsFiles.length} JavaScript files`);
 
     // Copy images and assets
+    // Note: same class of bug as the JavaScript fix above — wget kept the
+    // WordPress cache-busting query string as part of the on-disk filename
+    // for these too (e.g. "nunito-sans--v12-normal-400.woff2?c=1682535240"),
+    // so a plain end-anchored /\.woff2$/ pattern matches zero of them. This
+    // silently dropped every font file (and any other asset with a query
+    // string on disk) from the dist/ copy, producing 404s for @font-face
+    // src: url(...) references even though the CSS itself (and server.js's
+    // %3F-decoding logic) already handle this filename convention correctly
+    // — the files just never made it into dist/ in the first place.
     console.log('🖼️  Processing images and assets...');
-    const assetExtensions = /\.(jpg|jpeg|png|gif|webp|svg|woff|woff2|ttf|eot)$/i;
+    const assetExtensions = /\.(jpg|jpeg|png|gif|webp|svg|woff|woff2|ttf|eot)(\?|$)/i;
     const assetFiles = findFiles(SOURCE, assetExtensions);
 
     for (const assetFile of assetFiles) {

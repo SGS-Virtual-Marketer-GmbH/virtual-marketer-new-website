@@ -17,6 +17,28 @@ Required env vars are documented in `.env.example`. The process fails fast
 at startup if any are missing (`src/config.js`). SMTP connectivity is
 verified once at startup and logged (never logs the password).
 
+`src/app.js` exports the configured Express app with no `.listen()` call;
+`src/server.js` is the thin entrypoint that calls `.listen()` and starts the
+housekeeping sweep. This split exists so the test suite can drive the real
+app in-process over real HTTP without binding the actual configured port.
+
+## Tests
+
+```
+cd backend
+npm test
+```
+
+Uses Node's built-in test runner (`node --test`, no extra dependency).
+Covers: timezone/DST edge cases in `src/slots.js` (including the days
+immediately after Germany's spring-forward/fall-back transitions), token
+generation/verification/expiry (`src/tokens.js`), input validation and
+email normalization (`src/validate.js`), and — the most important one — a
+true-concurrency integration test that fires 10 simultaneous real HTTP
+requests at the same slot and asserts exactly one gets `201` and the other
+nine get `409`, proving the double-booking guard holds under actual
+concurrent load, not just by reading the code.
+
 ## Data model
 
 SQLite (`better-sqlite3`, file at `DB_PATH`), two tables: `bookings`,
@@ -50,10 +72,20 @@ Every booking/contact submission gets a 256-bit random token
 inside a confirmation *link* in the email
 (`GET /bookings/confirm?id=&token=` or `/contact/confirm?...`), never as a
 short code. Clicking it is the only way to confirm — there's no code entry
-field anywhere. Confirmation is rate-limited (`src/rateLimit.js`) and the
-same-email flood guard in each route caps how many pending
-requests one address can generate in 24h, so the flow can't be used to
-spam confirmation emails at an arbitrary third party.
+field anywhere. Confirmation is rate-limited (`src/rateLimit.js`, per-IP
+limits are env-overridable — see `.env.example`) and the same-email flood
+guard in each route caps how many pending requests one address can
+generate in 24h, so the flow can't be used to spam confirmation emails at
+an arbitrary third party. Email addresses are lowercased before storage
+and before the flood-guard lookup, so `Foo@X.com` and `foo@x.com` can't be
+used to get two independent budgets against the same real inbox.
+
+Rate limiting only holds if the client's real IP reaches this service
+correctly: nginx overwrites (not appends to) `X-Forwarded-For` with its own
+`$remote_addr` (`docker/nginx.conf`), and this app trusts exactly that one
+hop (`app.set('trust proxy', 1)` in `src/app.js`) — trusting `true` (every
+hop) would let a client set its own `X-Forwarded-For` and get a fresh
+rate-limit bucket on every request.
 
 ## Endpoints
 

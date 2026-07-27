@@ -379,6 +379,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://virtual-marketer.de/en/contact/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://virtual-marketer.de/en/demo/</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
@@ -566,6 +572,12 @@
   </url>
   <url>
     <loc>https://virtual-marketer.de/ki-loesungen/videos-generieren/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/kontakt/</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

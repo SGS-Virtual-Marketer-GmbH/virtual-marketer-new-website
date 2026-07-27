@@ -6,7 +6,7 @@ const config = require('../config');
 const tokens = require('../tokens');
 const mailer = require('../mailer');
 const { copy, confirmPageHtml } = require('../emails');
-const { isValidEmail, cleanString, cleanLocale } = require('../validate');
+const { isValidEmail, normalizeEmail, cleanString, cleanLocale } = require('../validate');
 const { submitLimiter, confirmLimiter } = require('../rateLimit');
 
 const router = express.Router();
@@ -23,7 +23,7 @@ const recentSubmissionsByEmail = db.prepare(`
 router.post('/', submitLimiter, express.json({ limit: '10kb' }), async (req, res) => {
   const body = req.body || {};
   const name = cleanString(body.name, { max: 200 });
-  const email = isValidEmail(body.email) ? body.email.trim() : null;
+  const email = isValidEmail(body.email) ? normalizeEmail(body.email) : null;
   const message = cleanString(body.message, { max: 4000 });
   const locale = cleanLocale(body.locale);
 
