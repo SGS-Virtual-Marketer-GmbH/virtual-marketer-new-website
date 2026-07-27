@@ -85,10 +85,6 @@ img[data-dominant-color]:not(.has-transparency) { background-color: var(--domina
 <link rel='stylesheet' id='simple-likes-public-css-css' href='../wp-content/themes/engitech/inc/backend/css/simple-likes-public.css%3Fver=7.0.1.css' media='all' />
 <link rel='stylesheet' id='engitech-preload-css' href='../wp-content/themes/engitech/css/royal-preload.css%3Fver=7.0.1.css' media='all' />
 <link rel='stylesheet' id='engitech-woocommerce-style-css' href='../wp-content/themes/engitech/css/woocommerce.css%3Fver=7.0.1.css' media='all' />
-<script id="wpcal_common_path-js-after">
-var __wpcal_dist_url = "https://virtual-marketer.de/wp-content/plugins/wpcal/dist/";
-//# sourceURL=wpcal_common_path-js-after
-</script>
 <script id="jquery-core-js" src="../wp-includes/js/jquery/jquery.min.js%3Fver=3.7.1"></script>
 <script id="jquery-migrate-js" src="../wp-includes/js/jquery/jquery-migrate.min.js%3Fver=3.4.1"></script>
 <script id="layerslider-utils-js-extra">
@@ -477,7 +473,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="canonical" href="https://virtual-marketer.de/virtual-marketer-demo/">
   <link rel="alternate" hreflang="de" href="https://virtual-marketer.de/virtual-marketer-demo/">
-  <link rel="alternate" hreflang="en" href="https://virtual-marketer.ai/virtual-marketer-demo/">
+  <link rel="alternate" hreflang="en" href="https://virtual-marketer.de/en/demo/">
   <link rel="alternate" hreflang="x-default" href="https://virtual-marketer.de/virtual-marketer-demo/">
 
   <!-- Open Graph / Social Media -->
@@ -562,7 +558,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- GTM Container placement set to automatic -->
 <!-- Google Tag Manager (noscript) -->
 				<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T4MJ9WSF" height="0" width="0" style="display:none;visibility:hidden" aria-hidden="true"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) --><div id="royal_preloader" data-width="100" data-height="127" data-url="http://virtual-marketer.de/wp-content/uploads/2023/04/Virtual-Marketer-Logo-128x128-New.png" data-color="#0a0f2b" data-bgcolor="#fff"></div><div id="page" class="site">
+<!-- End Google Tag Manager (noscript) --><div id="royal_preloader" data-width="100" data-height="127" data-url="https://virtual-marketer.de/wp-content/uploads/2023/04/Virtual-Marketer-Logo-128x128-New.png" data-color="#0a0f2b" data-bgcolor="#fff"></div><div id="page" class="site">
 	<!-- #site-header-open -->
 <header id="site-header" class="site-header header-static">
     <!-- #header-desktop-open -->
@@ -604,7 +600,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				<div class="elementor-widget-container">
 	    	<div class="the-logo">
 				<a href="../index.html">
-					<img src="http://virtual-marketer.de/wp-content/uploads/2023/04/Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer">
+					<img src="https://virtual-marketer.de/wp-content/uploads/2023/04/Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer">
 				</a>			        
 		    </div>
 	    				</div>
@@ -680,7 +676,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				<div class="elementor-widget-container">
 	    	<div class="the-logo">
 				<a href="../index.html">
-					<img src="http://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer">
+					<img src="https://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer">
 				</a>			        
 		    </div>
 	    				</div>
@@ -763,25 +759,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <main id="main" class="site-main">
 <article id="post-57684" class="post-57684 page type-page status-publish hentry">
 	<div class="inner-post">
-	<script type="text/javascript">
-	var wpcal_booking_service_id = "1";
-	var wpcal_post_id = "57684";
-	try{
-		var wpcal_load_trigger = new Event('wpcal_load_booking_widget');
-		if (/complete|interactive|loaded/.test(document.readyState)) {
-			setTimeout(() => {
-				document.dispatchEvent(wpcal_load_trigger);
-			}, 10);
-		} else {
-			document.addEventListener("DOMContentLoaded", () => {
-				setTimeout(() => {
-					document.dispatchEvent(wpcal_load_trigger);
-				}, 10);
-			});
-		}
-	}
-	catch(err){}
-	</script>
 	<style>
 	@keyframes rotation {
 		from {
@@ -825,13 +802,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 		border: 1px solid #e9ecf2;
 	}
 	</style>
-	<div id="wpcal_user_app" class="loading-indicator-initial"></div>
+	<div id="vm-booking-widget" data-locale="de"></div>
+<link rel="stylesheet" href="/assets/booking-widget/booking-widget.css">
+<script src="/assets/booking-widget/booking-widget.js" defer></script>
 	</div>
 </article>
             </main><!-- #main -->
         </div><!-- #primary -->
 <aside id="primary-sidebar" class="widget-area primary-sidebar col-lg-3 col-md-3 col-sm-12 col-xs-12">
-	<section id="search-3" class="widget widget_search"><form role="search" method="get" class="search-form" action="../index.html" >
+	<section id="search-3" class="widget widget_search"><form role="search" method="get" class="search-form" action="javascript:void(0)" onsubmit="return false" style="display:none" aria-hidden="true">
     <label><span class="screen-reader-text">Search for:</span>
     <input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" /></label>
 	<button type="submit" class="search-submit"><i class="flaticon-search"></i></button>
@@ -1118,9 +1097,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel='stylesheet' id='elementor-post-2843-css' href='../wp-content/uploads/elementor/css/post-2843.css%3Fver=1782174508.css' media='all' />
 <link rel='stylesheet' id='widget-icon-list-css' href='../wp-content/plugins/elementor/assets/css/widget-icon-list.min.css%3Fver=4.1.4.css' media='all' />
 <link rel='stylesheet' id='elementor-post-2854-css' href='../wp-content/uploads/elementor/css/post-2854.css%3Fver=1782174508.css' media='all' />
-<link rel='stylesheet' id='wpcal_common_chunk_vendor_css-css' href='../wp-content/plugins/wpcal/dist/css/chunk-vendors.css%3Fver=0.9.5.10.css' media='' />
-<link rel='stylesheet' id='wpcal_common_chunk_css-css' href='../wp-content/plugins/wpcal/dist/css/chunk-common.css%3Fver=0.9.5.10.css' media='' />
-<link rel='stylesheet' id='wpcal_user_css-css' href='../wp-content/plugins/wpcal/dist/css/user.css%3Fver=0.9.5.10.css' media='' />
 <link rel='stylesheet' id='elementor-post-1308-css' href='../wp-content/uploads/elementor/css/post-1308.css%3Fver=1782174508.css' media='all' />
 <link rel='stylesheet' id='widget-image-css' href='../wp-content/plugins/elementor/assets/css/widget-image.min.css%3Fver=4.1.4.css' media='all' />
 <link rel='stylesheet' id='swiper-css' href='../wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min.css%3Fver=8.4.5.css' media='all' />
@@ -1219,13 +1195,6 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
 //# sourceURL=elementor-frontend-js-before
 </script>
 <script id="elementor-frontend-js" src="../wp-content/plugins/elementor/assets/js/frontend.min.js%3Fver=4.1.4"></script>
-<script id="wpcal_user_chunk-js" src="../wp-content/plugins/wpcal/dist/js/chunk-vendors.min.js%3Fver=0.9.5.10"></script>
-<script id="wpcal_user_chunk_common-js" src="../wp-content/plugins/wpcal/dist/js/chunk-common.min.js%3Fver=0.9.5.10"></script>
-<script id="wpcal_user_app-js-extra">
-var wpcal_ajax = {"ajax_url":"https://virtual-marketer.de/wp-admin/admin-ajax.php","admin_url":"https://virtual-marketer.de/wp-admin/","is_debug":""};
-//# sourceURL=wpcal_user_app-js-extra
-</script>
-<script id="wpcal_user_app-js" src="../wp-content/plugins/wpcal/dist/js/user.min.js%3Fver=0.9.5.10"></script>
 <script id="swiper-js" src="../wp-content/plugins/elementor/assets/lib/swiper/v8/swiper.min.js%3Fver=8.4.5"></script>
 <script id="wp-emoji-settings" type="application/json">
 {"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://virtual-marketer.de/wp-includes/js/wp-emoji-release.min.js"}}

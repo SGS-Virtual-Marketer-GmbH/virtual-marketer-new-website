@@ -1,0 +1,20 @@
+{
+  "name": "virtual-marketer-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Booking + contact-form API: slot-locked demo scheduling, email verification via confirmation link, SMTP notifications.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "nodemailer": "^9.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

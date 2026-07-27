@@ -20,14 +20,37 @@ const path = require('path');
 const DIST = path.join(__dirname, '../dist');
 
 // International setup: virtual-marketer.de is the canonical/default site
-// (German, this repo). virtual-marketer.ai will be the English version on
-// a separate domain/repo — same URL paths, once it exists. Until then,
-// these hreflang="en" tags point at URLs that don't resolve yet; that's
-// expected and harmless (Google simply won't index them yet) — but the
-// .ai site, when built, MUST reciprocally declare hreflang="de" back to
-// virtual-marketer.de for either to count for anything. One-way hreflang
-// annotations are ignored by Google.
-const EN_BASE_URL = 'https://virtual-marketer.ai';
+// (German). English lives at /en/... on this SAME domain — virtual-marketer.ai
+// was never registered/DNS-configured, so pointing hreflang at it would be a
+// dead link forever (see the architecture note in generate-feature-pages.js
+// and generate-en-pages.js). This script runs near the end of the build
+// pipeline and previously overwrote the correct same-domain hreflang that
+// generate-feature-pages.js/inject-language-switcher.js had already set on
+// these exact pages with a hardcoded pointer to that dead domain — fixed by
+// reusing the same DE->EN path map those scripts use. Pages with no EN
+// counterpart (e.g. /virtual-marketer-ai-services/) simply get no
+// hreflang="en" line instead of a fabricated dead one.
+const DE_TO_EN = {
+  '/': '/en/',
+  '/ki-loesungen/': '/en/solutions/',
+  '/impressum/': '/en/legal-notice/',
+  '/datenschutzerklaerung/': '/en/privacy-policy/',
+  '/nutzungsbedingungen/': '/en/terms-of-service/',
+  '/faqs/': '/en/faqs/',
+  '/management/': '/en/about/',
+  '/modell-anfragen/': '/en/request-custom-model/',
+  '/virtual-marketer-demo/': '/en/demo/',
+  '/kontakt/': '/en/contact/',
+};
+
+function hreflangBlock(pagePath) {
+  const de = `https://virtual-marketer.de${pagePath}`;
+  const en = DE_TO_EN[pagePath] ? `https://virtual-marketer.de${DE_TO_EN[pagePath]}` : null;
+  let out = `  <link rel="alternate" hreflang="de" href="${de}">\n`;
+  if (en) out += `  <link rel="alternate" hreflang="en" href="${en}">\n`;
+  out += `  <link rel="alternate" hreflang="x-default" href="${de}">\n`;
+  return out;
+}
 
 console.log('\n🔍 SEO & Geo Optimization\n');
 console.log('='.repeat(60));
@@ -323,10 +346,8 @@ Object.entries(pageMetadata).forEach(([pagePath, meta]) => {
   injection += `  <meta name="theme-color" content="#1a202c">\n`;
   injection += `  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n`;
   injection += `  <link rel="canonical" href="https://virtual-marketer.de${pagePath}">\n`;
-  injection += `  <link rel="alternate" hreflang="de" href="https://virtual-marketer.de${pagePath}">\n`;
-  injection += `  <link rel="alternate" hreflang="en" href="${EN_BASE_URL}${pagePath}">\n`;
-  injection += `  <link rel="alternate" hreflang="x-default" href="https://virtual-marketer.de${pagePath}">\n\n`;
-  injection += '  <!-- Open Graph / Social Media -->\n';
+  injection += hreflangBlock(pagePath);
+  injection += '\n  <!-- Open Graph / Social Media -->\n';
   injection += ogTags + '\n\n';
   injection += '  <!-- Geo Targeting -->\n';
   injection += geoTags + '\n\n';
@@ -381,9 +402,7 @@ for (const file of findAllHtmlFiles(DIST)) {
   let injection = '\n\n  <!-- SEO: canonical + hreflang (auto) -->\n';
   injection += `  <meta name="description" content="${description}">\n`;
   injection += `  <link rel="canonical" href="https://virtual-marketer.de${pagePath}">\n`;
-  injection += `  <link rel="alternate" hreflang="de" href="https://virtual-marketer.de${pagePath}">\n`;
-  injection += `  <link rel="alternate" hreflang="en" href="${EN_BASE_URL}${pagePath}">\n`;
-  injection += `  <link rel="alternate" hreflang="x-default" href="https://virtual-marketer.de${pagePath}">\n`;
+  injection += hreflangBlock(pagePath);
   if (!hasOgImage) {
     injection += `  <meta property="og:type" content="article">\n`;
     injection += `  <meta property="og:title" content="${title}">\n`;

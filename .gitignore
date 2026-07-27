@@ -6,3 +6,8 @@ build/
 .env.local
 *.swp
 # dist/ is intentionally committed — see README.md "Note on dist/"
+
+# backend/ (booking + contact API) — local SQLite data, never committed
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal

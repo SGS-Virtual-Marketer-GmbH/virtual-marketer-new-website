@@ -56,7 +56,7 @@ const THEME_CSS = {
 
 const UI = {
   de: {
-    nav: { solutions: 'Lösungen', blog: 'Blog', api: 'API', request: 'Modell anfragen', login: 'Login' },
+    nav: { solutions: 'Lösungen', blog: 'Blog', api: 'API', request: 'Modell anfragen', contact: 'Kontakt', login: 'Login' },
     demoBook: 'Demo buchen', liveDemo: 'Live-Demo ansehen',
     forWhom: 'Für wen', forWhomTitle: 'Für wen sich das lohnt',
     impactLabel: 'Business Impact',
@@ -69,7 +69,7 @@ const UI = {
     allSolutions: 'Alle KI-Lösungen im Überblick',
   },
   en: {
-    nav: { solutions: 'Solutions', blog: 'Blog', api: 'API', request: 'Request a model', login: 'Login' },
+    nav: { solutions: 'Solutions', blog: 'Blog', api: 'API', request: 'Request a model', contact: 'Contact', login: 'Login' },
     demoBook: 'Book a demo', liveDemo: 'Try the live demo',
     forWhom: 'Who it’s for', forWhomTitle: 'Who this is built for',
     impactLabel: 'Business impact',
@@ -87,15 +87,21 @@ function header(lang) {
   const t = UI[lang].nav;
   const home = lang === 'en' ? '/en/' : '/';
   const solutions = lang === 'en' ? '/en/solutions/' : '/ki-loesungen/';
-  const blog = lang === 'en' ? '/en/blog/' : '/blog/';
+  // No English blog exists yet (translating all 56 posts is out of scope for
+  // this pass — see generate-en-pages.js's header comment), so the EN nav
+  // deliberately falls back to the German blog rather than linking to a
+  // /en/blog/ page that was never built.
+  const blog = '/blog/';
   const request = lang === 'en' ? '/en/request-custom-model/' : '/modell-anfragen/';
+  const contact = lang === 'en' ? '/en/contact/' : '/kontakt/';
   return `<header class="vm-header-simple">
   <a href="${home}"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none"></a>
   <nav>
     <a href="${solutions}">${t.solutions}</a>
     <a href="${blog}">${t.blog}</a>
-    <a href="http://api.virtual-marketer.de/documentation/">${t.api}</a>
+    <a href="https://api.virtual-marketer.de/documentation/">${t.api}</a>
     <a href="${request}">${t.request}</a>
+    <a href="${contact}">${t.contact}</a>
     <a href="https://login.virtual-marketer.de/">${t.login}</a>
   </nav>
 </header>`;

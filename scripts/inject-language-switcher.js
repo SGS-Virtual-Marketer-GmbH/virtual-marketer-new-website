@@ -57,6 +57,7 @@ const DE_TO_EN = {
   '/management/': '/en/about/',
   '/modell-anfragen/': '/en/request-custom-model/',
   '/virtual-marketer-demo/': '/en/demo/',
+  '/kontakt/': '/en/contact/',
 };
 const EN_TO_DE = Object.fromEntries(Object.entries(DE_TO_EN).map(([de, en]) => [en, de]));
 
