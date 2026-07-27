@@ -48,6 +48,15 @@
  * 8. ~190 internal `http://virtual-marketer.de/...` references (self-hosted
  *    logo image + a couple of link tags) upgraded to https — the site is
  *    HTTPS-only, plain-http internal links/assets are stray scrape debris.
+ * 9. dist/index.html loads 2 font stylesheets and the header logo via an
+ *    ABSOLUTE `https://virtual-marketer.de/wp-content/...` URL instead of a
+ *    relative path (every other page already uses relative paths for the
+ *    same files). Same-domain in real production, so it "works" there by
+ *    accident — but it means these specific requests are never actually
+ *    self-hosted from wherever the page is being served (fails in local
+ *    dev, in a not-yet-DNS-pointed staging environment, offline, etc.), and
+ *    defeats the whole point of self-hosting these assets. Rewritten to
+ *    relative paths, matching every other page.
  *
  * Run after scripts/fix-broken-links.js, before scripts/generate-404.js.
  */
@@ -95,6 +104,7 @@ function main() {
   let strayLinkFixed = 0;
   let faqsGradientFixed = 0;
   let httpUpgraded = 0;
+  let absoluteAssetUrlsFixed = 0;
   let filesChanged = 0;
 
   for (const file of files) {
@@ -149,6 +159,26 @@ function main() {
       html = html.replace(/http:\/\/virtual-marketer\.de\//g, 'https://virtual-marketer.de/');
     }
 
+    // 9. Absolute same-domain asset URLs -> relative (self-hosting only
+    // actually holds if the browser fetches these from wherever THIS page
+    // is served, not by hardcoding the production hostname). Also resolves
+    // the real on-disk filename if the naive relative path doesn't exist:
+    // these 2 links were missing their `?ver=...` suffix entirely, which
+    // wget's scrape bakes into the literal on-disk filename (the same class
+    // of bug fixed elsewhere in this project via resolveThemeAsset()/the
+    // %3F-encoding convention — see generate-en-pages.js's comment on it).
+    html = html.replace(/https:\/\/virtual-marketer\.de(\/wp-content\/[^"'\s]*)/g, (match, relPath) => {
+      absoluteAssetUrlsFixed++;
+      const onDisk = path.join(DIST, relPath);
+      if (fs.existsSync(onDisk)) return relPath;
+      const dir = path.dirname(onDisk);
+      const base = path.basename(relPath);
+      if (!fs.existsSync(dir)) return relPath;
+      const real = fs.readdirSync(dir).find((f) => f.startsWith(`${base}?`));
+      if (!real) return relPath; // no better match found — leave as-is rather than guess
+      return path.dirname(relPath) + '/' + real.replace(/\?/g, '%3F');
+    });
+
     if (html !== before) {
       fs.writeFileSync(file, html);
       filesChanged++;
@@ -162,6 +192,7 @@ function main() {
   console.log(`  ✓ Fixed stray dead theme-demo link: ${strayLinkFixed} occurrence(s)`);
   console.log(`  ✓ Overrode retired purple/cyan gradient on /faqs/: ${faqsGradientFixed} page(s)`);
   console.log(`  ✓ Upgraded internal http:// -> https://: ${httpUpgraded} occurrence(s)`);
+  console.log(`  ✓ Rewrote absolute same-domain asset URLs to relative: ${absoluteAssetUrlsFixed} occurrence(s)`);
   console.log(`  ✓ ${filesChanged} file(s) changed\n`);
 }
 
