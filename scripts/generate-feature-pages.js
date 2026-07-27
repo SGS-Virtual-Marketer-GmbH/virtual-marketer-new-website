@@ -1708,8 +1708,9 @@ function pagePath(f, lang) {
   return lang === 'en' ? `/en/solutions/${f.slugEn}/` : `/ki-loesungen/${f.slug}/`;
 }
 
-// The only portrait-format hero (896×1200); all others are 16:9 landscape.
-const PORTRAIT_HEROES = new Set(['/product-pages/staging-hero.jpg']);
+// All 16 heroes are now 16:9 flat-vector illustrations (staging-hero.jpg was
+// the one real photo, replaced to match the rest — see CLAUDE.md history).
+const PORTRAIT_HEROES = new Set();
 
 function pageShell(f, lang) {
   const c = f[lang];
