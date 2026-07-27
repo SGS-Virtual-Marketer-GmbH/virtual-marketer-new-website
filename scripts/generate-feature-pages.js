@@ -1708,6 +1708,9 @@ function pagePath(f, lang) {
   return lang === 'en' ? `/en/solutions/${f.slugEn}/` : `/ki-loesungen/${f.slug}/`;
 }
 
+// The only portrait-format hero (896×1200); all others are 16:9 landscape.
+const PORTRAIT_HEROES = new Set(['/product-pages/staging-hero.jpg']);
+
 function pageShell(f, lang) {
   const c = f[lang];
   const t = UI[lang];
@@ -1731,12 +1734,14 @@ function pageShell(f, lang) {
     offers: { '@type': 'AggregateOffer', priceCurrency: 'EUR', availability: 'https://schema.org/InStock' },
   };
 
-  // Only Product Staging and Feed Enhance have real hero photography today
-  // (see feature-catalog.md's "Demo images available today" table). Rather
-  // than fabricate a fake product photo for the others, pages without one
-  // get an honest abstract visual — an icon on a brand-color gradient.
+  // All 16 products now ship real hero artwork (synced from the product
+  // repo's public/product-pages). Most are 16:9 landscape illustrations —
+  // show those at their natural ratio instead of cover-cropping into the
+  // default 4:5 portrait frame, which zoomed them into an unrecognizable
+  // center blob. Only the Product Staging hero is a genuine portrait shot.
+  const isPortraitHero = PORTRAIT_HEROES.has(f.heroImage);
   const heroVisualHtml = f.heroImage
-    ? `<div class="hero-image"><img src="${f.heroImage}" alt="${c.seo.title}" loading="eager"></div>`
+    ? `<div class="hero-image"${isPortraitHero ? '' : ' style="aspect-ratio:16/9;align-self:center;"'}><img src="${f.heroImage}" alt="${c.seo.title}" loading="eager"></div>`
     : `<div class="hero-image hero-visual"><div class="hero-visual-icon">${icon(f.heroIcon || 'agent')}</div>${f.heroCaption ? `<span class="hero-visual-caption">${f.heroCaption}</span>` : ''}</div>`;
 
   const demoBookHref = lang === 'en' ? '/en/demo/' : '/virtual-marketer-demo/';
@@ -2013,9 +2018,36 @@ function hubCard(f, lang) {
   const c = f[lang];
   return `
         <a class="vm-fp-callout-card" href="${pagePath(f, lang)}">
-          <strong>${c.eyebrow}</strong>
-          <span>${c.tagline}</span>
+          <img src="${f.heroImage}" alt="" loading="lazy">
+          <span class="vm-fp-callout-body">
+            <strong>${c.eyebrow}</strong>
+            <span>${c.tagline}</span>
+          </span>
         </a>`;
+}
+
+function hubGridSection(lang, { withHeading = true, inline = false } = {}) {
+  const cards = FEATURES.map((f) => hubCard(f, lang)).join('');
+  // `inline`: rendered inside an already width-constrained container (the
+  // clean DE hub's <main>) — no own max-width/outer margins there.
+  const sectionStyle = inline ? 'margin:24px 0 0;' : 'max-width:1140px;margin:48px auto;padding:0 20px;';
+  return `
+<section class="vm-fp-callout" style="${sectionStyle}">
+  <style>
+    .vm-fp-callout-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;}
+    .vm-fp-callout-card{display:flex;flex-direction:column;background:#fff;border:1px solid #e7dfe0;border-radius:14px;overflow:hidden;text-decoration:none;color:#241417;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 2px 10px rgba(36,20,23,.05);}
+    .vm-fp-callout-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(36,20,23,.13);}
+    .vm-fp-callout-card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;border-bottom:1px solid #f0e9ea;}
+    .vm-fp-callout-body{display:flex;flex-direction:column;gap:5px;padding:16px 18px 18px;}
+    .vm-fp-callout-card strong{font-size:15px;line-height:1.35;}
+    .vm-fp-callout-body span{color:#6b5f60;font-size:13px;}
+  </style>
+  ${withHeading ? `<h3 style="font-size:20px;margin-bottom:18px;">${UI[lang].allSolutions}</h3>` : ''}
+  <div class="vm-fp-callout-grid">
+  ${cards}
+  </div>
+</section>
+`;
 }
 
 function injectHubGrid(lang) {
@@ -2023,46 +2055,106 @@ function injectHubGrid(lang) {
   if (!fs.existsSync(hubPath)) return false;
   let hub = fs.readFileSync(hubPath, 'utf-8');
   const marker = lang === 'en' ? '<h2 id="vmaf-heading-en">' : '<h2 id="vmaf-heading">';
-  // Anchor preference: explicit marker → </main> → before the site footer →
-  // </body>. The DE hub is a raw WordPress/Elementor export with neither a
-  // marker nor a <main> element, so without the footer/body fallbacks the grid
-  // silently never appeared there (only the EN hub, a hand-built page, got it).
-  const FOOTER = '<footer id="site-footer"';
-  const anchor = hub.includes(marker) ? marker
-    : hub.includes('</main>') ? '</main>'
-    : hub.includes(FOOTER) ? FOOTER
-    : hub.includes('</body>') ? '</body>'
-    : null;
+  const anchor = hub.includes(marker) ? marker : (hub.includes('</main>') ? '</main>' : null);
   if (!anchor) return false;
 
-  const cards = FEATURES.map((f) => hubCard(f, lang)).join('');
-  // When injected via the footer/body fallback the section sits on the dark
-  // pre-footer area of the Elementor page — give it a light panel so the
-  // heading and cards stay readable.
-  const onDark = anchor === FOOTER || anchor === '</body>';
-  const sectionStyle = onDark
-    ? 'max-width:1140px;margin:0 auto;padding:40px 24px 48px;background:#f4f1f1;border-radius:20px 20px 0 0;'
-    : 'max-width:1140px;margin:48px auto;padding:0 20px;';
-  const section = `
-<section class="vm-fp-callout" style="${sectionStyle}">
-  <style>
-    .vm-fp-callout-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
-    .vm-fp-callout-card{display:flex;flex-direction:column;gap:6px;background:#fff;border:1px solid #e7dfe0;border-left:4px solid #94152b;border-radius:12px;padding:18px 20px;text-decoration:none;color:#241417;transition:transform .15s ease,box-shadow .15s ease;}
-    .vm-fp-callout-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(36,20,23,.1);}
-    .vm-fp-callout-card strong{font-size:15px;}
-    .vm-fp-callout-card span{color:#6b5f60;font-size:13px;}
-  </style>
-  <h3 style="font-size:20px;margin-bottom:18px;">${UI[lang].allSolutions}</h3>
-  <div class="vm-fp-callout-grid">
-  ${cards}
-  </div>
-</section>
-`;
+  const section = hubGridSection(lang);
   hub = hub.includes('vm-fp-callout')
     ? hub.replace(/<section class="vm-fp-callout"[\s\S]*?<\/section>\s*/, section)
     : hub.replace(anchor, section + anchor);
   fs.writeFileSync(hubPath, hub);
   return true;
+}
+
+/**
+ * Clean, purpose-built DE solutions hub. The WordPress export at
+ * /ki-loesungen/ is the legacy dark Elementor page ("Individuelle KI
+ * Lösungen") — visually a different site than the feature pages, and the
+ * only place the solutions grid could live there was the dark pre-footer
+ * area, where it looked bolted-on. This replaces the export with the same
+ * kind of clean, hand-built page the EN hub (/en/solutions/, see
+ * generate-en-pages.js) already is, keeping the URL, the H1 topic and the
+ * legacy page's core message (custom-trained models → /modell-anfragen/).
+ * Runs before injectHubGrid('de'), which fills the marker with the grid.
+ */
+function renderDeHub() {
+  const url = `${BASE_URL}/ki-loesungen/`;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Individuelle KI-Lösungen',
+    description: 'Alle Virtual-Marketer-KI-Lösungen im Überblick: Agenten, Produktfotos, Feeds, Texte, Bilder, Videos, Kampagnen und mehr.',
+    url,
+    isPartOf: { '@type': 'WebSite', name: 'Virtual Marketer', url: BASE_URL },
+  };
+  return `<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Individuelle KI-Lösungen — alle Virtual-Marketer-Produkte | Virtual Marketer</title>
+<meta name="description" content="Alle KI-Lösungen von Virtual Marketer im Überblick: KI-Agenten, Produktfotos, Feed-Veredelung, Text-, Bild- und Videogenerierung, Kampagnen-Builder und individuelle KI-Modelle.">
+<meta name="keywords" content="KI Lösungen, individuelle KI Modelle, KI Marketing Tools, KI Agenten, KI Produktfotos, Feed Optimierung, KI Texte">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="${url}">
+<link rel="alternate" hreflang="de" href="${url}">
+<link rel="alternate" hreflang="en" href="${BASE_URL}/en/solutions/">
+<link rel="alternate" hreflang="x-default" href="${url}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="Virtual Marketer">
+<meta property="og:title" content="Individuelle KI-Lösungen — alle Virtual-Marketer-Produkte">
+<meta property="og:description" content="Alle KI-Lösungen von Virtual Marketer im Überblick — jede mit Live-Demo.">
+<meta property="og:url" content="${url}">
+<meta name="twitter:card" content="summary">
+<meta name="geo.placename" content="Germany">
+<meta name="geo.country" content="DE">
+<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+<link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
+<link rel="stylesheet" href="/${THEME_CSS.fontAwesome}">
+<link rel="stylesheet" href="/${THEME_CSS.style}">
+<style>
+  :root{
+    --vm-red:#94152b; --vm-red-dark:#700f2b; --vm-blue:#66a3ce; --vm-blue-light:#a3cce9;
+    --vm-gray-100:#f4f1f1; --vm-gray-200:#e7dfe0; --vm-gray-500:#6b5f60; --vm-gray-900:#241417;
+  }
+  .vm-hub *{box-sizing:border-box;}
+  .vm-hub{max-width:1140px;margin:0 auto;padding:48px 20px 96px;color:var(--vm-gray-900);line-height:1.65;font-size:16px;}
+  .vm-hub h1{font-size:38px;line-height:1.15;margin:0 0 12px;letter-spacing:-.01em;}
+  .vm-hub h2{font-size:24px;margin:56px 0 8px;}
+  .vm-hub p{margin:0 0 14px;color:#4a4143;}
+  .vm-hub a{color:var(--vm-red);}
+  .vm-hub .eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--vm-red);background:#fbecee;padding:5px 12px;border-radius:999px;margin-bottom:16px;}
+  .vm-hub .lede{font-size:18px;color:#4a4143;max-width:68ch;}
+  .vm-hub .btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;padding:13px 26px;border-radius:8px;text-decoration:none;background:var(--vm-red);color:#fff;margin:8px 12px 0 0;}
+  .vm-hub .btn:hover{background:var(--vm-red-dark);}
+  .vm-hub .btn-ghost{background:transparent;color:var(--vm-gray-900);border:1.5px solid var(--vm-gray-200);}
+  .vm-hub .btn-ghost:hover{border-color:var(--vm-red);color:var(--vm-red);}
+  .vm-hub .custom-panel{background:var(--vm-gray-100);border:1px solid var(--vm-gray-200);border-radius:16px;padding:28px 30px;margin-top:18px;}
+</style>
+</head>
+<body class="vm-static-blog">
+${header('de')}
+<main class="vm-hub">
+  <span class="eyebrow">KI-Lösungen</span>
+  <h1>Individuelle KI-Lösungen</h1>
+  <p class="lede">Jedes Virtual-Marketer-Produkt auf dieser Seite ist real und heute im Einsatz. Wählen Sie eine Lösung, um zu sehen, für wen sie gedacht ist, wie sie funktioniert &#8211; und wie sie im Produkt aussieht, mit Live-Demo direkt auf der Seite.</p>
+
+  <h2>Alle KI-Lösungen im Überblick</h2>
+  <p>Jede Karte führt zur ausführlichen Produktseite mit animierter Live-Demo.</p>
+${hubGridSection('de', { withHeading: false, inline: true })}
+  <h2>Individuelle KI-Modelle für Ihre Marke</h2>
+  <p>Hinter vielen dieser Lösungen stehen individuell trainierte Virtual-Marketer-Modelle: KI, die Ihre Markensprache, Ihre Produkte und Ihre Zielgruppe kennt &#8211; statt generischer Texte von der Stange. Wir trainieren Ihr Modell auf Ihren Daten und stellen es in allen Werkzeugen bereit.</p>
+  <div class="custom-panel">
+    <strong>Ihr eigenes KI-Modell anfragen</strong>
+    <p style="margin:8px 0 4px;">Beschreiben Sie Ihren Anwendungsfall &#8211; wir melden uns mit einem Vorschlag für Ihr individuelles Modell.</p>
+    <a class="btn" href="/modell-anfragen/">Modell anfragen</a>
+    <a class="btn btn-ghost" href="/virtual-marketer-demo/">Demo buchen</a>
+  </div>
+</main>
+${footer('de')}
+</body>
+</html>`;
 }
 
 function main() {
@@ -2084,10 +2176,12 @@ function main() {
     console.log(`  ✓ /ki-loesungen/${f.slug}/ + /en/solutions/${f.slugEn}/`);
   }
 
-  // Link all feature pages from both hub pages as a proper grid.
-  const deLinked = injectHubGrid('de');
+  // Replace the legacy Elementor export at /ki-loesungen/ with the clean,
+  // purpose-built DE hub — grid already embedded, so no injection needed
+  // there. The EN hub still gets its grid injected at the marker.
+  fs.writeFileSync(path.join(DIST, 'ki-loesungen', 'index.html'), renderDeHub());
+  console.log(`  ✓ /ki-loesungen/ (clean DE hub with ${FEATURES.length}-card grid, replaces Elementor export)`);
   const enLinked = injectHubGrid('en');
-  console.log(`  ✓ Linked ${FEATURES.length} page(s) from DE hub${deLinked ? '' : ' (hub not found, skipped)'}`);
   console.log(`  ✓ Linked ${FEATURES.length} page(s) from EN hub${enLinked ? '' : ' (hub not found, skipped)'}`);
 
   console.log(`\n✅ ${FEATURES.length * 2} feature page(s) generated (${FEATURES.length} DE + ${FEATURES.length} EN)\n`);
