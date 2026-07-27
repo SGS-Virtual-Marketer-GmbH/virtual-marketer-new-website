@@ -6,6 +6,8 @@ services:
     image: virtual-marketer-website:latest
     container_name: virtual-marketer-website
     restart: unless-stopped
+    depends_on:
+      - api
     ports:
       - "8080:8080"
     read_only: true
@@ -24,3 +26,40 @@ services:
       timeout: 3s
       retries: 3
       start_period: 5s
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: virtual-marketer-api:latest
+    container_name: virtual-marketer-api
+    restart: unless-stopped
+    # Not published to the host — only reachable from the "web" (nginx)
+    # container via the compose network's internal DNS, proxied at /api/.
+    expose:
+      - "4000"
+    env_file:
+      # Real SMTP credentials live here, gitignored — see backend/.env.example
+      # for the required keys. Never bake credentials into the image itself.
+      - ./backend/.env
+    environment:
+      PORT: "4000"
+      DB_PATH: /data/virtual-marketer.sqlite3
+    volumes:
+      # Named volume, not bind-mounted from the repo: booking/contact data
+      # must persist across image rebuilds and must never end up inside a
+      # git-tracked directory.
+      - vm-api-data:/data
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:4000/health', r => process.exit(r.statusCode===200?0:1)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  vm-api-data:

@@ -7,9 +7,10 @@
     "dev": "node server.js",
     "start": "node server.js",
     "clean": "rm -rf dist-tmp",
-    "build": "node scripts/build.js && node scripts/fix-shortlinks.js && node scripts/fix-preloader.js && node scripts/generate-blog-posts.js && node scripts/inject-ai-features.js && node scripts/generate-en-pages.js && node scripts/generate-feature-pages.js && node scripts/inject-language-switcher.js && node scripts/fix-navigation.js && node scripts/fix-legal-content.js && node scripts/fix-broken-links.js && node scripts/generate-404.js && node scripts/optimize.js && node scripts/seo-optimize.js && node scripts/generate-sitemap.js",
+    "build": "npm run build:tailwind && node scripts/build.js && node scripts/fix-shortlinks.js && node scripts/fix-preloader.js && node scripts/generate-blog-posts.js && node scripts/generate-en-pages.js && node scripts/generate-feature-pages.js && node scripts/inject-language-switcher.js && node scripts/fix-navigation.js && node scripts/fix-legal-content.js && node scripts/fix-broken-links.js && node scripts/fix-broken-widgets.js && node scripts/fix-external-cdn-assets.js && node scripts/inject-booking-widget.js && node scripts/generate-404.js && node scripts/optimize.js && node scripts/seo-optimize.js && node scripts/generate-sitemap.js",
     "analyze": "node scripts/analyze.js",
-    "optimize": "node scripts/optimize.js"
+    "optimize": "node scripts/optimize.js",
+    "build:tailwind": "tailwindcss -c tailwind.config.js -i assets/tailwind-services/input.css -o assets/tailwind-services/output.css --minify"
   },
   "keywords": [
     "static",
@@ -20,7 +21,8 @@
   "author": "Virtual Marketer",
   "license": "MIT",
   "devDependencies": {
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.3",
+    "tailwindcss": "^3.4.19"
   },
   "engines": {
     "node": ">=16.0.0"

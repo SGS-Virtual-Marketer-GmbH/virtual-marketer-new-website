@@ -15,6 +15,17 @@ const DIST_DIR = path.join(__dirname, 'dist');
 const PORT = process.env.PORT || 3000;
 const HOST = '127.0.0.1';
 
+// Dev-only reverse proxy to the booking/contact API (backend/), mirroring
+// what nginx's `location /api/` does in production (see docker/nginx.conf).
+// Defaults to the backend's default local port so the booking widget can be
+// tested against a locally-running `node backend/src/server.js` with zero
+// extra setup; harmless if that process isn't running (proxied requests
+// just 502). This file is never used in production (nginx serves dist/
+// directly there — see Dockerfile), so an always-on dev convenience proxy
+// carries no production risk. Override with API_PROXY_TARGET if the backend
+// is running on a non-default port.
+const API_PROXY_TARGET = process.env.API_PROXY_TARGET || 'http://127.0.0.1:4000';
+
 // MIME types
 const MIME_TYPES = {
   '.html': 'text/html; charset=UTF-8',
@@ -146,6 +157,23 @@ function serve404(res) {
  */
 const server = http.createServer((req, res) => {
   metrics.requests++;
+
+  if (API_PROXY_TARGET && req.url.startsWith('/api/')) {
+    const target = new URL(API_PROXY_TARGET);
+    const proxyReq = http.request({
+      host: target.hostname,
+      port: target.port,
+      path: req.url.replace(/^\/api/, '') || '/',
+      method: req.method,
+      headers: req.headers,
+    }, (proxyRes) => {
+      res.writeHead(proxyRes.statusCode, proxyRes.headers);
+      proxyRes.pipe(res);
+    });
+    proxyReq.on('error', () => { res.writeHead(502); res.end('API proxy target unreachable'); });
+    req.pipe(proxyReq);
+    return;
+  }
 
   // Handle root and trailing slash
   // Decode first: many filenames on disk are literal WordPress-export

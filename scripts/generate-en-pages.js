@@ -34,6 +34,25 @@ const DIST = path.join(ROOT, 'dist');
 const BASE_URL = 'https://virtual-marketer.de';
 const LOGO = '/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png';
 
+// EN path -> real DE counterpart. Slugs diverge on 7 of these 9 pages
+// (e.g. /en/about/ <-> /management/, /en/solutions/ <-> /ki-loesungen/), so
+// naively stripping the /en prefix produces a self-referencing hreflang
+// pointing at a page that doesn't exist. Kept in sync by hand with
+// inject-language-switcher.js's DE_TO_EN map (that script's map is the
+// other direction and drives the visible DE|EN switcher widget; this one
+// drives the <link hreflang> tags emitted by this file).
+const EN_TO_DE = {
+  '/en/': '/',
+  '/en/solutions/': '/ki-loesungen/',
+  '/en/legal-notice/': '/impressum/',
+  '/en/privacy-policy/': '/datenschutzerklaerung/',
+  '/en/terms-of-service/': '/nutzungsbedingungen/',
+  '/en/faqs/': '/faqs/',
+  '/en/about/': '/management/',
+  '/en/request-custom-model/': '/modell-anfragen/',
+  '/en/demo/': '/virtual-marketer-demo/',
+};
+
 function resolveThemeAsset(cleanRelPath) {
   const dir = path.dirname(path.join(DIST, cleanRelPath));
   const base = path.basename(cleanRelPath);
@@ -55,7 +74,7 @@ function header() {
   <nav>
     <a href="/en/solutions/">Solutions</a>
     <a href="/blog/">Blog</a>
-    <a href="http://api.virtual-marketer.de/documentation/">API</a>
+    <a href="https://api.virtual-marketer.de/documentation/">API</a>
     <a href="/en/request-custom-model/">Request a model</a>
     <a href="https://login.virtual-marketer.de/">Login</a>
   </nav>
@@ -95,7 +114,7 @@ const BASE_CSS = `
 
 function pageShell({ titleTag, description, keywords, path: urlPath, bodyHtml, jsonLd }) {
   const url = `${BASE_URL}${urlPath}`;
-  const dePath = urlPath.replace(/^\/en/, '') || '/';
+  const dePath = EN_TO_DE[urlPath] || (urlPath.replace(/^\/en/, '') || '/');
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -161,7 +180,7 @@ function main() {
 <span class="eyebrow">Made in Germany</span>
 <h1>Reliable. Automated. Efficient. The AI marketing solution from Germany.</h1>
 <p class="lede">Virtual Marketer trains custom AI models on your brand voice and puts them to work across product descriptions, product photography, marketing campaigns, coding and autonomous AI agents.</p>
-<a class="btn" href="/virtual-marketer-demo/">Book a demo</a>
+<a class="btn" href="/en/demo/">Book a demo</a>
 
 <h2>What Virtual Marketer does</h2>
 <div class="card"><strong>AI Agents</strong> — specialist virtual employees for analytics, Google Ads, Meta Ads, SEO and customer care. <a href="/en/solutions/ai-agents/">Learn more &rarr;</a></div>
@@ -180,7 +199,7 @@ function main() {
 
 <h2>Ready to see it in action?</h2>
 <p>Book a free, no-obligation demo and see Virtual Marketer live.</p>
-<a class="btn" href="/virtual-marketer-demo/">Book a demo</a>`,
+<a class="btn" href="/en/demo/">Book a demo</a>`,
   }));
 
   // Solutions hub — the feature-page grid gets injected here by
@@ -352,7 +371,7 @@ Represented by managing directors Jens Göckus and Lisa Stamminger</p>
     bodyHtml: `
 <span class="eyebrow">Custom Models</span>
 <h1>Request a Custom AI Model</h1>
-<p class="lede">Please describe the AI model you'd like us to build or modify below. If you need additional support, you can <a href="/virtual-marketer-demo/">book a call here</a> or reach us at <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>.</p>
+<p class="lede">Please describe the AI model you'd like us to build or modify below. If you need additional support, you can <a href="/en/demo/">book a call here</a> or reach us at <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>.</p>
 
 <h2>Two ways we can help</h2>
 <h3>1. Request a new model</h3>
@@ -361,10 +380,13 @@ Represented by managing directors Jens Göckus and Lisa Stamminger</p>
 <p>Already have AI models in production that could be optimized or adapted for new requirements? Our experienced data scientists can review, tune and extend existing models to make sure they keep delivering maximum value for your business.</p>
 
 <p>Book your free strategy call today and let's discuss your goals.</p>
-<a class="btn" href="/virtual-marketer-demo/">Book a demo</a>`,
+<a class="btn" href="/en/demo/">Book a demo</a>`,
   }));
 
-  // Demo booking landing
+  // Demo booking landing — real self-service scheduling widget (see
+  // assets/booking-widget/), backed by backend/ (see its README for the
+  // API contract). mailto stays as a fallback for anyone who'd rather just
+  // email directly.
   write('/en/demo/', pageShell({
     titleTag: 'Book a Demo',
     description: 'Book a no-obligation demo and see Virtual Marketer live in action.',
@@ -372,8 +394,10 @@ Represented by managing directors Jens Göckus and Lisa Stamminger</p>
     bodyHtml: `
 <span class="eyebrow">Demo</span>
 <h1>Book a Demo</h1>
-<p class="lede">See Virtual Marketer live &#8211; your AI marketing solution from Germany. Reach out and we'll set up a time that works for you.</p>
-<a class="btn" href="mailto:info@virtual-marketer.de">Contact us to schedule</a>`,
+<p class="lede">See Virtual Marketer live &#8211; your AI marketing solution from Germany. Pick a slot below (Mon&ndash;Fri, 2&ndash;8pm CET/CEST) or reach us directly at <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>.</p>
+<div id="vm-booking-widget" data-locale="en"></div>
+<link rel="stylesheet" href="/assets/booking-widget/booking-widget.css">
+<script src="/assets/booking-widget/booking-widget.js" defer></script>`,
   }));
 
   console.log('  ✓ /en/ (homepage)');
