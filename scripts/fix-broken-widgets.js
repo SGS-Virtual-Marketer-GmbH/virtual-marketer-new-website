@@ -57,6 +57,27 @@
  *    dev, in a not-yet-DNS-pointed staging environment, offline, etc.), and
  *    defeats the whole point of self-hosting these assets. Rewritten to
  *    relative paths, matching every other page.
+ * 10. Yoast's auto-generated Organization JSON-LD on every legacy page
+ *    points its `logo.url`/`logo.contentUrl` at a stale, non-existent path
+ *    (`http:\/\/virtual-marketer.de\/wp-content\/uploads\/2022\/11\/VM-Logo-bunt-2-2.png`
+ *    — that `2022/11` directory doesn't exist anywhere in dist/, and it's
+ *    plain http:// besides). This escaped-slash JSON string form wasn't
+ *    caught by finding #8's plain http:// upgrade (which looks for literal
+ *    `/` characters, not `\/`). Repointed at the real, current, self-hosted
+ *    logo used everywhere else on the site.
+ * 11. dist/faqs/index.html carries three sibling widgets of completely
+ *    unedited "Engitech" WordPress theme demo content, unique to this one
+ *    page: a "// support center" heading, a 3-column "support box" section
+ *    with broken images hotlinked from the theme vendor's own S3 bucket
+ *    (engitech.s3.amazonaws.com) and generic non-Virtual-Marketer copy
+ *    ("Entrust full-cycle implementation of your software product..."),
+ *    and a fake "client logos" carousel whose images link out to the
+ *    theme's own author page on ThemeForest. None of this is real Virtual
+ *    Marketer content — removed entirely rather than invented a
+ *    replacement, using a small stack-based tag matcher (findElement()
+ *    below) since these three elements are deeply nested inside other
+ *    legitimate page structure and a naive line-range delete would have
+ *    corrupted the surrounding HTML.
  *
  * Run after scripts/fix-broken-links.js, before scripts/generate-404.js.
  */
@@ -73,6 +94,39 @@ function findHtmlFiles(dir, results = []) {
     else if (entry.name.endsWith('.html')) results.push(full);
   }
   return results;
+}
+
+// Finds the full outer span [start, end) of the nearest ancestor
+// <tagName> of the first occurrence of `needle`, by walking forward and
+// tracking open/close depth of that same tag name until it returns to 0.
+// Used for removing specific widgets that are siblings deep inside
+// otherwise-legitimate nested markup, where a naive line/string range
+// would risk deleting someone else's closing tag.
+function findElement(html, needle, tagName) {
+  const needleIdx = html.indexOf(needle);
+  if (needleIdx === -1) return null;
+  const tagStart = html.lastIndexOf(`<${tagName}`, needleIdx);
+  if (tagStart === -1) return null;
+  const openRe = new RegExp(`<${tagName}(?:\\s|>)`, 'g');
+  const closeRe = new RegExp(`</${tagName}>`, 'g');
+  let depth = 0;
+  let pos = tagStart;
+  for (let guard = 0; guard < 100000; guard++) {
+    openRe.lastIndex = pos;
+    closeRe.lastIndex = pos;
+    const om = openRe.exec(html);
+    const cm = closeRe.exec(html);
+    if (!cm) return null; // unbalanced — caller must not blindly trust a null-check-free result
+    if (om && om.index < cm.index) {
+      depth++;
+      pos = om.index + om[0].length;
+    } else {
+      depth--;
+      pos = cm.index + cm[0].length;
+      if (depth === 0) return { start: tagStart, end: pos };
+    }
+  }
+  return null; // guard tripped — pathological input, bail rather than loop forever
 }
 
 const HERO_TRUST_PANEL = `<div class="vm-hero-trust">
@@ -105,6 +159,8 @@ function main() {
   let faqsGradientFixed = 0;
   let httpUpgraded = 0;
   let absoluteAssetUrlsFixed = 0;
+  let staleLogoJsonLdFixed = 0;
+  let faqsThemeDemoRemoved = 0;
   let filesChanged = 0;
 
   for (const file of files) {
@@ -179,6 +235,44 @@ function main() {
       return path.dirname(relPath) + '/' + real.replace(/\?/g, '%3F');
     });
 
+    // 10. Stale/broken logo URL in Yoast's escaped-JSON-LD Organization schema
+    const staleLogoMatches = html.match(/http:\\\/\\\/virtual-marketer\.de\\\/wp-content\\\/uploads\\\/2022\\\/11\\\/VM-Logo-bunt-2-2\.png/g);
+    if (staleLogoMatches) {
+      staleLogoJsonLdFixed += staleLogoMatches.length;
+      html = html.replace(
+        /http:\\\/\\\/virtual-marketer\.de\\\/wp-content\\\/uploads\\\/2022\\\/11\\\/VM-Logo-bunt-2-2\.png/g,
+        'https:\\/\\/virtual-marketer.de\\/wp-content\\/uploads\\/2023\\/04\\/cropped-Virtual-Marketer-Logo-128x128-New.png'
+      );
+    }
+
+    // 11b. Same broken-image family as #11 also leaked into /faqs/'s Yoast
+    // JSON-LD (thumbnailUrl / primaryImage ImageObject), independent of the
+    // <img> tags removed by #11 — fixed regardless of whether #11's element
+    // match succeeds, since this is a separate string, not nested inside it.
+    const staleThumbMatches = html.match(/https:\\\/\\\/engitech\.s3\.amazonaws\.com\\\/images\\\/support1\.jpg/g);
+    if (staleThumbMatches) {
+      staleLogoJsonLdFixed += staleThumbMatches.length;
+      html = html.replace(
+        /https:\\\/\\\/engitech\.s3\.amazonaws\.com\\\/images\\\/support1\.jpg/g,
+        'https:\\/\\/virtual-marketer.de\\/wp-content\\/uploads\\/2023\\/04\\/cropped-Virtual-Marketer-Logo-128x128-New.png'
+      );
+    }
+
+    // 11. /faqs/ only: three sibling widgets of unedited Engitech theme
+    // demo content (see header comment for what each one is).
+    if (file === path.join(DIST, 'faqs', 'index.html')) {
+      const heading = findElement(html, 'elementor-element-adf2a06', 'div');
+      const supportSection = findElement(html, 'elementor-element-36b4f39', 'section');
+      const carousel = findElement(html, 'elementor-element-efb4aef', 'div');
+      if (heading && supportSection && carousel && heading.start < supportSection.start && supportSection.start < carousel.start) {
+        // Remove as one contiguous span (heading start -> carousel end) —
+        // verified these three are contiguous siblings separated only by
+        // whitespace, so this can't clip into unrelated surrounding markup.
+        html = html.slice(0, heading.start) + html.slice(carousel.end);
+        faqsThemeDemoRemoved++;
+      }
+    }
+
     if (html !== before) {
       fs.writeFileSync(file, html);
       filesChanged++;
@@ -193,6 +287,8 @@ function main() {
   console.log(`  ✓ Overrode retired purple/cyan gradient on /faqs/: ${faqsGradientFixed} page(s)`);
   console.log(`  ✓ Upgraded internal http:// -> https://: ${httpUpgraded} occurrence(s)`);
   console.log(`  ✓ Rewrote absolute same-domain asset URLs to relative: ${absoluteAssetUrlsFixed} occurrence(s)`);
+  console.log(`  ✓ Fixed stale/broken logo URL in Organization JSON-LD: ${staleLogoJsonLdFixed} occurrence(s)`);
+  console.log(`  ✓ Removed unedited Engitech theme demo content from /faqs/: ${faqsThemeDemoRemoved} page(s)`);
   console.log(`  ✓ ${filesChanged} file(s) changed\n`);
 }
 
