@@ -12,10 +12,8 @@
  *
  * Scope of this pass: homepage, solutions hub, legal notice, privacy
  * policy, terms of service, FAQ, about, request-a-model and demo-booking
- * pages. NOT included: English translations of the 56 blog posts (14 new
- * + 42 legacy) — that is a separate, much larger content project and is
- * deliberately out of scope here rather than silently skipped without
- * mention (see the PR description).
+ * pages. The 58 blog posts (14 new + 44 legacy) are translated separately —
+ * see blog-posts-en.json / scripts/generate-en-blog-posts.js.
  *
  * Legal pages preserve the exact facts of their German originals (company
  * name, address, managing directors, sub-processors, the data-residency
@@ -74,7 +72,7 @@ function header() {
   <a href="/en/"><img src="${LOGO}" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none"></a>
   <nav>
     <a href="/en/solutions/">Solutions</a>
-    <a href="/blog/">Blog</a>
+    <a href="/en/blog/">Blog</a>
     <a href="https://api.virtual-marketer.de/documentation/">API</a>
     <a href="/en/request-custom-model/">Request a model</a>
     <a href="/en/contact/">Contact</a>
@@ -444,7 +442,7 @@ Represented by managing directors Jens Göckus and Lisa Stamminger</p>
   console.log('  ✓ /en/request-custom-model/');
   console.log('  ✓ /en/demo/');
   console.log('  ✓ /en/contact/');
-  console.log('\n✅ English core pages generated (blog post translation not included — see script header)\n');
+  console.log('\n✅ English core pages generated\n');
 }
 
 main();

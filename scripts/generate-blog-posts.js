@@ -19,12 +19,14 @@ const DIST_BLOG = path.join(ROOT, 'dist/blog');
 const CONTENT_DIR = path.join(ROOT, 'content/blog');
 const POSTS_JSON = path.join(ROOT, 'blog-posts.json');
 const BASE_URL = 'https://virtual-marketer.de';
-// No English blog exists (see generate-en-pages.js's header comment — the
-// 56-post translation is deliberately out of scope for this pass), so blog
-// pages get no hreflang="en" line at all rather than one pointing at the
-// never-registered virtual-marketer.ai domain (see scripts/seo-optimize.js's
-// comment for the full rationale on why that domain must never appear in
-// hreflang tags).
+// All 14 posts here have a real English translation now (see
+// blog-posts-en.json / generate-en-blog-posts.js), so each page gets a
+// same-domain hreflang="en" pointing at its /en/blog/<slug>/ counterpart —
+// never the never-registered virtual-marketer.ai domain (see
+// scripts/seo-optimize.js's comment for the full rationale on why that
+// domain must never appear in hreflang tags). The 44 older legacy-template
+// blog posts get their hreflang="en" wired separately via
+// scripts/seo-optimize.js's DE_TO_EN map, since they're not generated here.
 
 const CATEGORY_LABELS = {
   'AI-Trends': 'AI-Trends',
@@ -97,6 +99,7 @@ function pageShell({ title, description, keywords, slug, date, updated, category
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <link rel="canonical" href="${url}">
 <link rel="alternate" hreflang="de" href="${url}">
+<link rel="alternate" hreflang="en" href="${BASE_URL}/en/blog/${slug}/">
 <link rel="alternate" hreflang="x-default" href="${url}">
 
 <meta property="og:type" content="article">
@@ -213,6 +216,7 @@ function generateArchive(posts) {
 <meta name="description" content="Erfahren Sie alles über KI, Machine Learning und moderne Marketingstrategien. Artikel, Tipps und Best Practices von Virtual Marketer.">
 <link rel="canonical" href="${BASE_URL}/blog/">
 <link rel="alternate" hreflang="de" href="${BASE_URL}/blog/">
+<link rel="alternate" hreflang="en" href="${BASE_URL}/en/blog/">
 <link rel="alternate" hreflang="x-default" href="${BASE_URL}/blog/">
 <link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
 <link rel="stylesheet" href="/${THEME_CSS.style}">

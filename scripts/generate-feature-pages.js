@@ -92,11 +92,10 @@ function header(lang) {
   const t = UI[lang].nav;
   const home = lang === 'en' ? '/en/' : '/';
   const solutions = lang === 'en' ? '/en/solutions/' : '/ki-loesungen/';
-  // No English blog exists yet (translating all 56 posts is out of scope for
-  // this pass — see generate-en-pages.js's header comment), so the EN nav
-  // deliberately falls back to the German blog rather than linking to a
-  // /en/blog/ page that was never built.
-  const blog = '/blog/';
+  // All 58 posts now have a real English translation (see
+  // blog-posts-en.json / generate-en-blog-posts.js), so the EN nav links to
+  // the real /en/blog/ archive instead of falling back to the German one.
+  const blog = lang === 'en' ? '/en/blog/' : '/blog/';
   const request = lang === 'en' ? '/en/request-custom-model/' : '/modell-anfragen/';
   const contact = lang === 'en' ? '/en/contact/' : '/kontakt/';
   return `<header class="vm-header-simple">
