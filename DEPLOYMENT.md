@@ -505,3 +505,125 @@ rewrite ^/solutions/$ /ki-loesungen/ permanent;
 **Recomm Host:** Cloudflare Pages  
 **Next Action:** Create GitHub repo & deploy
 
+
+---
+
+# ☁️ Google Cloud Run (current production target)
+
+This is what the site actually runs on now. The hosting options above predate
+it and are kept only for reference.
+
+## Why Cloud Run and not the cheaper-looking alternatives
+
+Firebase Hosting and Cloudflare Pages are cheaper per byte for pure static
+content, but neither can filter traffic by user agent — and the requirement
+here is to block commercial scrapers while never throttling Googlebot. That
+rule lives in `docker/nginx.conf.template`, so the site has to be served by
+something that runs nginx. Cloud Armor could do it at the edge instead, but it
+needs a global external load balancer, which is a fixed ~EUR 18/month whether
+or not anyone visits.
+
+Cloud Run with `minScale: 0` costs effectively nothing at this traffic level:
+the free tier covers 2M requests and 180k vCPU-seconds a month, and the
+service bills nothing at all while idle. Firestore's free tier (1 GiB, 20k
+writes/day) similarly covers the booking volume with room to spare.
+
+## What is deployed
+
+One Cloud Run service, **two containers in the same instance**:
+
+| Container | Image | Role |
+|---|---|---|
+| `web` | `virtual-marketer-website` | nginx, ingress on `$PORT`, serves `dist/`, proxies `/api/` |
+| `api` | `virtual-marketer-api` | booking/contact API on `127.0.0.1:4000`, never public |
+
+```
+Project   virtual-marketer-chat-bot
+Region    europe-west1          (Firestore (default) is europe-west3 — cross-region
+                                 reads add ~5ms, and europe-west1 is where Cloud Run
+                                 domain mappings are supported)
+Service   virtual-marketer-website
+URL       https://virtual-marketer-website-394370849364.europe-west1.run.app
+Scaling   minScale 0, maxScale 4, concurrency 200
+Identity  vm-website@virtual-marketer-chat-bot.iam.gserviceaccount.com
+          └── roles/datastore.user, secretAccessor on vm-website-smtp-pass
+```
+
+The API is a sidecar rather than its own service on purpose: nginx reaches it
+over loopback, so there is no second public endpoint to secure, no
+service-to-service auth to configure, and no second cold start on the booking
+path.
+
+## Redeploying
+
+```bash
+# 1. Rebuild the static site
+npm run build
+
+# 2. Build and push both images
+REPO=europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy
+gcloud auth print-access-token | docker login -u oauth2accesstoken \
+  --password-stdin https://europe-west1-docker.pkg.dev
+docker build -t "$REPO/virtual-marketer-website:vN" .
+docker build -t "$REPO/virtual-marketer-api:vN" ./backend
+docker push "$REPO/virtual-marketer-website:vN"
+docker push "$REPO/virtual-marketer-api:vN"
+
+# 3. Point the manifest at the new tag and apply
+gcloud run services replace service.yaml \
+  --project=virtual-marketer-chat-bot --region=europe-west1
+```
+
+`gcloud auth configure-docker` alone is not enough on a snap-installed Docker —
+the credential helper is not on its PATH, hence the explicit `docker login`.
+
+Use real version tags, not `:latest`. Cloud Run resolves the image to a digest
+at deploy time, so `:latest` makes it impossible to tell which build a revision
+is running or to roll back to a specific one.
+
+## Cutting the domain over from the old WordPress host
+
+`virtual-marketer.de` still resolves to **178.254.10.137** (1blu), and DNS is
+served by `ns01.1blu.de` / `ns02.1blu.de`. Nothing below has been done — it
+changes what the public sees, so it is a deliberate, separate step.
+
+1. **Verify the domain** (once per domain, in Search Console):
+   ```bash
+   gcloud domains verify virtual-marketer.de
+   ```
+
+2. **Create the mappings:**
+   ```bash
+   gcloud beta run domain-mappings create --service=virtual-marketer-website \
+     --domain=virtual-marketer.de --region=europe-west1 \
+     --project=virtual-marketer-chat-bot
+   gcloud beta run domain-mappings create --service=virtual-marketer-website \
+     --domain=www.virtual-marketer.de --region=europe-west1 \
+     --project=virtual-marketer-chat-bot
+   ```
+
+3. **Add the records it prints** in the 1blu DNS panel — four A records and
+   four AAAA for the apex, one CNAME for `www`. Lower the TTL to 300s a day
+   beforehand so a rollback is fast.
+
+4. **Wait for the managed certificate.** Cloud Run issues it only after DNS
+   resolves to Google, typically 15–60 minutes. The site will serve TLS errors
+   in between, so do this outside business hours.
+
+5. **Afterwards:** resubmit `https://virtual-marketer.de/sitemap.xml` in Search
+   Console and confirm the 301s from `/tag/`, `/category/`, `/author/` and
+   `/blog/page/` resolve to `/blog/`.
+
+Keep the 1blu WordPress instance running but unreferenced until the new site
+has been live and indexed for a week — reverting is then just a DNS change.
+
+## Operational notes
+
+- **Secrets.** Only `SMTP_PASS` is in Secret Manager (`vm-website-smtp-pass`).
+  The rest of the SMTP settings are plain env vars in the service manifest;
+  they are configuration, not credentials.
+- **Cost ceiling.** `maxScale: 4` is the real protection against a traffic
+  spike or a determined scraper turning into a bill. The nginx rate limit is a
+  backstop, not the budget control.
+- **Logs.** `gcloud run services logs read virtual-marketer-website
+  --region=europe-west1 --project=virtual-marketer-chat-bot`
