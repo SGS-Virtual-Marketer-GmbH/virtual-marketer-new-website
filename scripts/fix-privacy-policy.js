@@ -312,6 +312,138 @@ function appendToSection(html, headingRe, body, guard) {
   return { html: html.slice(0, at) + body.trim() + '\n' + html.slice(at), changed: true };
 }
 
+/**
+ * The "Übersicht der Verarbeitungen" bullet lists are WordPress boilerplate
+ * and contradicted the rest of the page: they announced Remarketing, user
+ * profiling, audience building, conversion and reach measurement as purposes
+ * of processing, while four sections further down correctly state that none
+ * of that happens. A privacy policy that contradicts itself in its own
+ * summary is worse than one that is merely terse, so the ad-tech purposes are
+ * struck and the AI purposes the company actually pursues are added.
+ *
+ * The export nests every bullet as
+ *   <ul><li style="list-style-type: none;"><ul><li>TEXT</li></ul></li></ul>
+ * followed by two empty <p>s, so the whole wrapper is matched and removed —
+ * leaving an orphaned wrapper behind would show up as a stray empty bullet.
+ */
+const OVERVIEW_DROP = [
+  'Konversionsmessung (Messung der Effektivität von Marketingmaßnahmen).',
+  'Profile mit nutzerbezogenen Informationen (Erstellen von Nutzerprofilen).',
+  'Remarketing.',
+  'Reichweitenmessung (z.B. Zugriffsstatistiken, Erkennung wiederkehrender Besucher).',
+  'Zielgruppenbildung (Bestimmung von für Marketingzwecke relevanten Zielgruppen oder sonstige Ausgabe von Inhalten).',
+];
+
+const OVERVIEW_ADD = [
+  {
+    after: 'Inhaltsdaten (z.B. Eingaben in Onlineformularen).',
+    items: [
+      'Eingabe- und Ausgabedaten unserer KI-Dienste (z.B. Eingabeaufforderungen/„Prompts“, hochgeladene Dateien, Produkt- und Katalogdaten sowie die daraus erzeugten Inhalte).',
+    ],
+  },
+  {
+    after: 'Erbringung vertragliche Leistungen und Kundenservice.',
+    items: [
+      'Erbringung KI-gestützter Leistungen (Erzeugung und Bearbeitung von Texten, Bildern, Videos und Produktdaten).',
+    ],
+  },
+];
+
+function bulletBlock(text) {
+  return `<ul>\n<li style="list-style-type: none;">\n<ul>\n<li>${text}</li>\n</ul>\n</li>\n</ul>\n<p></p>\n<p></p>\n`;
+}
+
+function fixOverviewLists(html) {
+  let out = html;
+  let changed = 0;
+
+  for (const text of OVERVIEW_DROP) {
+    const block = bulletBlock(text);
+    if (out.includes(block)) {
+      out = out.replace(block, '');
+      changed++;
+    }
+  }
+
+  for (const { after, items } of OVERVIEW_ADD) {
+    const anchor = bulletBlock(after);
+    if (!out.includes(anchor)) continue;
+    const addition = items.filter((t) => !out.includes(`<li>${t}</li>`)).map(bulletBlock).join('');
+    if (!addition) continue;
+    out = out.replace(anchor, anchor + addition);
+    changed++;
+  }
+
+  return { html: out, changed };
+}
+
+/**
+ * Disclosures the English page must carry to be equivalent to the German one.
+ * The English policy is written in generate-en-pages.js and has its own,
+ * shorter structure; this check exists so that "shorter" can never quietly
+ * become "weaker" — the two pages have drifted before.
+ */
+const EN_REQUIRED = [
+  ...AI_SUBPROCESSORS.map((v) => [`AI sub-processor: ${v}`, new RegExp(`\\b${v}\\b`)]),
+  ['own models', /own[^.]{0,40}models/i],
+  ['Art. 28 processing agreement', /Art\.?\s*28/i],
+  ['no training on customer data', /not\s+used\s+to\s+train/i],
+  ['EU-US Data Privacy Framework', /Data Privacy Framework/i],
+  ['SCCs / Art. 46', /Art\.?\s*46/i],
+  ['right to object (Art. 21)', /Art\.?\s*21/i],
+  ['AI Act Regulation number', /2024\/1689/],
+  ['Digital Omnibus Regulation number', /2026\/1744/],
+  ['Art. 50 transparency', /Art\.?\s*50/i],
+  ['Art. 50 application date', /2\s+August\s+2026/i],
+  ['machine-readable marking', /machine-readable/i],
+  ['marking transition deadline', /2\s+December\s+2026/i],
+  ['Art. 4 AI literacy', /AI literacy/i],
+  ['EU hosting', /within the European Union/i],
+  ['server logs not denied', /server log/i],
+];
+
+/** Marketing trees that must never carry an AI vendor name. */
+const MARKETING_TREES = ['ki-loesungen', 'en/solutions', 'preise', 'en/pricing'];
+const VENDOR_LEAK = /\b(Anthropic|OpenAI|Gemini|Google Cloud|Vertex AI|HuggingFace|Hugging Face|Microsoft Azure|Claude)\b/gi;
+
+/**
+ * Naming a vendor as a WIRE PROTOCOL is not what the CLAUDE.md rule forbids.
+ * The Coding API's whole selling point is that it speaks the OpenAI- and
+ * Anthropic-compatible request format, and there is no vendor-neutral name
+ * for that format — "point your tool at an OpenAI-compatible base URL" says
+ * nothing about which engine answers. What the rule forbids is disclosing the
+ * engine behind Virtual Marketer Senior/Junior, so only unqualified vendor
+ * mentions are flagged.
+ */
+const PROTOCOL_CONTEXT =
+  /^[-\s]*(kompatib\w*|compatible|SDKs?|APIs?|Basis-URL|base URL|provider|Anbieter|Chat[- ]Completions|Messages|protocol|Protokoll|endpoint|Endpunkt|format|Format|Schema|Schl(ü|ue)ssel|key)\b/i;
+
+function checkVendorLeak() {
+  const offenders = [];
+  for (const tree of MARKETING_TREES) {
+    const dir = path.join(DIST, tree);
+    if (!fs.existsSync(dir)) continue;
+    for (const file of findHtmlFiles(dir)) {
+      const text = fs.readFileSync(file, 'utf-8');
+      const prose = text
+        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<[^>]+>/g, ' ');
+      VENDOR_LEAK.lastIndex = 0;
+      let hit;
+      while ((hit = VENDOR_LEAK.exec(prose))) {
+        const after = prose.slice(hit.index + hit[0].length, hit.index + hit[0].length + 40);
+        if (PROTOCOL_CONTEXT.test(after)) continue;
+        offenders.push(
+          `${path.relative(DIST, file)} — "${prose.slice(hit.index - 30, hit.index + 50).replace(/\s+/g, ' ').trim()}"`,
+        );
+        break;
+      }
+    }
+  }
+  return offenders;
+}
+
 function main() {
   console.log('\n🔐 Correcting the privacy policy...\n');
 
@@ -330,11 +462,29 @@ function main() {
 
     for (const s of SECTIONS.filter((x) => x.lang === lang)) {
       const res = s.append
-        ? appendToSection(html, s.match, s.body)
-        : replaceSection(html, s.match, s.body);
+        ? appendToSection(html, s.match, s.body, s.guard)
+        : replaceSection(html, s.match, s.body, s.heading);
       if (res.changed) {
         html = res.html;
         applied.push(String(s.match).slice(0, 42));
+      } else {
+        console.log(`   ⚠ ${url} — section not found: ${String(s.match)}`);
+      }
+    }
+
+    if (lang === 'de') {
+      const overview = fixOverviewLists(html);
+      if (overview.changed) {
+        html = overview.html;
+        applied.push(`Übersicht der Verarbeitungen (${overview.changed} Listenänderungen)`);
+      }
+
+      // "Stand:" is the revision date of the policy, not the build date —
+      // hardcoded on purpose so a rebuild cannot pretend the text was
+      // reviewed today.
+      if (/Stand: \d{1,2}\. \w+ \d{4}/.test(html)) {
+        html = html.replace(/Stand: \d{1,2}\. \w+ \d{4}/g, `Stand: ${STAND}`);
+        applied.push('Stand');
       }
     }
 
@@ -342,8 +492,12 @@ function main() {
       fs.writeFileSync(file, html);
       changedFiles++;
       console.log(`   • ${url} — ${applied.length} section(s) rewritten`);
-    } else {
+    } else if (SECTIONS.some((x) => x.lang === lang)) {
       console.log(`   – ${url} — no matching sections found`);
+    } else {
+      // The English policy is generated whole by generate-en-pages.js, so
+      // there is nothing to patch here — only the parity check below.
+      console.log(`   – ${url} — nothing to patch (authored in generate-en-pages.js)`);
     }
   }
 
@@ -379,6 +533,31 @@ function main() {
       console.log(`   ⚠ ${path.relative(DIST, file)} still asserts stale services:`);
       offenders.forEach((o) => console.log(`       ${o}`));
     }
+  }
+
+  // The German page is authoritative; the English one is shorter by design.
+  // "Shorter" must not silently become "says less", so every disclosure that
+  // carries legal weight is checked for on the English page too.
+  const enFile = targets.find((f) => f.includes(`${path.sep}en${path.sep}privacy-policy`));
+  if (enFile) {
+    const enText = fs.readFileSync(enFile, 'utf-8');
+    const missing = EN_REQUIRED.filter(([, re]) => !re.test(enText)).map(([label]) => label);
+    if (missing.length) {
+      console.log('   ⚠ /en/privacy-policy/ is missing German-page disclosures:');
+      [...new Set(missing)].forEach((m) => console.log(`       ${m}`));
+    } else {
+      console.log('   ✓ /en/privacy-policy/ carries every disclosure of the German page');
+    }
+  }
+
+  // The vendor names are legally required in the privacy policy and forbidden
+  // everywhere else (see the file header). Enforce the second half of that.
+  const leaks = checkVendorLeak();
+  if (leaks.length) {
+    console.log('   ⚠ AI vendor names leaked into marketing pages:');
+    leaks.forEach((l) => console.log(`       ${l}`));
+  } else {
+    console.log(`   ✓ no AI vendor name in ${MARKETING_TREES.join(', ')}`);
   }
 
   console.log(`\n✅ Privacy policy corrected in ${changedFiles} file(s)\n`);
