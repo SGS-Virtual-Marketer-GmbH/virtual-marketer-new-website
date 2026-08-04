@@ -35,6 +35,7 @@
 const fs = require('fs');
 const path = require('path');
 const { DEMO_STYLE, DEMO_ENGINE_JS, buildDemo } = require('./feature-demos.js');
+const { CHROME_CSS } = require('./lib/page-chrome');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -1889,6 +1890,7 @@ function pageShell(f, lang) {
     .vm-fp .vmd-stage{padding:16px;}
   }
 ${animDemo ? DEMO_STYLE : ''}
+${CHROME_CSS}
 </style>
 </head>
 <body class="vm-static-blog">
@@ -2135,6 +2137,7 @@ function renderDeHub() {
   .vm-hub .btn-ghost{background:transparent;color:var(--vm-gray-900);border:1.5px solid var(--vm-gray-200);}
   .vm-hub .btn-ghost:hover{border-color:var(--vm-red);color:var(--vm-red);}
   .vm-hub .custom-panel{background:var(--vm-gray-100);border:1px solid var(--vm-gray-200);border-radius:16px;padding:28px 30px;margin-top:18px;}
+${CHROME_CSS}
 </style>
 </head>
 <body class="vm-static-blog">

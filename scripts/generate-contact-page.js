@@ -33,6 +33,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { CHROME_CSS } = require('./lib/page-chrome');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -114,7 +115,7 @@ ${keywords ? `<meta name="keywords" content="${keywords}">\n` : ''}<meta name="r
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>\n` : ''}<link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
 <link rel="stylesheet" href="/${THEME_CSS.fontAwesome}">
 <link rel="stylesheet" href="/${THEME_CSS.style}">
-<style>${BASE_CSS}</style>
+<style>${BASE_CSS}${CHROME_CSS}</style>
 </head>
 <body class="vm-static-blog">
 ${header()}

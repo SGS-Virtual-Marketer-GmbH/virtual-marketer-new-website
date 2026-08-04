@@ -24,6 +24,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { CHROME_CSS } = require('./lib/page-chrome');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -115,9 +116,7 @@ function pageShell({ titleEN, descriptionEN, keywordsEN, slug, dateISO, category
   .vm-post .vm-related{margin-top:40px}
   .vm-post .vm-related ul{list-style:none;padding:0}
   .vm-post .vm-related li{margin-bottom:8px}
-  .vm-header-simple{max-width:1140px;margin:0 auto;padding:24px 20px;display:flex;align-items:center;justify-content:space-between}
-  .vm-header-simple nav a{margin-left:24px;color:#1f2937;text-decoration:none;font-weight:500}
-  .vm-footer-simple{max-width:1140px;margin:40px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px}
+  ${CHROME_CSS}
 </style>
 </head>
 <body class="vm-static-blog">
