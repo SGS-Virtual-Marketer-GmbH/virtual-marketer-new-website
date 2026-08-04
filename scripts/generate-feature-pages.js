@@ -224,7 +224,15 @@ const FEATURES = [
           { value: 'a few cents', label: 'per finished image', sub: 'with Virtual Marketer &#8211; well under one euro per image' },
           { value: '+20&ndash;40%', label: 'conversion potential', sub: 'moving from flat-lay to on-model imagery' },
         ],
-        compliance: 'From August 2, 2026 the EU AI Act requires machine-readable labeling of AI-generated images &#8211; Virtual Marketer labels correctly by default.',
+        // Mirrors the German string above. It used to read "Virtual Marketer
+        // labels correctly by default" — an assertion that the product meets
+        // a legal standard, which is not ours to make and, until the product
+        // repo's 2026-08-04 fix, was not even true: the image path stripped
+        // metadata rather than writing it. The German half was corrected
+        // there; this one was missed, so the overclaim stayed live in
+        // English only. State what the product does and leave the legal
+        // conclusion to a lawyer.
+        compliance: 'The EU AI Act requires machine-readable labeling of AI-generated images. Virtual Marketer writes it into every generated image: the IPTC tag &#8220;Digital Source Type: trainedAlgorithmicMedia&#8221; &#8211; automatic, not switchable, in addition to the optional visible watermark.',
       },
       valueBullets: [
         'Replace expensive photo shoots: from raw photo to e-commerce-ready imagery in minutes',
