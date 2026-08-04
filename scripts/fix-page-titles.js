@@ -44,8 +44,7 @@ const fs = require('fs');
 const path = require('path');
 
 const DIST = path.join(__dirname, '../dist');
-const MAX_TITLE = 65;
-const MIN_CLAUSE = 35;
+const { MAX_TITLE, MIN_CLAUSE } = require('./lib/title-cleanup');
 // " - Virtual Marketer" is redundant on an over-long title: the brand is
 // already in the domain shown above the SERP title and in og:site_name.
 // Dropping it buys 19 characters for free, so it is tried before any cut.
@@ -73,39 +72,10 @@ function escapeAttr(s) {
 }
 
 /** First quoted candidate from a pasted list of headline options. */
-function firstSuggestion(title) {
-  const quoted = title.match(/"([^"]{15,})"/g);
-  if (!quoted || quoted.length < 2) return null;
-  return quoted[0].replace(/^"|"$/g, '').trim();
-}
-
-/**
- * Removes quote marks that wrap a whole title.
- *
- * Some WordPress post titles were saved with the headline in quotes, which is
- * noise in a SERP on its own — and actively broken once clauseTrim() cuts the
- * title short, because the closing quote is in the discarded half. That is
- * how /blog/multimodale-ki-…/ ended up serving a title that opened with a
- * quote and never closed it. Stripping the wrapper first means the trimmer
- * only ever sees plain text.
- */
-function stripWrappingQuotes(title) {
-  let t = title.trim().replace(/^["'“„»«‚']+/, '').replace(/["'”“‘'»«]+$/, '').trim();
-  // If an unbalanced straight quote survives (quotes around only part of the
-  // title), drop it rather than ship a dangling one.
-  if ((t.match(/"/g) || []).length % 2 === 1) t = t.replace(/"/g, '');
-  return t;
-}
-
-/** Cut at the last clause boundary that leaves a complete, in-range clause. */
-function clauseTrim(title) {
-  if (title.length <= MAX_TITLE) return null;
-  const bounds = [...title.matchAll(/[:–—,?!]/g)]
-    .map((m) => m.index)
-    .filter((i) => i >= MIN_CLAUSE && i <= MAX_TITLE);
-  if (!bounds.length) return null;
-  return title.slice(0, bounds[bounds.length - 1]).replace(/[\s,:–—]+$/, '').trim();
-}
+// The title-cleaning rules moved to lib/title-cleanup.js so that the blog
+// archive, which harvests legacy titles at pipeline step 5, applies exactly
+// the same ones this step applies at step 28. See that file's header.
+const { firstSuggestion, stripWrappingQuotes, clauseTrim } = require('./lib/title-cleanup');
 
 function setMeta(html, re, value) {
   return html.replace(re, (tag) => tag.replace(/content=(["'])[\s\S]*?\1/i, `content="${escapeAttr(value)}"`));

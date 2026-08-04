@@ -25,6 +25,7 @@
 const fs = require('fs');
 const path = require('path');
 const { CHROME_CSS } = require('./lib/page-chrome');
+const BI = require('./lib/blog-index');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -169,19 +170,58 @@ function pageShell({ titleEN, descriptionEN, keywordsEN, slug, dateISO, category
 `;
 }
 
-function generateArchive(posts) {
-  const sorted = [...posts].sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO));
-  const cards = sorted
-    .map(
-      (p) => `
-      <article style="border-bottom:1px solid #e5e7eb;padding:24px 0;">
-        <span style="display:inline-block;background:#fbecee;color:#94152b;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:8px">${p.categoryEN}</span>
-        <h2 style="font-size:1.4rem;margin:0 0 8px;"><a href="/en/blog/${p.slug}/" style="color:#111827;text-decoration:none;">${p.titleEN}</a></h2>
-        <div style="color:#6b7280;font-size:14px;margin-bottom:8px;">${formatDateEN(p.dateISO)}</div>
-        <p style="color:#374151;line-height:1.6;">${p.descriptionEN}</p>
-        <a href="/en/blog/${p.slug}/" style="color:#94152b;font-weight:600;">Read more &rarr;</a>
-      </article>`
-    )
+/**
+ * One English archive page: /en/blog/, /en/blog/page/N/ or
+ * /en/blog/category/<slug>/.
+ *
+ * Same shape as the German one in generate-blog-posts.js, and deliberately
+ * so — the search, filter and pagination behaviour lives once, in
+ * lib/blog-index.js, parameterised by language. The English posts carry
+ * different field names (titleEN, dateISO, ...), so they are normalised to
+ * the shared shape here rather than the library learning about two schemas.
+ */
+function generateArchive({ pagePosts, allPosts, categories, activeCategory, page, totalPages, urlPath, hrefFor }) {
+  const cards = pagePosts.map((p) => BI.postCard(p, formatDateEN, 'en')).join('\n');
+
+  const canonical = `${BASE_URL}${urlPath}`;
+  const title = activeCategory
+    ? `${activeCategory} | Virtual Marketer Blog`
+    : page > 1
+      ? `Blog – page ${page} | Virtual Marketer`
+      : 'Blog | Virtual Marketer - AI &amp; Marketing Insights';
+  const description = activeCategory
+    ? `All posts on ${activeCategory} — articles, analysis and practical examples from Virtual Marketer.`
+    : 'Everything about AI, machine learning and modern marketing strategy. Articles, tips and best practices from Virtual Marketer.';
+
+  const indexJson = JSON.stringify(
+    allPosts.map((p) => ({
+      // Raw, NOT HTML-escaped. These values are compared against
+      // element.dataset.cat, which the DOM hands back with entities already
+      // decoded — so an escaped "Regulierung &amp; Compliance" here would
+      // never equal the "Regulierung & Compliance" the chip reports, and
+      // that one category would silently filter to zero results. Escaping
+      // happens at the point of use, in the client's card() helper.
+      t: p.title,
+      s: p.slug,
+      d: p.description,
+      c: p.category,
+      k: p.keywords || '',
+      f: p.date ? formatDateEN(p.date) : '',
+    }))
+  ).replace(/</g, '\\u003c');
+
+  const hreflang =
+    page === 1 && !activeCategory
+      ? `<link rel="alternate" hreflang="en" href="${BASE_URL}/en/blog/">
+<link rel="alternate" hreflang="de" href="${BASE_URL}/blog/">
+<link rel="alternate" hreflang="x-default" href="${BASE_URL}/blog/">`
+      : '';
+
+  const prevNext = [
+    page > 1 ? `<link rel="prev" href="${BASE_URL}${hrefFor(page - 1)}">` : '',
+    page < totalPages ? `<link rel="next" href="${BASE_URL}${hrefFor(page + 1)}">` : '',
+  ]
+    .filter(Boolean)
     .join('\n');
 
   return `<!doctype html>
@@ -189,22 +229,22 @@ function generateArchive(posts) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blog | Virtual Marketer - AI &amp; Marketing Insights</title>
-<meta name="description" content="Everything about AI, machine learning and modern marketing strategy. Articles, tips and best practices from Virtual Marketer.">
-<link rel="canonical" href="${BASE_URL}/en/blog/">
-<link rel="alternate" hreflang="en" href="${BASE_URL}/en/blog/">
-<link rel="alternate" hreflang="de" href="${BASE_URL}/blog/">
-<link rel="alternate" hreflang="x-default" href="${BASE_URL}/blog/">
+<title>${title}</title>
+<meta name="description" content="${description}">
+<link rel="canonical" href="${canonical}">
+${hreflang}
+${prevNext}
 <link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
 <link rel="stylesheet" href="/${THEME_CSS.style}">
 <style>
   ${CHROME_CSS}
+  ${BI.ARCHIVE_CSS}
 </style>
 <script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Virtual Marketer Blog',
-    url: `${BASE_URL}/en/blog/`,
+    name: activeCategory ? `${activeCategory} — Virtual Marketer Blog` : 'Virtual Marketer Blog',
+    url: canonical,
     inLanguage: 'en',
   })}</script>
 </head>
@@ -224,15 +264,23 @@ function generateArchive(posts) {
   </nav>
 </header>
 <main style="max-width:820px;margin:0 auto;padding:20px;">
-  <h1>Virtual Marketer Blog</h1>
-  <p style="color:#6b7280;">AI, machine learning and modern marketing strategy &mdash; articles, tips and best practices.</p>
-  ${cards}
+  <h1>${activeCategory ? BI.esc(activeCategory) : 'Virtual Marketer Blog'}</h1>
+  <p style="color:#6b7280;">${
+    activeCategory
+      ? `All posts in the &ldquo;${BI.esc(activeCategory)}&rdquo; category.`
+      : 'AI, machine learning and modern marketing strategy &mdash; articles, tips and best practices.'
+  }</p>
+${BI.toolsHtml({ categories, activeCategory, lang: 'en' })}
+${cards}
+${BI.paginationHtml(page, totalPages, hrefFor, 'en')}
+  </div>
 </main>
 <footer style="max-width:1140px;margin:40px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
   &copy; 2026 SGS Virtual Marketer GmbH &middot;
   <a href="/en/privacy-policy/">Privacy Policy</a> &middot;
   <a href="/en/legal-notice/">Legal Notice</a>
 </footer>
+${BI.searchScript(indexJson, 'en')}
 </body>
 </html>
 `;
@@ -260,9 +308,63 @@ function main() {
     fs.writeFileSync(path.join(outDir, 'index.html'), html);
   });
 
-  fs.writeFileSync(path.join(DIST_EN_BLOG, 'index.html'), generateArchive(posts));
+  // Normalised to the shared post shape so lib/blog-index.js needs to know
+  // about only one schema. The English corpus is the 58 translations of the
+  // legacy German posts; the 41 newer German-only articles have no English
+  // version yet, so the two blogs differ in size on purpose.
+  const all = posts
+    .map((p) => ({
+      title: p.titleEN,
+      slug: p.slug,
+      date: (p.dateISO || '').slice(0, 10),
+      category: p.categoryEN,
+      description: p.descriptionEN,
+      keywords: p.keywordsEN || '',
+    }))
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
-  console.log(`  ✓ ${posts.length} posts + /en/blog/ archive\n`);
+  const categories = [...new Set(all.map((p) => p.category))]
+    .sort()
+    .map((label) => ({ label, slug: BI.categorySlug(label) }));
+
+  // Wiped first — same reason as the German side: a page that stops existing
+  // must stop being served rather than linger as a stale orphan.
+  for (const stale of ['page', 'category']) {
+    fs.rmSync(path.join(DIST_EN_BLOG, stale), { recursive: true, force: true });
+  }
+
+  const writePage = (urlPath, html) => {
+    const dir = path.join(DIST, urlPath.replace(/^\/|\/$/g, ''));
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, 'index.html'), html);
+  };
+
+  const totalPages = Math.max(1, Math.ceil(all.length / BI.PER_PAGE));
+  const hrefFor = (n) => (n === 1 ? '/en/blog/' : `/en/blog/page/${n}/`);
+  for (let page = 1; page <= totalPages; page++) {
+    const urlPath = hrefFor(page);
+    writePage(urlPath, generateArchive({
+      pagePosts: all.slice((page - 1) * BI.PER_PAGE, page * BI.PER_PAGE),
+      allPosts: all, categories, activeCategory: null, page, totalPages, urlPath, hrefFor,
+    }));
+  }
+
+  for (const cat of categories) {
+    const catPosts = all.filter((p) => p.category === cat.label);
+    const catPages = Math.max(1, Math.ceil(catPosts.length / BI.PER_PAGE));
+    const catHref = (n) =>
+      n === 1 ? `/en/blog/category/${cat.slug}/` : `/en/blog/category/${cat.slug}/page/${n}/`;
+    for (let page = 1; page <= catPages; page++) {
+      const urlPath = catHref(page);
+      writePage(urlPath, generateArchive({
+        pagePosts: catPosts.slice((page - 1) * BI.PER_PAGE, page * BI.PER_PAGE),
+        allPosts: all, categories, activeCategory: cat.label, page,
+        totalPages: catPages, urlPath, hrefFor: catHref,
+      }));
+    }
+  }
+
+  console.log(`  ✓ ${posts.length} posts, /en/blog/ + ${totalPages - 1} paginated page(s), ${categories.length} category page(s)\n`);
 }
 
 main();

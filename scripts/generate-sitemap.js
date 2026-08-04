@@ -33,11 +33,18 @@ const EXCLUDE_DIR_PATTERNS = [
 // Slugs that are redirect stubs, not canonical content (kept out of sitemap)
 const REDIRECT_SLUGS = new Set(['home']);
 
-// Path prefixes that are duplicate-content pagination/archive artifacts from
-// the original WordPress scrape (e.g. /blog/page/2/) — excluded from the
-// sitemap to avoid duplicate-content signals; still reachable, just not
-// submitted for indexing.
-const EXCLUDE_PATH_PREFIXES = ['/blog/page/', '/tag/', '/category/', '/author/', '/login/'];
+// Path prefixes that are duplicate-content archive artifacts from the
+// original WordPress scrape — excluded from the sitemap to avoid
+// duplicate-content signals; still reachable, just not submitted.
+//
+// /blog/page/ was on this list and has come off it. When it held WordPress's
+// own scraped pagination that was right. It now holds the blog's real
+// pagination, generated with per-page canonicals and rel=prev/next, and those
+// pages are how a crawler reaches the 88 posts beyond the first twelve.
+// Leaving them out would have kept most of the blog out of the index — the
+// opposite of what excluding them was for. /blog/kategorie/ is listed for the
+// same reason: each category page is a distinct, substantive listing.
+const EXCLUDE_PATH_PREFIXES = ['/tag/', '/category/', '/author/', '/login/'];
 
 // Priority + change frequency rules
 function priorityFor(urlPath) {

@@ -19,13 +19,37 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://virtual-marketer.de/blog/ai-overviews-google-suche-vorbereitung/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/artikel-50-ki-inhalte-kennzeichnen/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://virtual-marketer.de/blog/automatisierte-produktbewertungen-wie-ki-das-vertrauen-steigert-und-informierte-entscheidungen-unterstuetzt/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://virtual-marketer.de/blog/custom-ki-modell-anfrage-prozess/</loc>
+    <loc>https://virtual-marketer.de/blog/bfsg-barrierefreier-onlineshop/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/consent-mode-v2-dma-pflicht/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/cookie-banner-digital-omnibus-2026/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -127,6 +151,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://virtual-marketer.de/blog/digital-omnibus-ki-fristen-2026/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/digitale-souveraenitaet-ki-marketing/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://virtual-marketer.de/blog/durch-massgeschneiderte-empfehlungen/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
@@ -139,19 +175,97 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://virtual-marketer.de/blog/eu-ai-act-fristen-marketing-teams/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/eu-ai-act-gpai-pflichten-august-2025/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/eu-ai-act-marketing-februar-2025/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/eu-digital-omnibus-dsgvo-ki-verordnung/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://virtual-marketer.de/blog/fair-und-effizient-bewerten-wie-ki-die-automatisierung-von-studentenleistungen-unterstuetzt/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://virtual-marketer.de/blog/fine-tuning-kleinerer-modelle-kosteneffizienz/</loc>
+    <loc>https://virtual-marketer.de/blog/first-party-data-strategie-cookie-ende/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://virtual-marketer.de/blog/google-meta-ads-ki-anzeigentexte/</loc>
+    <loc>https://virtual-marketer.de/blog/first-party-daten-ki-marketing/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/gmail-yahoo-anforderungen-e-mail-marketing/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/google-ai-max-suchkampagnen/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/google-ai-mode-deutschland-seo/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/google-ai-overviews-deutschland-start/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/google-behaelt-third-party-cookies/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/google-core-update-2024-ki-content/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/google-core-update-august-2024-sichtbarkeit/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/google-core-update-maerz-2026/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/google-marketing-live-2026-suchkampagnen/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -169,7 +283,79 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://virtual-marketer.de/blog/ki-content-governance-markenkonsistenz/</loc>
+    <loc>https://virtual-marketer.de/blog/kategorie/ai-trends/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/kategorie/archiv/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/kategorie/archiv/page/2/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/kategorie/archiv/page/3/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/kategorie/archiv/page/4/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/kategorie/bildung/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/kategorie/regulierung-compliance/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/kategorie/regulierung-compliance/page/2/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/kategorie/seo/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/kategorie/use-cases/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/ki-agenten-marketing-nutzen-grenzen/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/ki-bilder-kennzeichnen-content-credentials/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/ki-chatbots-kundenservice-praxis/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -194,6 +380,42 @@
   </url>
   <url>
     <loc>https://virtual-marketer.de/blog/ki-in-der-forschung-wie-kuenstliche-intelligenz-entdeckungen-und-innovationen-beschleunigt-die-macht-von-ki-in-der-forschung-neuartige-entdeckungen-und-bahnbrechende-innovationen-von/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/ki-kompetenz-marketing-team-aufbauen/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/ki-marketing-fahrplan-2026/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/ki-nutzung-unternehmen-2026-zahlen/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/ki-nutzung-unternehmen-deutschland-2024/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/ki-produktbilder-onlineshop/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/ki-weiterbildung-marketingteams/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -247,13 +469,55 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://virtual-marketer.de/blog/multimodale-ki-im-einzelhandel/</loc>
+    <loc>https://virtual-marketer.de/blog/online-monitor-2026-marktplaetze/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://virtual-marketer.de/blog/neural-search-ranking-ecommerce/</loc>
+    <loc>https://virtual-marketer.de/blog/onlinehandel-q1-2026-alltagskaeufe/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/page/2/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/page/3/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/page/4/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/page/5/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/page/6/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/page/7/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/page/8/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -265,19 +529,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://virtual-marketer.de/blog/predictive-analytics-universitaeten/</loc>
-    <lastmod>2026-08-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://virtual-marketer.de/blog/rag-fuer-ecommerce-produktbeschreibungen/</loc>
-    <lastmod>2026-08-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://virtual-marketer.de/blog/real-time-marketing-edge-ai/</loc>
+    <loc>https://virtual-marketer.de/blog/retouren-senken-ki-produktdaten/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -313,19 +565,43 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://virtual-marketer.de/blog/schatten-ki-marketing-regeln/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://virtual-marketer.de/blog/seo-im-zeitalter-der-ki-suche/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://virtual-marketer.de/blog/synthetische-daten-marketing-training/</loc>
+    <loc>https://virtual-marketer.de/blog/sichtbarkeit-ki-antworten-messen/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://virtual-marketer.de/blog/voice-marketing-conversational-ai/</loc>
+    <loc>https://virtual-marketer.de/blog/suchmarketing-2024-rueckblick-prioritaeten/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/umweltaussagen-werbung-uwg-2026/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/universal-analytics-datenexport-vor-loeschung/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/verhaltenskodex-ki-kennzeichnung/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -356,6 +632,12 @@
   </url>
   <url>
     <loc>https://virtual-marketer.de/blog/wie-koennen-unternehmen-generative-ki-im-marketing-nutzen/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/blog/zero-click-suche-ki-antworten/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -626,6 +908,30 @@
   </url>
   <url>
     <loc>https://virtual-marketer.de/en/blog/neural-search-ranking-ecommerce/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/en/blog/page/2/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/en/blog/page/3/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/en/blog/page/4/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://virtual-marketer.de/en/blog/page/5/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

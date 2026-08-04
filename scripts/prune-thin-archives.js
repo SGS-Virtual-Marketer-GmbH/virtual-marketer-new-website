@@ -33,18 +33,51 @@ const fs = require('fs');
 const path = require('path');
 
 const DIST = path.join(__dirname, '../dist');
-const TARGET_DIRS = ['author', 'tag', 'category', path.join('blog', 'page')];
 
-// Any link whose path lands inside a pruned archive.
-//
-// The pagination alternative carries no "blog/" prefix on purpose: posts link
-// to their archive pages relatively, as href="../page/1/index.html", so
-// matching on "blog/page/N" alone missed all 44 of them. Matching a bare
-// "page/N" is safe here because the only paginated section left after this
-// prune is /blog/, and the match is anchored to a path boundary so it cannot
-// fire on a slug that merely contains the word "page".
+/**
+ * WordPress's own thin archives. /blog/page/ is NOT in this list any more.
+ *
+ * It used to be, and correctly so: back then /blog/ was a single unpaginated
+ * page and the WordPress /blog/page/N/ directories were duplicate surface
+ * with nothing on them. scripts/generate-blog-posts.js now builds real
+ * pagination at those same URLs — eight pages of twelve posts each, plus
+ * /blog/kategorie/<slug>/ — so deleting the directory would delete the
+ * blog's own navigation. The old WordPress pages are gone regardless: the
+ * generator writes the directory fresh on every build.
+ */
+const TARGET_DIRS = ['author', 'tag', 'category'];
+
+/**
+ * Any link whose path lands inside a pruned archive.
+ *
+ * The pagination arm is still here, and still matches a bare "page/N"
+ * without a "blog/" prefix, because the 44 scraped posts link to their old
+ * archive as href="../page/1/index.html". Those old links point at
+ * WordPress's pagination, whose page 1 was a different post ordering from
+ * today's — sending them to /blog/ is right. What must NOT be rewritten is
+ * the generator's own pagination, which is why PRESERVE below exists.
+ */
 const ARCHIVE_LINK =
   /(?:\.\.\/)*\/?(?:author|tag|category)\/[A-Za-z0-9._~%-]+(?:\/[A-Za-z0-9._~%-]+)*\/?|(?:\.\.\/)*\/?(?:blog\/)?page\/\d+\/(?:index\.html)?|(?:\.\.\/)*\/?(?:blog\/)?page\/\d+\/?/g;
+
+/**
+ * Pages whose links this step must leave alone.
+ *
+ * The generated archive pages link to /blog/page/2/ and friends on purpose.
+ * Running the rewrite over them would collapse every pagination link to
+ * /blog/, leaving eight pages that all point at page one — the failure would
+ * look like "pagination does nothing" rather than like an error.
+ */
+const PRESERVE = [
+  /^\/blog\/(page\/\d+\/)?index\.html$/,
+  /^\/blog\/kategorie\//,
+  // The English archive too. Leaving it out was not a hypothetical: the
+  // build rewrote all four of /en/blog/'s pagination links to /blog/ —
+  // pointing English readers at the German blog — and the only visible
+  // symptom was a pagination bar with no page numbers in it.
+  /^\/en\/blog\/(page\/\d+\/)?index\.html$/,
+  /^\/en\/blog\/category\//,
+];
 
 function findHtmlFiles(dir, results = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -73,7 +106,9 @@ function main() {
   for (const file of findHtmlFiles(DIST)) {
     const url = '/' + path.relative(DIST, file).split(path.sep).join('/');
     // Pages that are themselves about to be deleted need no rewriting.
-    if (/^\/(author|tag|category)\/|^\/blog\/page\//.test(url)) continue;
+    if (/^\/(author|tag|category)\//.test(url)) continue;
+    // Pages whose pagination links are the real ones. See PRESERVE.
+    if (PRESERVE.some((re) => re.test(url))) continue;
 
     const original = fs.readFileSync(file, 'utf-8');
     const to = target(file);
