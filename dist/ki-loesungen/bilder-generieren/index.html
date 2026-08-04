@@ -199,6 +199,13 @@
   .vmd-imgbox { border-radius: 12px; border: 1px solid var(--vm-gray-200); height: 130px; background: linear-gradient(135deg, #a3cce9 0%, #66a3ce 45%, #94152b 130%); position: relative; overflow: hidden; transition: filter 1.2s ease; }
   .vmd-imgbox.vmd-blur { filter: blur(14px) saturate(0.4); }
   .vmd-imgbox::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 68% 32%, rgba(255,255,255,0.55), transparent 42%); }
+  /* With a real example in the pane the decorative gradient and its highlight
+     would show through the photo, so both are dropped for those. */
+  .vmd-imgbox.vmd-hasimg { background: var(--vm-gray-100); }
+  .vmd-imgbox.vmd-hasimg::after { display: none; }
+  .vmd-imgbox.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .vmd-avatar.vmd-hasimg { background: none; overflow: hidden; }
+  .vmd-avatar.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .vmd-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.9); left: 4%; transition: left 2.6s linear; }
 
   .vmd-email { border: 1px solid var(--vm-gray-200); border-radius: 12px; overflow: hidden; background: #fff; }
@@ -633,7 +640,7 @@
           <div style="display:flex;gap:8px;margin-top:10px;">
             <span class="vmd-chip vmd-chip-on">16:9</span><span class="vmd-chip">1:1</span><span class="vmd-chip">9:16</span>
           </div>
-          <div class="vmd-imgbox vmd-blur" id="im-result" style="margin-top:12px;"></div>
+          <div class="vmd-imgbox vmd-blur vmd-hasimg" id="im-result" style="margin-top:12px;"><img src="/product-pages/demo-imagegen-result.jpg" alt="" loading="lazy" decoding="async"></div>
           <div class="vmd" id="im-done" style="margin-top:10px;"><span class="vmd-badge">✓ Download in voller Auflösung</span></div></div>
     </div>
     <p class="vmd-demonote">Simulierte Vorschau mit Beispieldaten &#8211; keine echten Konten oder Server-Aufrufe.</p>

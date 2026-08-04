@@ -163,6 +163,19 @@ const DEMO_SCENES = [
   { file: 'demo-scene-cafe.jpg', prompt: 'An empty stylish café interior with warm wood and soft daylight through a large window, an empty table in the foreground, no people.' },
 ];
 
+/**
+ * Example outputs shown inside the animated product mockups. Those panes
+ * rendered a blue-red CSS gradient behind a blur that "sharpened" — which
+ * demonstrated a blur transition rather than the product. Each one is now
+ * the kind of asset the feature actually produces.
+ */
+const DEMO_MOCKUPS = [
+  { file: 'demo-imagegen-result.jpg', prompt: 'A dramatic advertising product photograph of a single running shoe on wet asphalt at dusk, reflections in the water, moody rim lighting, commercial campaign look.' },
+  { file: 'demo-video-frame.jpg', prompt: 'A cinematic video still from a fashion brand advert: a coat swinging in slow motion on a city street at golden hour, motion blur at the edges, colour graded.' },
+  { file: 'demo-email-hero.jpg', prompt: 'A clean e-mail newsletter header image for a lifestyle brand: a flat-lay of autumn apparel and accessories on a warm neutral background, soft daylight, generous empty space at the top for a headline.' },
+  { file: 'demo-content-hero.jpg', prompt: 'A blog article hero image about e-commerce content strategy: an open laptop with a product page on screen beside a notebook and coffee on a bright desk, shot from above.' },
+];
+
 const DEMO_RESULT = {
   file: 'demo-result.jpg',
   prompt:
@@ -303,7 +316,7 @@ async function main() {
     prompt: `Full-body fashion photograph of ${m.who}, wearing ${m.look}, ${m.pose}. ${MODEL_STUDIO}`,
   }));
 
-  for (const scene of [...SCENES, ...DEMO_MODELS, ...DEMO_SCENES, DEMO_RESULT, ...fashionBase]) {
+  for (const scene of [...SCENES, ...DEMO_MODELS, ...DEMO_SCENES, DEMO_RESULT, ...DEMO_MOCKUPS, ...fashionBase]) {
     if (!wanted(scene.file)) continue;
     if (exists(scene.file) && !FORCE) { skipped++; continue; }
     process.stdout.write(`   ${scene.file} ... `);

@@ -95,6 +95,13 @@ const DEMO_STYLE = `
   .vmd-imgbox { border-radius: 12px; border: 1px solid var(--vm-gray-200); height: 130px; background: linear-gradient(135deg, #a3cce9 0%, #66a3ce 45%, #94152b 130%); position: relative; overflow: hidden; transition: filter 1.2s ease; }
   .vmd-imgbox.vmd-blur { filter: blur(14px) saturate(0.4); }
   .vmd-imgbox::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 68% 32%, rgba(255,255,255,0.55), transparent 42%); }
+  /* With a real example in the pane the decorative gradient and its highlight
+     would show through the photo, so both are dropped for those. */
+  .vmd-imgbox.vmd-hasimg { background: var(--vm-gray-100); }
+  .vmd-imgbox.vmd-hasimg::after { display: none; }
+  .vmd-imgbox.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .vmd-avatar.vmd-hasimg { background: none; overflow: hidden; }
+  .vmd-avatar.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .vmd-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.9); left: 4%; transition: left 2.6s linear; }
 
   .vmd-email { border: 1px solid var(--vm-gray-200); border-radius: 12px; overflow: hidden; background: #fff; }
@@ -205,6 +212,44 @@ function chat(idPrefix, userText, toolText, botText) {
 // ---------------------------------------------------------------------------
 // The demos, one per product view (keys match the product repo's AppView).
 // ---------------------------------------------------------------------------
+
+/**
+ * Real example output inside a mockup's image pane.
+ *
+ * These panes were a blue-red CSS gradient that un-blurred on cue, which
+ * demonstrated a blur transition rather than anything the product makes. The
+ * blur reveal is kept — it reads as "generating…" — but what sharpens into
+ * view is now an actual example asset.
+ *
+ * Falls back to the gradient when the file is absent so a checkout without
+ * generated images still builds (see scripts/generate-ai-images.js).
+ */
+function vmdImage(id, src, extraStyle) {
+  const fs = require('fs');
+  const path = require('path');
+  const rel = `assets/product-pages/${src}`;
+  const has = fs.existsSync(path.join(__dirname, '..', rel));
+  const style = extraStyle ? ` style="${extraStyle}"` : '';
+  if (!has) return `<div class="vmd-imgbox vmd-blur" id="${id}"${style}></div>`;
+  return `<div class="vmd-imgbox vmd-blur vmd-hasimg" id="${id}"${style}>` +
+    `<img src="/product-pages/${src}" alt="" loading="lazy" decoding="async"></div>`;
+}
+
+/** Avatar row backed by the real model portraits. */
+function vmdAvatars(ids) {
+  const fs = require('fs');
+  const path = require('path');
+  return ids
+    .map((id, i) => {
+      const file = `demo-model-${i + 1}.jpg`;
+      const has = fs.existsSync(path.join(__dirname, '..', `assets/product-pages/${file}`));
+      return has
+        ? `<span class="vmd-avatar vmd-hasimg" id="${id}"><img src="/product-pages/${file}" alt="" loading="lazy" decoding="async"></span>`
+        : `<span class="vmd-avatar" id="${id}"></span>`;
+    })
+    .join('');
+}
+
 function buildDemo(view, locale) {
   const de = locale === 'de';
   const L = (d, e) => (de ? d : e);
@@ -269,7 +314,7 @@ function buildDemo(view, locale) {
           <div class="vmd-email vmd" id="em-mail" style="margin-top:14px;">
             <div class="vmd-email-head"><strong>${L('Betreff:', 'Subject:')}</strong> <span id="em-subj"></span></div>
             <div class="vmd-email-body">
-              <div class="vmd-imgbox vmd-blur" id="em-hero" style="height:78px;"></div>
+              ${vmdImage('em-hero', 'demo-email-hero.jpg', 'height:78px;')}
               <div id="em-body" style="margin-top:10px;">${skel(3)}</div>
               <span class="vmd-cta vmd" id="em-cta">${L('Jetzt entdecken', 'Discover now')}</span>
             </div>
@@ -358,12 +403,12 @@ function buildDemo(view, locale) {
             <span class="vmd-arrow">→</span>
             <div style="flex:1;min-width:130px;">
               <p class="vmd-label">${L('Avatar wählen', 'Pick an avatar')}</p>
-              <div class="vmd-avatars"><span class="vmd-avatar" id="st-a1"></span><span class="vmd-avatar" id="st-a2"></span><span class="vmd-avatar" id="st-a3"></span></div>
+              <div class="vmd-avatars">${vmdAvatars(['st-a1', 'st-a2', 'st-a3'])}</div>
             </div>
             <span class="vmd-arrow">→</span>
             <div style="flex:1.4;min-width:150px;">
               <p class="vmd-label">${L('Ergebnis', 'Result')}</p>
-              <div class="vmd-imgbox vmd-blur" id="st-result"></div>
+              ${vmdImage('st-result', 'model-nadia-studio.jpg')}
               <div class="vmd" id="st-done" style="margin-top:8px;"><span class="vmd-badge">✓ ${L('Model trägt Ihr Produkt — bereit für Shop & Ads', 'Model wearing your product — ready for shop & ads')}</span></div>
             </div>
           </div>
@@ -523,7 +568,7 @@ function buildDemo(view, locale) {
           <div style="display:flex;gap:8px;margin-top:10px;">
             <span class="vmd-chip vmd-chip-on">16:9</span><span class="vmd-chip">1:1</span><span class="vmd-chip">9:16</span>
           </div>
-          <div class="vmd-imgbox vmd-blur" id="im-result" style="margin-top:12px;"></div>
+          ${vmdImage('im-result', 'demo-imagegen-result.jpg', 'margin-top:12px;')}
           <div class="vmd" id="im-done" style="margin-top:10px;"><span class="vmd-badge">✓ ${L('Download in voller Auflösung', 'Full-resolution download')}</span></div>`,
         steps: [
           { t: 'type', s: '#im-in', x: L('Sportschuh auf nassem Asphalt, dramatisches Abendlicht, Werbe-Look', 'Running shoe on wet asphalt, dramatic evening light, ad-style'), d: 500 },
@@ -540,7 +585,7 @@ function buildDemo(view, locale) {
         html: `
           <p class="vmd-label">${L('Prompt', 'Prompt')}</p>
           <div class="vmd-input"><span id="vi-in"></span></div>
-          <div class="vmd-imgbox" id="vi-stage" style="margin-top:12px;"><div class="vmd-playhead" id="vi-head"></div></div>
+          ${vmdImage('vi-stage', 'demo-video-frame.jpg', 'margin-top:12px;').replace('vmd-blur ', '').replace('</div>', '<div class="vmd-playhead" id="vi-head"></div></div>')}
           <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
             <span class="vmd-chip vmd-chip-on">${L('Schnell', 'Fast')}</span><span class="vmd-chip">${L('Referenzbilder', 'Reference images')}</span><span class="vmd-chip">Frames</span><span class="vmd-chip">${L('Verlängern', 'Extend')}</span>
           </div>
@@ -565,7 +610,7 @@ function buildDemo(view, locale) {
             <span class="vmd-chip" id="cg-t3">${L('Zwiebelprinzip erklärt', 'Layering explained')}</span>
           </div>
           <div class="vmd vmd-card" id="cg-article" style="margin-top:12px;">
-            <div class="vmd-imgbox vmd-blur" id="cg-hero" style="height:64px;"></div>
+            ${vmdImage('cg-hero', 'demo-content-hero.jpg', 'height:64px;')}
             <div class="vmd-card-title" style="margin-top:10px;"><span id="cg-title"></span></div>
             <div class="vmd-text" id="cg-body">${skel(3)}</div>
           </div>
