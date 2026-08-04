@@ -160,7 +160,9 @@ const FEATURES = [
           { value: 'wenige Cent', label: 'pro fertigem Bild', sub: 'mit Virtual Marketer &#8211; deutlich unter einem Euro pro Bild' },
           { value: '+20&ndash;40%', label: 'Conversion-Potenzial', sub: 'beim Umstieg von Flat-Lay- auf On-Model-Darstellung' },
         ],
-        compliance: 'Ab 2. August 2026 verlangt der EU AI Act eine maschinenlesbare Kennzeichnung KI-generierter Bilder &#8211; Virtual Marketer kennzeichnet automatisch korrekt.',
+        // Describes what the product does, not whether that is legally sufficient —
+        // the second is a conclusion for a lawyer, not a claim for a landing page.
+        compliance: 'Der EU AI Act verlangt eine maschinenlesbare Kennzeichnung KI-generierter Bilder. Virtual Marketer schreibt sie in jedes erzeugte Bild: die IPTC-Kennung &#8222;Digital Source Type: trainedAlgorithmicMedia&#8220; &#8211; automatisch, nicht abschaltbar, zus&auml;tzlich zum optionalen sichtbaren Wasserzeichen.',
       },
       valueBullets: [
         'Teure Fotoshootings ersetzen: vom Rohfoto zum E-Commerce-Bild in Minuten',

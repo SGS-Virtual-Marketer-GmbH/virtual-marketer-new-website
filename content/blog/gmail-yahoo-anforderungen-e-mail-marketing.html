@@ -12,8 +12,12 @@
 <p>Für Absender, die bereits einen Abmeldelink im Nachrichtentext hatten, räumte Google eine Übergangsfrist bis zum 1. Juni 2024 ein, um die technische Ein-Klick-Variante nachzurüsten. Diese Frist läuft – wer sie nutzt, sollte die Umsetzung jetzt einplanen und nicht im Mai beginnen.</p>
 
 <h3>3. Spam-Rate unter 0,3 Prozent</h3>
-<p>Die dritte Anforderung ist die anspruchsvollste, weil sie sich nicht durch eine einmalige technische Änderung erledigen lässt. Google nennt einen Schwellenwert von 0,3 Prozent Spam-Beschwerden, den Absender nicht erreichen sollen, und empfiehlt, dauerhaft unter 0,1 Prozent zu bleiben. Gemessen wird das in den Google Postmaster Tools, die jeder Versender für seine Domain einrichten kann und sollte.</p>
+<p>Die dritte Anforderung ist die anspruchsvollste, weil sie sich nicht durch eine einmalige technische Änderung erledigen lässt. In Googles Richtlinien für E-Mail-Absender (Stand Februar 2024) steht ein Schwellenwert von 0,30 Prozent Spam-Beschwerden, den Absender nicht erreichen sollen; als Empfehlung nennt Google dort zusätzlich einen Dauerwert unter 0,10 Prozent, um gegen einzelne Ausreißer gewappnet zu sein. Gemessen wird das in den Google Postmaster Tools, die jeder Versender für seine Domain einrichten kann und sollte.</p>
 <p>Zur Einordnung: 0,3 Prozent bedeuten bei 100.000 Empfängern nur 300 Spam-Klicks. Das ist eine Größenordnung, die eine einzige schlecht segmentierte Kampagne an eine lange nicht kontaktierte Liste überschreiten kann.</p>
+
+<h3>Was die DMARC-Berichte in der Praxis zutage fördern</h3>
+<p>Der Schritt, der in vielen Unternehmen den größten Erkenntnisgewinn bringt, ist nicht die Veröffentlichung des DMARC-Eintrags selbst, sondern die Auswertung der ersten Berichte. Sie zeigen für jede Absenderquelle, ob SPF und DKIM greifen und ob die Domain ausgerichtet ist. Regelmäßig tauchen dabei Systeme auf, die in keiner Übersicht der IT standen: ein Bewerbermanagement, ein Newsletter-Werkzeug einer einzelnen Abteilung, eine Veranstaltungsplattform, ein alter Mailserver einer übernommenen Tochtergesellschaft.</p>
+<p>Genau diese Schattensysteme sind der Grund, warum eine Verschärfung auf p=quarantine oder p=reject nicht sofort erfolgen sollte. Wer die Richtlinie verschärft, bevor alle legitimen Quellen authentifiziert sind, blockiert eigene Geschäftspost. Zwei bis drei Monate Beobachtung mit p=none sind deshalb keine Verzögerung, sondern der eigentliche Arbeitsschritt.</p>
 
 <h2>Wen betreffen die Regeln – und wen nicht?</h2>
 <p>Die Schwelle von 5.000 Nachrichten pro Tag bezieht sich bei Google auf Nachrichten an persönliche Gmail-Konten, nicht auf Google-Workspace-Konten von Unternehmen. Sie wird pro Absenderdomain betrachtet, und sie muss nur einmal überschritten worden sein, damit die Domain dauerhaft als Massenversender gilt.</p>
@@ -38,6 +42,11 @@
 <p>Ein häufiges Missverständnis: KI verbessere die Zustellbarkeit. Das tut sie nicht direkt. Kein Sprachmodell repariert einen fehlerhaften SPF-Eintrag. Der Beitrag von KI liegt an anderer Stelle – bei der Relevanz, und Relevanz ist der wichtigste Hebel gegen Spam-Beschwerden.</p>
 <p>Konkret bedeutet das drei Dinge. Erstens: bessere Segmentierung, weil Modelle in Bestell- und Interaktionsdaten Muster finden, die in manuell gepflegten Segmenten untergehen. Zweitens: individuellere Inhalte, weil sich Betreffzeilen und Textbausteine je Segment automatisiert erzeugen lassen, statt eine Nachricht an alle zu schicken. Drittens: konsequenteres Testen, weil Varianten schneller entstehen und damit überhaupt genügend Testmaterial vorliegt.</p>
 <p>Der wirksamste Effekt ist dabei banal: Wer weniger Menschen anschreibt, aber die richtigen, senkt die Spam-Rate messbar. Reichweite ist im E-Mail-Marketing seit Februar 2024 endgültig kein Selbstzweck mehr.</p>
+
+<h2>Was zu tun ist, wenn die Spam-Rate bereits zu hoch ist</h2>
+<p>Wenn die Postmaster Tools eine Rate oberhalb der Schwelle zeigen, hilft kein schnelles technisches Pflaster. Wirksam ist nur, das Sendevolumen für eine Weile deutlich zu reduzieren und ausschließlich an die aktivsten Empfängerinnen und Empfänger zu senden – etwa an alle, die in den letzten 90 Tagen geöffnet oder geklickt haben. Diese Gruppe erzeugt kaum Beschwerden und stabilisiert die Reputation der Domain.</p>
+<p>Erst wenn die Rate über mehrere Wochen niedrig bleibt, sollte der Verteiler schrittweise wieder erweitert werden, in Stufen und mit Beobachtung nach jeder Stufe. Ein Reaktivierungsversuch an lange inaktive Adressen sollte dabei in einem eigenen, kleinen Segment laufen und nicht als Teil der regulären Aussendung – sonst gefährdet ein einziger Versuch die Zustellbarkeit aller Nachrichten.</p>
+<p>Parallel lohnt der Blick auf den Abmeldeweg: Wenn Menschen die Abmeldung nicht sofort finden, klicken sie stattdessen auf „Spam melden“. Ein gut sichtbarer Abmeldelink senkt die Beschwerderate messbar – auch wenn er kurzfristig mehr Abmeldungen erzeugt. Das ist der bessere Tausch.</p>
 
 <h2>Häufige Fragen</h2>
 <h3>Was passiert, wenn ich die Anforderungen nicht erfülle?</h3>

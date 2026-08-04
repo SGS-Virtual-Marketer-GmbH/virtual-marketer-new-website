@@ -251,7 +251,7 @@ Represented by managing directors Jens Göckus and Lisa Stamminger</p>
   // see EN_REQUIRED there. If you delete a sentence here, that check is what
   // will tell you.
   //
-  // Naming Anthropic, Google and OpenAI is deliberate and is the one place on
+  // Naming the infrastructure and AI providers is deliberate and is the one place on
   // this site where it is allowed: Art. 13(1)(e) and Art. 28(2)/(4) GDPR
   // require sub-processors to be disclosed. The CLAUDE.md rule against naming
   // the AI vendor governs product and marketing copy, not legal pages.
@@ -276,14 +276,23 @@ Represented by managing directors Jens Göckus and Lisa Stamminger</p>
 
 <h2>AI processing &amp; sub-processors</h2>
 <p>We provide AI-assisted marketing services ("AI as a Service"), generating and editing text, images, video and structured product data. Processing serves the performance of the agreed services, the technical operation of the platform, and the prevention of abuse and fraud. The legal bases are performance of a contract and pre-contractual steps (Art. 6(1)(b) GDPR), our legitimate interests in the secure, stable and economical operation of our services (Art. 6(1)(f) GDPR), compliance with legal obligations (Art. 6(1)(c) GDPR) and, where required, your consent (Art. 6(1)(a) GDPR). Where we process personal data on behalf of a customer, we do so under a data processing agreement pursuant to <strong>Art. 28 GDPR</strong>; in that case the customer is the controller.</p>
-<p>We use both <strong>our own models</strong>, developed and operated by us, and models and services from external providers. Those providers are sub-processors within the meaning of Art. 28(2) and (4) GDPR and are disclosed here in accordance with Art. 13(1)(e) GDPR. They currently are:</p>
+<p>We use both <strong>our own models</strong>, developed and operated by us, and infrastructure, models and services from external providers. Those providers are sub-processors within the meaning of Art. 28(2) and (4) GDPR and are disclosed here in accordance with Art. 13(1)(e) GDPR. They currently are:</p>
+<p><strong>Infrastructure, hosting and operations</strong></p>
+<ul>
+  <li><strong>STRATO AG</strong>, Berlin (Germany) &#8211; server, storage and email infrastructure.</li>
+  <li><strong>Microsoft Azure</strong> &#8211; cloud infrastructure, storage and computing capacity.</li>
+  <li><strong>Google Cloud</strong> &#8211; cloud infrastructure, storage and computing capacity.</li>
+</ul>
+<p><strong>AI models and services</strong></p>
 <ul>
   <li><strong>Anthropic</strong> &#8211; language and text models for generating and editing content.</li>
   <li><strong>Google</strong> &#8211; language, image and video models and the associated computing capacity.</li>
   <li><strong>OpenAI</strong> &#8211; language, text and image models.</li>
+  <li><strong>Hugging Face</strong> &#8211; hosting and execution of open models (model hosting and inference).</li>
 </ul>
 <p>The contracting entity is in each case the provider's group company responsible for the service used. We will supply the exact company name and address, and the full current sub-processor list, on request at <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>; intended changes are notified to customers as provided for in the applicable data processing agreement.</p>
-<p>Data processing agreements under Art. 28 GDPR are in place with every provider named above. We use only their business interfaces (API/enterprise offerings), under which the content transmitted is contractually <strong>not used to train</strong> that provider's models. Customer data is not passed to any third party for the purpose of model training.</p>
+<p>Data processing agreements under Art. 28 GDPR are in place with every provider named above. For the AI services we use only their business interfaces (API/enterprise offerings), under which the content transmitted is contractually <strong>not used to train</strong> that provider's models.</p>
+<p><strong>Nor do we ourselves use customer data to train models for other customers.</strong> Content a customer submits to us is processed for that customer only. It is not used to train or fine-tune our own models for other customers, and it is not fed into any cross-tenant analysis. Customer data is not passed to any third party for the purpose of model training.</p>
 <p>We do not take decisions based solely on automated processing, including profiling, that produce legal effects concerning you or similarly significantly affect you (Art. 22 GDPR). AI-generated content is a suggestion and must be reviewed by the user before publication.</p>
 
 <h3>Transparency under the EU AI Act</h3>
@@ -302,7 +311,7 @@ Represented by managing directors Jens Göckus and Lisa Stamminger</p>
 <p>The exact storage and processing location of personal data is determined individually per contractual agreement. Upon request and by separate agreement, SGS Virtual Marketer GmbH will process and store customer data exclusively in Germany or in other data centres within the EU/EEA. Absent such a separate agreement, SGS Virtual Marketer GmbH selects a cost-efficient processing location. Germany-only hosting is therefore an option you can agree with us, not a blanket property of our services.</p>
 
 <h3>Transfers to third countries</h3>
-<p>The providers named above are established, or operate individual processing locations, outside the European Union and the European Economic Area &#8211; in particular in the United States. Where a transfer to a third country takes place, we base it either on the European Commission's adequacy decision of 10 July 2023 on the EU-US Data Privacy Framework (Implementing Decision (EU) 2023/1795), where the recipient concerned is certified under it, or on the European Commission's Standard Contractual Clauses pursuant to <strong>Art. 46(2)(c) GDPR</strong>. We apply supplementary measures in addition, in particular encryption in transit and at rest, data minimisation and strict access controls. Where a service allows it, we give preference to processing regions inside the EU/EEA. If an adequacy decision ceases to apply, we rely on Art. 46 GDPR. A copy of the relevant safeguards is available on request.</p>
+<p>Some of the providers named above are established, or operate individual processing locations, outside the European Union and the European Economic Area &#8211; in particular in the United States. STRATO AG is a German company and operates its data centres in Germany; where the service allows it, we use Microsoft Azure and Google Cloud in European regions. Where a transfer to a third country takes place, we base it either on the European Commission's adequacy decision of 10 July 2023 on the EU-US Data Privacy Framework (Implementing Decision (EU) 2023/1795), where the recipient concerned is certified under it, or on the European Commission's Standard Contractual Clauses pursuant to <strong>Art. 46(2)(c) GDPR</strong>. We apply supplementary measures in addition, in particular encryption in transit and at rest, data minimisation and strict access controls. Where a service allows it, we give preference to processing regions inside the EU/EEA. If an adequacy decision ceases to apply, we rely on Art. 46 GDPR. A copy of the relevant safeguards is available on request.</p>
 
 <h2>Your rights under the GDPR</h2>
 <ul>

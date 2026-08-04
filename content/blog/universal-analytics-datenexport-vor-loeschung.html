@@ -26,6 +26,18 @@
 <p>Für die meisten mittelständischen Unternehmen ist eine Kombination sinnvoll: die fünf bis zehn wichtigsten Berichte über die Schnittstelle oder eine Tabellen-Erweiterung monatsweise ziehen, den Rest bewusst ziehen lassen.</p>
 <p>Ein wichtiger technischer Hinweis: Achten Sie beim Export auf Sampling. Wenn Google Analytics große Zeiträume auf Stichproben reduziert, weichen die Werte von den Originalzahlen ab. Kleinere Zeitfenster – etwa monatsweise statt jahresweise – reduzieren dieses Problem erheblich.</p>
 
+<h2>Ein Exportplan für einen Arbeitstag</h2>
+<p>Wer erst jetzt anfängt, braucht keine Projektstruktur, sondern eine Reihenfolge. Bewährt hat sich dieser Ablauf.</p>
+<ol>
+<li><strong>Zeitraum festlegen:</strong> In den meisten Fällen genügen die letzten 36 bis 60 Monate. Ältere Daten stammen aus einer anderen Website-Generation und sind ohnehin kaum vergleichbar.</li>
+<li><strong>Berichtsliste schreiben:</strong> Maximal zehn Berichte, jeweils mit den benötigten Dimensionen und Kennzahlen. Diese Liste ist gleichzeitig die spätere Dokumentation.</li>
+<li><strong>Monatsweise ziehen:</strong> Ein Export je Monat und Bericht, mit Monat und Berichtsname im Dateinamen. Das vermeidet Sampling und macht die Dateien später sortierbar.</li>
+<li><strong>Stichprobe prüfen:</strong> Zwei bis drei Monate gegen die Oberfläche gegenrechnen. Weichen die Werte ab, liegt es fast immer an Sampling, an einem abweichenden Datenansichts-Filter oder an einer anderen Zeitzone.</li>
+<li><strong>Zusammenführen und ablegen:</strong> Alles in eine Datei je Berichtstyp, plus eine kurze Notizdatei mit Definitionen, Datenansicht, Filtern und Exportdatum.</li>
+</ol>
+<p>Der häufigste Fehler in diesem Ablauf ist der vergessene vierte Schritt. Ein Export, dessen Richtigkeit nie geprüft wurde, wird Jahre später als Beleg verwendet – und niemand kann dann noch beurteilen, ob die Zahlen stimmen.</p>
+<p>Ebenfalls wichtig: Exportieren Sie aus der Datenansicht, die Sie tatsächlich als Referenz benutzt haben. In vielen Konten existieren mehrere Ansichten mit unterschiedlichen Filtern – ungefilterte Rohansicht, gefilterte Hauptansicht, Testansicht. Werden Monate aus verschiedenen Ansichten gemischt, entsteht eine Zeitreihe mit Sprüngen, die es in Wirklichkeit nie gab.</p>
+
 <h2>Wohin mit den exportierten Daten?</h2>
 <p>Eine Sammlung von CSV-Dateien in einem Ordner ist besser als nichts, aber schlecht nutzbar. Wer die Daten später tatsächlich auswerten will, sollte sie in eine Struktur überführen, die Abfragen erlaubt: eine Tabelle je Berichtstyp mit einer Spalte für den Monat, gespeichert in einem Data Warehouse oder wenigstens in einer sauber normalisierten Tabellendatei.</p>
 <p>Ebenso wichtig ist die Dokumentation der Definitionen. Eine „Sitzung“ in Universal Analytics ist nicht dasselbe wie eine „Sitzung“ in Google Analytics 4; auch Nutzerzahlen, Absprungraten und Conversion-Zählungen folgen anderen Regeln. Ohne eine kurze Notiz, wie die alten Kennzahlen definiert waren, entstehen später Vergleiche, die falsche Schlüsse nahelegen.</p>
@@ -40,6 +52,15 @@
 <h2>Wo KI im Analytics-Alltag tatsächlich hilft</h2>
 <p>Der praktische Nutzen liegt weniger in der Datenerhebung als in der Auswertung. Zwei Anwendungen sind unmittelbar wertschöpfend: erstens die Auffälligkeitserkennung, also das automatische Aufspüren von Abweichungen in vielen Kennzahlen gleichzeitig, für die niemand täglich Zeit hat. Zweitens die Übersetzung von Daten in verständliche Erklärungen für Menschen, die keine Analytics-Fachleute sind – Geschäftsführung, Vertrieb, Produktmanagement.</p>
 <p>Beides setzt allerdings voraus, dass die Datengrundlage stimmt. Ein Modell, das auf lückenhaften Daten arbeitet, erzeugt selbstbewusst formulierte falsche Schlüsse. Der Datenexport dieser Woche und ein sauberes GA4-Setup sind deshalb keine lästige Pflicht, sondern die Voraussetzung dafür, dass automatisierte Auswertung überhaupt sinnvoll ist.</p>
+
+<h2>Was mit den Daten anderer Systeme passiert</h2>
+<p>Universal Analytics war selten das einzige System, in dem Verlaufsdaten liegen. Der Stichtag ist deshalb ein guter Anlass, die übrigen Quellen mitzuprüfen – dort drohen zwar keine Löschungen zum selben Datum, aber ähnliche Lücken.</p>
+<ul>
+<li><strong>Werbeplattformen:</strong> Google Ads, Meta und LinkedIn halten Kampagnendaten unterschiedlich lange vor. Ein jährlicher Export auf Kampagnenebene kostet wenig und schließt genau die Lücke, die später schmerzt.</li>
+<li><strong>Search Console:</strong> Die Suchleistungsdaten reichen nur 16 Monate zurück. Wer Entwicklungen über mehrere Jahre belegen möchte, muss regelmäßig exportieren – am besten automatisiert.</li>
+<li><strong>Newsletter- und Shopsysteme:</strong> Hier liegen die belastbarsten Daten überhaupt, weil sie nicht von Einwilligungen und Browsereinstellungen abhängen. Sie sind die natürliche Referenz, wenn Plattformzahlen unscharf werden.</li>
+</ul>
+<p>Aus dieser Zusammenstellung entsteht mit wenig Aufwand ein einfaches Archivkonzept: eine feste Liste von Quellen, ein fester Turnus, ein fester Ablageort. Das ist deutlich weniger Arbeit als jede spätere Rekonstruktion – und es verhindert, dass der nächste Systemwechsel wieder zur Rettungsaktion unter Zeitdruck wird.</p>
 
 <h2>Häufige Fragen</h2>
 <h3>Kann ich Universal-Analytics-Daten in GA4 importieren?</h3>

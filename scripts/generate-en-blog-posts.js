@@ -197,6 +197,9 @@ function generateArchive(posts) {
 <link rel="alternate" hreflang="x-default" href="${BASE_URL}/blog/">
 <link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
 <link rel="stylesheet" href="/${THEME_CSS.style}">
+<style>
+  ${CHROME_CSS}
+</style>
 <script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -206,15 +209,18 @@ function generateArchive(posts) {
   })}</script>
 </head>
 <body>
-<header class="vm-header-simple" style="max-width:1140px;margin:0 auto;padding:24px 20px;display:flex;align-items:center;justify-content:space-between;">
+<!-- Shared chrome from lib/page-chrome.js — see the note in
+     generate-blog-posts.js. The inline-styled copy that used to live here had
+     the same overlap bug on narrow screens. -->
+<header class="vm-header-simple">
   <a href="/en/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none"></a>
   <nav>
-    <a href="/en/solutions/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Solutions</a>
-    <a href="/en/blog/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Blog</a>
-    <a href="https://api.virtual-marketer.de/documentation/" style="margin-left:24px;color:#1f2937;text-decoration:none;">API</a>
-    <a href="/en/request-custom-model/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Request a model</a>
-    <a href="/en/contact/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Contact</a>
-    <a href="https://login.virtual-marketer.de/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Login</a>
+    <a href="/en/solutions/">Solutions</a>
+    <a href="/en/blog/">Blog</a>
+    <a href="https://api.virtual-marketer.de/documentation/">API</a>
+    <a href="/en/request-custom-model/">Request a model</a>
+    <a href="/en/contact/">Contact</a>
+    <a href="https://login.virtual-marketer.de/">Login</a>
   </nav>
 </header>
 <main style="max-width:820px;margin:0 auto;padding:20px;">

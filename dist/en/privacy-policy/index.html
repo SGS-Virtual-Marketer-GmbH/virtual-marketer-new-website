@@ -336,14 +336,23 @@
 
 <h2>AI processing &amp; sub-processors</h2>
 <p>We provide AI-assisted marketing services ("AI as a Service"), generating and editing text, images, video and structured product data. Processing serves the performance of the agreed services, the technical operation of the platform, and the prevention of abuse and fraud. The legal bases are performance of a contract and pre-contractual steps (Art. 6(1)(b) GDPR), our legitimate interests in the secure, stable and economical operation of our services (Art. 6(1)(f) GDPR), compliance with legal obligations (Art. 6(1)(c) GDPR) and, where required, your consent (Art. 6(1)(a) GDPR). Where we process personal data on behalf of a customer, we do so under a data processing agreement pursuant to <strong>Art. 28 GDPR</strong>; in that case the customer is the controller.</p>
-<p>We use both <strong>our own models</strong>, developed and operated by us, and models and services from external providers. Those providers are sub-processors within the meaning of Art. 28(2) and (4) GDPR and are disclosed here in accordance with Art. 13(1)(e) GDPR. They currently are:</p>
+<p>We use both <strong>our own models</strong>, developed and operated by us, and infrastructure, models and services from external providers. Those providers are sub-processors within the meaning of Art. 28(2) and (4) GDPR and are disclosed here in accordance with Art. 13(1)(e) GDPR. They currently are:</p>
+<p><strong>Infrastructure, hosting and operations</strong></p>
+<ul>
+  <li><strong>STRATO AG</strong>, Berlin (Germany) &#8211; server, storage and email infrastructure.</li>
+  <li><strong>Microsoft Azure</strong> &#8211; cloud infrastructure, storage and computing capacity.</li>
+  <li><strong>Google Cloud</strong> &#8211; cloud infrastructure, storage and computing capacity.</li>
+</ul>
+<p><strong>AI models and services</strong></p>
 <ul>
   <li><strong>Anthropic</strong> &#8211; language and text models for generating and editing content.</li>
   <li><strong>Google</strong> &#8211; language, image and video models and the associated computing capacity.</li>
   <li><strong>OpenAI</strong> &#8211; language, text and image models.</li>
+  <li><strong>Hugging Face</strong> &#8211; hosting and execution of open models (model hosting and inference).</li>
 </ul>
 <p>The contracting entity is in each case the provider's group company responsible for the service used. We will supply the exact company name and address, and the full current sub-processor list, on request at <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>; intended changes are notified to customers as provided for in the applicable data processing agreement.</p>
-<p>Data processing agreements under Art. 28 GDPR are in place with every provider named above. We use only their business interfaces (API/enterprise offerings), under which the content transmitted is contractually <strong>not used to train</strong> that provider's models. Customer data is not passed to any third party for the purpose of model training.</p>
+<p>Data processing agreements under Art. 28 GDPR are in place with every provider named above. For the AI services we use only their business interfaces (API/enterprise offerings), under which the content transmitted is contractually <strong>not used to train</strong> that provider's models.</p>
+<p><strong>Nor do we ourselves use customer data to train models for other customers.</strong> Content a customer submits to us is processed for that customer only. It is not used to train or fine-tune our own models for other customers, and it is not fed into any cross-tenant analysis. Customer data is not passed to any third party for the purpose of model training.</p>
 <p>We do not take decisions based solely on automated processing, including profiling, that produce legal effects concerning you or similarly significantly affect you (Art. 22 GDPR). AI-generated content is a suggestion and must be reviewed by the user before publication.</p>
 
 <h3>Transparency under the EU AI Act</h3>
@@ -362,7 +371,7 @@
 <p>The exact storage and processing location of personal data is determined individually per contractual agreement. Upon request and by separate agreement, SGS Virtual Marketer GmbH will process and store customer data exclusively in Germany or in other data centres within the EU/EEA. Absent such a separate agreement, SGS Virtual Marketer GmbH selects a cost-efficient processing location. Germany-only hosting is therefore an option you can agree with us, not a blanket property of our services.</p>
 
 <h3>Transfers to third countries</h3>
-<p>The providers named above are established, or operate individual processing locations, outside the European Union and the European Economic Area &#8211; in particular in the United States. Where a transfer to a third country takes place, we base it either on the European Commission's adequacy decision of 10 July 2023 on the EU-US Data Privacy Framework (Implementing Decision (EU) 2023/1795), where the recipient concerned is certified under it, or on the European Commission's Standard Contractual Clauses pursuant to <strong>Art. 46(2)(c) GDPR</strong>. We apply supplementary measures in addition, in particular encryption in transit and at rest, data minimisation and strict access controls. Where a service allows it, we give preference to processing regions inside the EU/EEA. If an adequacy decision ceases to apply, we rely on Art. 46 GDPR. A copy of the relevant safeguards is available on request.</p>
+<p>Some of the providers named above are established, or operate individual processing locations, outside the European Union and the European Economic Area &#8211; in particular in the United States. STRATO AG is a German company and operates its data centres in Germany; where the service allows it, we use Microsoft Azure and Google Cloud in European regions. Where a transfer to a third country takes place, we base it either on the European Commission's adequacy decision of 10 July 2023 on the EU-US Data Privacy Framework (Implementing Decision (EU) 2023/1795), where the recipient concerned is certified under it, or on the European Commission's Standard Contractual Clauses pursuant to <strong>Art. 46(2)(c) GDPR</strong>. We apply supplementary measures in addition, in particular encryption in transit and at rest, data minimisation and strict access controls. Where a service allows it, we give preference to processing regions inside the EU/EEA. If an adequacy decision ceases to apply, we rely on Art. 46 GDPR. A copy of the relevant safeguards is available on request.</p>
 
 <h2>Your rights under the GDPR</h2>
 <ul>
@@ -406,5 +415,263 @@
   <a href="/en/privacy-policy/" class="active" lang="en" hreflang="en">EN</a>
 </div>
 <!-- vm-lang-switch:end -->
+<style id="vm-mobile-polish">
+/* ==========================================================================
+   Mobile polish — see scripts/mobile-polish.js
+   ========================================================================== */
+
+/* --- Applies at every width: things that were simply wrong ---------------- */
+
+/* A 565px-wide <img> inside a 375px column was forcing horizontal overflow.
+   body{overflow-x:hidden} was hiding the symptom; this fixes the cause, so
+   the image scales instead of being silently cropped. */
+img, video, iframe, canvas, svg { max-width: 100%; }
+img, video { height: auto; }
+
+/* In-page anchors landed underneath the fixed header. */
+html { scroll-padding-top: 76px; }
+
+@media (max-width: 1024px) {
+
+  /* Long tables and code blocks scroll in their own box rather than widening
+     the page. Scoped to mobile deliberately: display:block is what makes a
+     table scrollable, and it also switches off table layout — column widths
+     stop being distributed. That trade is right on a 375px screen and wrong
+     on a desktop one, so this must never escape the media query. */
+  table, pre { max-width: 100%; overflow-x: auto; display: block; }
+
+  /* --- 1. The header must be opaque --------------------------------------
+     Both the header and the Elementor section inside it are transparent, and
+     either one alone leaves the text showing through, so both are set. The
+     blur is what gives it the layered, app-like feel rather than a flat bar;
+     the -webkit- prefix is still required by Safari, which is most of the
+     phone traffic this matters for. */
+  #site-header.site-header,
+  #site-header .header-mobile > .elementor > .elementor-section,
+  #site-header .header-mobile .elementor-top-section {
+    background-color: rgba(255, 255, 255, 0.94);
+    -webkit-backdrop-filter: saturate(1.7) blur(16px);
+    backdrop-filter: saturate(1.7) blur(16px);
+  }
+  #site-header.site-header {
+    border-bottom: 1px solid rgba(36, 20, 23, 0.07);
+    /* Notch and Dynamic Island: content sits below the status bar instead of
+       under it. Resolves to 0 everywhere else, so it is safe unconditionally. */
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  /* --- 2. Logo -----------------------------------------------------------
+     The image was 30px tall inside a 22px box and clipped. Sizing the image
+     and letting the box follow is the fix; display:block removes the inline
+     baseline gap that caused the 8px mismatch in the first place. */
+  #site-header .header-mobile img {
+    height: 34px;
+    width: auto;
+    display: block;
+  }
+  #site-header .header-mobile > .elementor a { display: inline-flex; align-items: center; }
+
+  /* --- 3. Type scale -----------------------------------------------------
+     clamp() rather than a fixed size: the headline keeps scaling between the
+     narrowest phone and the tablet breakpoint instead of stepping. The upper
+     bounds are the theme's own desktop sizes, so nothing grows.
+
+     !important is load-bearing here and is not laziness. Elementor emits a
+     per-element selector for every heading it styles — the homepage h1 is
+     ".elementor-5668 .elementor-element.elementor-element-292329b2
+     .elementor-heading-title", four classes, and it already carries a
+     max-width:1024px override of its own setting 50px. There is no generic
+     selector that outranks a per-element one for every page without knowing
+     each element id, and there are hundreds of them across 173 pages.
+     Measured before writing this: without !important the h1 stayed at 50px
+     on a 375px viewport. */
+  h1, .elementor-widget-heading h1.elementor-heading-title {
+    font-size: clamp(28px, 8.2vw, 42px) !important;
+    line-height: 1.18 !important;
+  }
+  h2, .elementor-widget-heading h2.elementor-heading-title {
+    font-size: clamp(23px, 6.4vw, 32px) !important;
+    line-height: 1.24 !important;
+  }
+  h3, .elementor-widget-heading h3.elementor-heading-title {
+    font-size: clamp(19px, 5vw, 24px) !important;
+    line-height: 1.3 !important;
+  }
+  h1, h2, h3, h4 {
+    /* German compounds ("Produktdatenoptimierung") are long enough to overflow
+       a 375px column on their own. */
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  p, li { font-size: 16px; line-height: 1.65; }
+
+  /* --- 4. Tap targets ----------------------------------------------------
+     44px is Apple's minimum and 48dp Google's; 44 satisfies both once the
+     surrounding padding is counted.
+
+     Two exclusions, both found by looking at the rendered page rather than
+     by reasoning about the markup:
+       - Inline links inside prose. Enlarging those breaks paragraph leading.
+       - The burger, "#mmenu-toggle button". It is an empty <button> whose
+         bars are drawn with pseudo-elements, so forcing display:inline-flex
+         on it made the icon disappear entirely. It gets padding instead,
+         which enlarges the target without touching how it is drawn. */
+  .elementor-button,
+  input[type="submit"],
+  .vm-header-simple nav a,
+  .mmenu-wrapper a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mmenu-wrapper a { justify-content: flex-start; }
+
+  /* The burger's hit area is enlarged with a transparent overlay rather than
+     with padding. Its three bars are absolutely positioned against
+     .mmenu-toggle (left:0, top:50%), so padding moves the origin and the icon
+     drifts off-centre — it did, by 12px, on the first attempt. An ::after
+     overlay adds 12px of reachable area on every side and moves nothing.
+     Note ::after on the TOGGLE, not on the BUTTON: the button's own ::before
+     and ::after are two of the three bars. */
+  #mmenu-toggle { position: relative; }
+  #mmenu-toggle::after { content: ""; position: absolute; inset: -12px; }
+
+  /* --- The burger must be visible against the new white header ----------
+     The theme paints the burger white, because it was designed to sit
+     transparently over a dark hero image. Section 1 above gives the header an
+     opaque light background, which left the icon white on white — invisible
+     in the rendered screenshot, though nothing in the markup hints at it.
+     Repainting it in the brand's dark ink is the other half of that change.
+     The colour is set on all three bars: the button's own background is the
+     middle bar, its two pseudo-elements are the outer ones. */
+  #mmenu-toggle button,
+  #mmenu-toggle button::before,
+  #mmenu-toggle button::after {
+    background-color: #241417 !important;
+  }
+  #mmenu-toggle.active button { background-color: transparent !important; }
+
+  /* Primary calls to action span the column — the phone convention, and it
+     removes the half-width clipped button on the homepage hero. */
+  .elementor-widget-button .elementor-button { width: 100%; }
+
+  /* --- 5. The generated pages' header, compacted -------------------------
+     lib/page-chrome.js stacks .vm-header-simple into a column below 900px and
+     lets the six nav links wrap. Measured on a feature page at 375x812: the
+     bar came to roughly 200px tall — and it is sticky, so a quarter of the
+     screen was permanently occupied by navigation.
+
+     Instead: logo row on top, links in a single horizontally scrollable strip
+     underneath. That is the phone convention (a scrollable tab bar), it costs
+     about 100px, and no link is dropped — which hiding them behind a second
+     burger would have done. scrollbar-width:none hides the scrollbar without
+     disabling the scroll. */
+  .vm-header-simple {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin: 8px 10px 0;
+    padding: 10px 14px;
+  }
+  .vm-header-simple > a { justify-content: flex-start; }
+  .vm-header-simple > a img { height: 34px !important; }
+  .vm-header-simple nav {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .vm-header-simple nav::-webkit-scrollbar { display: none; }
+  .vm-header-simple nav a { flex: 0 0 auto; }
+
+  /* --- App feel ----------------------------------------------------------
+     The grey flash on tap is the single strongest "this is a web page" tell.
+     touch-action:manipulation removes the 300ms double-tap-zoom delay, so
+     buttons respond immediately. */
+  a, button, .elementor-button, summary {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  /* Rubber-banding at the end of a scroll container must not drag the page
+     behind it. "contain" keeps the browser's pull-to-refresh, which "none"
+     would remove — that gesture is expected on Android and taking it away
+     makes the site feel less native, not more. */
+  body { overscroll-behavior-y: contain; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+  /* iOS zooms the viewport when a focused field is under 16px. Nothing on the
+     site is today; this keeps that true if a form is added later. */
+  input, select, textarea { font-size: 16px; }
+
+  /* Bottom safe area, so the footer and any fixed CTA clear the home
+     indicator on a gesture-navigation phone. */
+  .vm-footer-simple, footer { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Users who ask for less motion get less motion — required for the animated
+   demos, which otherwise autoplay. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+<script>
+/**
+ * Desktop overlap effects, neutralised on phones.
+ *
+ * The homepage's red "Industries" section carries margin-top:-195px. On
+ * desktop that is an intentional overlap: the section slides up under the
+ * hero image. On a 375px screen the hero is far taller, so the same -195px
+ * lands on top of the hero's own content and swallows the "Demo" call to
+ * action completely — measured: hero spans 0-857, the red section starts at
+ * 662. That is the defect visible in the reported screenshot.
+ *
+ * This is done in script rather than CSS because only NEGATIVE margins are
+ * wrong. CSS cannot select "elements whose margin-top is negative", and
+ * zeroing every top-level section's margin would flatten spacing the design
+ * does want. Reading the computed value is the only way to touch exactly the
+ * broken ones.
+ *
+ * Re-evaluated on resize so rotating a phone to landscape past the
+ * breakpoint restores the desktop effect.
+ */
+(function () {
+  var BP = 1024;
+  var touched = [];
+
+  function apply() {
+    var mobile = window.innerWidth <= BP;
+
+    if (!mobile) {
+      touched.forEach(function (t) { t.el.style.marginTop = t.original; });
+      touched = [];
+      return;
+    }
+    if (touched.length) return; // already neutralised
+
+    var sections = document.querySelectorAll('.elementor-section.elementor-top-section');
+    Array.prototype.forEach.call(sections, function (el) {
+      if (parseFloat(window.getComputedStyle(el).marginTop) < 0) {
+        touched.push({ el: el, original: el.style.marginTop });
+        el.style.marginTop = '0px';
+      }
+    });
+  }
+
+  apply();
+  var t;
+  window.addEventListener('resize', function () {
+    clearTimeout(t);
+    t = setTimeout(apply, 150);
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>

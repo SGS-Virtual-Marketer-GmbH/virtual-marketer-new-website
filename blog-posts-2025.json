@@ -1,0 +1,124 @@
+{
+  "posts": [
+    {
+      "title": "EU AI Act ab Februar 2025: Was Marketing wissen muss",
+      "slug": "eu-ai-act-marketing-februar-2025",
+      "date": "2025-01-14",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Ab dem 2. Februar 2025 gelten die ersten Regeln des EU AI Act: verbotene Praktiken und KI-Kompetenzpflicht. Was Marketingteams jetzt konkret tun sollten.",
+      "keywords": "EU AI Act Marketing, KI-Verordnung Februar 2025, KI-Kompetenz Artikel 4, verbotene KI-Praktiken, KI Compliance Unternehmen",
+      "contentFile": "eu-ai-act-marketing-februar-2025.html"
+    },
+    {
+      "title": "Digitale Souveränität im KI-Marketing: Praxisleitfaden",
+      "slug": "digitale-souveraenitaet-ki-marketing",
+      "date": "2025-02-18",
+      "author": "Virtual Marketer Team",
+      "category": "AI-Trends",
+      "description": "Digitale Souveränität im KI-Marketing heißt: Verarbeitungsort, Trainingsnutzung und Exportfähigkeit kennen. Eine Prüfliste für das eigene Tool-Portfolio.",
+      "keywords": "digitale Souveränität KI, KI Datenverarbeitung EU, Serverstandort KI-Tools, InvestAI, KI Auftragsverarbeitung",
+      "contentFile": "digitale-souveraenitaet-ki-marketing.html"
+    },
+    {
+      "title": "AI Overviews in Deutschland: Was sich für SEO ändert",
+      "slug": "google-ai-overviews-deutschland-start",
+      "date": "2025-03-31",
+      "author": "Virtual Marketer Team",
+      "category": "SEO",
+      "description": "Google hat AI Overviews am 26. März 2025 in Deutschland gestartet. Was sich für SEO ändert, welche Anfragen betroffen sind und wie man die Wirkung misst.",
+      "keywords": "AI Overviews Deutschland, Übersicht mit KI, SEO KI-Suche, Generative Engine Optimization, Google KI-Zusammenfassung",
+      "contentFile": "google-ai-overviews-deutschland-start.html"
+    },
+    {
+      "title": "First-Party-Daten als Grundlage für KI-Marketing",
+      "slug": "first-party-daten-ki-marketing",
+      "date": "2025-04-29",
+      "author": "Virtual Marketer Team",
+      "category": "AI-Trends",
+      "description": "First-Party-Daten sind die Grundlage für KI-Marketing. Warum Googles Cookie-Kehrtwende vom April 2025 daran nichts ändert und wie der Aufbau gelingt.",
+      "keywords": "First-Party-Daten, Third-Party-Cookies Chrome, KI Personalisierung Daten, Datenqualität Marketing, serverseitiges Tracking",
+      "contentFile": "first-party-daten-ki-marketing.html"
+    },
+    {
+      "title": "AI Max für Suchkampagnen: Funktionen, Risiken, Test",
+      "slug": "google-ai-max-suchkampagnen",
+      "date": "2025-05-27",
+      "author": "Virtual Marketer Team",
+      "category": "SEO",
+      "description": "AI Max erweitert Suchkampagnen um KI-Keywords, Anzeigentexte und Zielseitenwahl. Was die Zahlen von Google wert sind und wie ein sauberer Test aussieht.",
+      "keywords": "AI Max Google Ads, Suchkampagnen Automatisierung, Performance Max Unterschied, Google Marketing Live 2025, Keyword-Erweiterung KI",
+      "contentFile": "google-ai-max-suchkampagnen.html"
+    },
+    {
+      "title": "BFSG: Barrierefreier Onlineshop ab 28. Juni 2025",
+      "slug": "bfsg-barrierefreier-onlineshop",
+      "date": "2025-06-30",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Seit dem 28. Juni 2025 gilt das BFSG für Onlineshops, und zwar ohne Übergangsfrist. Anforderungen, häufige Befunde und ein Fahrplan für Nachzügler.",
+      "keywords": "BFSG Onlineshop, Barrierefreiheitsstärkungsgesetz, barrierefreier Webshop, WCAG 2.1 AA, EN 301 549",
+      "contentFile": "bfsg-barrierefreier-onlineshop.html"
+    },
+    {
+      "title": "Zero-Click-Suche: Wie KI-Antworten Klicks kosten",
+      "slug": "zero-click-suche-ki-antworten",
+      "date": "2025-07-29",
+      "author": "Virtual Marketer Team",
+      "category": "SEO",
+      "description": "Pew-Daten vom Juli 2025 zeigen: Mit KI-Zusammenfassung sinkt die Klickrate auf 8 Prozent. Welche Inhalte betroffen sind und was Content-Teams jetzt tun.",
+      "keywords": "Zero-Click-Suche, KI-Zusammenfassung Klickrate, Pew Studie AI Overviews, organischer Traffic Rückgang, Content-Strategie KI-Suche",
+      "contentFile": "zero-click-suche-ki-antworten.html"
+    },
+    {
+      "title": "EU AI Act: GPAI-Pflichten ab August 2025 im Marketing",
+      "slug": "eu-ai-act-gpai-pflichten-august-2025",
+      "date": "2025-08-19",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Seit dem 2. August 2025 gelten die GPAI-Pflichten des EU AI Act. Warum das Anwenderunternehmen betrifft und wie man sich auf den August 2026 vorbereitet.",
+      "keywords": "GPAI Pflichten AI Act, Code of Practice KI, Artikel 50 Transparenzpflichten, KI-Kennzeichnung Inhalte, KI Lieferantenprüfung",
+      "contentFile": "eu-ai-act-gpai-pflichten-august-2025.html"
+    },
+    {
+      "title": "Retouren senken mit besseren KI-Produktdaten",
+      "slug": "retouren-senken-ki-produktdaten",
+      "date": "2025-09-16",
+      "author": "Virtual Marketer Team",
+      "category": "Use Cases",
+      "description": "Ein Großteil der Retouren entsteht durch Erwartungslücken. Wie KI-gestützte Produktdaten vermeidbare Rücksendungen senken und wo die Grenzen liegen.",
+      "keywords": "Retouren senken Onlineshop, Retourenquote Produktdaten, KI Produktbeschreibungen, Größenberatung E-Commerce, Retourenkosten",
+      "contentFile": "retouren-senken-ki-produktdaten.html"
+    },
+    {
+      "title": "Google KI-Modus in Deutschland: Folgen für SEO",
+      "slug": "google-ai-mode-deutschland-seo",
+      "date": "2025-10-14",
+      "author": "Virtual Marketer Team",
+      "category": "SEO",
+      "description": "Google hat den KI-Modus am 7. Oktober 2025 auf Deutschland ausgeweitet. Was sich für SEO ändert, welche Inhalte gewinnen und wie man die Wirkung misst.",
+      "keywords": "Google KI-Modus, AI Mode Deutschland, KI-Suche SEO, Answer Engine Optimization, Sichtbarkeit KI-Antworten",
+      "contentFile": "google-ai-mode-deutschland-seo.html"
+    },
+    {
+      "title": "Digital Omnibus: Änderungen an DSGVO und KI-Regeln",
+      "slug": "eu-digital-omnibus-dsgvo-ki-verordnung",
+      "date": "2025-11-25",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Die EU-Kommission schlug am 19. November 2025 Änderungen an DSGVO und KI-Verordnung vor. Was geplant ist und warum jetzt nichts aufgeschoben gehört.",
+      "keywords": "Digital Omnibus EU, DSGVO Änderungen 2025, Cookie Einwilligung Ausnahmen, KI-Verordnung Fristen, berechtigtes Interesse KI-Training",
+      "contentFile": "eu-digital-omnibus-dsgvo-ki-verordnung.html"
+    },
+    {
+      "title": "KI-Agenten im Marketing: Nutzen und Grenzen",
+      "slug": "ki-agenten-marketing-nutzen-grenzen",
+      "date": "2025-12-16",
+      "author": "Virtual Marketer Team",
+      "category": "AI-Trends",
+      "description": "KI-Agenten im Marketing: Gartner erwartet über 40 Prozent Projektabbrüche bis 2027. Welche Anwendungsfälle heute funktionieren und welche eben nicht.",
+      "keywords": "KI-Agenten Marketing, agentische KI Anwendungsfälle, Marketing Automatisierung KI, Agent Washing, KI Projekte scheitern",
+      "contentFile": "ki-agenten-marketing-nutzen-grenzen.html"
+    }
+  ]
+}

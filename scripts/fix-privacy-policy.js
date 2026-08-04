@@ -53,7 +53,8 @@
  *     be stated; a safeguard cannot be stated without naming who receives the
  *     data.
  *
- * So: Anthropic, Google and OpenAI are named in /datenschutzerklaerung/ and
+ * So: the infrastructure and AI providers below are named in
+ * /datenschutzerklaerung/ and
  * /en/privacy-policy/ and MUST NOT leak into any feature, solution, pricing or
  * blog page. The build's final check (see main()) greps the marketing trees to
  * enforce exactly that boundary in both directions.
@@ -90,11 +91,21 @@ const DIST = path.join(__dirname, '../dist');
 const STAND = '4. August 2026';
 
 /**
- * The three AI sub-processors, disclosed per Art. 13(1)(e) / Art. 28 GDPR.
- * Single source of truth so the German and English pages cannot drift, and so
- * the marketing-tree leak check below knows exactly what to look for.
+ * The sub-processors, disclosed per Art. 13(1)(e) / Art. 28 GDPR. Single
+ * source of truth so the German and English pages cannot drift, and so the
+ * marketing-tree leak check below knows exactly what to look for.
+ *
+ * Split into two groups because they answer different questions. Art. 13(1)(e)
+ * is about who receives the data; a reader cannot judge that from a flat list
+ * in which "Google" might mean a model API or a data centre. Infrastructure
+ * providers hold data at rest, model providers see it in transit — the
+ * distinction is what makes the third-country paragraph below readable.
+ *
+ * Confirmed in use by the operator (2026-08-04). STRATO is a German company,
+ * which is why the third-country wording says "some of" and not "the".
  */
-const AI_SUBPROCESSORS = ['Anthropic', 'Google', 'OpenAI'];
+const INFRA_SUBPROCESSORS = ['STRATO', 'Microsoft Azure', 'Google Cloud'];
+const AI_SUBPROCESSORS = ['Anthropic', 'Google', 'OpenAI', 'Hugging Face'];
 
 /**
  * Replacement bodies, keyed by the heading that opens the section. Everything
@@ -191,18 +202,27 @@ const SECTIONS = [
 <p>Rechtsgrundlagen sind die Erfüllung eines Vertrags und die Durchführung vorvertraglicher Maßnahmen (Art. 6 Abs. 1 S. 1 lit. b DSGVO), die Wahrung unserer berechtigten Interessen an einem sicheren, stabilen und wirtschaftlichen Betrieb unserer Dienste (Art. 6 Abs. 1 S. 1 lit. f DSGVO), die Erfüllung rechtlicher Verpflichtungen (Art. 6 Abs. 1 S. 1 lit. c DSGVO) sowie, soweit erforderlich, Ihre Einwilligung (Art. 6 Abs. 1 S. 1 lit. a DSGVO). Soweit wir personenbezogene Daten im Auftrag unserer Kunden verarbeiten, geschieht dies auf Grundlage eines Vertrags über die Auftragsverarbeitung nach Art. 28 DSGVO; Verantwortlicher im Sinne der DSGVO ist in diesem Fall der jeweilige Kunde.</p>
 
 <h3 class="wp-block-heading">Eigene Modelle und eingesetzte Unterauftragsverarbeiter</h3>
-<p>Wir setzen sowohl eigene, von uns entwickelte und betriebene Modelle als auch Modelle und Dienste externer Anbieter ein. Diese Anbieter sind Unterauftragsverarbeiter im Sinne des Art. 28 Abs. 2 und 4 DSGVO; wir legen sie hiermit nach Art. 13 Abs. 1 lit. e DSGVO offen. Derzeit sind dies:</p>
+<p>Wir setzen sowohl eigene, von uns entwickelte und betriebene Modelle als auch Infrastruktur, Modelle und Dienste externer Anbieter ein. Diese Anbieter sind Unterauftragsverarbeiter im Sinne des Art. 28 Abs. 2 und 4 DSGVO; wir legen sie hiermit nach Art. 13 Abs. 1 lit. e DSGVO offen. Derzeit sind dies:</p>
+<p><strong>Infrastruktur, Hosting und Betrieb</strong></p>
+<ul>
+<li><strong>STRATO AG</strong>, Berlin (Deutschland) – Server-, Speicher- und E-Mail-Infrastruktur.</li>
+<li><strong>Microsoft Azure</strong> – Cloud-Infrastruktur, Speicher und Rechenleistung.</li>
+<li><strong>Google Cloud</strong> – Cloud-Infrastruktur, Speicher und Rechenleistung.</li>
+</ul>
+<p><strong>KI-Modelle und KI-Dienste</strong></p>
 <ul>
 <li><strong>Anthropic</strong> – Sprach- und Textmodelle zur Erzeugung und Bearbeitung von Inhalten.</li>
 <li><strong>Google</strong> – Sprach-, Bild- und Videomodelle sowie die zugehörige Rechenleistung.</li>
 <li><strong>OpenAI</strong> – Sprach-, Text- und Bildmodelle.</li>
+<li><strong>Hugging Face</strong> – Bereitstellung und Ausführung offener Modelle (Modell-Hosting und Inferenz).</li>
 </ul>
 <p>Maßgeblich ist jeweils die für den genutzten Dienst vertraglich verantwortliche Gesellschaft des Anbieters. Die genaue Firmierung und Anschrift sowie die vollständige, jeweils aktuelle Liste der Unterauftragsverarbeiter teilen wir Ihnen auf Anfrage unter <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a> mit; über beabsichtigte Änderungen informieren wir unsere Kunden nach Maßgabe des jeweiligen Auftragsverarbeitungsvertrags.</p>
-<p>Mit sämtlichen genannten Anbietern bestehen Verträge zur Auftragsverarbeitung nach Art. 28 DSGVO. Wir nutzen ausschließlich deren geschäftliche Schnittstellen (API- bzw. Enterprise-Angebote), bei denen die übermittelten Inhalte vertraglich nicht zum Training der Modelle des jeweiligen Anbieters verwendet werden. Eine Weitergabe von Kundendaten an Dritte zum Zweck des Modelltrainings findet nicht statt.</p>
+<p>Mit sämtlichen genannten Anbietern bestehen Verträge zur Auftragsverarbeitung nach Art. 28 DSGVO. Bei den KI-Diensten nutzen wir ausschließlich deren geschäftliche Schnittstellen (API- bzw. Enterprise-Angebote), bei denen die übermittelten Inhalte vertraglich nicht zum Training der Modelle des jeweiligen Anbieters verwendet werden.</p>
+<p><strong>Auch wir selbst verwenden Kundendaten nicht zum Training von Modellen für andere Kunden.</strong> Inhalte, die uns eine Kundin oder ein Kunde zur Verarbeitung übermittelt, verarbeiten wir ausschließlich für diese Kundin bzw. diesen Kunden. Sie fließen weder in das Training oder die Nachjustierung („Feintuning“) unserer eigenen Modelle für andere Kundinnen und Kunden noch in mandantenübergreifende Auswertungen ein. Eine Weitergabe von Kundendaten an Dritte zum Zweck des Modelltrainings findet nicht statt.</p>
 <p>Eine ausschließlich auf automatisierter Verarbeitung – einschließlich Profiling – beruhende Entscheidung, die Ihnen gegenüber rechtliche Wirkung entfaltet oder Sie in ähnlicher Weise erheblich beeinträchtigt (Art. 22 DSGVO), treffen wir nicht. KI-generierte Inhalte sind Vorschläge und vor einer Veröffentlichung durch die Nutzerin bzw. den Nutzer zu prüfen.</p>
 
 <h3 class="wp-block-heading">Übermittlung in Drittländer</h3>
-<p>Die vorgenannten Anbieter haben ihren Sitz bzw. einzelne Verarbeitungsstandorte außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums, insbesondere in den Vereinigten Staaten. Soweit eine Übermittlung in ein Drittland stattfindet, stützen wir diese entweder auf den Angemessenheitsbeschluss der Europäischen Kommission vom 10. Juli 2023 zum EU-US Data Privacy Framework (Durchführungsbeschluss (EU) 2023/1795), sofern der jeweilige Anbieter dort zertifiziert ist, oder auf die Standardvertragsklauseln der Europäischen Kommission nach Art. 46 Abs. 2 lit. c DSGVO. Ergänzend treffen wir zusätzliche Schutzmaßnahmen, insbesondere Verschlüsselung bei Übertragung und Speicherung, Datenminimierung sowie strenge Zugriffsbeschränkungen. Soweit der jeweilige Dienst dies zulässt, nutzen wir vorrangig Verarbeitungsregionen innerhalb der EU bzw. des EWR.</p>
+<p>Ein Teil der vorgenannten Anbieter hat seinen Sitz bzw. einzelne Verarbeitungsstandorte außerhalb der Europäischen Union und des Europäischen Wirtschaftsraums, insbesondere in den Vereinigten Staaten. Die STRATO AG ist ein deutsches Unternehmen und betreibt ihre Rechenzentren in Deutschland; die Cloud-Angebote von Microsoft Azure und Google Cloud nutzen wir, soweit der jeweilige Dienst dies zulässt, in europäischen Regionen. Soweit eine Übermittlung in ein Drittland stattfindet, stützen wir diese entweder auf den Angemessenheitsbeschluss der Europäischen Kommission vom 10. Juli 2023 zum EU-US Data Privacy Framework (Durchführungsbeschluss (EU) 2023/1795), sofern der jeweilige Anbieter dort zertifiziert ist, oder auf die Standardvertragsklauseln der Europäischen Kommission nach Art. 46 Abs. 2 lit. c DSGVO. Ergänzend treffen wir zusätzliche Schutzmaßnahmen, insbesondere Verschlüsselung bei Übertragung und Speicherung, Datenminimierung sowie strenge Zugriffsbeschränkungen. Soweit der jeweilige Dienst dies zulässt, nutzen wir vorrangig Verarbeitungsregionen innerhalb der EU bzw. des EWR.</p>
 
 <h3 class="wp-block-heading">Speicher- und Verarbeitungsort</h3>
 <p>Der genaue Speicher- und Verarbeitungsort personenbezogener Daten wird individuell je nach vertraglicher Vereinbarung festgelegt. Auf Wunsch und nach entsprechender Vereinbarung verarbeitet und speichert die SGS Virtual Marketer GmbH Kundendaten ausschließlich in Deutschland oder in anderen Rechenzentren innerhalb der EU bzw. des EWR. Ohne eine solche gesonderte Vereinbarung wählt die SGS Virtual Marketer GmbH einen kosteneffizienten Verarbeitungsstandort; etwaige Übermittlungen in Drittländer erfolgen stets im Einklang mit den vorstehend beschriebenen gesetzlichen Vorgaben.</p>
@@ -384,10 +404,12 @@ function fixOverviewLists(html) {
  * become "weaker" — the two pages have drifted before.
  */
 const EN_REQUIRED = [
+  ...INFRA_SUBPROCESSORS.map((v) => [`infrastructure sub-processor: ${v}`, new RegExp(`\\b${v}\\b`)]),
   ...AI_SUBPROCESSORS.map((v) => [`AI sub-processor: ${v}`, new RegExp(`\\b${v}\\b`)]),
   ['own models', /own[^.]{0,40}models/i],
   ['Art. 28 processing agreement', /Art\.?\s*28/i],
-  ['no training on customer data', /not\s+used\s+to\s+train/i],
+  ['no vendor training on customer data', /not\s+used\s+to\s+train/i],
+  ['no own training across customers', /train[^.]{0,80}other customers/i],
   ['EU-US Data Privacy Framework', /Data Privacy Framework/i],
   ['SCCs / Art. 46', /Art\.?\s*46/i],
   ['right to object (Art. 21)', /Art\.?\s*21/i],

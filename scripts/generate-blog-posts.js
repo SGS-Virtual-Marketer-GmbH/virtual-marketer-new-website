@@ -219,6 +219,9 @@ function generateArchive(posts) {
 <link rel="alternate" hreflang="x-default" href="${BASE_URL}/blog/">
 <link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
 <link rel="stylesheet" href="/${THEME_CSS.style}">
+<style>
+  ${CHROME_CSS}
+</style>
 <script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -228,15 +231,22 @@ function generateArchive(posts) {
   })}</script>
 </head>
 <body>
-<header class="vm-header-simple" style="max-width:1140px;margin:0 auto;padding:24px 20px;display:flex;align-items:center;justify-content:space-between;">
+<!-- Header markup and styling both come from lib/page-chrome.js. This page
+     used to carry a hand-written copy with inline styles that predated that
+     module: a flex row with fixed 24px link margins and no wrapping rule, and
+     no CHROME_CSS in the head at all. Inline styles outrank the class rules,
+     so on a 375px screen the six links wrapped straight across the logo and
+     the two overlapped. Every other generated page already used the shared
+     chrome; this one was the last holdout. -->
+<header class="vm-header-simple">
   <a href="/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none"></a>
   <nav>
-    <a href="/ki-loesungen/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Lösungen</a>
-    <a href="/blog/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Blog</a>
-    <a href="https://api.virtual-marketer.de/documentation/" style="margin-left:24px;color:#1f2937;text-decoration:none;">API</a>
-    <a href="/modell-anfragen/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Modell anfragen</a>
-    <a href="/kontakt/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Kontakt</a>
-    <a href="https://login.virtual-marketer.de/" style="margin-left:24px;color:#1f2937;text-decoration:none;">Login</a>
+    <a href="/ki-loesungen/">Lösungen</a>
+    <a href="/blog/">Blog</a>
+    <a href="https://api.virtual-marketer.de/documentation/">API</a>
+    <a href="/modell-anfragen/">Modell anfragen</a>
+    <a href="/kontakt/">Kontakt</a>
+    <a href="https://login.virtual-marketer.de/">Login</a>
   </nav>
 </header>
 <main style="max-width:820px;margin:0 auto;padding:20px;">
