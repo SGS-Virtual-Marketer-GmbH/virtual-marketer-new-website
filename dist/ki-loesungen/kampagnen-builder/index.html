@@ -259,6 +259,26 @@
     .vm-fp .vm-tryon-row{grid-template-columns:repeat(2,1fr);gap:12px;}
   }
 
+  /* Panels slide-and-fade instead of hard-cutting, and the active step
+     button shows a progress bar that drains over the autoplay interval so
+     the advance is anticipated rather than sudden. Both are suppressed under
+     prefers-reduced-motion. */
+  .vm-fp .demo-panel{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;}
+  .vm-fp .demo-panel.active{opacity:1;transform:none;}
+  .vm-fp .demo-step-btn{position:relative;overflow:hidden;}
+  .vm-fp .demo-step-btn::after{
+    content:'';position:absolute;left:0;bottom:0;height:2px;width:100%;
+    background:rgba(255,255,255,.85);transform:scaleX(0);transform-origin:left;
+  }
+  .vm-fp.is-autoplaying .demo-step-btn.active::after{
+    animation:vmStepProgress 2.6s linear forwards;
+  }
+  @keyframes vmStepProgress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @media (prefers-reduced-motion:reduce){
+    .vm-fp .demo-panel{transition:none;transform:none;}
+    .vm-fp.is-autoplaying .demo-step-btn.active::after{animation:none;}
+  }
+
   /* Real photography in the demo's picker steps, replacing lettered circles
      and CSS gradients. Buttons rather than divs so they are focusable and
      announce themselves — they are genuine controls. */
@@ -733,6 +753,7 @@
 
 <script>
 (function(){
+  var root = document.querySelector('.vm-fp') || document;
   var steps = document.querySelectorAll('.demo-step-btn');
   var panels = document.querySelectorAll('.demo-panel');
   var prevBtn = document.getElementById('demo-prev');
@@ -747,9 +768,70 @@
     prevBtn.disabled = current === 0;
     nextBtn.textContent = current === steps.length - 1 ? "Von vorn" : "Weiter";
   }
-  steps.forEach(function(b, idx){ b.addEventListener('click', function(){ show(idx); }); });
-  prevBtn.addEventListener('click', function(){ show(current - 1); });
-  nextBtn.addEventListener('click', function(){ show(current === steps.length - 1 ? 0 : current + 1); });
+  steps.forEach(function(b, idx){ b.addEventListener('click', function(){ stopAuto(); show(idx); }); });
+  prevBtn.addEventListener('click', function(){ stopAuto(); show(current - 1); });
+  nextBtn.addEventListener('click', function(){ stopAuto(); show(current === steps.length - 1 ? 0 : current + 1); });
+
+  // --- Auto-advance ------------------------------------------------------
+  // The wizard sat on step 1 until someone clicked, so most visitors never
+  // saw the payoff — the interesting part is the last panel. It now plays
+  // itself once it scrolls into view, which turns a static screenshot into a
+  // demonstration without demanding interaction first.
+  //
+  // Three deliberate limits: it only runs while actually visible (an
+  // IntersectionObserver, so it is not burning timers off-screen), it stops
+  // permanently at the first click or keypress because a visitor who has
+  // taken control should not have the panel yanked out from under them, and
+  // it respects prefers-reduced-motion by not starting at all.
+  var timer = null;
+  var stopped = false;
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function stopAuto(){
+    stopped = true;
+    if (timer) { clearInterval(timer); timer = null; }
+    root.classList.remove('is-autoplaying');
+  }
+  function startAuto(){
+    if (stopped || reduced || timer) return;
+    root.classList.add('is-autoplaying');
+    timer = setInterval(function(){
+      if (stopped) return;
+      show(current === steps.length - 1 ? 0 : current + 1);
+    }, 2600);
+  }
+
+  var demoSection = prevBtn.closest('section') || prevBtn.parentElement;
+
+  // Visibility is checked by geometry, not solely by IntersectionObserver.
+  // IO is the tidier API, but it silently never fires in environments that
+  // do not composite frames (embedded webviews, headless panes) — verified
+  // here: a plain interval ticked while an observer on the same element
+  // reported nothing at all. Relying on it alone would mean the demo quietly
+  // never plays for some real visitors, and would be untestable besides.
+  function inView(){
+    if (!demoSection) return false;
+    var r = demoSection.getBoundingClientRect();
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    var visible = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+    return r.height > 0 && visible / Math.min(r.height, vh) > 0.35;
+  }
+  function sync(){
+    if (stopped) return;
+    if (inView()) startAuto();
+    else if (timer) { clearInterval(timer); timer = null; root.classList.remove('is-autoplaying'); }
+  }
+
+  window.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync, { passive: true });
+  if (demoSection && 'IntersectionObserver' in window) {
+    new IntersectionObserver(sync, { threshold: 0.35 }).observe(demoSection);
+  }
+  sync();
+
+  ['pointerdown', 'keydown'].forEach(function(ev){
+    demoSection && demoSection.addEventListener(ev, stopAuto, { once: true });
+  });
 
   document.querySelectorAll('.demo-model').forEach(function(el){
     el.addEventListener('click', function(){
