@@ -56,6 +56,30 @@ function findImages(dir, results = []) {
   return results;
 }
 
+/**
+ * Ownership + provenance tags re-applied on every re-encode.
+ *
+ * sharp drops all metadata unless told otherwise, so this step was silently
+ * undoing the branding written by scripts/generate-ai-images.js: the source
+ * files in assets/ carried the tags, the copies actually served from dist/
+ * carried none. Verified against the deployed URL, not just on disk — that
+ * is where the discrepancy showed up.
+ *
+ * The AI-generated marker is preserved deliberately, not stripped: the
+ * product pages state that Virtual Marketer marks AI images correctly for the
+ * EU AI Act, and removing that marking here would quietly break the claim.
+ */
+const IMAGE_METADATA = {
+  exif: {
+    IFD0: {
+      Artist: 'SGS Virtual Marketer GmbH',
+      Copyright: '© SGS Virtual Marketer GmbH — virtual-marketer.de',
+      Software: 'Virtual Marketer',
+      ImageDescription: 'AI-generated image produced with Virtual Marketer',
+    },
+  },
+};
+
 async function optimizeOne(file) {
   const originalSize = fs.statSync(file).size;
   const ext = path.extname(file).toLowerCase();
@@ -66,8 +90,8 @@ async function optimizeOne(file) {
 
     // 1. In-place lossy recompression (same format, same path)
     const optimizedBuffer = isJpeg
-      ? await image.jpeg({ quality: JPEG_QUALITY, mozjpeg: true }).toBuffer()
-      : await image.png({ quality: PNG_QUALITY, compressionLevel: 9, palette: true }).toBuffer();
+      ? await image.withMetadata(IMAGE_METADATA).jpeg({ quality: JPEG_QUALITY, mozjpeg: true }).toBuffer()
+      : await image.withMetadata(IMAGE_METADATA).png({ quality: PNG_QUALITY, compressionLevel: 9, palette: true }).toBuffer();
 
     let newSize = originalSize;
     if (optimizedBuffer.length < originalSize) {
@@ -83,7 +107,7 @@ async function optimizeOne(file) {
 
     let webpSize = null;
     if (!sourceStillFresh) {
-      const webpBuffer = await sharp(file).webp({ quality: WEBP_QUALITY }).toBuffer();
+      const webpBuffer = await sharp(file).withMetadata(IMAGE_METADATA).webp({ quality: WEBP_QUALITY }).toBuffer();
       fs.writeFileSync(webpPath, webpBuffer);
       webpSize = webpBuffer.length;
     } else {

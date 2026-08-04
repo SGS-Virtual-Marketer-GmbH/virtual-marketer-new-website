@@ -93,6 +93,49 @@ const SCENES = [
  * head-and-shoulders portraits because the picker renders them as circles,
  * where a full-body shot would crop to an unrecognisable torso.
  */
+
+/**
+ * Fashion model line-up for the try-on demo.
+ *
+ * Replaces the earlier six head-and-shoulders portraits. Two things changed:
+ *
+ *  1. They are full-body now, because the demo's result step has to show the
+ *     chosen model wearing the chosen garment in the chosen scene — a
+ *     cropped headshot cannot stand in for that.
+ *  2. The line-up deliberately spans body types as well as ethnicity and
+ *     gender — curvy, lean, athletic, tall, petite — because "you are not
+ *     limited to the one model you could book" is the actual pitch, and six
+ *     interchangeable slim models would contradict it on sight.
+ *
+ * Each model gets a distinct look rather than a shared uniform, so the row
+ * reads as a casting board instead of a set of variations on one person.
+ */
+const FASHION_MODELS = [
+  { id: 'ruby',  file: 'model-ruby-base.jpg',  pose: 'hand on hip, chin lifted, confident editorial stance',
+    who: 'a striking woman in her mid twenties with long wavy copper-red hair and prominent freckles across her face and shoulders, fair skin, slim athletic build',
+    look: 'a cream ribbed knit top and high-waisted wide-leg camel trousers with tan boots' },
+  { id: 'nadia', file: 'model-nadia-base.jpg', pose: 'one hand in pocket, weight on one leg, relaxed powerful stance',
+    who: 'a beautiful curvy Black woman in her late twenties with a voluminous natural afro, warm deep skin tone, full hourglass figure',
+    look: 'a tailored emerald green jumpsuit with gold hoop earrings and heeled sandals' },
+  { id: 'kai',   file: 'model-kai-base.jpg',   pose: 'arms crossed, shoulder angled to camera, cool streetwear attitude',
+    who: 'a handsome East Asian man in his late twenties with an undercut hairstyle, lean sharp features, slim tall build',
+    look: 'an oversized charcoal bomber jacket, black tapered trousers and white high-top sneakers' },
+  { id: 'marco', file: 'model-marco-base.jpg', pose: 'relaxed beach stance, one hand running through hair, easy smile',
+    who: 'a very attractive Mediterranean man in his early thirties with tousled dark hair, light stubble, tanned skin and a defined athletic beach physique',
+    look: 'an open linen shirt over swim shorts, barefoot' },
+  { id: 'lena',  file: 'model-lena-base.jpg',  pose: 'seated-height relaxed lean, hands clasped, soft approachable posture',
+    who: 'a lovely petite Scandinavian woman in her early thirties with a short blonde bob and pale blue eyes, slender frame',
+    look: 'a soft oversized grey cashmere sweater dress with white trainers' },
+  { id: 'amara', file: 'model-amara-base.jpg', pose: 'walking stride toward camera, fabric in motion, runway energy',
+    who: 'a glamorous South Asian woman in her late twenties with long glossy dark hair, warm brown skin, tall statuesque build',
+    look: 'a flowing deep burgundy maxi dress with layered gold jewellery' },
+];
+
+const MODEL_STUDIO =
+  'Full body visible from head to feet, standing on a plain light warm-grey seamless ' +
+  'studio backdrop, soft even professional studio lighting, sharp focus, high-end ' +
+  'fashion catalogue photography, vertical 3:4 framing.';
+
 const DEMO_MODELS = [
   { file: 'demo-model-1.jpg', prompt: 'Head and shoulders studio portrait of a East Asian woman in her late twenties, long straight black hair, warm confident expression, clear skin, professional fashion model, plain light grey seamless studio background, soft even beauty lighting, facing camera.' },
   { file: 'demo-model-2.jpg', prompt: 'Head and shoulders studio portrait of a Black man in his early thirties, short cropped hair, neat short beard, strong jawline, calm confident expression, professional fashion model, plain light grey seamless studio background, soft even beauty lighting, facing camera.' },
@@ -189,6 +232,34 @@ function request(key, parts) {
  * centre crop does not, because a head-and-shoulders shot puts the head well
  * above the middle of the frame.
  */
+/**
+ * Ownership and provenance metadata stamped into every generated file.
+ *
+ * Re-encoding through sharp drops incoming metadata, so these files shipped
+ * with none at all — no author, no copyright, nothing identifying them as
+ * Virtual Marketer assets once they leave the site.
+ *
+ * Note what is deliberately NOT done here: the AI-generated marking is added,
+ * not removed. The product page itself states that from 2 August 2026 the EU
+ * AI Act requires machine-readable marking of AI-generated images and that
+ * Virtual Marketer labels them correctly — quietly stripping that marking off
+ * the company's own marketing images would contradict both the regulation and
+ * the claim printed next to them. Re-attributing authorship is a branding
+ * change; erasing the synthetic-content disclosure would not be.
+ */
+function brandingMetadata() {
+  return {
+    exif: {
+      IFD0: {
+        Artist: 'SGS Virtual Marketer GmbH',
+        Copyright: '© SGS Virtual Marketer GmbH — virtual-marketer.de',
+        Software: 'Virtual Marketer',
+        ImageDescription: 'AI-generated image produced with Virtual Marketer',
+      },
+    },
+  };
+}
+
 async function save(buffer, file, width) {
   const target = path.join(OUT_DIR, file);
   const square = file.startsWith('demo-model-');
@@ -196,8 +267,9 @@ async function save(buffer, file, width) {
     ? { width, height: width, fit: 'cover', position: sharp.strategy.attention }
     : { width, withoutEnlargement: true };
 
-  await sharp(buffer).resize(resize).jpeg({ quality: 82, progressive: true }).toFile(target);
-  await sharp(buffer).resize(resize).webp({ quality: 80 }).toFile(target.replace(/\.jpg$/, '.webp'));
+  const meta = brandingMetadata();
+  await sharp(buffer).resize(resize).withMetadata(meta).jpeg({ quality: 82, progressive: true }).toFile(target);
+  await sharp(buffer).resize(resize).withMetadata(meta).webp({ quality: 80 }).toFile(target.replace(/\.jpg$/, '.webp'));
   const kb = Math.round(fs.statSync(target).size / 1024);
   return kb;
 }
@@ -215,7 +287,12 @@ async function main() {
   const exists = (f) => fs.existsSync(path.join(OUT_DIR, f));
 
   // --- Feature scenes, demo gallery, demo backdrops and result ------------
-  for (const scene of [...SCENES, ...DEMO_MODELS, ...DEMO_SCENES, DEMO_RESULT]) {
+  const fashionBase = FASHION_MODELS.map((m) => ({
+    file: m.file,
+    prompt: `Full-body fashion photograph of ${m.who}, wearing ${m.look}, ${m.pose}. ${MODEL_STUDIO}`,
+  }));
+
+  for (const scene of [...SCENES, ...DEMO_MODELS, ...DEMO_SCENES, DEMO_RESULT, ...fashionBase]) {
     if (!wanted(scene.file)) continue;
     if (exists(scene.file) && !FORCE) { skipped++; continue; }
     process.stdout.write(`   ${scene.file} ... `);
@@ -223,7 +300,7 @@ async function main() {
       const img = await request(key, [{ text: `${scene.prompt} ${STYLE}` }]);
       // Gallery portraits render at ~150px in a circle, so a 1600px master is
       // pure waste on a page that already carries a dozen photographs.
-      const kb = await save(img, scene.file, scene.file.startsWith('demo-model-') ? 480 : 1600);
+      const kb = await save(img, scene.file, scene.file.startsWith('demo-model-') ? 480 : scene.file.startsWith('model-') ? 720 : 1600);
       console.log(`${kb} KB`);
       made++;
     } catch (e) {
