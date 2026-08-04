@@ -1700,45 +1700,71 @@ function icon(name, className = '') {
  * Resolved by looking on disk rather than listing filenames in each FEATURES
  * entry, so adding an image to that folder is all it takes to light one up.
  */
+// The six-model cast used by the try-on demo. Ids match the filenames written
+// by scripts/generate-ai-images.js, so the gallery, the hover poses and the
+// model x scene result matrix all resolve from one list.
+const TRYON_CAST = [
+  { id: 'ruby',  name: 'Ruby' },
+  { id: 'nadia', name: 'Nadia' },
+  { id: 'kai',   name: 'Kai' },
+  { id: 'marco', name: 'Marco' },
+  { id: 'lena',  name: 'Lena' },
+  { id: 'amara', name: 'Amara' },
+];
+const TRYON_SCENE_IDS = ['studio', 'street', 'cafe'];
+
+const hasAsset = (rel) => fs.existsSync(path.join(ROOT, 'assets', rel.replace(/^\//, '')));
+
+/** Models that have a full base frame plus all three scene variants. */
+function availableCast() {
+  return TRYON_CAST.filter(
+    (m) => hasAsset(`/product-pages/model-${m.id}-base.jpg`) &&
+           TRYON_SCENE_IDS.every((sc) => hasAsset(`/product-pages/model-${m.id}-${sc}.jpg`))
+  );
+}
+
 /**
- * Model gallery for the try-on demo's "choose a model" step.
+ * Model gallery for the demo's "choose a model" step.
  *
- * This step used to render four gradient circles labelled A, B, C and D,
- * which communicated nothing: picking a fit model is the actual thing the
- * product does here, so the control should look like the thing it stands for.
- * The gallery is deliberately mixed across ethnicity, gender and age — a
- * single-look line-up would misrepresent a tool whose whole selling point is
- * that you are not tied to whoever you could book for a shoot.
+ * Two behaviours the earlier version lacked:
  *
- * Falls back to the old lettered swatches if the images have not been
- * generated yet (see scripts/generate-ai-images.js), so a checkout without
- * them still builds rather than shipping broken <img> tags.
+ *  - Hovering a model swaps in a posed frame of the SAME person in the SAME
+ *    outfit against the SAME backdrop, generated image-to-image from the base
+ *    so only the body position differs. A hover that changed the face or the
+ *    clothes would read as a glitch rather than as the model moving.
+ *  - The choice is now real. The result step reads the selected model and the
+ *    selected scene and shows that exact combination, which is why the cast
+ *    and the scene ids are one shared list rather than two that can drift.
  */
 function modelGallery() {
-  const available = [1, 2, 3, 4, 5, 6].filter((n) =>
-    fs.existsSync(path.join(ROOT, `assets/product-pages/demo-model-${n}.jpg`))
-  );
-  if (!available.length) {
+  const cast = availableCast();
+  if (!cast.length) {
     return `<div class="demo-swatches">${['A', 'B', 'C', 'D']
       .map((m, i) => `<div class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}">${m}</div>`)
       .join('')}</div>`;
   }
   return `<div class="demo-swatches demo-model-gallery">
-          ${available
-            .map(
-              (n, i) => `<button type="button" class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}" aria-label="Model ${n}">
-            <picture><source srcset="/product-pages/demo-model-${n}.webp" type="image/webp"><img src="/product-pages/demo-model-${n}.jpg" alt="" loading="lazy" decoding="async"></picture>
-          </button>`
-            )
+          ${cast
+            .map((m, i) => {
+              const pose = hasAsset(`/product-pages/model-${m.id}-pose.jpg`)
+                ? `/product-pages/model-${m.id}-pose.jpg`
+                : `/product-pages/model-${m.id}-base.jpg`;
+              return `<button type="button" class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}" data-model-id="${m.id}" aria-label="${m.name}" aria-pressed="${i === 0}">
+            <span class="demo-model-frame">
+              <img class="is-base" src="/product-pages/model-${m.id}-base.jpg" alt="" loading="lazy" decoding="async">
+              <img class="is-pose" src="${pose}" alt="" loading="lazy" decoding="async">
+            </span>
+            <span class="demo-model-name">${m.name}</span>
+          </button>`;
+            })
             .join('\n          ')}
         </div>`;
 }
 
-/** Scene step: real backdrops instead of flat CSS gradients. */
+/** Scene step: real backdrops, and the id the result matrix is keyed on. */
 function sceneChooser(labels) {
   const files = ['demo-scene-studio', 'demo-scene-street', 'demo-scene-cafe'];
-  const haveAll = files.every((f) => fs.existsSync(path.join(ROOT, `assets/product-pages/${f}.jpg`)));
-  if (!haveAll) {
+  if (!files.every((f) => hasAsset(`/product-pages/${f}.jpg`))) {
     const gradients = [
       'linear-gradient(135deg,#f4eeec,#e2d3d6)',
       'linear-gradient(135deg,#dce8f0,#a3cce9)',
@@ -1751,7 +1777,7 @@ function sceneChooser(labels) {
   return `<div class="demo-swatches demo-scene-gallery">
           ${labels
             .map(
-              (name, i) => `<button type="button" class="demo-scene${i === 0 ? ' selected' : ''}" data-scene="${i}">
+              (name, i) => `<button type="button" class="demo-scene${i === 0 ? ' selected' : ''}" data-scene="${i}" data-scene-id="${TRYON_SCENE_IDS[i]}" aria-pressed="${i === 0}">
             <picture><source srcset="/product-pages/${files[i]}.webp" type="image/webp"><img src="/product-pages/${files[i]}.jpg" alt="" loading="lazy" decoding="async"></picture>
             <span>${name}</span>
           </button>`
@@ -1761,14 +1787,29 @@ function sceneChooser(labels) {
 }
 
 /**
- * Result step. Previously reused the flat-vector hero, which undercut the
- * whole demo: the payoff of a photo-generation tool cannot be an illustration.
+ * Result step. Renders the full model x scene matrix and reveals exactly one
+ * frame, rather than fetching on demand: every combination is a static file
+ * already in the page's asset set, so switching is instant and works with no
+ * network round-trip and no loading state to design around.
  */
 function demoResult(alt) {
-  const real = fs.existsSync(path.join(ROOT, 'assets/product-pages/demo-result.jpg'));
-  const src = real ? '/product-pages/demo-result' : null;
-  if (!src) return `<img class="demo-result-img" src="/product-pages/staging-hero.jpg" alt="${alt}">`;
-  return `<picture><source srcset="${src}.webp" type="image/webp"><img class="demo-result-img" src="${src}.jpg" alt="${alt}" loading="lazy" decoding="async"></picture>`;
+  const cast = availableCast();
+  if (!cast.length) {
+    return hasAsset('/product-pages/demo-result.jpg')
+      ? `<img class="demo-result-img" src="/product-pages/demo-result.jpg" alt="${alt}" loading="lazy">`
+      : `<img class="demo-result-img" src="/product-pages/staging-hero.jpg" alt="${alt}">`;
+  }
+  const frames = cast
+    .flatMap((m) =>
+      TRYON_SCENE_IDS.map(
+        (sc) => `<img class="demo-result-frame" data-model-id="${m.id}" data-scene-id="${sc}"
+              src="/product-pages/model-${m.id}-${sc}.jpg" alt="${alt}" loading="lazy" decoding="async">`
+      )
+    )
+    .join('\n            ');
+  return `<div class="demo-result-stage" data-active-model="${cast[0].id}" data-active-scene="studio">
+            ${frames}
+          </div>`;
 }
 
 function sceneImageFor(f) {
@@ -2050,23 +2091,42 @@ ${animDemo ? DEMO_STYLE : ''}
   /* Real photography in the demo's picker steps, replacing lettered circles
      and CSS gradients. Buttons rather than divs so they are focusable and
      announce themselves — they are genuine controls. */
-  .vm-fp .demo-model-gallery{display:flex;flex-wrap:wrap;gap:14px;}
+  .vm-fp .demo-model-gallery{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;}
   .vm-fp .demo-model-gallery .demo-model{
-    width:78px;height:78px;padding:0;border:0;border-radius:50%;overflow:hidden;
-    background:none;cursor:pointer;outline:2px solid transparent;outline-offset:3px;
+    padding:0;border:0;background:none;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+  }
+  .vm-fp .demo-model-frame{
+    position:relative;display:block;width:92px;height:92px;border-radius:50%;
+    overflow:hidden;background:#efe7e8;
+    outline:2px solid transparent;outline-offset:3px;
+    transition:outline-color .18s ease,transform .18s ease;
+  }
+  .vm-fp .demo-model-frame img{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center 12%;
+    transition:opacity .28s ease;
+  }
+  /* Hover swaps to the posed frame of the same person. Both images are
+     stacked and cross-faded rather than swapping src, so there is no flicker
+     and no second network request mid-interaction. */
+  .vm-fp .demo-model-frame .is-pose{opacity:0;}
+  .vm-fp .demo-model:hover .demo-model-frame .is-pose,
+  .vm-fp .demo-model:focus-visible .demo-model-frame .is-pose{opacity:1;}
+  .vm-fp .demo-model:hover .demo-model-frame .is-base,
+  .vm-fp .demo-model:focus-visible .demo-model-frame .is-base{opacity:0;}
+  .vm-fp .demo-model:hover .demo-model-frame{transform:translateY(-3px);}
+  .vm-fp .demo-model.selected .demo-model-frame{outline-color:#fff;}
+  .vm-fp .demo-model-name{font-size:13px;font-weight:600;color:#d8c5c4;}
+  .vm-fp .demo-model.selected .demo-model-name{color:#fff;}
+
+  .vm-fp .demo-scene-gallery{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;}
+  .vm-fp .demo-scene-gallery .demo-scene{
+    width:180px;padding:0;border:0;border-radius:12px;overflow:hidden;background:none;
+    cursor:pointer;outline:2px solid transparent;outline-offset:3px;
     transition:outline-color .15s ease,transform .15s ease;
   }
-  .vm-fp .demo-model-gallery .demo-model img{width:100%;height:100%;object-fit:cover;display:block;}
-  .vm-fp .demo-model-gallery .demo-model:hover{transform:translateY(-2px);}
-  .vm-fp .demo-model-gallery .demo-model.selected{outline-color:#fff;}
-
-  .vm-fp .demo-scene-gallery{display:flex;flex-wrap:wrap;gap:14px;}
-  .vm-fp .demo-scene-gallery .demo-scene{
-    width:170px;padding:0;border:0;border-radius:12px;overflow:hidden;background:none;
-    cursor:pointer;outline:2px solid transparent;outline-offset:3px;
-    transition:outline-color .15s ease,transform .15s ease;position:relative;
-  }
-  .vm-fp .demo-scene-gallery .demo-scene img{width:100%;height:104px;object-fit:cover;display:block;}
+  .vm-fp .demo-scene-gallery .demo-scene img{width:100%;height:108px;object-fit:cover;display:block;}
   .vm-fp .demo-scene-gallery .demo-scene span{
     display:block;padding:8px 10px;font-size:13px;font-weight:600;color:#fff;
     background:rgba(36,20,23,.55);
@@ -2074,11 +2134,22 @@ ${animDemo ? DEMO_STYLE : ''}
   .vm-fp .demo-scene-gallery .demo-scene:hover{transform:translateY(-2px);}
   .vm-fp .demo-scene-gallery .demo-scene.selected{outline-color:#fff;}
 
-  .vm-fp .demo-result-img{border-radius:12px;}
+  /* Result matrix: every model x scene frame is present, exactly one shown. */
+  .vm-fp .demo-result-stage{
+    position:relative;width:100%;max-width:520px;margin:0 auto;
+    aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:#1b1113;
+  }
+  .vm-fp .demo-result-frame{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:0;transform:scale(1.015);
+    transition:opacity .45s ease,transform .45s ease;
+  }
+  .vm-fp .demo-result-frame.is-active{opacity:1;transform:none;}
   @media (max-width:560px){
-    .vm-fp .demo-model-gallery .demo-model{width:62px;height:62px;}
+    .vm-fp .demo-model-frame{width:74px;height:74px;}
     .vm-fp .demo-scene-gallery .demo-scene{width:calc(50% - 7px);}
   }
+
 ${CHROME_CSS}
 </style>
 </head>
@@ -2171,6 +2242,45 @@ ${sceneSection(f, lang)}
   </section>
 </main>
 ${footer(lang)}
+<script>
+(function(){
+  // Ties the two picker steps to the result matrix. Every combination is
+  // already in the DOM as a static image, so this only toggles which one is
+  // visible — no fetch, no loading state, instant switching.
+  document.querySelectorAll('.vm-fp').forEach(function(root){
+    var stage = root.querySelector('.demo-result-stage');
+    if(!stage) return;
+
+    function show(){
+      var m = stage.getAttribute('data-active-model');
+      var s = stage.getAttribute('data-active-scene');
+      var match = stage.querySelector('.demo-result-frame[data-model-id="'+m+'"][data-scene-id="'+s+'"]');
+      stage.querySelectorAll('.demo-result-frame').forEach(function(f){
+        f.classList.toggle('is-active', f === match);
+      });
+    }
+
+    function bind(sel, attr, target){
+      root.querySelectorAll(sel).forEach(function(btn){
+        btn.addEventListener('click', function(){
+          root.querySelectorAll(sel).forEach(function(b){
+            b.classList.toggle('selected', b === btn);
+            if(b.hasAttribute('aria-pressed')) b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+          });
+          var v = btn.getAttribute(attr);
+          if(v) stage.setAttribute(target, v);
+          show();
+        });
+      });
+    }
+
+    bind('.demo-model-gallery .demo-model', 'data-model-id', 'data-active-model');
+    bind('.demo-scene-gallery .demo-scene', 'data-scene-id', 'data-active-scene');
+    show();
+  });
+})();
+</script>
+
 
 <script>
 (function(){

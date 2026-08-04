@@ -53,7 +53,10 @@ const CHROME_CSS = `
   @media (max-width:900px){
     .vm-header-simple{
       flex-direction:column;align-items:stretch;gap:14px;
-      margin:12px 12px 0;padding:14px 16px;position:static;
+      margin:12px 12px 0;padding:14px 16px;
+      /* Stays sticky on mobile as well — it was switched to static here,
+         which meant the nav scrolled away exactly on the screens where
+         getting back to it costs the most. */
     }
     .vm-header-simple > a{justify-content:center}
     .vm-header-simple nav{justify-content:center;gap:18px}

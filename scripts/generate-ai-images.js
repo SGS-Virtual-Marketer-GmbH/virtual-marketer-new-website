@@ -131,6 +131,17 @@ const FASHION_MODELS = [
     look: 'a flowing deep burgundy maxi dress with layered gold jewellery' },
 ];
 
+/**
+ * Scenes the demo lets a visitor drop a model into. Keys match the ids used
+ * by the "choose a scene" step so the result lookup is a direct index rather
+ * than a mapping table that can drift.
+ */
+const MODEL_SCENES = [
+  { id: 'studio', desc: 'a clean professional photo studio with a warm off-white seamless backdrop and soft studio lighting' },
+  { id: 'street', desc: 'a bright European city street with blurred shopfronts behind, natural daylight' },
+  { id: 'cafe',   desc: 'a stylish café interior with warm wood, plants and soft daylight from a large window' },
+];
+
 const MODEL_STUDIO =
   'Full body visible from head to feet, standing on a plain light warm-grey seamless ' +
   'studio backdrop, soft even professional studio lighting, sharp focus, high-end ' +
@@ -340,6 +351,51 @@ async function main() {
       } catch (e) {
         console.log(`FAILED — ${e.message}`);
       }
+    }
+  }
+
+  // --- Per-model hover pose and scene variants ---------------------------
+  // Both are conditioned on the model's own base frame rather than generated
+  // from text. That is the whole point: a hover that swapped in a different
+  // face, or a scene that changed the outfit, would read as a bug rather than
+  // as the same model repositioned or relocated.
+  for (const m of FASHION_MODELS) {
+    const basePath = path.join(OUT_DIR, m.file);
+    if (!fs.existsSync(basePath)) continue;
+    const baseB64 = fs.readFileSync(basePath).toString('base64');
+    const conditioned = async (file, instruction, width) => {
+      if (!wanted(file)) return;
+      if (exists(file) && !FORCE) { skipped++; return; }
+      process.stdout.write(`   ${file} ... `);
+      try {
+        const img = await request(key, [
+          { inlineData: { mimeType: 'image/jpeg', data: baseB64 } },
+          { text: instruction },
+        ]);
+        const kb = await save(img, file, width);
+        console.log(`${kb} KB`);
+        made++;
+      } catch (e) {
+        console.log(`FAILED — ${e.message}`);
+      }
+    };
+
+    await conditioned(
+      `model-${m.id}-pose.jpg`,
+      `Keep the exact same person, same face, same hair, same outfit, same studio background ` +
+        `and same lighting as the reference image. Change ONLY the body pose to: ${m.pose}. ` +
+        `Full body visible from head to feet. ${STYLE}`,
+      720
+    );
+
+    for (const sc of MODEL_SCENES) {
+      await conditioned(
+        `model-${m.id}-${sc.id}.jpg`,
+        `Keep the exact same person, same face, same hair and the exact same outfit as the ` +
+          `reference image. Place them in ${sc.desc}. Full body visible from head to feet, ` +
+          `photographed as an e-commerce on-model product shot. ${STYLE}`,
+        900
+      );
     }
   }
 
