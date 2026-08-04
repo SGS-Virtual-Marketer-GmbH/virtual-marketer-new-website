@@ -71,6 +71,10 @@ const UI = {
     faqLabel: 'FAQ', faqTitle: 'Häufige Fragen',
     footerLinks: { privacy: 'Datenschutzerklärung', privacyHref: '/datenschutzerklaerung/', legal: 'Impressum', legalHref: '/impressum/' },
     allSolutions: 'Alle KI-Lösungen im Überblick',
+    sceneLabel: 'Im Einsatz', sceneTitle: 'So sieht der Alltag damit aus',
+    tryonLabel: 'Virtuelle Anprobe', tryonTitle: 'Ein Modell, beliebig viele Outfits',
+    tryonIntro: 'Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; gleiche Person, gleiche Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.',
+    tryonBase: 'Referenzfoto', tryonNote: 'Illustratives Beispiel &#8211; alle Aufnahmen sind KI-generiert.',
   },
   en: {
     nav: { solutions: 'Solutions', blog: 'Blog', api: 'API', request: 'Request a model', contact: 'Contact', login: 'Login' },
@@ -86,6 +90,10 @@ const UI = {
     faqLabel: 'FAQ', faqTitle: 'Frequently asked questions',
     footerLinks: { privacy: 'Privacy Policy', privacyHref: '/en/privacy-policy/', legal: 'Legal Notice', legalHref: '/en/legal-notice/' },
     allSolutions: 'All AI solutions at a glance',
+    sceneLabel: 'In practice', sceneTitle: 'What working with it looks like',
+    tryonLabel: 'Virtual try-on', tryonTitle: 'One model, any number of outfits',
+    tryonIntro: 'A single reference photo of your fit model is enough. Every further garment is applied to it &#8211; same person, same pose, same lighting. For a few cents per image instead of a photo shoot.',
+    tryonBase: 'Reference photo', tryonNote: 'Illustrative example &#8211; every shot here is AI-generated.',
   },
 };
 
@@ -140,7 +148,7 @@ const FEATURES = [
       },
       eyebrow: 'KI Produktfotos &amp; Virtual Try-On',
       tagline: 'Dein digitales Fotostudio.',
-      intro: 'VM Product Staging macht aus einem einfachen Produktfoto professionelle On-Model-Aufnahmen, Lifestyle-Szenen und Produktvideos &#8211; in Minuten statt Wochen, zu einem Bruchteil der Kosten eines klassischen Shootings.',
+      intro: 'VM Product Staging macht aus einem einfachen Produktfoto professionelle On-Model-Aufnahmen, Lifestyle-Szenen und Produktvideos &#8211; in Minuten statt Wochen, für wenige Cent pro Bild statt eines Shootings.',
       audiences: [
         { label: 'Fashion &amp; Apparel E-Commerce', detail: 'Laufend neue Kollektionen, ohne für jede ein Shooting zu buchen.' },
         { label: 'Retail-Marken mit wechselndem Sortiment', detail: 'Konsistente Bildsprache über hunderte SKUs hinweg.' },
@@ -210,7 +218,7 @@ const FEATURES = [
       },
       eyebrow: 'AI Product Photos &amp; Virtual Try-On',
       tagline: 'Your digital photo studio.',
-      intro: 'VM Product Staging turns a simple product photo into professional on-model shots, lifestyle scenes and product videos &#8211; in minutes instead of weeks, at a fraction of the cost of a traditional shoot.',
+      intro: 'VM Product Staging turns a simple product photo into professional on-model shots, lifestyle scenes and product videos &#8211; in minutes instead of weeks, for a few cents per image instead of a photo shoot.',
       audiences: [
         { label: 'Fashion &amp; apparel e-commerce', detail: 'New collections constantly, without booking a shoot for every drop.' },
         { label: 'Retail brands with a changing catalog', detail: 'Consistent visuals across hundreds of SKUs.' },
@@ -1704,6 +1712,74 @@ function icon(name, className = '') {
   return `<svg viewBox="0 0 24 24" class="${className}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icons[name] || ''}</svg>`;
 }
 
+/**
+ * Photographic scene shot for a feature, by convention
+ * assets/product-pages/<slug>-scene.jpg (see scripts/generate-ai-images.js).
+ * Resolved by looking on disk rather than listing filenames in each FEATURES
+ * entry, so adding an image to that folder is all it takes to light one up.
+ */
+function sceneImageFor(f) {
+  const rel = `/product-pages/${f.slug}-scene.jpg`;
+  return fs.existsSync(path.join(ROOT, 'assets', rel.replace(/^\//, ''))) ? rel : null;
+}
+
+/**
+ * The photo sits *alongside* the flat-vector hero, not instead of it: the
+ * illustration explains the mechanism, the photograph shows the situation.
+ * <picture> so browsers take the WebP and fall back to JPEG.
+ */
+function sceneSection(f, lang) {
+  const src = sceneImageFor(f);
+  if (!src) return '';
+  const t = UI[lang];
+  const c = f[lang];
+  return `
+  <section class="vm-scene" aria-labelledby="scene-h">
+    <p class="section-label">${t.sceneLabel}</p>
+    <h2 class="section-title" id="scene-h">${t.sceneTitle}</h2>
+    <figure class="vm-scene-figure">
+      <picture>
+        <source srcset="${src.replace(/\.jpg$/, '.webp')}" type="image/webp">
+        <img src="${src}" alt="${c.tagline}" loading="lazy" decoding="async" width="1600" height="900">
+      </picture>
+    </figure>
+  </section>`;
+}
+
+/**
+ * Virtual try-on strip: one reference shot plus the same model in three
+ * outfits. The images are generated image-to-image from the reference so the
+ * person really is identical across the row — that consistency is the claim
+ * the section is making, so a set of four unrelated models would undercut
+ * exactly the point it exists to demonstrate.
+ */
+function tryonSection(f, lang) {
+  if (f.slug !== 'produktfotos-ki') return '';
+  const base = path.join(ROOT, 'assets/product-pages/tryon-base.jpg');
+  if (!fs.existsSync(base)) return '';
+  const t = UI[lang];
+  const looks = [1, 2, 3].filter((n) => fs.existsSync(path.join(ROOT, `assets/product-pages/tryon-look-${n}.jpg`)));
+  const shot = (src, caption, isBase) => `
+        <figure class="vm-tryon-shot${isBase ? ' is-base' : ''}">
+          <picture>
+            <source srcset="${src.replace(/\.jpg$/, '.webp')}" type="image/webp">
+            <img src="${src}" alt="${caption}" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>${caption}</figcaption>
+        </figure>`;
+  return `
+  <section class="vm-tryon" aria-labelledby="tryon-h">
+    <p class="section-label">${t.tryonLabel}</p>
+    <h2 class="section-title" id="tryon-h">${t.tryonTitle}</h2>
+    <p class="impact-note">${t.tryonIntro}</p>
+    <div class="vm-tryon-row">
+      ${shot('/product-pages/tryon-base.jpg', t.tryonBase, true)}
+      ${looks.map((n) => shot(`/product-pages/tryon-look-${n}.jpg`, `Look ${n}`, false)).join('\n      ')}
+    </div>
+    <p class="vm-tryon-note">${t.tryonNote}</p>
+  </section>`;
+}
+
 function pagePath(f, lang) {
   return lang === 'en' ? `/en/solutions/${f.slugEn}/` : `/ki-loesungen/${f.slug}/`;
 }
@@ -1890,6 +1966,28 @@ function pageShell(f, lang) {
     .vm-fp .vmd-stage{padding:16px;}
   }
 ${animDemo ? DEMO_STYLE : ''}
+
+  /* --- Photographic scene + virtual try-on -------------------------------
+     Both sit alongside the flat-vector hero rather than replacing it: the
+     illustration explains the mechanism, the photograph shows the situation
+     the feature is actually used in. */
+  .vm-fp .vm-scene-figure{margin:0;border-radius:16px;overflow:hidden;box-shadow:0 10px 34px rgba(36,20,23,.14);}
+  .vm-fp .vm-scene-figure img{display:block;width:100%;height:auto;}
+
+  .vm-fp .vm-tryon-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px;align-items:start;}
+  .vm-fp .vm-tryon-shot{margin:0;}
+  .vm-fp .vm-tryon-shot picture{display:block;border-radius:14px;overflow:hidden;background:var(--vm-gray-100);box-shadow:0 6px 20px rgba(36,20,23,.10);}
+  .vm-fp .vm-tryon-shot img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;}
+  .vm-fp .vm-tryon-shot figcaption{margin-top:10px;font-size:14px;font-weight:600;color:var(--vm-gray-900);text-align:center;}
+  /* The reference shot is the input, the rest are outputs — the accent ring
+     and label make that read at a glance instead of looking like four
+     interchangeable photos. */
+  .vm-fp .vm-tryon-shot.is-base picture{outline:2px solid var(--vm-red);outline-offset:3px;}
+  .vm-fp .vm-tryon-shot.is-base figcaption{color:var(--vm-red);}
+  .vm-fp .vm-tryon-note{margin-top:18px;font-size:14px;color:var(--vm-gray-600,#6b7280);}
+  @media (max-width:780px){
+    .vm-fp .vm-tryon-row{grid-template-columns:repeat(2,1fr);gap:12px;}
+  }
 ${CHROME_CSS}
 </style>
 </head>
@@ -1917,6 +2015,8 @@ ${header(lang)}
       ${c.audiences.map((a) => `<div class="audience-card"><b>${a.label}</b><span>${a.detail}</span></div>`).join('\n      ')}
     </div>
   </section>
+${tryonSection(f, lang)}
+${sceneSection(f, lang)}
 
   ${c.impact ? `<section aria-labelledby="impact-h">
     <p class="section-label">${t.impactLabel}</p>

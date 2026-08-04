@@ -230,6 +230,28 @@
   .vmd-senti-neu { background: var(--vm-gray-200); color: var(--vm-gray-600); }
 
 
+  /* --- Photographic scene + virtual try-on -------------------------------
+     Both sit alongside the flat-vector hero rather than replacing it: the
+     illustration explains the mechanism, the photograph shows the situation
+     the feature is actually used in. */
+  .vm-fp .vm-scene-figure{margin:0;border-radius:16px;overflow:hidden;box-shadow:0 10px 34px rgba(36,20,23,.14);}
+  .vm-fp .vm-scene-figure img{display:block;width:100%;height:auto;}
+
+  .vm-fp .vm-tryon-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px;align-items:start;}
+  .vm-fp .vm-tryon-shot{margin:0;}
+  .vm-fp .vm-tryon-shot picture{display:block;border-radius:14px;overflow:hidden;background:var(--vm-gray-100);box-shadow:0 6px 20px rgba(36,20,23,.10);}
+  .vm-fp .vm-tryon-shot img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;}
+  .vm-fp .vm-tryon-shot figcaption{margin-top:10px;font-size:14px;font-weight:600;color:var(--vm-gray-900);text-align:center;}
+  /* The reference shot is the input, the rest are outputs — the accent ring
+     and label make that read at a glance instead of looking like four
+     interchangeable photos. */
+  .vm-fp .vm-tryon-shot.is-base picture{outline:2px solid var(--vm-red);outline-offset:3px;}
+  .vm-fp .vm-tryon-shot.is-base figcaption{color:var(--vm-red);}
+  .vm-fp .vm-tryon-note{margin-top:18px;font-size:14px;color:var(--vm-gray-600,#6b7280);}
+  @media (max-width:780px){
+    .vm-fp .vm-tryon-row{grid-template-columns:repeat(2,1fr);gap:12px;}
+  }
+
   .vm-header-simple{
     position:sticky;top:0;z-index:9990;
     max-width:1140px;margin:16px auto 0;padding:14px 24px;
@@ -323,7 +345,7 @@
       <span class="eyebrow">KI Produktfotos &amp; Virtual Try-On</span>
       <h1>KI-Produktfotos & virtuelle Anprobe (Virtual Try-On)</h1>
       <p class="tagline">Dein digitales Fotostudio.</p>
-      <p class="intro">VM Product Staging macht aus einem einfachen Produktfoto professionelle On-Model-Aufnahmen, Lifestyle-Szenen und Produktvideos &#8211; in Minuten statt Wochen, zu einem Bruchteil der Kosten eines klassischen Shootings.</p>
+      <p class="intro">VM Product Staging macht aus einem einfachen Produktfoto professionelle On-Model-Aufnahmen, Lifestyle-Szenen und Produktvideos &#8211; in Minuten statt Wochen, für wenige Cent pro Bild statt eines Shootings.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="/virtual-marketer-demo/">Demo buchen</a>
         <a class="btn btn-ghost" href="#demo">Live-Demo ansehen</a>
@@ -340,6 +362,58 @@
       <div class="audience-card"><b>Retail-Marken mit wechselndem Sortiment</b><span>Konsistente Bildsprache über hunderte SKUs hinweg.</span></div>
       <div class="audience-card"><b>Agenturen mit mehreren Kunden</b><span>Ein Werkzeug für Bildproduktion über alle Konten hinweg.</span></div>
     </div>
+  </section>
+
+  <section class="vm-tryon" aria-labelledby="tryon-h">
+    <p class="section-label">Virtuelle Anprobe</p>
+    <h2 class="section-title" id="tryon-h">Ein Modell, beliebig viele Outfits</h2>
+    <p class="impact-note">Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; gleiche Person, gleiche Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.</p>
+    <div class="vm-tryon-row">
+      
+        <figure class="vm-tryon-shot is-base">
+          <picture>
+            <source srcset="/product-pages/tryon-base.webp" type="image/webp">
+            <img src="/product-pages/tryon-base.jpg" alt="Referenzfoto" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>Referenzfoto</figcaption>
+        </figure>
+      
+        <figure class="vm-tryon-shot">
+          <picture>
+            <source srcset="/product-pages/tryon-look-1.webp" type="image/webp">
+            <img src="/product-pages/tryon-look-1.jpg" alt="Look 1" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>Look 1</figcaption>
+        </figure>
+      
+        <figure class="vm-tryon-shot">
+          <picture>
+            <source srcset="/product-pages/tryon-look-2.webp" type="image/webp">
+            <img src="/product-pages/tryon-look-2.jpg" alt="Look 2" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>Look 2</figcaption>
+        </figure>
+      
+        <figure class="vm-tryon-shot">
+          <picture>
+            <source srcset="/product-pages/tryon-look-3.webp" type="image/webp">
+            <img src="/product-pages/tryon-look-3.jpg" alt="Look 3" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>Look 3</figcaption>
+        </figure>
+    </div>
+    <p class="vm-tryon-note">Illustratives Beispiel &#8211; alle Aufnahmen sind KI-generiert.</p>
+  </section>
+
+  <section class="vm-scene" aria-labelledby="scene-h">
+    <p class="section-label">Im Einsatz</p>
+    <h2 class="section-title" id="scene-h">So sieht der Alltag damit aus</h2>
+    <figure class="vm-scene-figure">
+      <picture>
+        <source srcset="/product-pages/produktfotos-ki-scene.webp" type="image/webp">
+        <img src="/product-pages/produktfotos-ki-scene.jpg" alt="Dein digitales Fotostudio." loading="lazy" decoding="async" width="1600" height="900">
+      </picture>
+    </figure>
   </section>
 
   <section aria-labelledby="impact-h">
