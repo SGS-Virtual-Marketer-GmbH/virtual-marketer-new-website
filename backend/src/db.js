@@ -1,57 +1,178 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const Database = require('better-sqlite3');
+/**
+ * Firestore data layer for bookings and contact submissions.
+ *
+ * This used to be better-sqlite3 against a file on a mounted volume. That
+ * does not survive Cloud Run: instances are ephemeral and scale to zero, so
+ * a local SQLite file is thrown away on every scale-down, and Cloud Run's
+ * only persistent volume option is a Cloud Storage FUSE mount, which cannot
+ * give SQLite the file locking and fsync semantics WAL mode requires. The
+ * choice was between paying for a Cloud SQL instance that never scales to
+ * zero and moving to a serverless store; Firestore's free tier covers this
+ * workload (a handful of bookings a day against 20k writes/day) at no cost
+ * and scales to zero with the service.
+ *
+ * The one thing that had to survive the move is the double-booking
+ * guarantee. Under better-sqlite3 it came for free from the driver being
+ * synchronous and single-connection: a check-then-insert wrapped in
+ * db.transaction() could not interleave with another request because the
+ * event loop could not run in between. Firestore is neither synchronous nor
+ * single-connection, so that reasoning does not transfer at all — the
+ * guarantee is re-established explicitly with runTransaction(), which reads
+ * the slot inside the transaction and aborts and retries if a concurrent
+ * writer touched the same documents. Same invariant, enforced by the
+ * database rather than by the shape of the runtime.
+ *
+ * The conflict check reads every booking for the slot and filters in JS
+ * rather than expressing "confirmed OR (pending AND not expired)" as a
+ * Firestore query. A disjunction across two fields needs a composite index
+ * that has to be deployed alongside the code, and a slot only ever holds a
+ * couple of documents, so the filter is cheaper to operate and impossible
+ * to get silently wrong at deploy time.
+ *
+ * Document fields keep the snake_case names the SQL schema used, so the
+ * route handlers and email templates did not have to be renamed field by
+ * field during the port.
+ */
+
+const { Firestore } = require('@google-cloud/firestore');
 const config = require('./config');
 
-fs.mkdirSync(path.dirname(config.dbPath), { recursive: true });
+const firestore = new Firestore({
+  projectId: config.firestore.projectId,
+  databaseId: config.firestore.databaseId,
+  ignoreUndefinedProperties: true,
+});
 
-const db = new Database(config.dbPath);
-db.pragma('journal_mode = WAL');
-db.pragma('foreign_keys = ON');
+const prefix = config.firestore.collectionPrefix;
+const bookingsCol = firestore.collection(`${prefix}bookings`);
+const contactsCol = firestore.collection(`${prefix}contact_submissions`);
 
-// better-sqlite3 is synchronous and single-connection: every statement here
-// runs to completion before the Node event loop can start another request.
-// That's what makes the slot-conflict check in routes/bookings.js race-free
-// without any extra locking — as long as the check-then-insert happens
-// inside one synchronous db.transaction(), nothing can interleave.
-db.exec(`
-  CREATE TABLE IF NOT EXISTS bookings (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    slot_start TEXT NOT NULL,
-    slot_end TEXT NOT NULL,
-    name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    company TEXT,
-    message TEXT,
-    locale TEXT NOT NULL DEFAULT 'de',
-    status TEXT NOT NULL DEFAULT 'pending',
-    confirm_token_hash TEXT NOT NULL,
-    confirm_token_expires_at TEXT NOT NULL,
-    confirmed_at TEXT,
-    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-    ip TEXT
-  );
+function withId(doc) {
+  return doc.exists ? { id: doc.id, ...doc.data() } : null;
+}
 
-  CREATE INDEX IF NOT EXISTS idx_bookings_slot_start ON bookings(slot_start);
-  CREATE INDEX IF NOT EXISTS idx_bookings_email ON bookings(email);
+/** A slot is taken by a confirmed booking, or by a pending one still in date. */
+function blocksSlot(booking, nowIso) {
+  if (booking.status === 'confirmed') return true;
+  return booking.status === 'pending' && booking.confirm_token_expires_at > nowIso;
+}
 
-  CREATE TABLE IF NOT EXISTS contact_submissions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    message TEXT NOT NULL,
-    locale TEXT NOT NULL DEFAULT 'de',
-    status TEXT NOT NULL DEFAULT 'pending',
-    confirm_token_hash TEXT NOT NULL,
-    confirm_token_expires_at TEXT NOT NULL,
-    confirmed_at TEXT,
-    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-    ip TEXT
-  );
+/**
+ * Housekeeping only. Correctness never depends on this having run — the
+ * conflict check already treats an expired pending booking as free — it just
+ * keeps `status` truthful for anyone reading the collection directly.
+ */
+async function sweep(col, nowIso) {
+  // Only the inequality is expressed as a query; `status` is filtered in JS.
+  // Combining an equality and an inequality on two different fields is
+  // exactly the shape Firestore requires a composite index for, and that
+  // index would have to be created out of band before this code could run —
+  // a deploy-time failure mode for what is only a cosmetic tidy-up. A range
+  // on a single field rides the automatic index instead.
+  const snap = await col.where('confirm_token_expires_at', '<', nowIso).limit(500).get();
+  const stale = snap.docs.filter((d) => d.data().status === 'pending');
+  if (!stale.length) return 0;
 
-  CREATE INDEX IF NOT EXISTS idx_contact_email ON contact_submissions(email);
-`);
+  const batch = firestore.batch();
+  stale.forEach((d) => batch.update(d.ref, { status: 'expired' }));
+  await batch.commit();
+  return stale.length;
+}
 
-module.exports = db;
+const bookings = {
+  async isSlotTaken(slotStartIso, nowIso) {
+    const snap = await bookingsCol.where('slot_start', '==', slotStartIso).get();
+    return snap.docs.some((d) => blocksSlot(d.data(), nowIso));
+  },
+
+  /**
+   * Reserves a slot if free. Returns the new document id, or null if the
+   * slot was taken. The read and the write are one Firestore transaction, so
+   * two simultaneous requests for the same slot cannot both succeed —
+   * whichever loses the contention is retried and then sees the winner's
+   * document.
+   */
+  async reserveSlot(row) {
+    const nowIso = new Date().toISOString();
+    return firestore.runTransaction(async (tx) => {
+      const snap = await tx.get(bookingsCol.where('slot_start', '==', row.slot_start));
+      if (snap.docs.some((d) => blocksSlot(d.data(), nowIso))) return null;
+
+      const ref = bookingsCol.doc();
+      tx.create(ref, { ...row, status: 'pending', confirmed_at: null, created_at: nowIso });
+      return ref.id;
+    });
+  },
+
+  /**
+   * Same-email flood guard. Filtered in JS on purpose: an (email, created_at)
+   * range query needs a composite index, while an equality query on email
+   * alone rides Firestore's automatic single-field index. The limit keeps a
+   * pathological address from pulling an unbounded read.
+   */
+  async countRecentByEmail(email, sinceIso) {
+    const snap = await bookingsCol.where('email', '==', email).limit(200).get();
+    return snap.docs.filter((d) => d.data().created_at > sinceIso).length;
+  },
+
+  async getById(id) {
+    if (!id) return null;
+    return withId(await bookingsCol.doc(id).get());
+  },
+
+  /**
+   * Confirms a pending booking. Returns false if it was already confirmed,
+   * expired or gone — the transaction is what makes a double-clicked
+   * confirmation link resolve to exactly one state change.
+   */
+  async confirm(id, nowIso) {
+    return firestore.runTransaction(async (tx) => {
+      const ref = bookingsCol.doc(id);
+      const doc = await tx.get(ref);
+      if (!doc.exists || doc.data().status !== 'pending') return false;
+      tx.update(ref, { status: 'confirmed', confirmed_at: nowIso });
+      return true;
+    });
+  },
+
+  sweepExpired(nowIso) {
+    return sweep(bookingsCol, nowIso);
+  },
+};
+
+const contacts = {
+  async create(row) {
+    const nowIso = new Date().toISOString();
+    const ref = contactsCol.doc();
+    await ref.create({ ...row, status: 'pending', confirmed_at: null, created_at: nowIso });
+    return ref.id;
+  },
+
+  async countRecentByEmail(email, sinceIso) {
+    const snap = await contactsCol.where('email', '==', email).limit(200).get();
+    return snap.docs.filter((d) => d.data().created_at > sinceIso).length;
+  },
+
+  async getById(id) {
+    if (!id) return null;
+    return withId(await contactsCol.doc(id).get());
+  },
+
+  async confirm(id, nowIso) {
+    return firestore.runTransaction(async (tx) => {
+      const ref = contactsCol.doc(id);
+      const doc = await tx.get(ref);
+      if (!doc.exists || doc.data().status !== 'pending') return false;
+      tx.update(ref, { status: 'confirmed', confirmed_at: nowIso });
+      return true;
+    });
+  },
+
+  sweepExpired(nowIso) {
+    return sweep(contactsCol, nowIso);
+  },
+};
+
+module.exports = { firestore, bookings, contacts };

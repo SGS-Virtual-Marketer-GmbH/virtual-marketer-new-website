@@ -16,8 +16,23 @@ requireEnv();
 
 module.exports = {
   port: parseInt(process.env.PORT || '4000', 10),
-  dbPath: process.env.DB_PATH || '/data/virtual-marketer.sqlite3',
   publicBaseUrl: (process.env.PUBLIC_BASE_URL || 'https://virtual-marketer.de').replace(/\/$/, ''),
+
+  // Both left undefined by default on purpose. On Cloud Run the Firestore
+  // client picks up the project from the metadata server and the default
+  // database, which is what production should use — hardcoding a project id
+  // here would make the container refuse to run anywhere else. The env vars
+  // exist for local runs and for the emulator, which needs *a* project id
+  // even though it never authenticates against a real one.
+  firestore: {
+    projectId: process.env.GOOGLE_CLOUD_PROJECT || process.env.FIRESTORE_PROJECT_ID || undefined,
+    databaseId: process.env.FIRESTORE_DATABASE_ID || undefined,
+    // Prefix applied to every collection name. Empty in production. The test
+    // suite sets a unique throwaway prefix so it can exercise real Firestore
+    // transactions — the thing the double-booking guard actually depends on
+    // — without ever touching the live bookings collection.
+    collectionPrefix: process.env.FIRESTORE_COLLECTION_PREFIX || '',
+  },
 
   smtp: {
     host: process.env.SMTP_HOST,

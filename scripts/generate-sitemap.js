@@ -94,21 +94,83 @@ function generateSitemapIndexXML() {
 `;
 }
 
+// Crawlers that should be able to read everything: classic search, plus the
+// answer engines. Being readable by those is the whole point of the GEO work
+// — a page that is not crawlable cannot be cited in an AI answer, and these
+// are referral sources now, not just training scrapers.
+const ALLOWED_BOTS = [
+  'Googlebot',
+  'Googlebot-Image',
+  'Google-Extended',      // Gemini / AI Overviews grounding
+  'Bingbot',
+  'DuckDuckBot',
+  'Applebot',
+  'Applebot-Extended',
+  'GPTBot',               // OpenAI crawler
+  'OAI-SearchBot',        // ChatGPT search index
+  'ChatGPT-User',         // live fetch when a user asks about the site
+  'ClaudeBot',
+  'Claude-User',
+  'PerplexityBot',
+  'Perplexity-User',
+  'cohere-ai',
+  'meta-externalagent',
+];
+
+// Commercial SEO/backlink scrapers and aggressive content harvesters. They
+// cost bandwidth (and on Cloud Run, request billing) while returning nothing.
+// Blocked here by request AND enforced in docker/nginx.conf, because
+// robots.txt is a convention that only well-behaved bots honour — the nginx
+// rule is what actually stops them.
+const BLOCKED_BOTS = [
+  'AhrefsBot',
+  'SemrushBot',
+  'MJ12bot',
+  'DotBot',
+  'DataForSeoBot',
+  'BLEXBot',
+  'PetalBot',
+  'SerpstatBot',
+  'ZoominfoBot',
+  'magpie-crawler',
+  'Bytespider',
+  'ImagesiftBot',
+];
+
 function generateRobotsTxt() {
+  // Note what is NOT disallowed any more: /tag/, /category/, /author/ and
+  // /blog/page/ used to be listed here. scripts/prune-thin-archives.js
+  // deleted those pages and docker/nginx.conf now 301s them to /blog/ — and
+  // a crawler cannot follow a redirect it is forbidden to request. Keeping
+  // the old Disallow lines would strand whatever inbound links those URLs
+  // still hold instead of passing them to /blog/.
+  const shared = [
+    'Disallow: /wp-admin/',
+    'Disallow: /wp-login.php',
+    'Disallow: /wp-includes/',
+    'Disallow: /wp-content/plugins/',
+    'Disallow: /wp-json/',
+    'Disallow: /login/',
+  ].join('\n');
+
+  const allowBlocks = ALLOWED_BOTS.map(
+    (bot) => `User-agent: ${bot}\nAllow: /\n${shared}\n`
+  ).join('\n');
+
+  const blockBlocks = BLOCKED_BOTS.map((bot) => `User-agent: ${bot}\nDisallow: /\n`).join('\n');
+
   return `# Virtual Marketer - robots.txt (auto-generated, see scripts/generate-sitemap.js)
+
+# --- Default policy -------------------------------------------------------
 User-agent: *
 Allow: /
-Disallow: /wp-admin/
-Disallow: /wp-login.php
-Disallow: /wp-includes/
-Disallow: /wp-content/plugins/
-Disallow: /wp-json/
-Disallow: /blog/page/
-Disallow: /tag/
-Disallow: /category/
-Disallow: /author/
-Disallow: /login/
+${shared}
 
+# --- Search and answer engines (explicitly welcome) -----------------------
+${allowBlocks}
+# --- SEO scrapers and harvesters (not welcome) ----------------------------
+${blockBlocks}
+# --- Discovery ------------------------------------------------------------
 Sitemap: ${BASE_URL}/sitemap.xml
 Sitemap: ${BASE_URL}/sitemap_index.xml
 `;

@@ -10,6 +10,11 @@ services:
       - api
     ports:
       - "8080:8080"
+    environment:
+      # Under compose the API is a separate service on the compose network,
+      # not a Cloud Run sidecar on loopback — see docker/entrypoint.sh.
+      API_UPSTREAM: "api:4000"
+      PORT: "8080"
     read_only: true
     tmpfs:
       - /tmp
@@ -44,12 +49,13 @@ services:
       - ./backend/.env
     environment:
       PORT: "4000"
-      DB_PATH: /data/virtual-marketer.sqlite3
-    volumes:
-      # Named volume, not bind-mounted from the repo: booking/contact data
-      # must persist across image rebuilds and must never end up inside a
-      # git-tracked directory.
-      - vm-api-data:/data
+      # Bookings and contact submissions live in Firestore now (see
+      # backend/src/db.js), so this service is stateless — no volume, and
+      # nothing is lost when the container is recreated. Point it at a real
+      # project with GOOGLE_CLOUD_PROJECT plus credentials, or at the
+      # Firestore emulator with FIRESTORE_EMULATOR_HOST.
+      GOOGLE_CLOUD_PROJECT: "${GOOGLE_CLOUD_PROJECT:-}"
+      FIRESTORE_EMULATOR_HOST: "${FIRESTORE_EMULATOR_HOST:-}"
     read_only: true
     tmpfs:
       - /tmp
@@ -63,6 +69,3 @@ services:
       timeout: 3s
       retries: 3
       start_period: 10s
-
-volumes:
-  vm-api-data:

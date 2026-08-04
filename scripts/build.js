@@ -134,7 +134,12 @@ async function build() {
     // %3F-decoding logic) already handle this filename convention correctly
     // — the files just never made it into dist/ in the first place.
     console.log('🖼️  Processing images and assets...');
-    const assetExtensions = /\.(jpg|jpeg|png|gif|webp|svg|woff|woff2|ttf|eot)(\?|$)/i;
+    // avif belongs here even though the original list omitted it: the three
+    // management-team portraits (/wp-content/uploads/2025/06/*.avif) are the
+    // only AVIF files in the scrape, and leaving the extension out meant
+    // /management/ shipped with three broken portraits — the images were
+    // sitting in SOURCE the whole time, they just never got copied.
+    const assetExtensions = /\.(jpg|jpeg|png|gif|webp|avif|svg|woff|woff2|ttf|eot)(\?|$)/i;
     const assetFiles = findFiles(SOURCE, assetExtensions);
 
     for (const assetFile of assetFiles) {
