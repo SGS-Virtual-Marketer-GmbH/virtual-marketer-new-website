@@ -78,6 +78,46 @@ const SCENES = [
  * it keeps the page appropriate for a B2B audience, and it demonstrates the
  * exact same before/after transformation.
  */
+
+/**
+ * Model gallery for the try-on demo's "choose a model" step.
+ *
+ * These replace four abstract gradient circles labelled A-D, which told a
+ * visitor nothing about what the feature does. A real gallery is also the
+ * honest representation of the product: choosing a fit model is the actual
+ * step, so the picker should look like the thing it stands for.
+ *
+ * Deliberately spread across ethnicity, gender and age, and each face is
+ * described distinctly enough that no two read as the same person — a row of
+ * near-identical models would defeat the point of a gallery. Framed as
+ * head-and-shoulders portraits because the picker renders them as circles,
+ * where a full-body shot would crop to an unrecognisable torso.
+ */
+const DEMO_MODELS = [
+  { file: 'demo-model-1.jpg', prompt: 'Head and shoulders studio portrait of a East Asian woman in her late twenties, long straight black hair, warm confident expression, clear skin, professional fashion model, plain light grey seamless studio background, soft even beauty lighting, facing camera.' },
+  { file: 'demo-model-2.jpg', prompt: 'Head and shoulders studio portrait of a Black man in his early thirties, short cropped hair, neat short beard, strong jawline, calm confident expression, professional fashion model, plain light grey seamless studio background, soft even beauty lighting, facing camera.' },
+  { file: 'demo-model-3.jpg', prompt: 'Head and shoulders studio portrait of a white woman in her mid twenties, shoulder-length wavy auburn hair, freckles, bright friendly expression, professional fashion model, plain light grey seamless studio background, soft even beauty lighting, facing camera.' },
+  { file: 'demo-model-4.jpg', prompt: 'Head and shoulders studio portrait of a South Asian man in his late twenties, thick dark wavy hair, clean shaven, warm approachable smile, professional fashion model, plain light grey seamless studio background, soft even beauty lighting, facing camera.' },
+  { file: 'demo-model-5.jpg', prompt: 'Head and shoulders studio portrait of a Latina woman in her early thirties, dark hair tied back, elegant high cheekbones, poised neutral expression, professional fashion model, plain light grey seamless studio background, soft even beauty lighting, facing camera.' },
+  { file: 'demo-model-6.jpg', prompt: 'Head and shoulders studio portrait of a Middle Eastern man in his forties, salt and pepper hair, well groomed short beard, distinguished confident expression, professional fashion model, plain light grey seamless studio background, soft even beauty lighting, facing camera.' },
+];
+
+/** Backdrops for the demo's "choose a scene" step, and the final result shot. */
+const DEMO_SCENES = [
+  { file: 'demo-scene-studio.jpg', prompt: 'An empty professional photography studio backdrop, plain warm off-white seamless paper sweep, softbox lighting stands just out of frame, no people.' },
+  { file: 'demo-scene-street.jpg', prompt: 'An empty European city street scene on a bright day, blurred shopfronts and pavement, shallow depth of field, no people in frame.' },
+  { file: 'demo-scene-cafe.jpg', prompt: 'An empty stylish café interior with warm wood and soft daylight through a large window, an empty table in the foreground, no people.' },
+];
+
+const DEMO_RESULT = {
+  file: 'demo-result.jpg',
+  prompt:
+    'Professional e-commerce on-model product photograph: a woman in her late twenties wearing ' +
+    'an olive green quilted jacket over a white t-shirt and dark jeans, standing on a bright ' +
+    'European city street, natural daylight, sharp focus on the garment, blurred street behind, ' +
+    'full body visible, catalogue photography.',
+};
+
 const TRYON_BASE = {
   file: 'tryon-base.jpg',
   prompt:
@@ -137,11 +177,27 @@ function request(key, parts) {
   });
 }
 
-/** Normalises to a web-sized progressive JPEG plus a WebP sibling. */
+/**
+ * Normalises to a web-sized progressive JPEG plus a WebP sibling.
+ *
+ * Gallery portraits are additionally forced to a square. The model returns
+ * whatever aspect it feels like — this set came back as four 480x860 portraits
+ * and two 480x262 landscapes — and the picker renders them as circles, so an
+ * un-normalised set crops inconsistently and slices the tops off heads.
+ * sharp's `attention` strategy picks the crop window by visual salience, which
+ * on a portrait against a plain backdrop reliably lands on the face; a plain
+ * centre crop does not, because a head-and-shoulders shot puts the head well
+ * above the middle of the frame.
+ */
 async function save(buffer, file, width) {
   const target = path.join(OUT_DIR, file);
-  await sharp(buffer).resize({ width, withoutEnlargement: true }).jpeg({ quality: 82, progressive: true }).toFile(target);
-  await sharp(buffer).resize({ width, withoutEnlargement: true }).webp({ quality: 80 }).toFile(target.replace(/\.jpg$/, '.webp'));
+  const square = file.startsWith('demo-model-');
+  const resize = square
+    ? { width, height: width, fit: 'cover', position: sharp.strategy.attention }
+    : { width, withoutEnlargement: true };
+
+  await sharp(buffer).resize(resize).jpeg({ quality: 82, progressive: true }).toFile(target);
+  await sharp(buffer).resize(resize).webp({ quality: 80 }).toFile(target.replace(/\.jpg$/, '.webp'));
   const kb = Math.round(fs.statSync(target).size / 1024);
   return kb;
 }
@@ -158,14 +214,16 @@ async function main() {
   const wanted = (f) => !ONLY || f.includes(ONLY);
   const exists = (f) => fs.existsSync(path.join(OUT_DIR, f));
 
-  // --- Feature scenes -----------------------------------------------------
-  for (const scene of SCENES) {
+  // --- Feature scenes, demo gallery, demo backdrops and result ------------
+  for (const scene of [...SCENES, ...DEMO_MODELS, ...DEMO_SCENES, DEMO_RESULT]) {
     if (!wanted(scene.file)) continue;
     if (exists(scene.file) && !FORCE) { skipped++; continue; }
     process.stdout.write(`   ${scene.file} ... `);
     try {
       const img = await request(key, [{ text: `${scene.prompt} ${STYLE}` }]);
-      const kb = await save(img, scene.file, 1600);
+      // Gallery portraits render at ~150px in a circle, so a 1600px master is
+      // pure waste on a page that already carries a dozen photographs.
+      const kb = await save(img, scene.file, scene.file.startsWith('demo-model-') ? 480 : 1600);
       console.log(`${kb} KB`);
       made++;
     } catch (e) {

@@ -234,8 +234,8 @@
      Both sit alongside the flat-vector hero rather than replacing it: the
      illustration explains the mechanism, the photograph shows the situation
      the feature is actually used in. */
-  .vm-fp .vm-scene-figure{margin:0;border-radius:16px;overflow:hidden;box-shadow:0 10px 34px rgba(36,20,23,.14);}
-  .vm-fp .vm-scene-figure img{display:block;width:100%;height:auto;}
+  .vm-fp .vm-scene-figure{margin:8px 0 56px;border-radius:18px;overflow:hidden;}
+  .vm-fp .vm-scene-figure img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;}
 
   .vm-fp .vm-tryon-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px;align-items:start;}
   .vm-fp .vm-tryon-shot{margin:0;}
@@ -250,6 +250,39 @@
   .vm-fp .vm-tryon-note{margin-top:18px;font-size:14px;color:var(--vm-gray-600,#6b7280);}
   @media (max-width:780px){
     .vm-fp .vm-tryon-row{grid-template-columns:repeat(2,1fr);gap:12px;}
+  }
+
+  /* Real photography in the demo's picker steps, replacing lettered circles
+     and CSS gradients. Buttons rather than divs so they are focusable and
+     announce themselves — they are genuine controls. */
+  .vm-fp .demo-model-gallery{display:flex;flex-wrap:wrap;gap:14px;}
+  .vm-fp .demo-model-gallery .demo-model{
+    width:78px;height:78px;padding:0;border:0;border-radius:50%;overflow:hidden;
+    background:none;cursor:pointer;outline:2px solid transparent;outline-offset:3px;
+    transition:outline-color .15s ease,transform .15s ease;
+  }
+  .vm-fp .demo-model-gallery .demo-model img{width:100%;height:100%;object-fit:cover;display:block;}
+  .vm-fp .demo-model-gallery .demo-model:hover{transform:translateY(-2px);}
+  .vm-fp .demo-model-gallery .demo-model.selected{outline-color:#fff;}
+
+  .vm-fp .demo-scene-gallery{display:flex;flex-wrap:wrap;gap:14px;}
+  .vm-fp .demo-scene-gallery .demo-scene{
+    width:170px;padding:0;border:0;border-radius:12px;overflow:hidden;background:none;
+    cursor:pointer;outline:2px solid transparent;outline-offset:3px;
+    transition:outline-color .15s ease,transform .15s ease;position:relative;
+  }
+  .vm-fp .demo-scene-gallery .demo-scene img{width:100%;height:104px;object-fit:cover;display:block;}
+  .vm-fp .demo-scene-gallery .demo-scene span{
+    display:block;padding:8px 10px;font-size:13px;font-weight:600;color:#fff;
+    background:rgba(36,20,23,.55);
+  }
+  .vm-fp .demo-scene-gallery .demo-scene:hover{transform:translateY(-2px);}
+  .vm-fp .demo-scene-gallery .demo-scene.selected{outline-color:#fff;}
+
+  .vm-fp .demo-result-img{border-radius:12px;}
+  @media (max-width:560px){
+    .vm-fp .demo-model-gallery .demo-model{width:62px;height:62px;}
+    .vm-fp .demo-scene-gallery .demo-scene{width:calc(50% - 7px);}
   }
 
   .vm-header-simple{
@@ -298,40 +331,117 @@
   <nav>
     <details class="vm-solutions-dd">
     <summary>Solutions</summary>
-    <ul class="vm-solutions-list">
-      <li><a href="/en/solutions/ai-agents/">AI Agents for Marketing &amp; Ads</a></li>
-      <li><a href="/en/solutions/coding-api/">Coding API &amp; MCP Server</a></li>
-      <li><a href="/en/solutions/ai-product-photos/">AI Product Photos &amp; Virtual Try-On</a></li>
-      <li><a href="/en/solutions/feed-enhance/">AI Feed Enhance</a></li>
-      <li><a href="/en/solutions/ai-text-generator/">AI Text Generation</a></li>
-      <li><a href="/en/solutions/ai-image-generator/">AI Image Generation</a></li>
-      <li><a href="/en/solutions/ai-video-generator/">AI Video Generation</a></li>
-      <li><a href="/en/solutions/ai-seo-content/">AI SEO Content</a></li>
-      <li><a href="/en/solutions/campaign-builder/">AI Campaign Builder</a></li>
-      <li><a href="/en/solutions/internal-linking/">Internal Linking</a></li>
-      <li><a href="/en/solutions/ai-email-generator/">AI Email Generator</a></li>
-      <li><a href="/en/solutions/social-publisher/">AI Social Publisher</a></li>
-      <li><a href="/en/solutions/bulk-text-generator/">AI Bulk Generator</a></li>
-      <li><a href="/en/solutions/ai-files/">Files &amp; Reports</a></li>
-      <li><a href="/en/solutions/feed-optimizer/">Feed Optimizer</a></li>
-      <li><a href="/en/solutions/chat-insights/">Chat Insights</a></li>
-      <li class="vm-solutions-all"><a href="/en/solutions/">All solutions at a glance &rarr;</a></li>
-    </ul>
+    <div class="vm-solutions-panel">
+      <ul class="vm-solutions-grid">
+        <li><a href="/en/solutions/ai-agents/">AI Agents for Marketing &amp; Ads</a></li>
+        <li><a href="/en/solutions/coding-api/">Coding API &amp; MCP Server</a></li>
+        <li><a href="/en/solutions/ai-product-photos/">AI Product Photos &amp; Virtual Try-On</a></li>
+        <li><a href="/en/solutions/feed-enhance/">AI Feed Enhance</a></li>
+        <li><a href="/en/solutions/ai-text-generator/">AI Text Generation</a></li>
+        <li><a href="/en/solutions/ai-image-generator/">AI Image Generation</a></li>
+        <li><a href="/en/solutions/ai-video-generator/">AI Video Generation</a></li>
+        <li><a href="/en/solutions/ai-seo-content/">AI SEO Content</a></li>
+        <li><a href="/en/solutions/campaign-builder/">AI Campaign Builder</a></li>
+        <li><a href="/en/solutions/internal-linking/">Internal Linking</a></li>
+        <li><a href="/en/solutions/ai-email-generator/">AI Email Generator</a></li>
+        <li><a href="/en/solutions/social-publisher/">AI Social Publisher</a></li>
+        <li><a href="/en/solutions/bulk-text-generator/">AI Bulk Generator</a></li>
+        <li><a href="/en/solutions/ai-files/">Files &amp; Reports</a></li>
+        <li><a href="/en/solutions/feed-optimizer/">Feed Optimizer</a></li>
+        <li><a href="/en/solutions/chat-insights/">Chat Insights</a></li>
+      </ul>
+      <ul class="vm-solutions-foot"><li><a href="/en/solutions/">All solutions at a glance &rarr;</a></li></ul>
+    </div>
   </details><style>
-  .vm-solutions-dd{position:relative;display:inline-block;font-family:inherit;}
-  .vm-solutions-dd summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:4px;padding:0;color:inherit;font:inherit;}
-  .vm-solutions-dd summary::-webkit-details-marker{display:none;}
-  .vm-solutions-dd summary::after{content:" \25BE";font-size:.7em;}
-  .vm-solutions-dd .vm-solutions-list{position:absolute;top:calc(100% + 10px);left:0;background:#fff;border:1px solid #e7dfe0;border-radius:10px;box-shadow:0 12px 32px rgba(36,20,23,.14);min-width:270px;padding:8px;margin:0;list-style:none;z-index:9999;}
-  .vm-solutions-dd .vm-solutions-list li{margin:0;}
-  .vm-solutions-dd .vm-solutions-list a{display:block;padding:9px 12px;border-radius:6px;color:#241417;text-decoration:none;font-size:14px;white-space:nowrap;}
-  .vm-solutions-dd .vm-solutions-list a:hover{background:#fbecee;color:#94152b;}
-  .vm-solutions-dd .vm-solutions-list li.vm-solutions-all{border-top:1px solid #e7dfe0;margin-top:6px;padding-top:6px;}
-  .vm-solutions-dd .vm-solutions-list li.vm-solutions-all a{color:#94152b;font-weight:600;}
+  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
+  /* Vertical alignment with the sibling nav links.
+     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
+     while a bare <summary> is only as tall as its text, so with both boxes
+     starting at the same y the label sat 11px above "Blog" and "API".
+     Stretching the wrapper to the flex row's height and centring inside it
+     matches whatever the theme happens to use, instead of hardcoding this
+     theme's padding and breaking again the next time it changes. */
+  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
+  .vm-solutions-dd{align-self:stretch;}
+  /* align-self:stretch above computes correctly but the theme's flex row still
+     leaves the item at its content height, so the summary is matched to the
+     sibling anchors' box directly: they are line-height 35px inside 10px
+     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
+     only when replacing the legacy theme nav — so it cannot leak into
+     .vm-header-simple, where the generated pages set their own metrics. */
+  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
+  .vm-solutions-dd > summary{
+    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
+    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
+  }
+  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
+  .vm-solutions-dd > summary::marker{content:'';}
+  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
+     the label's baseline the way a "▾" character does. */
+  .vm-solutions-dd > summary::after{
+    content:'';width:7px;height:7px;flex:0 0 auto;
+    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
+  }
+  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
+  .vm-solutions-dd > summary,
+  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
+
+  .vm-solutions-panel{
+    position:absolute;top:calc(100% + 16px);left:50%;transform:translateX(-50%);
+    width:min(760px,calc(100vw - 32px));
+    background:#fff;border:1px solid #ece4e5;border-radius:16px;
+    box-shadow:0 24px 60px rgba(36,20,23,.18);
+    padding:18px;margin:0;z-index:99999;
+  }
+  .vm-solutions-grid{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
+    margin:0;padding:0;list-style:none;
+  }
+  .vm-solutions-grid a{
+    display:block;padding:11px 12px;border-radius:9px;
+    color:#241417;text-decoration:none;font-size:14px;font-weight:500;line-height:1.35;
+  }
+  .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
+  .vm-solutions-foot{
+    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
+  }
+  .vm-solutions-foot a{
+    display:inline-block;color:#94152b;font-weight:600;font-size:14px;text-decoration:none;padding:4px 12px;
+  }
+  .vm-solutions-foot a:hover{text-decoration:underline;}
+
   @media (max-width:900px){
-    .vm-solutions-dd .vm-solutions-list{position:static;box-shadow:none;border:none;margin-top:6px;min-width:0;padding-left:12px;}
+    .vm-solutions-dd{display:block;width:100%;}
+    .vm-solutions-panel{
+      position:static;transform:none;width:auto;
+      box-shadow:none;border:0;border-radius:0;padding:6px 0 0;
+    }
+    .vm-solutions-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .vm-solutions-grid a{font-size:13px;padding:9px 8px;}
+  }
+  @media (max-width:520px){
+    .vm-solutions-grid{grid-template-columns:1fr;}
   }
 </style>
+<script>
+(function(){
+  // <details> has no concept of "dismiss" — without this the panel stays open
+  // until the summary is clicked again, which feels broken next to every other
+  // menu on the web.
+  document.addEventListener('click', function(e){
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      if(!d.contains(e.target)) d.removeAttribute('open');
+    });
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape') return;
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      d.removeAttribute('open');
+    });
+  });
+})();
+</script>
     <a href="/en/blog/">Blog</a>
     <a href="https://api.virtual-marketer.de/documentation/">API</a>
     <a href="/en/request-custom-model/">Request a model</a>
@@ -365,16 +475,12 @@
   </section>
 
 
-  <section class="vm-scene" aria-labelledby="scene-h">
-    <p class="section-label">In practice</p>
-    <h2 class="section-title" id="scene-h">What working with it looks like</h2>
-    <figure class="vm-scene-figure">
-      <picture>
-        <source srcset="/product-pages/ki-dateien-scene.webp" type="image/webp">
-        <img src="/product-pages/ki-dateien-scene.jpg" alt="Every report, one click away." loading="lazy" decoding="async" width="1600" height="900">
-      </picture>
-    </figure>
-  </section>
+  <figure class="vm-scene-figure">
+    <picture>
+      <source srcset="/product-pages/ki-dateien-scene.webp" type="image/webp">
+      <img src="/product-pages/ki-dateien-scene.jpg" alt="Every report, one click away." loading="lazy" decoding="async" width="1600" height="900">
+    </picture>
+  </figure>
 
   
 

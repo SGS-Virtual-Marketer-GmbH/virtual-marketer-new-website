@@ -71,34 +71,136 @@ const SOLUTIONS_EN = [
   { href: '/en/solutions/chat-insights/', label: 'Chat Insights' },
 ];
 
+/**
+ * Solutions menu, as an app-drawer style panel.
+ *
+ * It began as a single vertical <ul>. With sixteen solutions that produced a
+ * ~780px column of links running most of the way down the viewport — visually
+ * overwhelming, impossible to scan, and on shorter screens it simply ran off
+ * the bottom. The list is now a three-column grid in a wide panel anchored
+ * under the nav, so the whole product range is visible at once and reads as a
+ * launcher rather than a scrolling menu.
+ *
+ * Two alignment details that were wrong before:
+ *
+ *  - The <summary> was `display:inline-flex` inside a nav whose siblings are
+ *    plain <a> elements, so it sat on a different baseline and the label rode
+ *    visibly higher than "Blog" and "API". It now matches the siblings' box
+ *    exactly (same line-height, same vertical padding) and centres itself in
+ *    the flex row.
+ *  - The theme underlines the item because it treats the nav's descendant as
+ *    a current-menu link; that decoration is explicitly cleared so the label
+ *    is not the only underlined thing in the bar.
+ *
+ * <details> stays the mechanism — it works with no JavaScript and is
+ * keyboard-accessible for free. The small script only adds what <details>
+ * cannot do on its own: close when clicking elsewhere or pressing Escape.
+ */
 const DROPDOWN_STYLE = `<style>
-  .vm-solutions-dd{position:relative;display:inline-block;font-family:inherit;}
-  .vm-solutions-dd summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:4px;padding:0;color:inherit;font:inherit;}
-  .vm-solutions-dd summary::-webkit-details-marker{display:none;}
-  .vm-solutions-dd summary::after{content:" \\25BE";font-size:.7em;}
-  .vm-solutions-dd .vm-solutions-list{position:absolute;top:calc(100% + 10px);left:0;background:#fff;border:1px solid #e7dfe0;border-radius:10px;box-shadow:0 12px 32px rgba(36,20,23,.14);min-width:270px;padding:8px;margin:0;list-style:none;z-index:9999;}
-  .vm-solutions-dd .vm-solutions-list li{margin:0;}
-  .vm-solutions-dd .vm-solutions-list a{display:block;padding:9px 12px;border-radius:6px;color:#241417;text-decoration:none;font-size:14px;white-space:nowrap;}
-  .vm-solutions-dd .vm-solutions-list a:hover{background:#fbecee;color:#94152b;}
-  .vm-solutions-dd .vm-solutions-list li.vm-solutions-all{border-top:1px solid #e7dfe0;margin-top:6px;padding-top:6px;}
-  .vm-solutions-dd .vm-solutions-list li.vm-solutions-all a{color:#94152b;font-weight:600;}
-  @media (max-width:900px){
-    .vm-solutions-dd .vm-solutions-list{position:static;box-shadow:none;border:none;margin-top:6px;min-width:0;padding-left:12px;}
+  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
+  /* Vertical alignment with the sibling nav links.
+     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
+     while a bare <summary> is only as tall as its text, so with both boxes
+     starting at the same y the label sat 11px above "Blog" and "API".
+     Stretching the wrapper to the flex row's height and centring inside it
+     matches whatever the theme happens to use, instead of hardcoding this
+     theme's padding and breaking again the next time it changes. */
+  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
+  .vm-solutions-dd{align-self:stretch;}
+  /* align-self:stretch above computes correctly but the theme's flex row still
+     leaves the item at its content height, so the summary is matched to the
+     sibling anchors' box directly: they are line-height 35px inside 10px
+     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
+     only when replacing the legacy theme nav — so it cannot leak into
+     .vm-header-simple, where the generated pages set their own metrics. */
+  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
+  .vm-solutions-dd > summary{
+    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
+    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
   }
-</style>`;
+  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
+  .vm-solutions-dd > summary::marker{content:'';}
+  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
+     the label's baseline the way a "▾" character does. */
+  .vm-solutions-dd > summary::after{
+    content:'';width:7px;height:7px;flex:0 0 auto;
+    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
+  }
+  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
+  .vm-solutions-dd > summary,
+  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
+
+  .vm-solutions-panel{
+    position:absolute;top:calc(100% + 16px);left:50%;transform:translateX(-50%);
+    width:min(760px,calc(100vw - 32px));
+    background:#fff;border:1px solid #ece4e5;border-radius:16px;
+    box-shadow:0 24px 60px rgba(36,20,23,.18);
+    padding:18px;margin:0;z-index:99999;
+  }
+  .vm-solutions-grid{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
+    margin:0;padding:0;list-style:none;
+  }
+  .vm-solutions-grid a{
+    display:block;padding:11px 12px;border-radius:9px;
+    color:#241417;text-decoration:none;font-size:14px;font-weight:500;line-height:1.35;
+  }
+  .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
+  .vm-solutions-foot{
+    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
+  }
+  .vm-solutions-foot a{
+    display:inline-block;color:#94152b;font-weight:600;font-size:14px;text-decoration:none;padding:4px 12px;
+  }
+  .vm-solutions-foot a:hover{text-decoration:underline;}
+
+  @media (max-width:900px){
+    .vm-solutions-dd{display:block;width:100%;}
+    .vm-solutions-panel{
+      position:static;transform:none;width:auto;
+      box-shadow:none;border:0;border-radius:0;padding:6px 0 0;
+    }
+    .vm-solutions-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .vm-solutions-grid a{font-size:13px;padding:9px 8px;}
+  }
+  @media (max-width:520px){
+    .vm-solutions-grid{grid-template-columns:1fr;}
+  }
+</style>
+<script>
+(function(){
+  // <details> has no concept of "dismiss" — without this the panel stays open
+  // until the summary is clicked again, which feels broken next to every other
+  // menu on the web.
+  document.addEventListener('click', function(e){
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      if(!d.contains(e.target)) d.removeAttribute('open');
+    });
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape') return;
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      d.removeAttribute('open');
+    });
+  });
+})();
+</script>`;
 
 function buildDropdown(lang) {
   const list = lang === 'en' ? SOLUTIONS_EN : SOLUTIONS;
   const label = lang === 'en' ? 'Solutions' : 'Lösungen';
   const allHref = lang === 'en' ? '/en/solutions/' : '/ki-loesungen/';
   const allLabel = lang === 'en' ? 'All solutions at a glance &rarr;' : 'Alle Lösungen im Überblick &rarr;';
-  const items = list.map((s) => `      <li><a href="${s.href}">${s.label}</a></li>`).join('\n');
+  const items = list.map((s) => `        <li><a href="${s.href}">${s.label}</a></li>`).join('\n');
   return `<details class="vm-solutions-dd">
     <summary>${label}</summary>
-    <ul class="vm-solutions-list">
+    <div class="vm-solutions-panel">
+      <ul class="vm-solutions-grid">
 ${items}
-      <li class="vm-solutions-all"><a href="${allHref}">${allLabel}</a></li>
-    </ul>
+      </ul>
+      <ul class="vm-solutions-foot"><li><a href="${allHref}">${allLabel}</a></li></ul>
+    </div>
   </details>${DROPDOWN_STYLE}`;
 }
 

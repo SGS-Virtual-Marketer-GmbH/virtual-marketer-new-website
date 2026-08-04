@@ -71,7 +71,6 @@ const UI = {
     faqLabel: 'FAQ', faqTitle: 'Häufige Fragen',
     footerLinks: { privacy: 'Datenschutzerklärung', privacyHref: '/datenschutzerklaerung/', legal: 'Impressum', legalHref: '/impressum/' },
     allSolutions: 'Alle KI-Lösungen im Überblick',
-    sceneLabel: 'Im Einsatz', sceneTitle: 'So sieht der Alltag damit aus',
     tryonLabel: 'Virtuelle Anprobe', tryonTitle: 'Ein Modell, beliebig viele Outfits',
     tryonIntro: 'Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; gleiche Person, gleiche Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.',
     tryonBase: 'Referenzfoto', tryonNote: 'Illustratives Beispiel &#8211; alle Aufnahmen sind KI-generiert.',
@@ -90,7 +89,6 @@ const UI = {
     faqLabel: 'FAQ', faqTitle: 'Frequently asked questions',
     footerLinks: { privacy: 'Privacy Policy', privacyHref: '/en/privacy-policy/', legal: 'Legal Notice', legalHref: '/en/legal-notice/' },
     allSolutions: 'All AI solutions at a glance',
-    sceneLabel: 'In practice', sceneTitle: 'What working with it looks like',
     tryonLabel: 'Virtual try-on', tryonTitle: 'One model, any number of outfits',
     tryonIntro: 'A single reference photo of your fit model is enough. Every further garment is applied to it &#8211; same person, same pose, same lighting. For a few cents per image instead of a photo shoot.',
     tryonBase: 'Reference photo', tryonNote: 'Illustrative example &#8211; every shot here is AI-generated.',
@@ -156,10 +154,10 @@ const FEATURES = [
       ],
       impact: {
         heading: 'Was das für Ihr Budget bedeutet',
-        note: 'Branchenvergleich, kein Virtual-Marketer-spezifisches Versprechen &#8211; die tatsächlichen Kosten hängen von Umfang und Anzahl der Bilder ab.',
+        note: 'Die Shooting-Kosten sind ein Branchenvergleich; der Bildpreis ist unserer. Die tatsächlichen Kosten hängen von Umfang und Anzahl der Bilder ab.',
         cards: [
           { value: '&euro;50&ndash;150', label: 'pro fertigem Bild', sub: 'klassisches Fotoshooting mit Model, Studio &amp; Postproduktion' },
-          { value: '&euro;3&ndash;12', label: 'pro fertigem Bild', sub: 'vergleichbares KI-generiertes Ergebnis, laut Branchenbenchmarks' },
+          { value: 'wenige Cent', label: 'pro fertigem Bild', sub: 'mit Virtual Marketer &#8211; deutlich unter einem Euro pro Bild' },
           { value: '+20&ndash;40%', label: 'Conversion-Potenzial', sub: 'beim Umstieg von Flat-Lay- auf On-Model-Darstellung' },
         ],
         compliance: 'Ab 2. August 2026 verlangt der EU AI Act eine maschinenlesbare Kennzeichnung KI-generierter Bilder &#8211; Virtual Marketer kennzeichnet automatisch korrekt.',
@@ -194,18 +192,10 @@ const FEATURES = [
         panels: [
           (icon) => `<div class="demo-upload-zone">${icon('upload')}<p>Produktfoto hier ablegen &#8211; ein Smartphone-Foto genügt.</p></div>`,
           () => `<p style="color:#d8c5c4;margin-bottom:20px;">Model aus der Galerie wählen:</p>
-        <div class="demo-swatches">
-          ${['A', 'B', 'C', 'D'].map((m, i) => `<div class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}">${m}</div>`).join('\n          ')}
-        </div>`,
+        ${modelGallery()}`,
           () => `<p style="color:#d8c5c4;margin-bottom:20px;">Szene wählen:</p>
-        <div class="demo-swatches">
-          ${[
-            { name: 'Studio', gradient: 'linear-gradient(135deg,#f4eeec,#e2d3d6)' },
-            { name: 'Straße', gradient: 'linear-gradient(135deg,#dce8f0,#a3cce9)' },
-            { name: 'Café', gradient: 'linear-gradient(135deg,#f0e4d8,#d9bfa0)' },
-          ].map((s, i) => `<div class="demo-scene${i === 0 ? ' selected' : ''}" data-scene="${i}" style="background:${s.gradient}">${s.name}</div>`).join('\n          ')}
-        </div>`,
-          () => `<img class="demo-result-img" src="/product-pages/staging-hero.jpg" alt="Generiertes Ergebnisbeispiel">
+        ${sceneChooser(['Studio', 'Straße', 'Café'])}`,
+          () => `${demoResult('Generiertes Ergebnisbeispiel')}
         <p class="demo-caption">So sieht ein fertiges Ergebnis aus &#8211; in Minuten statt Wochen generiert.</p>`,
         ],
       },
@@ -226,10 +216,10 @@ const FEATURES = [
       ],
       impact: {
         heading: 'What that means for your budget',
-        note: 'Industry comparison, not a Virtual Marketer-specific promise &#8211; actual cost depends on scope and image count.',
+        note: 'The shoot cost is an industry comparison; the per-image price is ours. Actual cost depends on scope and image count.',
         cards: [
           { value: '&euro;50&ndash;150', label: 'per finished image', sub: 'traditional photo shoot with model, studio &amp; post-production' },
-          { value: '&euro;3&ndash;12', label: 'per finished image', sub: 'comparable AI-generated result, per industry benchmarks' },
+          { value: 'a few cents', label: 'per finished image', sub: 'with Virtual Marketer &#8211; well under one euro per image' },
           { value: '+20&ndash;40%', label: 'conversion potential', sub: 'moving from flat-lay to on-model imagery' },
         ],
         compliance: 'From August 2, 2026 the EU AI Act requires machine-readable labeling of AI-generated images &#8211; Virtual Marketer labels correctly by default.',
@@ -263,19 +253,11 @@ const FEATURES = [
         ],
         panels: [
           (icon) => `<div class="demo-upload-zone">${icon('upload')}<p>Drop a product photo here &#8211; a smartphone shot is enough.</p></div>`,
-          () => `<p style="color:#d8c5c4;margin-bottom:20px;">Pick a model from the gallery:</p>
-        <div class="demo-swatches">
-          ${['A', 'B', 'C', 'D'].map((m, i) => `<div class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}">${m}</div>`).join('\n          ')}
-        </div>`,
-          () => `<p style="color:#d8c5c4;margin-bottom:20px;">Pick a scene:</p>
-        <div class="demo-swatches">
-          ${[
-            { name: 'Studio', gradient: 'linear-gradient(135deg,#f4eeec,#e2d3d6)' },
-            { name: 'Street', gradient: 'linear-gradient(135deg,#dce8f0,#a3cce9)' },
-            { name: 'Café', gradient: 'linear-gradient(135deg,#f0e4d8,#d9bfa0)' },
-          ].map((s, i) => `<div class="demo-scene${i === 0 ? ' selected' : ''}" data-scene="${i}" style="background:${s.gradient}">${s.name}</div>`).join('\n          ')}
-        </div>`,
-          () => `<img class="demo-result-img" src="/product-pages/staging-hero.jpg" alt="Generated result example">
+          () => `<p style="color:#d8c5c4;margin-bottom:20px;">Choose a model from the gallery:</p>
+        ${modelGallery()}`,
+          () => `<p style="color:#d8c5c4;margin-bottom:20px;">Choose a scene:</p>
+        ${sceneChooser(['Studio', 'Street', 'Café'])}`,
+          () => `${demoResult('Generated result example')}
         <p class="demo-caption">This is what a finished result looks like &#8211; generated in minutes instead of weeks.</p>`,
         ],
       },
@@ -1718,32 +1700,108 @@ function icon(name, className = '') {
  * Resolved by looking on disk rather than listing filenames in each FEATURES
  * entry, so adding an image to that folder is all it takes to light one up.
  */
+/**
+ * Model gallery for the try-on demo's "choose a model" step.
+ *
+ * This step used to render four gradient circles labelled A, B, C and D,
+ * which communicated nothing: picking a fit model is the actual thing the
+ * product does here, so the control should look like the thing it stands for.
+ * The gallery is deliberately mixed across ethnicity, gender and age — a
+ * single-look line-up would misrepresent a tool whose whole selling point is
+ * that you are not tied to whoever you could book for a shoot.
+ *
+ * Falls back to the old lettered swatches if the images have not been
+ * generated yet (see scripts/generate-ai-images.js), so a checkout without
+ * them still builds rather than shipping broken <img> tags.
+ */
+function modelGallery() {
+  const available = [1, 2, 3, 4, 5, 6].filter((n) =>
+    fs.existsSync(path.join(ROOT, `assets/product-pages/demo-model-${n}.jpg`))
+  );
+  if (!available.length) {
+    return `<div class="demo-swatches">${['A', 'B', 'C', 'D']
+      .map((m, i) => `<div class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}">${m}</div>`)
+      .join('')}</div>`;
+  }
+  return `<div class="demo-swatches demo-model-gallery">
+          ${available
+            .map(
+              (n, i) => `<button type="button" class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}" aria-label="Model ${n}">
+            <picture><source srcset="/product-pages/demo-model-${n}.webp" type="image/webp"><img src="/product-pages/demo-model-${n}.jpg" alt="" loading="lazy" decoding="async"></picture>
+          </button>`
+            )
+            .join('\n          ')}
+        </div>`;
+}
+
+/** Scene step: real backdrops instead of flat CSS gradients. */
+function sceneChooser(labels) {
+  const files = ['demo-scene-studio', 'demo-scene-street', 'demo-scene-cafe'];
+  const haveAll = files.every((f) => fs.existsSync(path.join(ROOT, `assets/product-pages/${f}.jpg`)));
+  if (!haveAll) {
+    const gradients = [
+      'linear-gradient(135deg,#f4eeec,#e2d3d6)',
+      'linear-gradient(135deg,#dce8f0,#a3cce9)',
+      'linear-gradient(135deg,#f0e4d8,#d9bfa0)',
+    ];
+    return `<div class="demo-swatches">${labels
+      .map((n, i) => `<div class="demo-scene${i === 0 ? ' selected' : ''}" data-scene="${i}" style="background:${gradients[i]}">${n}</div>`)
+      .join('')}</div>`;
+  }
+  return `<div class="demo-swatches demo-scene-gallery">
+          ${labels
+            .map(
+              (name, i) => `<button type="button" class="demo-scene${i === 0 ? ' selected' : ''}" data-scene="${i}">
+            <picture><source srcset="/product-pages/${files[i]}.webp" type="image/webp"><img src="/product-pages/${files[i]}.jpg" alt="" loading="lazy" decoding="async"></picture>
+            <span>${name}</span>
+          </button>`
+            )
+            .join('\n          ')}
+        </div>`;
+}
+
+/**
+ * Result step. Previously reused the flat-vector hero, which undercut the
+ * whole demo: the payoff of a photo-generation tool cannot be an illustration.
+ */
+function demoResult(alt) {
+  const real = fs.existsSync(path.join(ROOT, 'assets/product-pages/demo-result.jpg'));
+  const src = real ? '/product-pages/demo-result' : null;
+  if (!src) return `<img class="demo-result-img" src="/product-pages/staging-hero.jpg" alt="${alt}">`;
+  return `<picture><source srcset="${src}.webp" type="image/webp"><img class="demo-result-img" src="${src}.jpg" alt="${alt}" loading="lazy" decoding="async"></picture>`;
+}
+
 function sceneImageFor(f) {
   const rel = `/product-pages/${f.slug}-scene.jpg`;
   return fs.existsSync(path.join(ROOT, 'assets', rel.replace(/^\//, ''))) ? rel : null;
 }
 
 /**
- * The photo sits *alongside* the flat-vector hero, not instead of it: the
- * illustration explains the mechanism, the photograph shows the situation.
- * <picture> so browsers take the WebP and fall back to JPEG.
+ * The photograph is deliberately NOT its own titled section.
+ *
+ * It first shipped under a heading ("So sieht der Alltag damit aus"), which
+ * announced the picture as a thing in its own right and made it read like a
+ * stock-photo interlude bolted onto the page. A real product page just has
+ * photography in it — the image belongs to the section it sits in rather than
+ * interrupting the argument to present itself.
+ *
+ * So it renders as a full-bleed band with no label and no heading, directly
+ * after the audience grid, where it illustrates who the feature is for
+ * without narrating that that is what it is doing. The flat-vector hero
+ * stays: the illustration explains the mechanism, the photograph supplies the
+ * context, and neither needs a caption to say so.
  */
 function sceneSection(f, lang) {
   const src = sceneImageFor(f);
   if (!src) return '';
-  const t = UI[lang];
   const c = f[lang];
   return `
-  <section class="vm-scene" aria-labelledby="scene-h">
-    <p class="section-label">${t.sceneLabel}</p>
-    <h2 class="section-title" id="scene-h">${t.sceneTitle}</h2>
-    <figure class="vm-scene-figure">
-      <picture>
-        <source srcset="${src.replace(/\.jpg$/, '.webp')}" type="image/webp">
-        <img src="${src}" alt="${c.tagline}" loading="lazy" decoding="async" width="1600" height="900">
-      </picture>
-    </figure>
-  </section>`;
+  <figure class="vm-scene-figure">
+    <picture>
+      <source srcset="${src.replace(/\.jpg$/, '.webp')}" type="image/webp">
+      <img src="${src}" alt="${c.tagline}" loading="lazy" decoding="async" width="1600" height="900">
+    </picture>
+  </figure>`;
 }
 
 /**
@@ -1971,8 +2029,8 @@ ${animDemo ? DEMO_STYLE : ''}
      Both sit alongside the flat-vector hero rather than replacing it: the
      illustration explains the mechanism, the photograph shows the situation
      the feature is actually used in. */
-  .vm-fp .vm-scene-figure{margin:0;border-radius:16px;overflow:hidden;box-shadow:0 10px 34px rgba(36,20,23,.14);}
-  .vm-fp .vm-scene-figure img{display:block;width:100%;height:auto;}
+  .vm-fp .vm-scene-figure{margin:8px 0 56px;border-radius:18px;overflow:hidden;}
+  .vm-fp .vm-scene-figure img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;}
 
   .vm-fp .vm-tryon-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px;align-items:start;}
   .vm-fp .vm-tryon-shot{margin:0;}
@@ -1987,6 +2045,39 @@ ${animDemo ? DEMO_STYLE : ''}
   .vm-fp .vm-tryon-note{margin-top:18px;font-size:14px;color:var(--vm-gray-600,#6b7280);}
   @media (max-width:780px){
     .vm-fp .vm-tryon-row{grid-template-columns:repeat(2,1fr);gap:12px;}
+  }
+
+  /* Real photography in the demo's picker steps, replacing lettered circles
+     and CSS gradients. Buttons rather than divs so they are focusable and
+     announce themselves — they are genuine controls. */
+  .vm-fp .demo-model-gallery{display:flex;flex-wrap:wrap;gap:14px;}
+  .vm-fp .demo-model-gallery .demo-model{
+    width:78px;height:78px;padding:0;border:0;border-radius:50%;overflow:hidden;
+    background:none;cursor:pointer;outline:2px solid transparent;outline-offset:3px;
+    transition:outline-color .15s ease,transform .15s ease;
+  }
+  .vm-fp .demo-model-gallery .demo-model img{width:100%;height:100%;object-fit:cover;display:block;}
+  .vm-fp .demo-model-gallery .demo-model:hover{transform:translateY(-2px);}
+  .vm-fp .demo-model-gallery .demo-model.selected{outline-color:#fff;}
+
+  .vm-fp .demo-scene-gallery{display:flex;flex-wrap:wrap;gap:14px;}
+  .vm-fp .demo-scene-gallery .demo-scene{
+    width:170px;padding:0;border:0;border-radius:12px;overflow:hidden;background:none;
+    cursor:pointer;outline:2px solid transparent;outline-offset:3px;
+    transition:outline-color .15s ease,transform .15s ease;position:relative;
+  }
+  .vm-fp .demo-scene-gallery .demo-scene img{width:100%;height:104px;object-fit:cover;display:block;}
+  .vm-fp .demo-scene-gallery .demo-scene span{
+    display:block;padding:8px 10px;font-size:13px;font-weight:600;color:#fff;
+    background:rgba(36,20,23,.55);
+  }
+  .vm-fp .demo-scene-gallery .demo-scene:hover{transform:translateY(-2px);}
+  .vm-fp .demo-scene-gallery .demo-scene.selected{outline-color:#fff;}
+
+  .vm-fp .demo-result-img{border-radius:12px;}
+  @media (max-width:560px){
+    .vm-fp .demo-model-gallery .demo-model{width:62px;height:62px;}
+    .vm-fp .demo-scene-gallery .demo-scene{width:calc(50% - 7px);}
   }
 ${CHROME_CSS}
 </style>
