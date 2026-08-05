@@ -125,6 +125,32 @@ const DEAD_INLINE = [
   /var\s+woocommerce_params\s*=/,
   /var\s+wc_order_attribution\s*=/,
   /var\s+wpcf7\s*=/,
+
+  /**
+   * WordPress's emoji detection. Two reasons, either of which is sufficient:
+   *
+   *   1. It builds a Web Worker from a blob: URL to feature-test emoji
+   *      rendering. The site's Content-Security-Policy refuses that, and the
+   *      refusal was the last Best Practices failure on the homepage. It
+   *      survived the removal of Contact Form 7, which had looked like the
+   *      culprit — the worker is named "wpTestEmojiSupports" and comes from
+   *      here.
+   *   2. Its entire purpose is to decide whether to load replacement emoji
+   *      images from s.w.org — an external host, on a site whose privacy
+   *      policy states that opening a page establishes no connection to a
+   *      third-party server.
+   *
+   * Matched on the worker name and on the settings object, because the two
+   * ship as separate inline blocks.
+   */
+  /wpTestEmojiSupports/,
+  /_wpemojiSettings/,
+  /window\._wpemojiSettings/,
+  /* The settings ship as a third, anonymous block — a bare JSON object with
+     no identifier in it, just {"baseUrl":"https://s.w.org/images/core/emoji…}.
+     Nothing reads it once the detection script is gone, but it still names an
+     external host on a page that promises none. */
+  /["']baseUrl["']\s*:\s*["']https:\/\/s\.w\.org/,
 ];
 
 function findHtmlFiles(dir, results = []) {
