@@ -1,24 +1,20 @@
 'use strict';
 
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-
-// Isolated on-disk DB per test run (better-sqlite3 needs a real file for
-// this test, not ':memory:' — an in-memory DB is private to one connection,
-// but the point here is to prove the app's actual single-connection,
-// single-process concurrency story, which ':memory:' would trivially "pass"
-// for the wrong reason).
-const dbPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'vm-api-test-')), 'test.sqlite3');
-process.env.DB_PATH = dbPath;
+// Runs against real Firestore in an isolated, throwaway collection namespace
+// (see test/firestore-env.js), not against a stub. The whole point of this
+// file is the double-booking guard, which now lives in Firestore's
+// runTransaction contention/retry behaviour (see src/db.js) rather than in
+// better-sqlite3's synchronous single connection — a hand-rolled in-memory
+// fake would pass these assertions without exercising any of that.
 process.env.PUBLIC_BASE_URL = 'http://localhost:0';
 // This file's tests all share one Express app instance (and therefore one
 // in-memory rate-limit store) across all `test()` blocks below, since
 // they're one process. Raised well above what this file actually sends so
-// the concurrency stress test proves the SQL-level double-booking guard,
-// not the (separately, deliberately tight) production rate limit.
+// the concurrency stress test proves the transactional double-booking
+// guard, not the (separately, deliberately tight) production rate limit.
 process.env.RATE_LIMIT_SUBMIT = '1000';
-require('./env');
+
+const { firestoreAvailable, cleanup } = require('./firestore-env');
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -50,7 +46,21 @@ function post(server, path, body) {
   });
 }
 
+// Resolved lazily on first use: `await` is not available at module scope in
+// CommonJS, and node:test has no async gate that runs before test discovery.
+let available = null;
+async function ready(t) {
+  if (available === null) available = await firestoreAvailable();
+  if (!available) t.skip('Firestore unavailable — see test/firestore-env.js');
+  return available;
+}
+
+test.after(async () => {
+  if (available) await cleanup();
+});
+
 test('concurrent booking requests for the same slot: exactly one succeeds', async (t) => {
+  if (!(await ready(t))) return;
   const server = await listen();
   t.after(() => server.close());
 
@@ -72,6 +82,7 @@ test('concurrent booking requests for the same slot: exactly one succeeds', asyn
 });
 
 test('a slot rejected once as taken stays taken for a later, non-concurrent request', async (t) => {
+  if (!(await ready(t))) return;
   const server = await listen();
   t.after(() => server.close());
 
@@ -86,6 +97,7 @@ test('a slot rejected once as taken stays taken for a later, non-concurrent requ
 });
 
 test('booking rejects a slot outside business hours even with a well-formed request', async (t) => {
+  if (!(await ready(t))) return;
   const server = await listen();
   t.after(() => server.close());
 

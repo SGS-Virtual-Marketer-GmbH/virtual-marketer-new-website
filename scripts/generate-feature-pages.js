@@ -35,6 +35,7 @@
 const fs = require('fs');
 const path = require('path');
 const { DEMO_STYLE, DEMO_ENGINE_JS, buildDemo } = require('./feature-demos.js');
+const { CHROME_CSS } = require('./lib/page-chrome');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -70,6 +71,9 @@ const UI = {
     faqLabel: 'FAQ', faqTitle: 'Häufige Fragen',
     footerLinks: { privacy: 'Datenschutzerklärung', privacyHref: '/datenschutzerklaerung/', legal: 'Impressum', legalHref: '/impressum/' },
     allSolutions: 'Alle KI-Lösungen im Überblick',
+    tryonLabel: 'Virtuelle Anprobe', tryonTitle: 'Ein Modell, beliebig viele Outfits',
+    tryonIntro: 'Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; gleiche Person, gleiche Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.',
+    tryonBase: 'Referenzfoto', tryonNote: 'Illustratives Beispiel &#8211; alle Aufnahmen sind KI-generiert.',
   },
   en: {
     nav: { solutions: 'Solutions', blog: 'Blog', api: 'API', request: 'Request a model', contact: 'Contact', login: 'Login' },
@@ -85,6 +89,9 @@ const UI = {
     faqLabel: 'FAQ', faqTitle: 'Frequently asked questions',
     footerLinks: { privacy: 'Privacy Policy', privacyHref: '/en/privacy-policy/', legal: 'Legal Notice', legalHref: '/en/legal-notice/' },
     allSolutions: 'All AI solutions at a glance',
+    tryonLabel: 'Virtual try-on', tryonTitle: 'One model, any number of outfits',
+    tryonIntro: 'A single reference photo of your fit model is enough. Every further garment is applied to it &#8211; same person, same pose, same lighting. For a few cents per image instead of a photo shoot.',
+    tryonBase: 'Reference photo', tryonNote: 'Illustrative example &#8211; every shot here is AI-generated.',
   },
 };
 
@@ -92,11 +99,10 @@ function header(lang) {
   const t = UI[lang].nav;
   const home = lang === 'en' ? '/en/' : '/';
   const solutions = lang === 'en' ? '/en/solutions/' : '/ki-loesungen/';
-  // No English blog exists yet (translating all 56 posts is out of scope for
-  // this pass — see generate-en-pages.js's header comment), so the EN nav
-  // deliberately falls back to the German blog rather than linking to a
-  // /en/blog/ page that was never built.
-  const blog = '/blog/';
+  // All 58 posts now have a real English translation (see
+  // blog-posts-en.json / generate-en-blog-posts.js), so the EN nav links to
+  // the real /en/blog/ archive instead of falling back to the German one.
+  const blog = lang === 'en' ? '/en/blog/' : '/blog/';
   const request = lang === 'en' ? '/en/request-custom-model/' : '/modell-anfragen/';
   const contact = lang === 'en' ? '/en/contact/' : '/kontakt/';
   return `<header class="vm-header-simple">
@@ -140,7 +146,7 @@ const FEATURES = [
       },
       eyebrow: 'KI Produktfotos &amp; Virtual Try-On',
       tagline: 'Dein digitales Fotostudio.',
-      intro: 'VM Product Staging macht aus einem einfachen Produktfoto professionelle On-Model-Aufnahmen, Lifestyle-Szenen und Produktvideos &#8211; in Minuten statt Wochen, zu einem Bruchteil der Kosten eines klassischen Shootings.',
+      intro: 'VM Product Staging macht aus einem einfachen Produktfoto professionelle On-Model-Aufnahmen, Lifestyle-Szenen und Produktvideos &#8211; in Minuten statt Wochen, für wenige Cent pro Bild statt eines Shootings.',
       audiences: [
         { label: 'Fashion &amp; Apparel E-Commerce', detail: 'Laufend neue Kollektionen, ohne für jede ein Shooting zu buchen.' },
         { label: 'Retail-Marken mit wechselndem Sortiment', detail: 'Konsistente Bildsprache über hunderte SKUs hinweg.' },
@@ -148,13 +154,15 @@ const FEATURES = [
       ],
       impact: {
         heading: 'Was das für Ihr Budget bedeutet',
-        note: 'Branchenvergleich, kein Virtual-Marketer-spezifisches Versprechen &#8211; die tatsächlichen Kosten hängen von Umfang und Anzahl der Bilder ab.',
+        note: 'Die Shooting-Kosten sind ein Branchenvergleich; der Bildpreis ist unserer. Die tatsächlichen Kosten hängen von Umfang und Anzahl der Bilder ab.',
         cards: [
           { value: '&euro;50&ndash;150', label: 'pro fertigem Bild', sub: 'klassisches Fotoshooting mit Model, Studio &amp; Postproduktion' },
-          { value: '&euro;3&ndash;12', label: 'pro fertigem Bild', sub: 'vergleichbares KI-generiertes Ergebnis, laut Branchenbenchmarks' },
+          { value: 'wenige Cent', label: 'pro fertigem Bild', sub: 'mit Virtual Marketer &#8211; deutlich unter einem Euro pro Bild' },
           { value: '+20&ndash;40%', label: 'Conversion-Potenzial', sub: 'beim Umstieg von Flat-Lay- auf On-Model-Darstellung' },
         ],
-        compliance: 'Ab 2. August 2026 verlangt der EU AI Act eine maschinenlesbare Kennzeichnung KI-generierter Bilder &#8211; Virtual Marketer kennzeichnet automatisch korrekt.',
+        // Describes what the product does, not whether that is legally sufficient —
+        // the second is a conclusion for a lawyer, not a claim for a landing page.
+        compliance: 'Der EU AI Act verlangt eine maschinenlesbare Kennzeichnung KI-generierter Bilder. Virtual Marketer schreibt sie in jedes erzeugte Bild: die IPTC-Kennung &#8222;Digital Source Type: trainedAlgorithmicMedia&#8220; &#8211; automatisch, nicht abschaltbar, zus&auml;tzlich zum optionalen sichtbaren Wasserzeichen.',
       },
       valueBullets: [
         'Teure Fotoshootings ersetzen: vom Rohfoto zum E-Commerce-Bild in Minuten',
@@ -186,18 +194,10 @@ const FEATURES = [
         panels: [
           (icon) => `<div class="demo-upload-zone">${icon('upload')}<p>Produktfoto hier ablegen &#8211; ein Smartphone-Foto genügt.</p></div>`,
           () => `<p style="color:#d8c5c4;margin-bottom:20px;">Model aus der Galerie wählen:</p>
-        <div class="demo-swatches">
-          ${['A', 'B', 'C', 'D'].map((m, i) => `<div class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}">${m}</div>`).join('\n          ')}
-        </div>`,
+        ${modelGallery()}`,
           () => `<p style="color:#d8c5c4;margin-bottom:20px;">Szene wählen:</p>
-        <div class="demo-swatches">
-          ${[
-            { name: 'Studio', gradient: 'linear-gradient(135deg,#f4eeec,#e2d3d6)' },
-            { name: 'Straße', gradient: 'linear-gradient(135deg,#dce8f0,#a3cce9)' },
-            { name: 'Café', gradient: 'linear-gradient(135deg,#f0e4d8,#d9bfa0)' },
-          ].map((s, i) => `<div class="demo-scene${i === 0 ? ' selected' : ''}" data-scene="${i}" style="background:${s.gradient}">${s.name}</div>`).join('\n          ')}
-        </div>`,
-          () => `<img class="demo-result-img" src="/product-pages/staging-hero.jpg" alt="Generiertes Ergebnisbeispiel">
+        ${sceneChooser(['Studio', 'Straße', 'Café'])}`,
+          () => `${demoResult('Generiertes Ergebnisbeispiel')}
         <p class="demo-caption">So sieht ein fertiges Ergebnis aus &#8211; in Minuten statt Wochen generiert.</p>`,
         ],
       },
@@ -210,7 +210,7 @@ const FEATURES = [
       },
       eyebrow: 'AI Product Photos &amp; Virtual Try-On',
       tagline: 'Your digital photo studio.',
-      intro: 'VM Product Staging turns a simple product photo into professional on-model shots, lifestyle scenes and product videos &#8211; in minutes instead of weeks, at a fraction of the cost of a traditional shoot.',
+      intro: 'VM Product Staging turns a simple product photo into professional on-model shots, lifestyle scenes and product videos &#8211; in minutes instead of weeks, for a few cents per image instead of a photo shoot.',
       audiences: [
         { label: 'Fashion &amp; apparel e-commerce', detail: 'New collections constantly, without booking a shoot for every drop.' },
         { label: 'Retail brands with a changing catalog', detail: 'Consistent visuals across hundreds of SKUs.' },
@@ -218,13 +218,21 @@ const FEATURES = [
       ],
       impact: {
         heading: 'What that means for your budget',
-        note: 'Industry comparison, not a Virtual Marketer-specific promise &#8211; actual cost depends on scope and image count.',
+        note: 'The shoot cost is an industry comparison; the per-image price is ours. Actual cost depends on scope and image count.',
         cards: [
           { value: '&euro;50&ndash;150', label: 'per finished image', sub: 'traditional photo shoot with model, studio &amp; post-production' },
-          { value: '&euro;3&ndash;12', label: 'per finished image', sub: 'comparable AI-generated result, per industry benchmarks' },
+          { value: 'a few cents', label: 'per finished image', sub: 'with Virtual Marketer &#8211; well under one euro per image' },
           { value: '+20&ndash;40%', label: 'conversion potential', sub: 'moving from flat-lay to on-model imagery' },
         ],
-        compliance: 'From August 2, 2026 the EU AI Act requires machine-readable labeling of AI-generated images &#8211; Virtual Marketer labels correctly by default.',
+        // Mirrors the German string above. It used to read "Virtual Marketer
+        // labels correctly by default" — an assertion that the product meets
+        // a legal standard, which is not ours to make and, until the product
+        // repo's 2026-08-04 fix, was not even true: the image path stripped
+        // metadata rather than writing it. The German half was corrected
+        // there; this one was missed, so the overclaim stayed live in
+        // English only. State what the product does and leave the legal
+        // conclusion to a lawyer.
+        compliance: 'The EU AI Act requires machine-readable labeling of AI-generated images. Virtual Marketer writes it into every generated image: the IPTC tag &#8220;Digital Source Type: trainedAlgorithmicMedia&#8221; &#8211; automatic, not switchable, in addition to the optional visible watermark.',
       },
       valueBullets: [
         'Replace expensive photo shoots: from raw photo to e-commerce-ready imagery in minutes',
@@ -255,19 +263,11 @@ const FEATURES = [
         ],
         panels: [
           (icon) => `<div class="demo-upload-zone">${icon('upload')}<p>Drop a product photo here &#8211; a smartphone shot is enough.</p></div>`,
-          () => `<p style="color:#d8c5c4;margin-bottom:20px;">Pick a model from the gallery:</p>
-        <div class="demo-swatches">
-          ${['A', 'B', 'C', 'D'].map((m, i) => `<div class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}">${m}</div>`).join('\n          ')}
-        </div>`,
-          () => `<p style="color:#d8c5c4;margin-bottom:20px;">Pick a scene:</p>
-        <div class="demo-swatches">
-          ${[
-            { name: 'Studio', gradient: 'linear-gradient(135deg,#f4eeec,#e2d3d6)' },
-            { name: 'Street', gradient: 'linear-gradient(135deg,#dce8f0,#a3cce9)' },
-            { name: 'Café', gradient: 'linear-gradient(135deg,#f0e4d8,#d9bfa0)' },
-          ].map((s, i) => `<div class="demo-scene${i === 0 ? ' selected' : ''}" data-scene="${i}" style="background:${s.gradient}">${s.name}</div>`).join('\n          ')}
-        </div>`,
-          () => `<img class="demo-result-img" src="/product-pages/staging-hero.jpg" alt="Generated result example">
+          () => `<p style="color:#d8c5c4;margin-bottom:20px;">Choose a model from the gallery:</p>
+        ${modelGallery()}`,
+          () => `<p style="color:#d8c5c4;margin-bottom:20px;">Choose a scene:</p>
+        ${sceneChooser(['Studio', 'Street', 'Café'])}`,
+          () => `${demoResult('Generated result example')}
         <p class="demo-caption">This is what a finished result looks like &#8211; generated in minutes instead of weeks.</p>`,
         ],
       },
@@ -1704,6 +1704,191 @@ function icon(name, className = '') {
   return `<svg viewBox="0 0 24 24" class="${className}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icons[name] || ''}</svg>`;
 }
 
+/**
+ * Photographic scene shot for a feature, by convention
+ * assets/product-pages/<slug>-scene.jpg (see scripts/generate-ai-images.js).
+ * Resolved by looking on disk rather than listing filenames in each FEATURES
+ * entry, so adding an image to that folder is all it takes to light one up.
+ */
+// The six-model cast used by the try-on demo. Ids match the filenames written
+// by scripts/generate-ai-images.js, so the gallery, the hover poses and the
+// model x scene result matrix all resolve from one list.
+const TRYON_CAST = [
+  { id: 'ruby',  name: 'Ruby' },
+  { id: 'nadia', name: 'Nadia' },
+  { id: 'kai',   name: 'Kai' },
+  { id: 'marco', name: 'Marco' },
+  { id: 'lena',  name: 'Lena' },
+  { id: 'amara', name: 'Amara' },
+];
+const TRYON_SCENE_IDS = ['studio', 'street', 'cafe'];
+
+const hasAsset = (rel) => fs.existsSync(path.join(ROOT, 'assets', rel.replace(/^\//, '')));
+
+/** Models that have a full base frame plus all three scene variants. */
+function availableCast() {
+  return TRYON_CAST.filter(
+    (m) => hasAsset(`/product-pages/model-${m.id}-base.jpg`) &&
+           TRYON_SCENE_IDS.every((sc) => hasAsset(`/product-pages/model-${m.id}-${sc}.jpg`))
+  );
+}
+
+/**
+ * Model gallery for the demo's "choose a model" step.
+ *
+ * Two behaviours the earlier version lacked:
+ *
+ *  - Hovering a model swaps in a posed frame of the SAME person in the SAME
+ *    outfit against the SAME backdrop, generated image-to-image from the base
+ *    so only the body position differs. A hover that changed the face or the
+ *    clothes would read as a glitch rather than as the model moving.
+ *  - The choice is now real. The result step reads the selected model and the
+ *    selected scene and shows that exact combination, which is why the cast
+ *    and the scene ids are one shared list rather than two that can drift.
+ */
+function modelGallery() {
+  const cast = availableCast();
+  if (!cast.length) {
+    return `<div class="demo-swatches">${['A', 'B', 'C', 'D']
+      .map((m, i) => `<div class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}">${m}</div>`)
+      .join('')}</div>`;
+  }
+  return `<div class="demo-swatches demo-model-gallery">
+          ${cast
+            .map((m, i) => {
+              const pose = hasAsset(`/product-pages/model-${m.id}-pose.jpg`)
+                ? `/product-pages/model-${m.id}-pose.jpg`
+                : `/product-pages/model-${m.id}-base.jpg`;
+              return `<button type="button" class="demo-model${i === 0 ? ' selected' : ''}" data-model="${i}" data-model-id="${m.id}" aria-label="${m.name}" aria-pressed="${i === 0}">
+            <span class="demo-model-frame">
+              <img class="is-base" src="/product-pages/model-${m.id}-base.jpg" alt="" loading="lazy" decoding="async">
+              <img class="is-pose" src="${pose}" alt="" loading="lazy" decoding="async">
+            </span>
+            <span class="demo-model-name">${m.name}</span>
+          </button>`;
+            })
+            .join('\n          ')}
+        </div>`;
+}
+
+/** Scene step: real backdrops, and the id the result matrix is keyed on. */
+function sceneChooser(labels) {
+  const files = ['demo-scene-studio', 'demo-scene-street', 'demo-scene-cafe'];
+  if (!files.every((f) => hasAsset(`/product-pages/${f}.jpg`))) {
+    const gradients = [
+      'linear-gradient(135deg,#f4eeec,#e2d3d6)',
+      'linear-gradient(135deg,#dce8f0,#a3cce9)',
+      'linear-gradient(135deg,#f0e4d8,#d9bfa0)',
+    ];
+    return `<div class="demo-swatches">${labels
+      .map((n, i) => `<div class="demo-scene${i === 0 ? ' selected' : ''}" data-scene="${i}" style="background:${gradients[i]}">${n}</div>`)
+      .join('')}</div>`;
+  }
+  return `<div class="demo-swatches demo-scene-gallery">
+          ${labels
+            .map(
+              (name, i) => `<button type="button" class="demo-scene${i === 0 ? ' selected' : ''}" data-scene="${i}" data-scene-id="${TRYON_SCENE_IDS[i]}" aria-pressed="${i === 0}">
+            <picture><source srcset="/product-pages/${files[i]}.webp" type="image/webp"><img src="/product-pages/${files[i]}.jpg" alt="" loading="lazy" decoding="async"></picture>
+            <span>${name}</span>
+          </button>`
+            )
+            .join('\n          ')}
+        </div>`;
+}
+
+/**
+ * Result step. Renders the full model x scene matrix and reveals exactly one
+ * frame, rather than fetching on demand: every combination is a static file
+ * already in the page's asset set, so switching is instant and works with no
+ * network round-trip and no loading state to design around.
+ */
+function demoResult(alt) {
+  const cast = availableCast();
+  if (!cast.length) {
+    return hasAsset('/product-pages/demo-result.jpg')
+      ? `<img class="demo-result-img" src="/product-pages/demo-result.jpg" alt="${alt}" loading="lazy">`
+      : `<img class="demo-result-img" src="/product-pages/staging-hero.jpg" alt="${alt}">`;
+  }
+  const frames = cast
+    .flatMap((m) =>
+      TRYON_SCENE_IDS.map(
+        (sc) => `<img class="demo-result-frame" data-model-id="${m.id}" data-scene-id="${sc}"
+              src="/product-pages/model-${m.id}-${sc}.jpg" alt="${alt}" loading="lazy" decoding="async">`
+      )
+    )
+    .join('\n            ');
+  return `<div class="demo-result-stage" data-active-model="${cast[0].id}" data-active-scene="studio">
+            ${frames}
+          </div>`;
+}
+
+function sceneImageFor(f) {
+  const rel = `/product-pages/${f.slug}-scene.jpg`;
+  return fs.existsSync(path.join(ROOT, 'assets', rel.replace(/^\//, ''))) ? rel : null;
+}
+
+/**
+ * The photograph is deliberately NOT its own titled section.
+ *
+ * It first shipped under a heading ("So sieht der Alltag damit aus"), which
+ * announced the picture as a thing in its own right and made it read like a
+ * stock-photo interlude bolted onto the page. A real product page just has
+ * photography in it — the image belongs to the section it sits in rather than
+ * interrupting the argument to present itself.
+ *
+ * So it renders as a full-bleed band with no label and no heading, directly
+ * after the audience grid, where it illustrates who the feature is for
+ * without narrating that that is what it is doing. The flat-vector hero
+ * stays: the illustration explains the mechanism, the photograph supplies the
+ * context, and neither needs a caption to say so.
+ */
+function sceneSection(f, lang) {
+  const src = sceneImageFor(f);
+  if (!src) return '';
+  const c = f[lang];
+  return `
+  <figure class="vm-scene-figure">
+    <picture>
+      <source srcset="${src.replace(/\.jpg$/, '.webp')}" type="image/webp">
+      <img src="${src}" alt="${c.tagline}" loading="lazy" decoding="async" width="1600" height="900">
+    </picture>
+  </figure>`;
+}
+
+/**
+ * Virtual try-on strip: one reference shot plus the same model in three
+ * outfits. The images are generated image-to-image from the reference so the
+ * person really is identical across the row — that consistency is the claim
+ * the section is making, so a set of four unrelated models would undercut
+ * exactly the point it exists to demonstrate.
+ */
+function tryonSection(f, lang) {
+  if (f.slug !== 'produktfotos-ki') return '';
+  const base = path.join(ROOT, 'assets/product-pages/tryon-base.jpg');
+  if (!fs.existsSync(base)) return '';
+  const t = UI[lang];
+  const looks = [1, 2, 3].filter((n) => fs.existsSync(path.join(ROOT, `assets/product-pages/tryon-look-${n}.jpg`)));
+  const shot = (src, caption, isBase) => `
+        <figure class="vm-tryon-shot${isBase ? ' is-base' : ''}">
+          <picture>
+            <source srcset="${src.replace(/\.jpg$/, '.webp')}" type="image/webp">
+            <img src="${src}" alt="${caption}" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>${caption}</figcaption>
+        </figure>`;
+  return `
+  <section class="vm-tryon" aria-labelledby="tryon-h">
+    <p class="section-label">${t.tryonLabel}</p>
+    <h2 class="section-title" id="tryon-h">${t.tryonTitle}</h2>
+    <p class="impact-note">${t.tryonIntro}</p>
+    <div class="vm-tryon-row">
+      ${shot('/product-pages/tryon-base.jpg', t.tryonBase, true)}
+      ${looks.map((n) => shot(`/product-pages/tryon-look-${n}.jpg`, `Look ${n}`, false)).join('\n      ')}
+    </div>
+    <p class="vm-tryon-note">${t.tryonNote}</p>
+  </section>`;
+}
+
 function pagePath(f, lang) {
   return lang === 'en' ? `/en/solutions/${f.slugEn}/` : `/ki-loesungen/${f.slug}/`;
 }
@@ -1890,6 +2075,112 @@ function pageShell(f, lang) {
     .vm-fp .vmd-stage{padding:16px;}
   }
 ${animDemo ? DEMO_STYLE : ''}
+
+  /* --- Photographic scene + virtual try-on -------------------------------
+     Both sit alongside the flat-vector hero rather than replacing it: the
+     illustration explains the mechanism, the photograph shows the situation
+     the feature is actually used in. */
+  .vm-fp .vm-scene-figure{margin:8px 0 56px;border-radius:18px;overflow:hidden;}
+  .vm-fp .vm-scene-figure img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;}
+
+  .vm-fp .vm-tryon-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px;align-items:start;}
+  .vm-fp .vm-tryon-shot{margin:0;}
+  .vm-fp .vm-tryon-shot picture{display:block;border-radius:14px;overflow:hidden;background:var(--vm-gray-100);box-shadow:0 6px 20px rgba(36,20,23,.10);}
+  .vm-fp .vm-tryon-shot img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;}
+  .vm-fp .vm-tryon-shot figcaption{margin-top:10px;font-size:14px;font-weight:600;color:var(--vm-gray-900);text-align:center;}
+  /* The reference shot is the input, the rest are outputs — the accent ring
+     and label make that read at a glance instead of looking like four
+     interchangeable photos. */
+  .vm-fp .vm-tryon-shot.is-base picture{outline:2px solid var(--vm-red);outline-offset:3px;}
+  .vm-fp .vm-tryon-shot.is-base figcaption{color:var(--vm-red);}
+  .vm-fp .vm-tryon-note{margin-top:18px;font-size:14px;color:var(--vm-gray-600,#6b7280);}
+  @media (max-width:780px){
+    .vm-fp .vm-tryon-row{grid-template-columns:repeat(2,1fr);gap:12px;}
+  }
+
+  /* Panels slide-and-fade instead of hard-cutting, and the active step
+     button shows a progress bar that drains over the autoplay interval so
+     the advance is anticipated rather than sudden. Both are suppressed under
+     prefers-reduced-motion. */
+  .vm-fp .demo-panel{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease;}
+  .vm-fp .demo-panel.active{opacity:1;transform:none;}
+  .vm-fp .demo-step-btn{position:relative;overflow:hidden;}
+  .vm-fp .demo-step-btn::after{
+    content:'';position:absolute;left:0;bottom:0;height:2px;width:100%;
+    background:rgba(255,255,255,.85);transform:scaleX(0);transform-origin:left;
+  }
+  .vm-fp.is-autoplaying .demo-step-btn.active::after{
+    animation:vmStepProgress 2.6s linear forwards;
+  }
+  @keyframes vmStepProgress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @media (prefers-reduced-motion:reduce){
+    .vm-fp .demo-panel{transition:none;transform:none;}
+    .vm-fp.is-autoplaying .demo-step-btn.active::after{animation:none;}
+  }
+
+  /* Real photography in the demo's picker steps, replacing lettered circles
+     and CSS gradients. Buttons rather than divs so they are focusable and
+     announce themselves — they are genuine controls. */
+  .vm-fp .demo-model-gallery{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;}
+  .vm-fp .demo-model-gallery .demo-model{
+    padding:0;border:0;background:none;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+  }
+  .vm-fp .demo-model-frame{
+    position:relative;display:block;width:92px;height:92px;border-radius:50%;
+    overflow:hidden;background:#efe7e8;
+    outline:2px solid transparent;outline-offset:3px;
+    transition:outline-color .18s ease,transform .18s ease;
+  }
+  .vm-fp .demo-model-frame img{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center 12%;
+    transition:opacity .28s ease;
+  }
+  /* Hover swaps to the posed frame of the same person. Both images are
+     stacked and cross-faded rather than swapping src, so there is no flicker
+     and no second network request mid-interaction. */
+  .vm-fp .demo-model-frame .is-pose{opacity:0;}
+  .vm-fp .demo-model:hover .demo-model-frame .is-pose,
+  .vm-fp .demo-model:focus-visible .demo-model-frame .is-pose{opacity:1;}
+  .vm-fp .demo-model:hover .demo-model-frame .is-base,
+  .vm-fp .demo-model:focus-visible .demo-model-frame .is-base{opacity:0;}
+  .vm-fp .demo-model:hover .demo-model-frame{transform:translateY(-3px);}
+  .vm-fp .demo-model.selected .demo-model-frame{outline-color:#fff;}
+  .vm-fp .demo-model-name{font-size:13px;font-weight:600;color:#d8c5c4;}
+  .vm-fp .demo-model.selected .demo-model-name{color:#fff;}
+
+  .vm-fp .demo-scene-gallery{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;}
+  .vm-fp .demo-scene-gallery .demo-scene{
+    width:180px;padding:0;border:0;border-radius:12px;overflow:hidden;background:none;
+    cursor:pointer;outline:2px solid transparent;outline-offset:3px;
+    transition:outline-color .15s ease,transform .15s ease;
+  }
+  .vm-fp .demo-scene-gallery .demo-scene img{width:100%;height:108px;object-fit:cover;display:block;}
+  .vm-fp .demo-scene-gallery .demo-scene span{
+    display:block;padding:8px 10px;font-size:13px;font-weight:600;color:#fff;
+    background:rgba(36,20,23,.55);
+  }
+  .vm-fp .demo-scene-gallery .demo-scene:hover{transform:translateY(-2px);}
+  .vm-fp .demo-scene-gallery .demo-scene.selected{outline-color:#fff;}
+
+  /* Result matrix: every model x scene frame is present, exactly one shown. */
+  .vm-fp .demo-result-stage{
+    position:relative;width:100%;max-width:520px;margin:0 auto;
+    aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:#1b1113;
+  }
+  .vm-fp .demo-result-frame{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:0;transform:scale(1.015);
+    transition:opacity .45s ease,transform .45s ease;
+  }
+  .vm-fp .demo-result-frame.is-active{opacity:1;transform:none;}
+  @media (max-width:560px){
+    .vm-fp .demo-model-frame{width:74px;height:74px;}
+    .vm-fp .demo-scene-gallery .demo-scene{width:calc(50% - 7px);}
+  }
+
+${CHROME_CSS}
 </style>
 </head>
 <body class="vm-static-blog">
@@ -1916,6 +2207,8 @@ ${header(lang)}
       ${c.audiences.map((a) => `<div class="audience-card"><b>${a.label}</b><span>${a.detail}</span></div>`).join('\n      ')}
     </div>
   </section>
+${tryonSection(f, lang)}
+${sceneSection(f, lang)}
 
   ${c.impact ? `<section aria-labelledby="impact-h">
     <p class="section-label">${t.impactLabel}</p>
@@ -1979,9 +2272,49 @@ ${header(lang)}
   </section>
 </main>
 ${footer(lang)}
+<script>
+(function(){
+  // Ties the two picker steps to the result matrix. Every combination is
+  // already in the DOM as a static image, so this only toggles which one is
+  // visible — no fetch, no loading state, instant switching.
+  document.querySelectorAll('.vm-fp').forEach(function(root){
+    var stage = root.querySelector('.demo-result-stage');
+    if(!stage) return;
+
+    function show(){
+      var m = stage.getAttribute('data-active-model');
+      var s = stage.getAttribute('data-active-scene');
+      var match = stage.querySelector('.demo-result-frame[data-model-id="'+m+'"][data-scene-id="'+s+'"]');
+      stage.querySelectorAll('.demo-result-frame').forEach(function(f){
+        f.classList.toggle('is-active', f === match);
+      });
+    }
+
+    function bind(sel, attr, target){
+      root.querySelectorAll(sel).forEach(function(btn){
+        btn.addEventListener('click', function(){
+          root.querySelectorAll(sel).forEach(function(b){
+            b.classList.toggle('selected', b === btn);
+            if(b.hasAttribute('aria-pressed')) b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+          });
+          var v = btn.getAttribute(attr);
+          if(v) stage.setAttribute(target, v);
+          show();
+        });
+      });
+    }
+
+    bind('.demo-model-gallery .demo-model', 'data-model-id', 'data-active-model');
+    bind('.demo-scene-gallery .demo-scene', 'data-scene-id', 'data-active-scene');
+    show();
+  });
+})();
+</script>
+
 
 <script>
 (function(){
+  var root = document.querySelector('.vm-fp') || document;
   var steps = document.querySelectorAll('.demo-step-btn');
   var panels = document.querySelectorAll('.demo-panel');
   var prevBtn = document.getElementById('demo-prev');
@@ -1996,9 +2329,70 @@ ${footer(lang)}
     prevBtn.disabled = current === 0;
     nextBtn.textContent = current === steps.length - 1 ? ${JSON.stringify('__RESTART__')} : ${JSON.stringify('__NEXT__')};
   }
-  steps.forEach(function(b, idx){ b.addEventListener('click', function(){ show(idx); }); });
-  prevBtn.addEventListener('click', function(){ show(current - 1); });
-  nextBtn.addEventListener('click', function(){ show(current === steps.length - 1 ? 0 : current + 1); });
+  steps.forEach(function(b, idx){ b.addEventListener('click', function(){ stopAuto(); show(idx); }); });
+  prevBtn.addEventListener('click', function(){ stopAuto(); show(current - 1); });
+  nextBtn.addEventListener('click', function(){ stopAuto(); show(current === steps.length - 1 ? 0 : current + 1); });
+
+  // --- Auto-advance ------------------------------------------------------
+  // The wizard sat on step 1 until someone clicked, so most visitors never
+  // saw the payoff — the interesting part is the last panel. It now plays
+  // itself once it scrolls into view, which turns a static screenshot into a
+  // demonstration without demanding interaction first.
+  //
+  // Three deliberate limits: it only runs while actually visible (an
+  // IntersectionObserver, so it is not burning timers off-screen), it stops
+  // permanently at the first click or keypress because a visitor who has
+  // taken control should not have the panel yanked out from under them, and
+  // it respects prefers-reduced-motion by not starting at all.
+  var timer = null;
+  var stopped = false;
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function stopAuto(){
+    stopped = true;
+    if (timer) { clearInterval(timer); timer = null; }
+    root.classList.remove('is-autoplaying');
+  }
+  function startAuto(){
+    if (stopped || reduced || timer) return;
+    root.classList.add('is-autoplaying');
+    timer = setInterval(function(){
+      if (stopped) return;
+      show(current === steps.length - 1 ? 0 : current + 1);
+    }, 2600);
+  }
+
+  var demoSection = prevBtn.closest('section') || prevBtn.parentElement;
+
+  // Visibility is checked by geometry, not solely by IntersectionObserver.
+  // IO is the tidier API, but it silently never fires in environments that
+  // do not composite frames (embedded webviews, headless panes) — verified
+  // here: a plain interval ticked while an observer on the same element
+  // reported nothing at all. Relying on it alone would mean the demo quietly
+  // never plays for some real visitors, and would be untestable besides.
+  function inView(){
+    if (!demoSection) return false;
+    var r = demoSection.getBoundingClientRect();
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    var visible = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+    return r.height > 0 && visible / Math.min(r.height, vh) > 0.35;
+  }
+  function sync(){
+    if (stopped) return;
+    if (inView()) startAuto();
+    else if (timer) { clearInterval(timer); timer = null; root.classList.remove('is-autoplaying'); }
+  }
+
+  window.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync, { passive: true });
+  if (demoSection && 'IntersectionObserver' in window) {
+    new IntersectionObserver(sync, { threshold: 0.35 }).observe(demoSection);
+  }
+  sync();
+
+  ['pointerdown', 'keydown'].forEach(function(ev){
+    demoSection && demoSection.addEventListener(ev, stopAuto, { once: true });
+  });
 
   document.querySelectorAll('.demo-model').forEach(function(el){
     el.addEventListener('click', function(){
@@ -2136,6 +2530,7 @@ function renderDeHub() {
   .vm-hub .btn-ghost{background:transparent;color:var(--vm-gray-900);border:1.5px solid var(--vm-gray-200);}
   .vm-hub .btn-ghost:hover{border-color:var(--vm-red);color:var(--vm-red);}
   .vm-hub .custom-panel{background:var(--vm-gray-100);border:1px solid var(--vm-gray-200);border-radius:16px;padding:28px 30px;margin-top:18px;}
+${CHROME_CSS}
 </style>
 </head>
 <body class="vm-static-blog">

@@ -1,0 +1,124 @@
+{
+  "posts": [
+    {
+      "title": "First-Party-Daten-Strategie für das Ende der Cookies",
+      "slug": "first-party-data-strategie-cookie-ende",
+      "date": "2024-01-18",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Chrome blockiert seit Januar 2024 Drittanbieter-Cookies für ein Prozent der Nutzer. Wie Sie jetzt eine belastbare First-Party-Data-Strategie aufbauen.",
+      "keywords": "First-Party-Daten, Cookie-Ende, Drittanbieter-Cookies, Consent Rate, serverseitiges Tracking, Datenstrategie Marketing",
+      "contentFile": "first-party-data-strategie-cookie-ende.html"
+    },
+    {
+      "title": "Gmail- und Yahoo-Regeln: E-Mail-Marketing anpassen",
+      "slug": "gmail-yahoo-anforderungen-e-mail-marketing",
+      "date": "2024-02-15",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Seit Februar 2024 verlangen Gmail und Yahoo SPF, DKIM, DMARC und Ein-Klick-Abmeldung. Was Massenversender jetzt umsetzen müssen – Schritt für Schritt.",
+      "keywords": "Gmail Absenderrichtlinien, DMARC einrichten, E-Mail-Zustellbarkeit, Ein-Klick-Abmeldung, Spam-Rate senken, Newsletter Authentifizierung",
+      "contentFile": "gmail-yahoo-anforderungen-e-mail-marketing.html"
+    },
+    {
+      "title": "Consent Mode v2: Pflicht seit 6. März 2024 erklärt",
+      "slug": "consent-mode-v2-dma-pflicht",
+      "date": "2024-03-12",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Seit dem 6. März 2024 verlangt Google Einwilligungssignale im Consent Mode v2. Warum der Digital Markets Act dahintersteckt und wie die Umsetzung gelingt.",
+      "keywords": "Consent Mode v2, Digital Markets Act, Einwilligungssignale Google Ads, ad_user_data, Cookie-Banner DSGVO, Conversion-Modellierung",
+      "contentFile": "consent-mode-v2-dma-pflicht.html"
+    },
+    {
+      "title": "Google Core Update März 2024 und KI-Content",
+      "slug": "google-core-update-2024-ki-content",
+      "date": "2024-04-29",
+      "author": "Virtual Marketer Team",
+      "category": "SEO",
+      "description": "Das März-2024-Core-Update ist abgeschlossen. Was die neuen Spam-Richtlinien für KI-gestützte Content-Produktion bedeuten und wie Sie richtig reagieren.",
+      "keywords": "Google Core Update 2024, Scaled Content Abuse, Site Reputation Abuse, KI-Content SEO, Helpful Content, Rankingverlust Ursachen",
+      "contentFile": "google-core-update-2024-ki-content.html"
+    },
+    {
+      "title": "AI Overviews: Website jetzt richtig vorbereiten",
+      "slug": "ai-overviews-google-suche-vorbereitung",
+      "date": "2024-05-23",
+      "author": "Virtual Marketer Team",
+      "category": "SEO",
+      "description": "Google startet AI Overviews in den USA. Warum die Verzögerung in Deutschland ein Vorteil ist und mit welchen sechs Maßnahmen Sie sich jetzt vorbereiten.",
+      "keywords": "AI Overviews, KI-Suche Google, generative Suche SEO, als Quelle zitiert werden, strukturierte Daten, Zero-Click-Suche",
+      "contentFile": "ai-overviews-google-suche-vorbereitung.html"
+    },
+    {
+      "title": "Universal Analytics: Daten vor der Löschung sichern",
+      "slug": "universal-analytics-datenexport-vor-loeschung",
+      "date": "2024-06-20",
+      "author": "Virtual Marketer Team",
+      "category": "Use Cases",
+      "description": "Ab 1. Juli 2024 werden Universal-Analytics-Daten gelöscht. Welche Berichte Sie exportieren sollten, welche Wege es gibt und wie Sie die Daten nutzbar ablegen.",
+      "keywords": "Universal Analytics Export, UA Daten sichern, Google Analytics 4 Umstieg, historische Webdaten, Analytics Archivierung, GA4 Messkonzept",
+      "contentFile": "universal-analytics-datenexport-vor-loeschung.html"
+    },
+    {
+      "title": "Third-Party-Cookies bleiben: Was jetzt zu tun ist",
+      "slug": "google-behaelt-third-party-cookies",
+      "date": "2024-07-25",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Google schafft Drittanbieter-Cookies in Chrome doch nicht ab. Warum das rechtlich nichts ändert und welche Projekte Sie trotzdem weiterführen sollten.",
+      "keywords": "Drittanbieter-Cookies Chrome, Privacy Sandbox, TDDDG Einwilligung, Cookie-Banner Pflicht, Browser-Tracking, Attribution Safari",
+      "contentFile": "google-behaelt-third-party-cookies.html"
+    },
+    {
+      "title": "EU AI Act: Fristen und Pflichten für Marketingteams",
+      "slug": "eu-ai-act-fristen-marketing-teams",
+      "date": "2024-08-08",
+      "author": "Virtual Marketer Team",
+      "category": "Regulierung & Compliance",
+      "description": "Der EU AI Act ist am 1. August 2024 in Kraft getreten. Welche Fristen für Marketingteams gelten, was verboten ist und wie Sie sich jetzt vorbereiten.",
+      "keywords": "EU AI Act Marketing, KI-Verordnung Fristen, KI-Kompetenz Artikel 4, Transparenzpflichten KI, Betreiber Anbieter KI, KI-Inventar",
+      "contentFile": "eu-ai-act-fristen-marketing-teams.html"
+    },
+    {
+      "title": "Google Core Update August 2024: Sichtbarkeit prüfen",
+      "slug": "google-core-update-august-2024-sichtbarkeit",
+      "date": "2024-09-12",
+      "author": "Virtual Marketer Team",
+      "category": "SEO",
+      "description": "Das August-2024-Core-Update ist abgeschlossen. Wie Sie Sichtbarkeitsveränderungen sauber auswerten und was nach einem Rankingverlust wirklich hilft.",
+      "keywords": "Google Core Update August 2024, Sichtbarkeitsverlust analysieren, Search Console Auswertung, Rankingverlust beheben, Helpful Content, SEO Kernupdate",
+      "contentFile": "google-core-update-august-2024-sichtbarkeit.html"
+    },
+    {
+      "title": "KI-Bilder kennzeichnen: Content Credentials in der Suche",
+      "slug": "ki-bilder-kennzeichnen-content-credentials",
+      "date": "2024-10-17",
+      "author": "Virtual Marketer Team",
+      "category": "AI-Trends",
+      "description": "Google zeigt seit September 2024 Herkunftsangaben nach C2PA in der Suche. Welche Regeln Marketingteams für generierte Bilder jetzt festlegen sollten.",
+      "keywords": "KI-Bilder kennzeichnen, Content Credentials, C2PA Standard, Bildherkunft Google Suche, KI-Bilder Werbung, Transparenzpflicht KI Bilder",
+      "contentFile": "ki-bilder-kennzeichnen-content-credentials.html"
+    },
+    {
+      "title": "KI-Nutzung in Unternehmen 2024: Zahlen und Lücken",
+      "slug": "ki-nutzung-unternehmen-deutschland-2024",
+      "date": "2024-11-28",
+      "author": "Virtual Marketer Team",
+      "category": "Bildung",
+      "description": "20 Prozent der Unternehmen in Deutschland nutzen KI, meldet das Statistische Bundesamt. Was die Zahlen zeigen und wie Sie die größte Hürde schließen.",
+      "keywords": "KI-Nutzung Unternehmen Deutschland, Statistisches Bundesamt KI, KI im Mittelstand, KI-Kompetenz aufbauen, KI Marketing Vertrieb, KI Weiterbildung",
+      "contentFile": "ki-nutzung-unternehmen-deutschland-2024.html"
+    },
+    {
+      "title": "Suchmarketing 2024: Rückblick und Fahrplan für 2025",
+      "slug": "suchmarketing-2024-rueckblick-prioritaeten",
+      "date": "2024-12-11",
+      "author": "Virtual Marketer Team",
+      "category": "SEO",
+      "description": "Core Updates, Consent Mode v2, AI Overviews und der EU AI Act: Was sich 2024 im Suchmarketing wirklich geändert hat und welche fünf Prioritäten 2025 zählen.",
+      "keywords": "Suchmarketing Rückblick 2024, SEO Trends 2025, Core Updates 2024, Consent Mode v2, EU AI Act Februar 2025, Online-Marketing Planung",
+      "contentFile": "suchmarketing-2024-rueckblick-prioritaeten.html"
+    }
+  ]
+}

@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Through Tailored Recommendations | Virtual Marketer</title>
+<meta name="description" content="An overview of AI-powered personalization in e-commerce, covering its benefits for customer satisfaction and conversion, and the challenges around data…">
+<meta name="keywords" content="AI personalization, e-commerce, customer experience, product recommendations, data privacy">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="canonical" href="https://virtual-marketer.de/en/blog/durch-massgeschneiderte-empfehlungen/">
+<link rel="alternate" hreflang="en" href="https://virtual-marketer.de/en/blog/durch-massgeschneiderte-empfehlungen/">
+<link rel="alternate" hreflang="de" href="https://virtual-marketer.de/blog/durch-massgeschneiderte-empfehlungen/">
+<link rel="alternate" hreflang="x-default" href="https://virtual-marketer.de/blog/durch-massgeschneiderte-empfehlungen/">
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Virtual Marketer">
+<meta property="og:title" content="Through Tailored Recommendations">
+<meta property="og:description" content="An overview of AI-powered personalization in e-commerce, covering its benefits for customer satisfaction and conversion, and the challenges around data…">
+<meta property="og:url" content="https://virtual-marketer.de/en/blog/durch-massgeschneiderte-empfehlungen/">
+<meta property="og:image" content="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png">
+<meta property="article:published_time" content="2024-04-17">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Through Tailored Recommendations","description":"An overview of AI-powered personalization in e-commerce, covering its benefits for customer satisfaction and conversion, and the challenges around data privacy, prediction accuracy, and cost.","datePublished":"2024-04-17","dateModified":"2024-04-17","author":{"@type":"Organization","name":"Virtual Marketer"},"publisher":{"@type":"Organization","name":"Virtual Marketer","logo":{"@type":"ImageObject","url":"/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://virtual-marketer.de/en/blog/durch-massgeschneiderte-empfehlungen/"},"inLanguage":"en"}</script>
+
+<link rel="stylesheet" href="/wp-content/themes/engitech/css/bootstrap.css%3Fver=4.0.css">
+<link rel="stylesheet" href="/wp-content/themes/engitech/css/font-awesome.min.css%3Fver=7.0.1.css">
+<link rel="stylesheet" href="/wp-content/themes/engitech/style.css%3Fver=7.0.1.css">
+<style>
+  
+  .vm-post{
+    /* 68ch at the body size, with a floor so the column does not collapse
+       on a narrow phone before the padding does its job. */
+    max-width:720px;margin:0 auto;padding:56px 22px 96px;
+    color:#241417;
+    font-size:18px;line-height:1.72;
+    text-rendering:optimizeLegibility;
+    -webkit-font-smoothing:antialiased;
+  }
+  .vm-post .vm-meta{color:#6b5f60;font-size:14px;margin-bottom:10px}
+  .vm-post .vm-category{
+    display:inline-block;background:#fbecee;color:#94152b;
+    font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    padding:5px 12px;border-radius:999px;margin-bottom:18px;
+  }
+
+  .vm-post h1{font-size:40px;line-height:1.15;letter-spacing:-.015em;margin:0 0 14px;font-weight:700}
+  .vm-post h2{font-size:26px;line-height:1.25;margin:2.4em 0 .6em;font-weight:700;letter-spacing:-.01em}
+  .vm-post h3{font-size:20px;line-height:1.3;margin:1.9em 0 .5em;font-weight:700}
+  .vm-post h4{font-size:17px;margin:1.6em 0 .4em;font-weight:700}
+
+  .vm-post p{margin:0 0 1.15em;font-size:18px;line-height:1.72}
+  .vm-post ul,.vm-post ol{margin:0 0 1.3em;padding-left:1.35em}
+  .vm-post li{margin-bottom:.5em;font-size:18px;line-height:1.72}
+  .vm-post li::marker{color:#94152b}
+
+  .vm-post a{color:#94152b;text-underline-offset:2px;text-decoration-thickness:1px}
+  .vm-post a:hover{color:#700f2b}
+  .vm-post strong{font-weight:700;color:#1a0f11}
+
+  /* Tables. The articles use them for side-by-side comparisons and they had
+     no styling at all — no rules, no header weight, no padding. */
+  .vm-post table{
+    width:100%;border-collapse:collapse;margin:1.6em 0;
+    font-size:16px;line-height:1.55;
+  }
+  .vm-post thead th{
+    text-align:left;font-weight:700;color:#241417;
+    background:#f7f4f4;border-bottom:2px solid #e7dfe0;
+    padding:11px 14px;
+  }
+  .vm-post td,.vm-post th{padding:12px 14px;border-bottom:1px solid #ece7e7;vertical-align:top;font-size:16px;line-height:1.55}
+  .vm-post tbody tr:last-child td{border-bottom:none}
+
+  .vm-post blockquote{
+    margin:1.6em 0;padding:2px 0 2px 20px;
+    border-left:3px solid #94152b;color:#4a4143;font-style:normal;
+  }
+  .vm-post blockquote p:last-child{margin-bottom:0}
+
+  .vm-post code{
+    background:#f4f1f1;border-radius:5px;padding:.14em .4em;
+    font-size:.9em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  .vm-post pre{
+    background:#241417;color:#f4f1f1;border-radius:12px;
+    padding:18px 20px;overflow-x:auto;margin:1.6em 0;font-size:15px;line-height:1.55;
+  }
+  .vm-post pre code{background:none;padding:0;color:inherit}
+
+  .vm-post img{max-width:100%;height:auto;border-radius:12px;margin:1.6em 0}
+  .vm-post figure{margin:1.6em 0}
+  .vm-post figcaption{font-size:14px;color:#6b5f60;margin-top:.5em}
+  .vm-post hr{border:none;border-top:1px solid #e7dfe0;margin:2.4em 0}
+
+  .vm-post .vm-cta{
+    margin-top:3.5em;padding:30px;background:#f8f9fc;
+    border:1px solid #e7dfe0;border-radius:14px;text-align:center;
+  }
+  .vm-post .vm-cta a{
+    display:inline-block;margin-top:12px;padding:13px 26px;
+    background:linear-gradient(90deg,#66a3ce,#94152b);
+    color:#fff;border-radius:8px;text-decoration:none;font-weight:700;
+  }
+  .vm-post .vm-cta a:hover{background:linear-gradient(90deg,#94152b,#700f2b);color:#fff}
+
+  .vm-post .vm-related{margin-top:3em;padding-top:1.6em;border-top:1px solid #e7dfe0}
+  .vm-post .vm-related h3{margin-top:0}
+  .vm-post .vm-related ul{list-style:none;padding:0}
+  .vm-post .vm-related li{margin-bottom:.6em}
+
+  /* On a phone the column padding does the work the max-width does on
+     desktop, and the display sizes come down a step. Body copy stays at
+     1.15rem — shrinking it is what made these articles hard to read. */
+  @media (max-width:640px){
+    .vm-post{padding:32px 18px 64px;font-size:17px;line-height:1.68}
+    .vm-post p,.vm-post li{font-size:17px;line-height:1.68}
+    .vm-post h1{font-size:30px}
+    .vm-post h2{font-size:22px;margin-top:2em}
+    .vm-post h3{font-size:18px}
+    .vm-post table{font-size:15px}
+    .vm-post td,.vm-post th{padding:10px 10px;font-size:15px}
+  }
+
+  
+  .vm-header-simple{
+    position:sticky;top:0;z-index:9990;
+    max-width:1140px;margin:16px auto 0;padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    background:#fff;border-radius:14px;
+    box-shadow:0 6px 24px rgba(36,20,23,.10);
+  }
+  .vm-header-simple > a{display:flex;align-items:center;flex:0 0 auto}
+  .vm-header-simple nav{display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:flex-end}
+  .vm-header-simple nav a{color:#241417;text-decoration:none;font-weight:500;font-size:15px;white-space:nowrap}
+  .vm-header-simple nav a:hover{color:#94152b}
+
+  /* The solutions dropdown is a <details>/<summary>, not an <a>, so none of
+     the rules above reach it. Left alone it falls back to the browser default
+     and renders 16px/400 in grey beside 14px/500 in near-black — the one nav
+     item that looks like it belongs to a different site. Values copied from
+     the anchor rule above so the two cannot drift apart. */
+  .vm-header-simple nav > details > summary{
+    color:#241417;font-weight:500;font-size:15px;white-space:nowrap;
+    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:4px;
+  }
+  .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
+  .vm-header-simple nav > details > summary:hover{color:#94152b}
+
+  /* position:sticky above is disabled by ANY ancestor with a clipping
+     overflow, and the scraped theme's stylesheet sets overflow:hidden on
+     <body> — which is why the header on /blog/ and the feature pages scrolled
+     away despite being declared sticky. The same trap is documented in
+     scripts/make-header-sticky.js for the legacy header, where the answer was
+     position:fixed; here the cleaner fix is available, because these pages do
+     not use the theme's layout and nothing on them needs body to clip.
+     overflow-x stays hidden so a wide element still cannot scroll the page
+     sideways; only the vertical axis is released, which is the axis sticky
+     needs. */
+  body.vm-static-blog{overflow-x:hidden;overflow-y:visible}
+  /* Login is the primary action in this bar — same gradient pill as the
+     homepage header, so the two do not look like different sites. */
+  .vm-header-simple nav a[href*="login.virtual-marketer.de"]{
+    background:linear-gradient(90deg,#66a3ce,#94152b);
+    color:#fff;padding:11px 26px;border-radius:10px;font-weight:600;
+  }
+  .vm-header-simple nav a[href*="login.virtual-marketer.de"]:hover{
+    background:linear-gradient(90deg,#94152b,#700f2b);color:#fff;
+  }
+
+  /* Below ~900px the six nav items no longer fit beside the logo, so the bar
+     stacks: logo on its own line, nav wrapping under it, centred. Without
+     this the nav overflowed the bar and pushed the page horizontally. */
+  @media (max-width:900px){
+    .vm-header-simple{
+      flex-direction:column;align-items:stretch;gap:14px;
+      margin:12px 12px 0;padding:14px 16px;
+      /* Stays sticky on mobile as well — it was switched to static here,
+         which meant the nav scrolled away exactly on the screens where
+         getting back to it costs the most. */
+    }
+    .vm-header-simple > a{justify-content:center}
+    .vm-header-simple nav{justify-content:center;gap:18px}
+    .vm-header-simple nav a{font-size:14px}
+    .vm-header-simple nav a[href*="login.virtual-marketer.de"]{padding:9px 20px}
+  }
+
+  .vm-footer-simple{max-width:1140px;margin:40px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px}
+  .vm-footer-simple a{color:#6b7280}
+
+</style>
+</head>
+<body class="vm-static-blog">
+
+<header class="vm-header-simple">
+  <a href="/en/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.webp" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none" width="512" height="512"></a>
+  <nav>
+    <details class="vm-solutions-dd">
+    <summary>Solutions</summary>
+    <div class="vm-solutions-panel" data-title="Solutions">
+      <button type="button" class="vm-solutions-close" aria-label="Menü schließen">&times;</button>
+      <ul class="vm-solutions-grid">
+        <li><a href="/en/solutions/ai-agents/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></span><span class="vm-sol-tx">AI Agents for Marketing &amp; Ads</span></a></li>
+        <li><a href="/en/solutions/coding-api/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span><span class="vm-sol-tx">Coding API &amp; MCP Server</span></a></li>
+        <li><a href="/en/solutions/ai-product-photos/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="vm-sol-tx">AI Product Photos &amp; Virtual Try-On</span></a></li>
+        <li><a href="/en/solutions/feed-enhance/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16M4 12h16M4 19h9"/></svg></span><span class="vm-sol-tx">AI Feed Enhance</span></a></li>
+        <li><a href="/en/solutions/ai-text-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 6h14M5 12h14M5 18h8"/></svg></span><span class="vm-sol-tx">AI Text Generation</span></a></li>
+        <li><a href="/en/solutions/ai-image-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg></span><span class="vm-sol-tx">AI Image Generation</span></a></li>
+        <li><a href="/en/solutions/ai-video-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/></svg></span><span class="vm-sol-tx">AI Video Generation</span></a></li>
+        <li><a href="/en/solutions/ai-seo-content/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span class="vm-sol-tx">AI SEO Content</span></a></li>
+        <li><a href="/en/solutions/campaign-builder/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10v4h4l6 4V6l-6 4H4z"/><path d="M18 9a4 4 0 010 6"/></svg></span><span class="vm-sol-tx">AI Campaign Builder</span></a></li>
+        <li><a href="/en/solutions/internal-linking/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 006 0l3-3a4 4 0 10-6-6l-1 1"/><path d="M14 10a4 4 0 00-6 0l-3 3a4 4 0 106 6l1-1"/></svg></span><span class="vm-sol-tx">Internal Linking</span></a></li>
+        <li><a href="/en/solutions/ai-email-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg></span><span class="vm-sol-tx">AI Email Generator</span></a></li>
+        <li><a href="/en/solutions/social-publisher/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.5 11l6-4M8.5 13l6 4"/></svg></span><span class="vm-sol-tx">AI Social Publisher</span></a></li>
+        <li><a href="/en/solutions/bulk-text-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 13l8 4 8-4"/></svg></span><span class="vm-sol-tx">AI Bulk Generator</span></a></li>
+        <li><a href="/en/solutions/ai-files/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="vm-sol-tx">Files &amp; Reports</span></a></li>
+        <li><a href="/en/solutions/feed-optimizer/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8h10M18 8h2M4 16h4M12 16h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/></svg></span><span class="vm-sol-tx">Feed Optimizer</span></a></li>
+        <li><a href="/en/solutions/chat-insights/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12a7 7 0 01-7 7H8l-4 3v-5a7 7 0 017-9h2a7 7 0 017 4z"/></svg></span><span class="vm-sol-tx">Chat Insights</span></a></li>
+      </ul>
+      <ul class="vm-solutions-foot"><li><a href="/en/solutions/">All solutions at a glance &rarr;</a></li></ul>
+    </div>
+  </details><style>
+  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
+  /* Vertical alignment with the sibling nav links.
+     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
+     while a bare <summary> is only as tall as its text, so with both boxes
+     starting at the same y the label sat 11px above "Blog" and "API".
+     Stretching the wrapper to the flex row's height and centring inside it
+     matches whatever the theme happens to use, instead of hardcoding this
+     theme's padding and breaking again the next time it changes. */
+  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
+  .vm-solutions-dd{align-self:stretch;}
+  /* align-self:stretch above computes correctly but the theme's flex row still
+     leaves the item at its content height, so the summary is matched to the
+     sibling anchors' box directly: they are line-height 35px inside 10px
+     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
+     only when replacing the legacy theme nav — so it cannot leak into
+     .vm-header-simple, where the generated pages set their own metrics. */
+  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
+  .vm-solutions-dd > summary{
+    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
+    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
+  }
+  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
+  .vm-solutions-dd > summary::marker{content:'';}
+  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
+     the label's baseline the way a "▾" character does. */
+  .vm-solutions-dd > summary::after{
+    content:'';width:7px;height:7px;flex:0 0 auto;
+    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
+  }
+  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
+  .vm-solutions-dd > summary,
+  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
+
+  .vm-solutions-panel{
+    position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
+    width:min(820px,calc(100vw - 32px));
+    background:#fff;border:1px solid #ece4e5;border-radius:18px;
+    box-shadow:0 28px 68px rgba(36,20,23,.20);
+    padding:18px;margin:0;z-index:99999;
+  }
+  .vm-solutions-grid{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
+    margin:0;padding:0;list-style:none;
+  }
+  .vm-solutions-grid li{margin:0;padding:0;}
+  /* Two classes in the selector on purpose. The theme styles these links via
+     .main-navigation ul li li a (one class, four elements) and
+     .main-navigation ul > li > a, both of which outrank a bare
+     .vm-solutions-grid a. Class count is compared before element count, so
+     scoping to the panel wins cleanly without resorting to !important. */
+  .vm-solutions-panel .vm-solutions-grid a{
+    display:flex;align-items:center;gap:11px;
+    padding:10px 11px;border-radius:10px;
+    color:#241417;text-decoration:none;
+    /* The theme uppercases and nowraps its nav links. Inherited into a
+       three-column grid that produced the overlap this panel was reported
+       for: labels ran straight through their neighbours instead of wrapping.
+       Both are reset here rather than fought with !important elsewhere. */
+    text-transform:none;white-space:normal;
+    font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
+  }
+  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
+  .vm-sol-ic{
+    flex:0 0 auto;display:grid;place-items:center;
+    width:32px;height:32px;border-radius:9px;
+    background:#f6eff0;color:#94152b;
+  }
+  .vm-sol-ic svg{width:17px;height:17px;display:block;}
+  .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
+  .vm-sol-tx{min-width:0;}
+  .vm-solutions-foot{
+    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
+  }
+  .vm-solutions-panel .vm-solutions-foot a{
+    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
+    text-decoration:none;padding:4px 12px;text-transform:none;
+  }
+  .vm-solutions-foot a:hover{text-decoration:underline;}
+
+  /* --- Mobile: a real full-screen drawer -------------------------------
+     Below 900px the panel used to render inline, which pushed the whole
+     header open and buried the page under a 16-item list. It is now an
+     overlay pinned to the viewport with its own header and scroll area, so
+     it behaves like a drawer instead of an expanding accordion. */
+  @media (max-width:900px){
+    .vm-solutions-dd{position:static;}
+    .vm-solutions-panel{
+      position:fixed;inset:0;top:0;left:0;transform:none;
+      width:100vw;height:100dvh;max-height:100dvh;
+      border:0;border-radius:0;box-shadow:none;
+      padding:calc(env(safe-area-inset-top) + 64px) 16px calc(env(safe-area-inset-bottom) + 24px);
+      overflow-y:auto;-webkit-overflow-scrolling:touch;
+      animation:vmDrawerIn .18s ease-out;
+    }
+    .vm-solutions-panel::before{
+      content:attr(data-title);
+      position:fixed;top:0;left:0;right:0;height:56px;
+      display:flex;align-items:center;padding:0 16px;
+      background:#fff;border-bottom:1px solid #ece4e5;
+      font-weight:700;font-size:16px;color:#241417;
+    }
+    .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
+    .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
+    .vm-sol-ic{width:36px;height:36px;}
+    .vm-sol-ic svg{width:19px;height:19px;}
+    .vm-solutions-foot a{font-size:15px;}
+    /* Stop the page behind the drawer from scrolling with it. */
+    html:has(.vm-solutions-dd[open]) body{overflow:hidden;}
+  }
+  @keyframes vmDrawerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* The legacy theme already has a full-screen off-canvas menu, and it slides
+     in with a transform. A transformed ancestor becomes the containing block
+     for position:fixed, so the drawer above rendered *inside* it landed one
+     viewport off-screen (measured at left:375 on a 375px viewport). Inside
+     that wrapper the panel therefore renders inline and lets the theme's own
+     drawer be the drawer — nesting a second full-screen overlay inside the
+     first is the actual mistake. The fixed drawer still applies on the
+     generated pages, whose header has no off-canvas container. */
+  @media (max-width:900px){
+    .mmenu-wrapper .vm-solutions-panel{
+      position:static;width:auto;height:auto;max-height:none;
+      padding:4px 0 0;overflow:visible;animation:none;
+    }
+    .mmenu-wrapper .vm-solutions-panel::before{display:none;}
+    .mmenu-wrapper .vm-solutions-close{display:none;}
+    .mmenu-wrapper .vm-solutions-grid a{padding:11px 8px;font-size:14px;}
+  }
+  .vm-solutions-close{display:none;}
+  @media (max-width:900px){
+    .vm-solutions-close{
+      display:block;position:fixed;top:8px;right:10px;z-index:1;
+      width:40px;height:40px;border:0;background:none;
+      font-size:30px;line-height:1;color:#241417;cursor:pointer;
+    }
+  }
+</style>
+<script>
+(function(){
+  // <details> has no concept of "dismiss" — without this the panel stays open
+  // until the summary is clicked again, which feels broken next to every other
+  // menu on the web.
+  document.addEventListener('click', function(e){
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      if(!d.contains(e.target)) d.removeAttribute('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.vm-solutions-close')) return;
+    var d = e.target.closest('details.vm-solutions-dd');
+    if(d) d.removeAttribute('open');
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape') return;
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      d.removeAttribute('open');
+    });
+  });
+})();
+</script>
+    <a href="/en/blog/">Blog</a>
+    <a href="https://api.virtual-marketer.de/documentation/">API</a>
+    <a href="/en/request-custom-model/">Request a model</a>
+    <a href="/en/contact/">Contact</a>
+    <a href="https://login.virtual-marketer.de/">Login</a>
+  </nav>
+</header>
+
+<main class="vm-post">
+  <article>
+    <span class="vm-category">Use Cases</span>
+    <h1>Through Tailored Recommendations</h1>
+    <div class="vm-meta">
+      <span>17 April 2024</span> &middot; <span>Virtual Marketer Team</span>
+    </div>
+
+    <p>AI-powered personalization in e-commerce is an important aspect of increasing customer satisfaction and building long-term relationships with customers. By using artificial intelligence, e-commerce companies can create tailored experiences for their customers and offer them exactly what they are looking for. This post explains the benefits and challenges of AI-powered personalization in e-commerce.</p><h2>Benefits of AI-powered personalization in e-commerce</h2><ul><li><strong>Better understanding of customers</strong>: AI technologies make it possible to analyze customer behavior and understand their preferences. On this basis, personalized recommendations and offers can be created.</li><li><strong>Increasing conversion rates</strong>: When customers receive personalized offers, the likelihood that they will make a purchase increases. This can raise the company's conversion rates and revenue.</li><li><strong>Improved customer experience</strong>: Personalized content, products, and recommendations lead to a better customer experience, as customers feel that their needs are understood and taken into account.</li><li><strong>Increased efficiency</strong>: AI can help automate and optimize the personalization process, leading to more efficient use of resources and a faster response to customer needs.</li></ul><h2>Challenges of AI-powered personalization in e-commerce</h2><ul><li><strong>Privacy and data protection</strong>: Using customer data for personalization carries privacy risks and requires transparent communication with customers about how their data is used.</li><li><strong>Accuracy of predictions</strong>: AI algorithms are only as good as the data they are trained on. An inaccurate data foundation can lead to inaccurate predictions and recommendations.</li><li><strong>Overcoming filter bubbles</strong>: Personalization can cause customers to see only content that matches their existing interests, which can narrow their horizons. It is important to also provide recommendations beyond known preferences.</li><li><strong>Cost and resources</strong>: Implementing AI technologies for personalization requires investment in technology, training, and development, which can be a challenge for small businesses.</li></ul><h2>Conclusion</h2><p>AI-powered personalization in e-commerce offers many benefits for companies looking to increase customer satisfaction and build long-term customer relationships. It is important to recognize and overcome the challenges in order to maximize the effectiveness of personalization while ensuring data protection and the accuracy of predictions. Through the targeted and transparent use of AI technologies, e-commerce companies can offer their customers tailored experiences and thereby increase their competitiveness and profitability.</p>
+
+    <div class="vm-cta">
+      <strong>Ready for AI marketing solutions?</strong>
+      <p>See in a no-obligation demo how Virtual Marketer automates your marketing.</p>
+      <a href="/en/demo/">Book a demo</a>
+    </div>
+
+    <div class="vm-related">
+      <h3>More articles</h3>
+      <ul>
+        <li><a href="/en/blog/wie-koennen-unternehmen-generative-ki-im-marketing-nutzen/">How Can Companies Use Generative AI in Marketing?</a></li>
+        <li><a href="/en/blog/was-sagt-die-ki-technologie-ueber-die-effizienz-der-lagerhaltung-und-warenlieferung-aus/">What Does AI Technology Tell Us About the Efficiency of Warehousing and Goods Delivery?</a></li>
+        <li><a href="/en/blog/was-ist-generative-ai-und-wie-unterscheidet-es-sich-von-anderen-kis/">What Is Generative AI and How Does It Differ From Other Types of AI?</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer class="vm-footer-simple">
+  &copy; 2026 SGS Virtual Marketer GmbH &middot;
+  <a href="/en/privacy-policy/">Privacy Policy</a> &middot;
+  <a href="/en/legal-notice/">Legal Notice</a>
+</footer>
+
+<!-- vm-lang-switch:start -->
+<style>
+  #vm-lang-switch{position:fixed;top:16px;right:16px;z-index:99998;display:flex;align-items:center;gap:6px;background:#ffffffee;backdrop-filter:blur(6px);border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  #vm-lang-switch a{color:#6b7280;text-decoration:none;padding:2px 6px;border-radius:999px}
+  #vm-lang-switch a.active{color:#fff;background:#1a202c}
+  /* Bottom-LEFT on mobile, not bottom-right: the legacy theme's own
+     "back to top" button (#back-to-top) is fixed bottom-right at this same
+     viewport width and was overlapping this widget — confirmed by
+     measuring both elements' actual rendered rects at 375x812. */
+  @media (max-width:640px){#vm-lang-switch{top:auto;bottom:16px;right:auto;left:16px}}
+</style>
+<div id="vm-lang-switch" role="navigation" aria-label="Sprache wählen / Language">
+  <a href="/blog/durch-massgeschneiderte-empfehlungen/" class="" lang="de" hreflang="de">DE</a>
+  <a href="/en/blog/durch-massgeschneiderte-empfehlungen/" class="active" lang="en" hreflang="en">EN</a>
+</div>
+<!-- vm-lang-switch:end -->
+<style id="vm-mobile-polish">
+/* ==========================================================================
+   Mobile polish — see scripts/mobile-polish.js
+   ========================================================================== */
+
+/* --- Applies at every width: things that were simply wrong ---------------- */
+
+/* A 565px-wide <img> inside a 375px column was forcing horizontal overflow.
+   body{overflow-x:hidden} was hiding the symptom; this fixes the cause, so
+   the image scales instead of being silently cropped. */
+img, video, iframe, canvas, svg { max-width: 100%; }
+img, video { height: auto; }
+
+/* In-page anchors landed underneath the fixed header. */
+html { scroll-padding-top: 76px; }
+
+@media (max-width: 1024px) {
+
+  /* Long tables and code blocks scroll in their own box rather than widening
+     the page. Scoped to mobile deliberately: display:block is what makes a
+     table scrollable, and it also switches off table layout — column widths
+     stop being distributed. That trade is right on a 375px screen and wrong
+     on a desktop one, so this must never escape the media query. */
+  table, pre { max-width: 100%; overflow-x: auto; display: block; }
+
+  /* --- 1. The header must be opaque --------------------------------------
+     Both the header and the Elementor section inside it are transparent, and
+     either one alone leaves the text showing through, so both are set. The
+     blur is what gives it the layered, app-like feel rather than a flat bar;
+     the -webkit- prefix is still required by Safari, which is most of the
+     phone traffic this matters for. */
+  #site-header.site-header,
+  #site-header .header-mobile > .elementor > .elementor-section,
+  #site-header .header-mobile .elementor-top-section {
+    background-color: rgba(255, 255, 255, 0.94);
+    -webkit-backdrop-filter: saturate(1.7) blur(16px);
+    backdrop-filter: saturate(1.7) blur(16px);
+  }
+  #site-header.site-header {
+    border-bottom: 1px solid rgba(36, 20, 23, 0.07);
+    /* Notch and Dynamic Island: content sits below the status bar instead of
+       under it. Resolves to 0 everywhere else, so it is safe unconditionally. */
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  /* --- 2. Logo -----------------------------------------------------------
+     The image was 30px tall inside a 22px box and clipped. Sizing the image
+     and letting the box follow is the fix; display:block removes the inline
+     baseline gap that caused the 8px mismatch in the first place. */
+  #site-header .header-mobile img {
+    height: 34px;
+    width: auto;
+    display: block;
+  }
+  #site-header .header-mobile > .elementor a { display: inline-flex; align-items: center; }
+
+  /* --- 3. Type scale -----------------------------------------------------
+     clamp() rather than a fixed size: the headline keeps scaling between the
+     narrowest phone and the tablet breakpoint instead of stepping. The upper
+     bounds are the theme's own desktop sizes, so nothing grows.
+
+     !important is load-bearing here and is not laziness. Elementor emits a
+     per-element selector for every heading it styles — the homepage h1 is
+     ".elementor-5668 .elementor-element.elementor-element-292329b2
+     .elementor-heading-title", four classes, and it already carries a
+     max-width:1024px override of its own setting 50px. There is no generic
+     selector that outranks a per-element one for every page without knowing
+     each element id, and there are hundreds of them across 173 pages.
+     Measured before writing this: without !important the h1 stayed at 50px
+     on a 375px viewport. */
+  h1, .elementor-widget-heading h1.elementor-heading-title {
+    font-size: clamp(28px, 8.2vw, 42px) !important;
+    line-height: 1.18 !important;
+  }
+  h2, .elementor-widget-heading h2.elementor-heading-title {
+    font-size: clamp(23px, 6.4vw, 32px) !important;
+    line-height: 1.24 !important;
+  }
+  h3, .elementor-widget-heading h3.elementor-heading-title {
+    font-size: clamp(19px, 5vw, 24px) !important;
+    line-height: 1.3 !important;
+  }
+  h1, h2, h3, h4 {
+    /* German compounds ("Produktdatenoptimierung") are long enough to overflow
+       a 375px column on their own. */
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  p, li { font-size: 16px; line-height: 1.65; }
+
+  /* --- 4. Tap targets ----------------------------------------------------
+     44px is Apple's minimum and 48dp Google's; 44 satisfies both once the
+     surrounding padding is counted.
+
+     Two exclusions, both found by looking at the rendered page rather than
+     by reasoning about the markup:
+       - Inline links inside prose. Enlarging those breaks paragraph leading.
+       - The burger, "#mmenu-toggle button". It is an empty <button> whose
+         bars are drawn with pseudo-elements, so forcing display:inline-flex
+         on it made the icon disappear entirely. It gets padding instead,
+         which enlarges the target without touching how it is drawn. */
+  .elementor-button,
+  input[type="submit"],
+  .vm-header-simple nav a,
+  .mmenu-wrapper a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mmenu-wrapper a { justify-content: flex-start; }
+
+  /* The burger's hit area is enlarged with a transparent overlay rather than
+     with padding. Its three bars are absolutely positioned against
+     .mmenu-toggle (left:0, top:50%), so padding moves the origin and the icon
+     drifts off-centre — it did, by 12px, on the first attempt. An ::after
+     overlay adds 12px of reachable area on every side and moves nothing.
+     Note ::after on the TOGGLE, not on the BUTTON: the button's own ::before
+     and ::after are two of the three bars. */
+  #mmenu-toggle { position: relative; }
+  #mmenu-toggle::after { content: ""; position: absolute; inset: -12px; }
+
+  /* --- The burger must be visible against the new white header ----------
+     The theme paints the burger white, because it was designed to sit
+     transparently over a dark hero image. Section 1 above gives the header an
+     opaque light background, which left the icon white on white — invisible
+     in the rendered screenshot, though nothing in the markup hints at it.
+     Repainting it in the brand's dark ink is the other half of that change.
+     The colour is set on all three bars: the button's own background is the
+     middle bar, its two pseudo-elements are the outer ones. */
+  #mmenu-toggle button,
+  #mmenu-toggle button::before,
+  #mmenu-toggle button::after {
+    background-color: #241417 !important;
+  }
+  #mmenu-toggle.active button { background-color: transparent !important; }
+
+  /* Primary calls to action span the column — the phone convention, and it
+     removes the half-width clipped button on the homepage hero. */
+  .elementor-widget-button .elementor-button { width: 100%; }
+
+  /* --- 5. The generated pages' header, compacted -------------------------
+     lib/page-chrome.js stacks .vm-header-simple into a column below 900px and
+     lets the six nav links wrap. Measured on a feature page at 375x812: the
+     bar came to roughly 200px tall — and it is sticky, so a quarter of the
+     screen was permanently occupied by navigation.
+
+     Instead: logo row on top, links in a single horizontally scrollable strip
+     underneath. That is the phone convention (a scrollable tab bar), it costs
+     about 100px, and no link is dropped — which hiding them behind a second
+     burger would have done. scrollbar-width:none hides the scrollbar without
+     disabling the scroll. */
+  .vm-header-simple {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin: 8px 10px 0;
+    padding: 10px 14px;
+  }
+  .vm-header-simple > a { justify-content: flex-start; }
+  .vm-header-simple > a img { height: 34px !important; }
+  .vm-header-simple nav {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .vm-header-simple nav::-webkit-scrollbar { display: none; }
+  .vm-header-simple nav a { flex: 0 0 auto; }
+
+  /* --- App feel ----------------------------------------------------------
+     The grey flash on tap is the single strongest "this is a web page" tell.
+     touch-action:manipulation removes the 300ms double-tap-zoom delay, so
+     buttons respond immediately. */
+  a, button, .elementor-button, summary {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  /* Rubber-banding at the end of a scroll container must not drag the page
+     behind it. "contain" keeps the browser's pull-to-refresh, which "none"
+     would remove — that gesture is expected on Android and taking it away
+     makes the site feel less native, not more. */
+  body { overscroll-behavior-y: contain; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+  /* iOS zooms the viewport when a focused field is under 16px. Nothing on the
+     site is today; this keeps that true if a form is added later. */
+  input, select, textarea { font-size: 16px; }
+
+  /* Bottom safe area, so the footer and any fixed CTA clear the home
+     indicator on a gesture-navigation phone. */
+  .vm-footer-simple, footer { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Users who ask for less motion get less motion — required for the animated
+   demos, which otherwise autoplay. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+<script>
+/**
+ * Desktop overlap effects, neutralised on phones.
+ *
+ * The homepage's red "Industries" section carries margin-top:-195px. On
+ * desktop that is an intentional overlap: the section slides up under the
+ * hero image. On a 375px screen the hero is far taller, so the same -195px
+ * lands on top of the hero's own content and swallows the "Demo" call to
+ * action completely — measured: hero spans 0-857, the red section starts at
+ * 662. That is the defect visible in the reported screenshot.
+ *
+ * This is done in script rather than CSS because only NEGATIVE margins are
+ * wrong. CSS cannot select "elements whose margin-top is negative", and
+ * zeroing every top-level section's margin would flatten spacing the design
+ * does want. Reading the computed value is the only way to touch exactly the
+ * broken ones.
+ *
+ * Re-evaluated on resize so rotating a phone to landscape past the
+ * breakpoint restores the desktop effect.
+ */
+(function () {
+  var BP = 1024;
+  var touched = [];
+
+  function apply() {
+    var mobile = window.innerWidth <= BP;
+
+    if (!mobile) {
+      touched.forEach(function (t) { t.el.style.marginTop = t.original; });
+      touched = [];
+      return;
+    }
+    if (touched.length) return; // already neutralised
+
+    var sections = document.querySelectorAll('.elementor-section.elementor-top-section');
+    Array.prototype.forEach.call(sections, function (el) {
+      if (parseFloat(window.getComputedStyle(el).marginTop) < 0) {
+        touched.push({ el: el, original: el.style.marginTop });
+        el.style.marginTop = '0px';
+      }
+    });
+  }
+
+  apply();
+  var t;
+  window.addEventListener('resize', function () {
+    clearTimeout(t);
+    t = setTimeout(apply, 150);
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

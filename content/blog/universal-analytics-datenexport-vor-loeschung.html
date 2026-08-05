@@ -1,0 +1,74 @@
+<p>Ab dem 1. Juli 2024 sind Universal-Analytics-Properties und die zugehörige Schnittstelle nicht mehr erreichbar, und die dort gespeicherten historischen Daten werden gelöscht. Ein Import dieser Daten in Google Analytics 4 ist nicht möglich. Wer seine Jahresvergleiche behalten will, muss vorher exportieren – und zwar in den kommenden Tagen.</p>
+
+<h2>Was genau passiert und wann</h2>
+<p>Die Abschaltung erfolgt in zwei Stufen. Die erste liegt bereits hinter uns: Am 1. Juli 2023 haben Universal-Analytics-Properties in der Standardversion aufgehört, neue Daten zu verarbeiten. Seitdem waren die Berichte nur noch lesend verfügbar. Die zweite Stufe beginnt ab dem 1. Juli 2024 – Google hat angekündigt, dass ab dieser Woche der Zugriff über die Oberfläche und über die Reporting-Schnittstelle endet und die Daten anschließend gelöscht werden.</p>
+<p>Für Nutzer von Analytics 360 galten abweichende, später liegende Fristen. Für alle anderen ist der Stichtag verbindlich, und es gibt keinen dokumentierten Weg, gelöschte Daten nachträglich wiederherzustellen.</p>
+
+<h2>Welche Daten wirklich wichtig sind</h2>
+<p>Der häufigste Fehler bei einem Datenexport unter Zeitdruck ist, alles retten zu wollen. Das führt zu einem Berg unstrukturierter Dateien, in den nie wieder jemand hineinsieht. Sinnvoller ist eine Priorisierung nach der Frage: Welche historischen Vergleiche brauchen wir in den nächsten drei Jahren tatsächlich?</p>
+<p>In der Praxis sind das meist diese Berichte, jeweils auf Monatsebene über die letzten drei bis fünf Jahre:</p>
+<ul>
+<li><strong>Akquisition nach Kanalgruppierung:</strong> Sitzungen, Nutzer, Conversions und Umsatz je Kanal – die Grundlage jedes Kanalvergleichs über Jahre.</li>
+<li><strong>Landingpages:</strong> Einstiege, Absprungrate und Conversions je Seite. Unverzichtbar, um SEO-Entwicklungen vor und nach großen Google-Updates zu belegen.</li>
+<li><strong>E-Commerce-Berichte:</strong> Transaktionen, Umsatz, Conversion-Rate, durchschnittlicher Bestellwert – idealerweise zusätzlich auf Produktebene.</li>
+<li><strong>Zielvorhaben:</strong> die definierten Ziele mit ihren monatlichen Werten, weil sich die Zieldefinitionen in GA4 grundlegend geändert haben.</li>
+<li><strong>Geräte und Regionen:</strong> für Kapazitäts- und Budgetplanung sowie zur Einordnung struktureller Verschiebungen.</li>
+<li><strong>Kampagnendaten:</strong> Quelle, Medium und Kampagne, sofern nicht ohnehin in den Werbeplattformen vorhanden.</li>
+</ul>
+
+<h2>Drei Exportwege im Vergleich</h2>
+<table>
+<tr><th>Weg</th><th>Geeignet für</th><th>Einschränkung</th></tr>
+<tr><td>CSV-Export aus der Oberfläche</td><td>wenige, klar definierte Berichte</td><td>manuell, begrenzte Zeilenzahl, aufwendig bei vielen Zeiträumen</td></tr>
+<tr><td>Reporting-Schnittstelle</td><td>systematische Exporte über viele Monate</td><td>technisches Wissen nötig, Sampling und Kontingentgrenzen beachten</td></tr>
+<tr><td>Tabellen-Erweiterungen</td><td>mittlere Datenmengen ohne Programmierung</td><td>ebenfalls Kontingentgrenzen, Ergebnisse sorgfältig prüfen</td></tr>
+</table>
+<p>Für die meisten mittelständischen Unternehmen ist eine Kombination sinnvoll: die fünf bis zehn wichtigsten Berichte über die Schnittstelle oder eine Tabellen-Erweiterung monatsweise ziehen, den Rest bewusst ziehen lassen.</p>
+<p>Ein wichtiger technischer Hinweis: Achten Sie beim Export auf Sampling. Wenn Google Analytics große Zeiträume auf Stichproben reduziert, weichen die Werte von den Originalzahlen ab. Kleinere Zeitfenster – etwa monatsweise statt jahresweise – reduzieren dieses Problem erheblich.</p>
+
+<h2>Ein Exportplan für einen Arbeitstag</h2>
+<p>Wer erst jetzt anfängt, braucht keine Projektstruktur, sondern eine Reihenfolge. Bewährt hat sich dieser Ablauf.</p>
+<ol>
+<li><strong>Zeitraum festlegen:</strong> In den meisten Fällen genügen die letzten 36 bis 60 Monate. Ältere Daten stammen aus einer anderen Website-Generation und sind ohnehin kaum vergleichbar.</li>
+<li><strong>Berichtsliste schreiben:</strong> Maximal zehn Berichte, jeweils mit den benötigten Dimensionen und Kennzahlen. Diese Liste ist gleichzeitig die spätere Dokumentation.</li>
+<li><strong>Monatsweise ziehen:</strong> Ein Export je Monat und Bericht, mit Monat und Berichtsname im Dateinamen. Das vermeidet Sampling und macht die Dateien später sortierbar.</li>
+<li><strong>Stichprobe prüfen:</strong> Zwei bis drei Monate gegen die Oberfläche gegenrechnen. Weichen die Werte ab, liegt es fast immer an Sampling, an einem abweichenden Datenansichts-Filter oder an einer anderen Zeitzone.</li>
+<li><strong>Zusammenführen und ablegen:</strong> Alles in eine Datei je Berichtstyp, plus eine kurze Notizdatei mit Definitionen, Datenansicht, Filtern und Exportdatum.</li>
+</ol>
+<p>Der häufigste Fehler in diesem Ablauf ist der vergessene vierte Schritt. Ein Export, dessen Richtigkeit nie geprüft wurde, wird Jahre später als Beleg verwendet – und niemand kann dann noch beurteilen, ob die Zahlen stimmen.</p>
+<p>Ebenfalls wichtig: Exportieren Sie aus der Datenansicht, die Sie tatsächlich als Referenz benutzt haben. In vielen Konten existieren mehrere Ansichten mit unterschiedlichen Filtern – ungefilterte Rohansicht, gefilterte Hauptansicht, Testansicht. Werden Monate aus verschiedenen Ansichten gemischt, entsteht eine Zeitreihe mit Sprüngen, die es in Wirklichkeit nie gab.</p>
+
+<h2>Wohin mit den exportierten Daten?</h2>
+<p>Eine Sammlung von CSV-Dateien in einem Ordner ist besser als nichts, aber schlecht nutzbar. Wer die Daten später tatsächlich auswerten will, sollte sie in eine Struktur überführen, die Abfragen erlaubt: eine Tabelle je Berichtstyp mit einer Spalte für den Monat, gespeichert in einem Data Warehouse oder wenigstens in einer sauber normalisierten Tabellendatei.</p>
+<p>Ebenso wichtig ist die Dokumentation der Definitionen. Eine „Sitzung“ in Universal Analytics ist nicht dasselbe wie eine „Sitzung“ in Google Analytics 4; auch Nutzerzahlen, Absprungraten und Conversion-Zählungen folgen anderen Regeln. Ohne eine kurze Notiz, wie die alten Kennzahlen definiert waren, entstehen später Vergleiche, die falsche Schlüsse nahelegen.</p>
+<p>Datenschutzrechtlich gilt: Exportierte Web-Analytics-Daten unterliegen weiterhin der DSGVO. Aggregierte Berichtsdaten ohne Personenbezug sind unproblematisch, Rohdaten mit Identifikatoren dagegen nicht. Nehmen Sie den Export zum Anlass, die eigene Aufbewahrungsfrist zu prüfen und im Verarbeitungsverzeichnis zu ergänzen.</p>
+
+<h2>Der Blick nach vorn: Was in GA4 anders gedacht werden muss</h2>
+<p>Die Abschaltung ist ein guter Zeitpunkt, das eigene Messkonzept zu überarbeiten, statt die alte Logik nachzubauen. Drei Punkte sind besonders relevant.</p>
+<p><strong>Ereignisbasiertes Modell:</strong> GA4 kennt keine Kategorien-Aktions-Label-Struktur mehr. Wer die alte Struktur eins zu eins überträgt, verschenkt die Möglichkeit, Ereignisse und Parameter am tatsächlichen Geschäftsmodell auszurichten.</p>
+<p><strong>Einwilligung und Modellierung:</strong> Seit März 2024 verlangt Google für Nutzer aus dem EWR die Übermittlung von Einwilligungssignalen im Consent Mode v2. Erst damit funktioniert die Modellierung fehlender Conversions. Wer die Signale nicht überträgt, sieht dauerhaft zu niedrige Werte.</p>
+<p><strong>Aggregierte Bewertung:</strong> Je größer der modellierte Anteil, desto weniger tragfähig sind sehr feingliedrige Auswertungen. Kanal- und Kampagnenebene bleiben belastbar, einzelne Nutzerpfade werden es immer weniger.</p>
+
+<h2>Wo KI im Analytics-Alltag tatsächlich hilft</h2>
+<p>Der praktische Nutzen liegt weniger in der Datenerhebung als in der Auswertung. Zwei Anwendungen sind unmittelbar wertschöpfend: erstens die Auffälligkeitserkennung, also das automatische Aufspüren von Abweichungen in vielen Kennzahlen gleichzeitig, für die niemand täglich Zeit hat. Zweitens die Übersetzung von Daten in verständliche Erklärungen für Menschen, die keine Analytics-Fachleute sind – Geschäftsführung, Vertrieb, Produktmanagement.</p>
+<p>Beides setzt allerdings voraus, dass die Datengrundlage stimmt. Ein Modell, das auf lückenhaften Daten arbeitet, erzeugt selbstbewusst formulierte falsche Schlüsse. Der Datenexport dieser Woche und ein sauberes GA4-Setup sind deshalb keine lästige Pflicht, sondern die Voraussetzung dafür, dass automatisierte Auswertung überhaupt sinnvoll ist.</p>
+
+<h2>Was mit den Daten anderer Systeme passiert</h2>
+<p>Universal Analytics war selten das einzige System, in dem Verlaufsdaten liegen. Der Stichtag ist deshalb ein guter Anlass, die übrigen Quellen mitzuprüfen – dort drohen zwar keine Löschungen zum selben Datum, aber ähnliche Lücken.</p>
+<ul>
+<li><strong>Werbeplattformen:</strong> Google Ads, Meta und LinkedIn halten Kampagnendaten unterschiedlich lange vor. Ein jährlicher Export auf Kampagnenebene kostet wenig und schließt genau die Lücke, die später schmerzt.</li>
+<li><strong>Search Console:</strong> Die Suchleistungsdaten reichen nur 16 Monate zurück. Wer Entwicklungen über mehrere Jahre belegen möchte, muss regelmäßig exportieren – am besten automatisiert.</li>
+<li><strong>Newsletter- und Shopsysteme:</strong> Hier liegen die belastbarsten Daten überhaupt, weil sie nicht von Einwilligungen und Browsereinstellungen abhängen. Sie sind die natürliche Referenz, wenn Plattformzahlen unscharf werden.</li>
+</ul>
+<p>Aus dieser Zusammenstellung entsteht mit wenig Aufwand ein einfaches Archivkonzept: eine feste Liste von Quellen, ein fester Turnus, ein fester Ablageort. Das ist deutlich weniger Arbeit als jede spätere Rekonstruktion – und es verhindert, dass der nächste Systemwechsel wieder zur Rettungsaktion unter Zeitdruck wird.</p>
+
+<h2>Häufige Fragen</h2>
+<h3>Kann ich Universal-Analytics-Daten in GA4 importieren?</h3>
+<p>Nein. Die Datenmodelle sind grundlegend verschieden; Google bietet keinen Migrationspfad für historische Daten an. Vergleiche über den Umstellungszeitpunkt hinweg müssen außerhalb beider Systeme erfolgen.</p>
+<h3>Was ist, wenn ich den Export nicht mehr schaffe?</h3>
+<p>Dann konzentrieren Sie sich auf das Wenige, das wirklich zählt: Kanalgruppierung und E-Commerce-Kennzahlen auf Monatsebene. Zwei brauchbare Berichte sind mehr wert als ein unvollständiger Versuch, alles zu sichern.</p>
+<h3>Bleiben Vergleiche zwischen alten und neuen Zahlen überhaupt aussagekräftig?</h3>
+<p>Nur eingeschränkt und nur bei Kennzahlen, deren Definition sich kaum geändert hat – etwa Transaktionen und Umsatz. Bei Nutzern, Sitzungen und Absprungraten sind direkte Vergleiche irreführend und sollten immer mit einem Hinweis auf den Systemwechsel versehen werden.</p>
+
+<h2>Fazit</h2>
+<p>Der 1. Juli 2024 ist eine harte Grenze: Danach sind die historischen Universal-Analytics-Daten weg. Der Aufwand für einen priorisierten Export liegt bei wenigen Stunden, der Verlust im Falle des Nichthandelns bei mehreren Jahren Vergleichsdaten. Wer die Gelegenheit zusätzlich nutzt, um Messkonzept, Einwilligungssignale und Definitionen aufzuräumen, gewinnt mehr als nur ein Archiv.</p>

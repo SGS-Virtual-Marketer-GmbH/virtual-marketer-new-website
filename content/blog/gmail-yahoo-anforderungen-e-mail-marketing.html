@@ -1,0 +1,60 @@
+<p>Seit dem 1. Februar 2024 gelten bei Gmail und Yahoo verschärfte Anforderungen für Massenversender. Wer täglich 5.000 oder mehr Nachrichten an private Gmail-Konten schickt, muss seine E-Mails per SPF, DKIM und DMARC authentifizieren, eine Ein-Klick-Abmeldung anbieten und die Spam-Beschwerderate niedrig halten. Wer das nicht tut, riskiert nicht nur den Spam-Ordner, sondern die vollständige Zurückweisung seiner Nachrichten.</p>
+
+<h2>Was genau fordern Gmail und Yahoo?</h2>
+<p>Google und Yahoo hatten die neuen Regeln im Oktober 2023 nahezu zeitgleich angekündigt und zum Februar 2024 in Kraft gesetzt. Die Anforderungen unterscheiden sich in Details, laufen aber auf drei Punkte hinaus.</p>
+
+<h3>1. Authentifizierung: SPF, DKIM und DMARC</h3>
+<p>Bislang genügte für die meisten Absender eines der beiden Verfahren SPF oder DKIM. Für Massenversender verlangt Google nun beides – und zusätzlich einen DMARC-Eintrag im DNS der Absenderdomain. Dabei muss mindestens eine sogenannte DMARC-Ausrichtung („Alignment“) gegeben sein: Die Domain im sichtbaren Absenderfeld muss zur Domain passen, die durch SPF oder DKIM bestätigt wird.</p>
+<p>Wichtig für die Praxis: Eine DMARC-Richtlinie mit p=none reicht zunächst aus, um die Anforderung zu erfüllen. p=none bedeutet, dass empfangende Server bei Verstößen keine Maßnahmen ergreifen, aber Berichte senden. Genau diese Berichte sind der eigentliche Nutzen: Sie zeigen, welche Systeme im Unternehmen tatsächlich unter der eigenen Domain versenden – häufig deutlich mehr als gedacht, etwa Rechnungssysteme, Ticket-Tools oder Veranstaltungsplattformen.</p>
+
+<h3>2. Ein-Klick-Abmeldung</h3>
+<p>Werbliche Nachrichten müssen eine Abmeldung ermöglichen, die mit einem einzigen Klick funktioniert – ohne Login, ohne Bestätigungsseite, ohne Umfrage. Technisch geschieht das über die Header List-Unsubscribe und List-Unsubscribe-Post nach dem Standard RFC 8058. Google verlangt zudem, dass Abmeldungen innerhalb von zwei Tagen verarbeitet werden.</p>
+<p>Für Absender, die bereits einen Abmeldelink im Nachrichtentext hatten, räumte Google eine Übergangsfrist bis zum 1. Juni 2024 ein, um die technische Ein-Klick-Variante nachzurüsten. Diese Frist läuft – wer sie nutzt, sollte die Umsetzung jetzt einplanen und nicht im Mai beginnen.</p>
+
+<h3>3. Spam-Rate unter 0,3 Prozent</h3>
+<p>Die dritte Anforderung ist die anspruchsvollste, weil sie sich nicht durch eine einmalige technische Änderung erledigen lässt. In Googles Richtlinien für E-Mail-Absender (Stand Februar 2024) steht ein Schwellenwert von 0,30 Prozent Spam-Beschwerden, den Absender nicht erreichen sollen; als Empfehlung nennt Google dort zusätzlich einen Dauerwert unter 0,10 Prozent, um gegen einzelne Ausreißer gewappnet zu sein. Gemessen wird das in den Google Postmaster Tools, die jeder Versender für seine Domain einrichten kann und sollte.</p>
+<p>Zur Einordnung: 0,3 Prozent bedeuten bei 100.000 Empfängern nur 300 Spam-Klicks. Das ist eine Größenordnung, die eine einzige schlecht segmentierte Kampagne an eine lange nicht kontaktierte Liste überschreiten kann.</p>
+
+<h3>Was die DMARC-Berichte in der Praxis zutage fördern</h3>
+<p>Der Schritt, der in vielen Unternehmen den größten Erkenntnisgewinn bringt, ist nicht die Veröffentlichung des DMARC-Eintrags selbst, sondern die Auswertung der ersten Berichte. Sie zeigen für jede Absenderquelle, ob SPF und DKIM greifen und ob die Domain ausgerichtet ist. Regelmäßig tauchen dabei Systeme auf, die in keiner Übersicht der IT standen: ein Bewerbermanagement, ein Newsletter-Werkzeug einer einzelnen Abteilung, eine Veranstaltungsplattform, ein alter Mailserver einer übernommenen Tochtergesellschaft.</p>
+<p>Genau diese Schattensysteme sind der Grund, warum eine Verschärfung auf p=quarantine oder p=reject nicht sofort erfolgen sollte. Wer die Richtlinie verschärft, bevor alle legitimen Quellen authentifiziert sind, blockiert eigene Geschäftspost. Zwei bis drei Monate Beobachtung mit p=none sind deshalb keine Verzögerung, sondern der eigentliche Arbeitsschritt.</p>
+
+<h2>Wen betreffen die Regeln – und wen nicht?</h2>
+<p>Die Schwelle von 5.000 Nachrichten pro Tag bezieht sich bei Google auf Nachrichten an persönliche Gmail-Konten, nicht auf Google-Workspace-Konten von Unternehmen. Sie wird pro Absenderdomain betrachtet, und sie muss nur einmal überschritten worden sein, damit die Domain dauerhaft als Massenversender gilt.</p>
+<p>Praktisch heißt das: Auch mittelständische Unternehmen mit einem Verteiler von 30.000 Adressen liegen bei einem einzigen Newsletterversand schnell über der Grenze, sobald ein nennenswerter Anteil davon Gmail-Adressen sind. Und selbst wer die Schwelle sicher unterschreitet, sollte die Anforderungen erfüllen – Authentifizierung und einfache Abmeldung sind unabhängig von Schwellenwerten Grundlagen guter Zustellbarkeit.</p>
+
+<h2>Was das mit deutschem Recht zu tun hat – und was nicht</h2>
+<p>Die Anforderungen von Gmail und Yahoo sind private Regeln von Plattformbetreibern, kein Gesetz. Sie treten neben die deutschen Vorgaben, ersetzen sie aber nicht. Für werbliche E-Mails gilt in Deutschland weiterhin § 7 UWG: Werbung per E-Mail ist grundsätzlich nur mit vorheriger ausdrücklicher Einwilligung zulässig, mit einer engen Ausnahme für Bestandskunden. Hinzu kommen die Informations- und Widerspruchspflichten aus der DSGVO.</p>
+<p>Der praktische Punkt: Wer die deutschen Anforderungen ernst nimmt – also nur an Menschen versendet, die aktiv zugestimmt haben, und Abmeldungen sofort umsetzt – hat mit der 0,3-Prozent-Grenze in aller Regel kein Problem. Die neuen Plattformregeln bestrafen vor allem Praktiken, die hierzulande ohnehin rechtlich heikel waren: gekaufte Adressen, alte Listen ohne Reaktivierung, versteckte Abmeldewege.</p>
+
+<h2>Eine Checkliste für die kommenden Wochen</h2>
+<ol>
+<li><strong>Versandquellen erfassen:</strong> Welche Systeme versenden unter Ihrer Domain? Newsletter-Tool, Shopsystem, CRM, ERP, Ticketsystem, Terminbuchung.</li>
+<li><strong>SPF prüfen:</strong> Sind alle diese Systeme im SPF-Eintrag enthalten? Enthält der Eintrag höchstens zehn DNS-Lookups?</li>
+<li><strong>DKIM aktivieren:</strong> Für jedes versendende System einen eigenen Selektor einrichten, Schlüssellänge mindestens 1024 Bit, besser 2048.</li>
+<li><strong>DMARC mit p=none veröffentlichen</strong> und eine Adresse für die aggregierten Berichte hinterlegen. Nach einigen Wochen Auswertung schrittweise auf quarantine verschärfen.</li>
+<li><strong>Ein-Klick-Abmeldung testen:</strong> Nicht nur „ist implementiert“ abhaken, sondern in einem echten Gmail-Konto prüfen, ob der Abmeldelink oben in der Nachricht erscheint.</li>
+<li><strong>Postmaster Tools einrichten</strong> und die Spam-Rate wöchentlich beobachten – vor allem nach jeder größeren Kampagne.</li>
+<li><strong>Liste bereinigen:</strong> Empfänger ohne Öffnung oder Klick über zwölf Monate entweder reaktivieren oder entfernen.</li>
+</ol>
+
+<h2>Wie KI beim Erreichen dieser Ziele hilft – und wo nicht</h2>
+<p>Ein häufiges Missverständnis: KI verbessere die Zustellbarkeit. Das tut sie nicht direkt. Kein Sprachmodell repariert einen fehlerhaften SPF-Eintrag. Der Beitrag von KI liegt an anderer Stelle – bei der Relevanz, und Relevanz ist der wichtigste Hebel gegen Spam-Beschwerden.</p>
+<p>Konkret bedeutet das drei Dinge. Erstens: bessere Segmentierung, weil Modelle in Bestell- und Interaktionsdaten Muster finden, die in manuell gepflegten Segmenten untergehen. Zweitens: individuellere Inhalte, weil sich Betreffzeilen und Textbausteine je Segment automatisiert erzeugen lassen, statt eine Nachricht an alle zu schicken. Drittens: konsequenteres Testen, weil Varianten schneller entstehen und damit überhaupt genügend Testmaterial vorliegt.</p>
+<p>Der wirksamste Effekt ist dabei banal: Wer weniger Menschen anschreibt, aber die richtigen, senkt die Spam-Rate messbar. Reichweite ist im E-Mail-Marketing seit Februar 2024 endgültig kein Selbstzweck mehr.</p>
+
+<h2>Was zu tun ist, wenn die Spam-Rate bereits zu hoch ist</h2>
+<p>Wenn die Postmaster Tools eine Rate oberhalb der Schwelle zeigen, hilft kein schnelles technisches Pflaster. Wirksam ist nur, das Sendevolumen für eine Weile deutlich zu reduzieren und ausschließlich an die aktivsten Empfängerinnen und Empfänger zu senden – etwa an alle, die in den letzten 90 Tagen geöffnet oder geklickt haben. Diese Gruppe erzeugt kaum Beschwerden und stabilisiert die Reputation der Domain.</p>
+<p>Erst wenn die Rate über mehrere Wochen niedrig bleibt, sollte der Verteiler schrittweise wieder erweitert werden, in Stufen und mit Beobachtung nach jeder Stufe. Ein Reaktivierungsversuch an lange inaktive Adressen sollte dabei in einem eigenen, kleinen Segment laufen und nicht als Teil der regulären Aussendung – sonst gefährdet ein einziger Versuch die Zustellbarkeit aller Nachrichten.</p>
+<p>Parallel lohnt der Blick auf den Abmeldeweg: Wenn Menschen die Abmeldung nicht sofort finden, klicken sie stattdessen auf „Spam melden“. Ein gut sichtbarer Abmeldelink senkt die Beschwerderate messbar – auch wenn er kurzfristig mehr Abmeldungen erzeugt. Das ist der bessere Tausch.</p>
+
+<h2>Häufige Fragen</h2>
+<h3>Was passiert, wenn ich die Anforderungen nicht erfülle?</h3>
+<p>Google hat angekündigt, nicht konforme Nachrichten zunächst vermehrt als Spam einzustufen und später vollständig zurückzuweisen. Betroffene Absender erhalten dann eine Fehlermeldung des empfangenden Servers. Die Umstellung erfolgt schrittweise, nicht schlagartig.</p>
+<h3>Reicht ein DMARC-Eintrag mit p=none dauerhaft aus?</h3>
+<p>Für die formale Anforderung ja. Schutz vor Missbrauch der eigenen Domain bietet aber erst eine strengere Richtlinie. Sinnvoll ist der Weg über p=none zur Auswertung, dann p=quarantine, dann gegebenenfalls p=reject.</p>
+<h3>Gelten die Regeln auch für Transaktionsmails wie Bestellbestätigungen?</h3>
+<p>Die Authentifizierungspflichten gelten für alle Nachrichten. Die Pflicht zur Ein-Klick-Abmeldung bezieht sich dagegen auf werbliche und promotionale Nachrichten – reine Transaktionsmails sind davon nicht erfasst. Die Abgrenzung sollte im Zweifel eng ausgelegt werden: Sobald eine Bestellbestätigung Produktempfehlungen enthält, wird sie zur Werbung.</p>
+
+<h2>Fazit</h2>
+<p>Die Anforderungen, die seit dem 1. Februar 2024 gelten, sind technisch überschaubar und in wenigen Tagen umsetzbar. Der schwierigere Teil ist der inhaltliche: dauerhaft unter der Beschwerdeschwelle zu bleiben, verlangt relevante Inhalte und gepflegte Verteiler. Genau hier – bei Segmentierung, Personalisierung und Testgeschwindigkeit – liegt der sinnvolle Einsatzbereich KI-gestützter Werkzeuge im E-Mail-Marketing.</p>

@@ -1,0 +1,169 @@
+/* Custom-model request form — see model-request.js for what it replaces.
+   Brand colours are the real ones from vm-customer-web-ui/tailwind.config.js:
+   vm-red #94152b / vm-red-dark #700f2b / vm-blue #66a3ce. */
+
+.vm-mr {
+  --vm-red: #94152b;
+  --vm-red-dark: #700f2b;
+  --vm-blue: #66a3ce;
+  --vm-ink: #241417;
+  --vm-line: #e7dfe0;
+  max-width: 720px;
+  margin: 0 auto;
+  color: var(--vm-ink);
+}
+
+/* --- progress ----------------------------------------------------------- */
+.vm-mr-progress {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  counter-reset: none;
+}
+.vm-mr-progress li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: 1 1 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #9b8f90;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--vm-line);
+}
+.vm-mr-progress .vm-mr-dot {
+  flex: 0 0 auto;
+  width: 26px; height: 26px;
+  border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #f4f1f1; color: #9b8f90;
+  font-size: 13px;
+}
+.vm-mr-progress li.is-current { color: var(--vm-ink); border-bottom-color: var(--vm-red); }
+.vm-mr-progress li.is-current .vm-mr-dot { background: var(--vm-red); color: #fff; }
+.vm-mr-progress li.is-done { color: var(--vm-ink); border-bottom-color: var(--vm-blue); }
+.vm-mr-progress li.is-done .vm-mr-dot { background: var(--vm-blue); color: #fff; }
+
+/* --- fields ------------------------------------------------------------- */
+.vm-mr-field { display: block; margin-bottom: 22px; }
+.vm-mr-label {
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 7px;
+}
+.vm-mr-req { color: var(--vm-red); margin-left: 3px; }
+.vm-mr-hint {
+  display: block;
+  font-size: 13.5px;
+  color: #6b5f60;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.vm-mr input[type="text"],
+.vm-mr input[type="email"],
+.vm-mr textarea,
+.vm-mr select {
+  width: 100%;
+  box-sizing: border-box;
+  /* 16px so iOS does not zoom the viewport when a field takes focus. */
+  font: inherit;
+  font-size: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--vm-line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--vm-ink);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.vm-mr textarea { resize: vertical; line-height: 1.55; }
+.vm-mr input:focus, .vm-mr textarea:focus, .vm-mr select:focus {
+  border-color: var(--vm-blue);
+  box-shadow: 0 0 0 3px rgba(102, 163, 206, .18);
+}
+.vm-mr-field.is-invalid input,
+.vm-mr-field.is-invalid textarea,
+.vm-mr-field.is-invalid select,
+.vm-mr-field.is-invalid .vm-mr-choices { border-color: var(--vm-red); }
+.vm-mr-field.is-invalid .vm-mr-choices { border: 0; }
+.vm-mr-field.is-invalid .vm-mr-choice { border-color: var(--vm-red); }
+
+/* --- choice cards ------------------------------------------------------- */
+.vm-mr-choices { display: grid; gap: 10px; }
+@media (min-width: 620px) { .vm-mr-choices { grid-template-columns: 1fr 1fr; } }
+.vm-mr-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 15px 16px;
+  border: 1px solid var(--vm-line);
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.vm-mr-choice:hover { border-color: var(--vm-blue); }
+.vm-mr-choice input { margin: 3px 0 0; accent-color: var(--vm-red); flex: 0 0 auto; }
+.vm-mr-choice-body { display: block; }
+.vm-mr-choice-body strong { display: block; font-size: 15px; }
+.vm-mr-choice-body span { display: block; font-size: 13.5px; color: #6b5f60; margin-top: 3px; line-height: 1.5; }
+.vm-mr-choice:has(input:checked) { border-color: var(--vm-red); background: #fdf7f8; }
+
+/* --- navigation --------------------------------------------------------- */
+.vm-mr-nav { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+.vm-mr-btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  /* 44px minimum so the control clears both Apple's and Google's touch
+     target guidance without extra padding on mobile. */
+  min-height: 44px;
+  padding: 12px 28px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--vm-blue), var(--vm-red));
+  color: #fff;
+  cursor: pointer;
+  margin-left: auto;
+}
+.vm-mr-btn:hover { background: linear-gradient(90deg, var(--vm-red), var(--vm-red-dark)); }
+.vm-mr-btn[disabled] { opacity: .6; cursor: default; }
+.vm-mr-btn-ghost {
+  background: #fff;
+  color: #6b5f60;
+  border: 1px solid var(--vm-line);
+  margin-left: 0;
+  padding: 12px 20px;
+}
+.vm-mr-btn-ghost:hover { background: #f4f1f1; color: var(--vm-ink); }
+
+/* --- messages ----------------------------------------------------------- */
+.vm-mr-msg { min-height: 0; font-size: 14.5px; margin: 4px 0 14px; }
+.vm-mr-msg.is-error {
+  color: var(--vm-red);
+  background: #fdf0f2;
+  border: 1px solid #f4d4da;
+  border-radius: 9px;
+  padding: 11px 14px;
+}
+.vm-mr-done {
+  background: #f8f9fc;
+  border: 1px solid var(--vm-line);
+  border-radius: 14px;
+  padding: 30px;
+  text-align: center;
+}
+.vm-mr-done h3 { margin: 0 0 8px; font-size: 20px; }
+.vm-mr-done p { margin: 0; color: #4a4143; line-height: 1.6; }
+
+/* --- no JavaScript ------------------------------------------------------ */
+.vm-mr-nojs {
+  background: #f8f9fc;
+  border: 1px solid var(--vm-line);
+  border-radius: 14px;
+  padding: 24px;
+}
+.vm-mr-nojs a { color: var(--vm-red); font-weight: 600; }

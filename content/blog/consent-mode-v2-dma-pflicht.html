@@ -1,0 +1,62 @@
+<p>Seit dem 6. März 2024 verlangt Google von allen Werbetreibenden, die Nutzer im Europäischen Wirtschaftsraum oder im Vereinigten Königreich ansprechen, die Übermittlung von Einwilligungssignalen im Format des Consent Mode v2. Ohne diese Signale lassen sich Remarketing-Zielgruppen, Conversion-Messung und personalisierte Werbung in Google Ads und Google Analytics 4 nicht mehr vollständig nutzen. Auslöser ist nicht die DSGVO, sondern der Digital Markets Act.</p>
+
+<h2>Warum der Digital Markets Act der eigentliche Auslöser ist</h2>
+<p>Der Digital Markets Act – Verordnung (EU) 2022/1925 – verpflichtet sogenannte Torwächter, große Plattformbetreiber mit besonderer Marktstellung, zu einer Reihe von Verhaltenspflichten. Die EU-Kommission hatte im September 2023 mehrere Unternehmen als Torwächter benannt, darunter Google. Für die benannten Dienste galt eine Umsetzungsfrist bis zum 6. März 2024.</p>
+<p>Der Nachdruck hinter diesen Pflichten ist erheblich: Artikel 30 der Verordnung sieht Geldbußen von bis zu 10 Prozent des weltweiten Jahresumsatzes vor, bei wiederholten gleichartigen Verstößen bis zu 20 Prozent. Diese Größenordnung erklärt, warum Google die Anforderung an die Werbetreibenden weitergibt, statt sie sportlich auszulegen.</p>
+<p>Eine der Pflichten betrifft die Zusammenführung personenbezogener Daten über verschiedene Dienste hinweg und deren Nutzung für Werbung: Sie ist nur mit einer ausdrücklichen Einwilligung der betroffenen Person zulässig. Google muss diese Einwilligung nachweisen können – und weil Google sie nicht selbst einholt, wenn Nutzer sich auf der Website eines Werbetreibenden befinden, verlagert sich die Nachweispflicht faktisch auf die Werbetreibenden. Der Consent Mode ist das technische Format, in dem dieser Nachweis übergeben wird.</p>
+<p>Das erklärt auch, warum die Anforderung unabhängig davon gilt, ob ein Unternehmen seine Cookie-Einwilligung bereits DSGVO-konform einholt. Die deutschen Vorgaben aus § 25 TTDSG und der DSGVO bleiben unverändert bestehen; der Consent Mode ist keine Alternative dazu, sondern eine zusätzliche Übermittlungsschicht in Richtung Google.</p>
+
+<h2>Was sich technisch gegenüber Version 1 ändert</h2>
+<p>Der Consent Mode arbeitete bislang mit zwei Signalen. Version 2 ergänzt zwei weitere, sodass insgesamt vier Parameter übertragen werden:</p>
+<table>
+<tr><th>Signal</th><th>Bedeutung</th></tr>
+<tr><td>ad_storage</td><td>Einwilligung in das Speichern von Werbe-Cookies auf dem Endgerät</td></tr>
+<tr><td>analytics_storage</td><td>Einwilligung in das Speichern von Analyse-Cookies</td></tr>
+<tr><td>ad_user_data</td><td>Einwilligung in die Übermittlung personenbezogener Daten an Google zu Werbezwecken</td></tr>
+<tr><td>ad_personalization</td><td>Einwilligung in personalisierte Werbung, einschließlich Remarketing</td></tr>
+</table>
+<p>Die beiden neuen Signale sind der Kern der Umstellung. Sie trennen die Frage „darf etwas auf dem Gerät gespeichert werden?“ von der Frage „darf Google die Daten für Werbung verwenden?“. Genau diese Trennung verlangt der Digital Markets Act.</p>
+
+<h3>Basic oder Advanced: Der entscheidende Konfigurationsunterschied</h3>
+<p>Beim Basic Consent Mode werden die Google-Tags erst geladen, nachdem eine Einwilligung erteilt wurde. Lehnt jemand ab, sendet die Seite überhaupt keine Daten an Google – auch keine Signale. Das ist die datensparsamste Variante, führt aber zu größeren Messlücken.</p>
+<p>Beim Advanced Consent Mode werden die Tags von Anfang an geladen, senden aber vor einer Einwilligung nur sogenannte Cookieless Pings: anonyme Signale ohne Identifikatoren, die den Einwilligungsstatus mitteilen. Auf dieser Basis kann Google Conversions modellieren, also aus den beobachteten Fällen auf die nicht messbaren hochrechnen.</p>
+<p>Die Wahl zwischen beiden Varianten ist keine rein technische, sondern eine datenschutzrechtliche Abwägung, die dokumentiert werden sollte. Mehrere deutsche Aufsichtsbehörden haben sich in der Vergangenheit kritisch dazu geäußert, ob Signale vor einer Einwilligung übermittelt werden dürfen. Wer den Advanced Mode einsetzt, sollte das mit dem eigenen Datenschutzbeauftragten abstimmen und in der Datenschutzerklärung transparent beschreiben.</p>
+
+<h2>Was passiert, wenn nichts umgesetzt wird?</h2>
+<p>Es gibt keine sofortige Kontosperrung. Die Auswirkungen setzen schleichend ein und treffen vor allem drei Bereiche:</p>
+<ul>
+<li><strong>Remarketing-Zielgruppen:</strong> Für neue Nutzer aus dem EWR werden keine Zielgruppenmitglieder mehr hinzugefügt. Bestehende Listen laufen aus, ohne aufgefüllt zu werden – der Effekt zeigt sich erst nach Wochen.</li>
+<li><strong>Conversion-Messung:</strong> Ohne Einwilligungssignale entfällt die Modellierung. Kampagnen erscheinen im Bericht schlechter, als sie tatsächlich sind, was zu falschen Budgetentscheidungen führt.</li>
+<li><strong>Smart-Bidding-Strategien:</strong> Automatisierte Gebotsstrategien lernen aus Conversion-Daten. Fehlen diese teilweise, verschlechtert sich die Steuerung – nicht dramatisch, aber messbar.</li>
+</ul>
+<p>Der dritte Punkt wird häufig unterschätzt. Wer stark auf automatisierte Gebote setzt, hat ein doppeltes Interesse an sauberen Einwilligungsdaten: rechtlich und wirtschaftlich.</p>
+
+<h2>Umsetzung in der Praxis</h2>
+<ol>
+<li><strong>Einwilligungslösung prüfen:</strong> Unterstützt Ihre Consent-Management-Plattform die vier Signale? Nahezu alle etablierten Anbieter haben die Unterstützung im Laufe des ersten Quartals 2024 nachgerüstet, oft muss sie aber aktiv eingeschaltet werden.</li>
+<li><strong>Reihenfolge sicherstellen:</strong> Der Standardstatus muss gesetzt sein, bevor Google-Tags ausgeführt werden. Ein häufiger Fehler ist, den Consent-Mode-Befehl erst nach dem Tag-Manager-Container zu laden.</li>
+<li><strong>Verhalten testen:</strong> Prüfen Sie beide Fälle – Zustimmung und Ablehnung – und kontrollieren Sie in den Entwicklerwerkzeugen des Browsers, welche Parameter tatsächlich übertragen werden.</li>
+<li><strong>Dokumentieren:</strong> Halten Sie fest, welche Variante Sie einsetzen, warum, und wie die Einwilligung eingeholt wird. Diese Dokumentation gehört ins Verarbeitungsverzeichnis.</li>
+<li><strong>Zustimmungsrate beobachten:</strong> Sie wird ab jetzt zur betriebswirtschaftlichen Kennzahl. Eine Verbesserung um wenige Prozentpunkte wirkt sich direkt auf die Datenqualität aller nachgelagerten Systeme aus.</li>
+</ol>
+
+<h3>Warum die Zustimmungsrate jetzt eine Umsatzgröße ist</h3>
+<p>Bis März 2024 war die Einwilligungsquote für die meisten Marketingabteilungen eine Compliance-Kennzahl, die niemand aktiv steuerte. Mit der Umstellung wird sie zur Steuergröße für die Datenmenge, mit der Gebotsalgorithmen, Zielgruppen und Auswertungen arbeiten. Der Zusammenhang ist direkt: Jeder Prozentpunkt mehr Zustimmung bedeutet mehr beobachtete Conversions und damit weniger Modellierungsbedarf.</p>
+<p>Die wirksamsten Stellschrauben sind unspektakulär. Erstens die Gestaltung: verständliche Formulierungen statt juristischer Aufzählungen, gleichwertig gestaltete Schaltflächen, keine Vorauswahl. Zweitens der Zeitpunkt: ein Banner, das eine Seite vollständig verdeckt, bevor überhaupt Inhalt sichtbar war, erzeugt Abwehr. Drittens die Ehrlichkeit über den Zweck – Menschen stimmen eher zu, wenn erkennbar ist, was sie davon haben. Wichtig ist dabei, jede Änderung als Test zu fahren und die Quote wöchentlich zu beobachten, statt einmalig zu optimieren und das Thema abzuhaken.</p>
+
+<h2>Was das für datengetriebenes und KI-gestütztes Marketing bedeutet</h2>
+<p>Die Umstellung verstärkt einen Trend, der ohnehin läuft: Der Anteil modellierter Daten in Marketingberichten steigt, der Anteil direkt beobachteter Daten sinkt. Das ist kein Makel, verlangt aber eine andere Arbeitsweise. Drei Konsequenzen sind praktisch relevant.</p>
+<p><strong>Erstens</strong> verlieren sehr kleinteilige Auswertungen an Aussagekraft. Wer Kampagnen auf Basis von zwölf Conversions pro Woche steuert, steuert künftig auf Basis von zwölf teilweise geschätzten Conversions. Aggregation auf Kampagnen- oder Kanalebene wird belastbarer.</p>
+<p><strong>Zweitens</strong> gewinnen eigene Daten an Gewicht. Bestellungen im Shopsystem, Leads im CRM und Kundenwert über die Zeit lassen sich vollständig und ohne Modellierung erfassen. Sie eignen sich damit als Kontrollgröße für Plattformberichte – und als Trainingsgrundlage für eigene Prognosemodelle.</p>
+<p><strong>Drittens</strong> verschiebt sich der Hebel für Optimierung von der Messung zur Kreation. Wenn die Zuordnung einzelner Klicks unschärfer wird, zählt umso mehr, wie gut Anzeigen, Landingpages und Angebote tatsächlich sind. Genau dort setzen KI-gestützte Werkzeuge sinnvoll an: mehr Varianten, schnellere Tests, konsistentere Markenführung über viele Anzeigen hinweg.</p>
+
+<h2>Häufige Fragen</h2>
+<h3>Gilt der Consent Mode v2 auch für Unternehmen ohne Google-Ads-Konto?</h3>
+<p>Wer ausschließlich Google Analytics 4 nutzt und keine Werbeprodukte einsetzt, ist von den werbebezogenen Signalen weniger betroffen. Die Übermittlung der Signale wird aber auch dort empfohlen, weil sonst die Modellierung in GA4 entfällt.</p>
+<h3>Ersetzt der Consent Mode ein Cookie-Banner?</h3>
+<p>Nein. Der Consent Mode übermittelt nur den Status einer Einwilligung. Eingeholt werden muss sie weiterhin über eine eigene Lösung, die den Anforderungen von § 25 TTDSG und der DSGVO genügt.</p>
+<h3>Was ist mit Nutzern außerhalb des EWR?</h3>
+<p>Die Anforderung von Google bezieht sich auf Nutzer im EWR, in der Schweiz und im Vereinigten Königreich. Technisch ist es dennoch einfacher, die Signale für alle Nutzer zu übertragen, als eine geografische Fallunterscheidung zu pflegen.</p>
+
+<h2>Fazit</h2>
+<p>Der 6. März 2024 markiert weniger eine neue Datenschutzanforderung als eine neue Nachweisanforderung. Die eigentliche Arbeit liegt nicht im Einbau von vier Parametern, sondern in dem, was daraus folgt: höhere Zustimmungsraten als Ziel, eigene Datenquellen als Rückgrat und ein Reporting, das offen ausweist, welcher Anteil beobachtet und welcher modelliert ist. Unternehmen, die das jetzt sauber aufsetzen, haben eine belastbare Grundlage – auch für den KI-gestützten Teil ihres Marketings.</p>

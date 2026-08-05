@@ -6,9 +6,10 @@
  * Adds a small, fixed-position "DE | EN" badge linking a German page to
  * its real English counterpart under /en/ on this same domain, and vice
  * versa. Only pages with an actual, built EN equivalent get the switcher
- * — for everything else (the ~90 legacy blog posts, tag/category/author
- * archives, etc.) injecting a switcher would just link to a 404, so those
- * pages are left alone entirely rather than showing a broken control.
+ * — for everything else (tag/category/author archives, etc.) injecting a
+ * switcher would just link to a 404, so those pages are left alone
+ * entirely rather than showing a broken control. All 58 blog posts now
+ * have a real EN translation (blog-posts-en.json), so they're included too.
  *
  * Note this is a real, same-domain /en/ path prefix, not the
  * virtual-marketer.ai domain referenced in earlier versions of this
@@ -58,7 +59,19 @@ const DE_TO_EN = {
   '/modell-anfragen/': '/en/request-custom-model/',
   '/virtual-marketer-demo/': '/en/demo/',
   '/kontakt/': '/en/contact/',
+  '/blog/': '/en/blog/',
 };
+
+// Every post in blog-posts-en.json has a real English translation — derive
+// the per-post mapping from that file rather than hardcoding 58 slugs here.
+const BLOG_POSTS_EN_JSON = path.join(__dirname, '../blog-posts-en.json');
+if (fs.existsSync(BLOG_POSTS_EN_JSON)) {
+  const { posts } = JSON.parse(fs.readFileSync(BLOG_POSTS_EN_JSON, 'utf-8'));
+  posts.forEach(({ slug }) => {
+    DE_TO_EN[`/blog/${slug}/`] = `/en/blog/${slug}/`;
+  });
+}
+
 const EN_TO_DE = Object.fromEntries(Object.entries(DE_TO_EN).map(([de, en]) => [en, de]));
 
 const START_MARKER = '<!-- vm-lang-switch:start -->';

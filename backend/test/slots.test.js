@@ -5,8 +5,10 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const slots = require('../src/slots');
 
-// A Tuesday, far enough in the future that "must be in the future" checks
-// never flake, during German summer time (CEST, UTC+2).
+// A Tuesday during German summer time (CEST, UTC+2). Used for assertions
+// about slot generation, which are time-independent. Anything that depends on
+// the date still being in the future uses futureWeekday() below instead —
+// this constant is in the past now.
 const SUMMER_WEEKDAY = '2026-08-04';
 // A Tuesday during German winter time (CET, UTC+1).
 const WINTER_WEEKDAY = '2027-01-05';
@@ -58,8 +60,28 @@ test('slotsForDate: invalid/malformed date strings return no slots without throw
   assert.deepEqual(slots.slotsForDate(null), []);
 });
 
+/**
+ * A weekday roughly a month out, computed rather than written down.
+ *
+ * The fixed SUMMER_WEEKDAY above was chosen as "far enough in the future that
+ * the must-be-in-the-future check never flakes" — and then that date arrived,
+ * and this test started failing against correct code. isValidSlotStart()
+ * rejects slots in the past, which is exactly what it should do; the test had
+ * simply expired.
+ *
+ * The other constants stay fixed on purpose: they assert exact ISO strings
+ * across DST boundaries, which only works against a known date.
+ */
+function futureWeekday() {
+  const d = new Date(Date.now() + 30 * 24 * 3600 * 1000);
+  // Saturday and Sunday generate no slots, so step forward to Monday.
+  while (d.getUTCDay() === 0 || d.getUTCDay() === 6) d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
 test('isValidSlotStart: accepts an exact generated slot boundary', () => {
-  const [first] = slots.slotsForDate(SUMMER_WEEKDAY);
+  const [first] = slots.slotsForDate(futureWeekday());
+  assert.ok(first, 'the computed weekday should generate slots');
   assert.equal(slots.isValidSlotStart(first), true);
 });
 

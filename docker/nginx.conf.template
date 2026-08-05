@@ -1,0 +1,258 @@
+worker_processes auto;
+pid /tmp/nginx.pid;
+
+events {
+  worker_connections 1024;
+}
+
+http {
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;
+
+  sendfile        on;
+  tcp_nopush      on;
+  keepalive_timeout 65;
+
+  # Don't leak nginx version
+  server_tokens off;
+
+  gzip on;
+  gzip_comp_level 6;
+  gzip_min_length 256;
+  gzip_vary on;
+  gzip_proxied any;
+  gzip_types
+    text/plain text/css text/xml application/xml application/xml+rss
+    text/javascript application/javascript application/json
+    image/svg+xml font/woff font/woff2;
+
+  # Temp paths writable by non-root user (see Dockerfile)
+  client_body_temp_path /tmp/client_temp;
+  proxy_temp_path       /tmp/proxy_temp;
+  fastcgi_temp_path     /tmp/fastcgi_temp;
+  uwsgi_temp_path       /tmp/uwsgi_temp;
+  scgi_temp_path        /tmp/scgi_temp;
+
+  # ---- Real client IP behind Cloud Run -----------------------------------
+  # Cloud Run terminates TLS at Google's frontend and proxies to this
+  # container, so $remote_addr is a Google frontend address shared by every
+  # visitor — NOT the client. Keying a rate limit on it would put the whole
+  # internet into a handful of buckets and start 429-ing real users the
+  # moment traffic picked up. The client address arrives in X-Forwarded-For,
+  # leftmost entry, so that is what every per-client decision below uses.
+  #
+  # A client can of course send its own X-Forwarded-For and shift the
+  # leftmost entry. That is tolerable here precisely because this limit is a
+  # coarse backstop against runaway crawling and accidental cost, not an
+  # authentication boundary — and the hard cost ceiling is Cloud Run's
+  # max-instances setting, which no header can talk its way past.
+  map $http_x_forwarded_for $vm_client_ip {
+    default                        $remote_addr;
+    ~^\s*(?<first_ip>[0-9a-fA-F:.]+) $first_ip;
+  }
+
+  # ---- Bot classification -------------------------------------------------
+  # Commercial SEO/backlink crawlers and content harvesters. They generate
+  # real traffic and, on a pay-per-request platform, real cost, while sending
+  # no visitors back. robots.txt asks them to stay away; this is what makes
+  # them. Deliberately does NOT include any search or answer engine.
+  map $http_user_agent $vm_bad_bot {
+    default 0;
+    "~*(AhrefsBot|SemrushBot|MJ12bot|DotBot|DataForSeoBot|BLEXBot|PetalBot|SerpstatBot|ZoominfoBot|magpie-crawler|Bytespider|ImagesiftBot|MegaIndex|Barkrowler|SeekportBot|VelenPublicWebCrawler|Timpibot|Diffbot)" 1;
+    # Empty User-Agent: no legitimate crawler or browser omits it; in practice
+    # it is scripted scraping and vulnerability scanning.
+    ""      1;
+  }
+
+  # Search engines and answer engines. These must never be throttled — the
+  # explicit requirement is that Google can always crawl, and the GEO work is
+  # pointless if the engines that would cite the site get 429s instead of
+  # pages. Kept in sync with the allow-list in scripts/generate-sitemap.js.
+  map $http_user_agent $vm_search_bot {
+    default 0;
+    "~*(Googlebot|Google-Extended|Google-InspectionTool|Storebot-Google|AdsBot-Google|Bingbot|BingPreview|Slurp|DuckDuckBot|Applebot|YandexBot|GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-User|PerplexityBot|Perplexity-User|cohere-ai|meta-externalagent)" 1;
+  }
+
+  # An empty limit_req key is exempt from accounting in nginx, so search bots
+  # simply are not rate limited, while everyone else is bucketed per client IP.
+  map $vm_search_bot $vm_limit_key {
+    0 $vm_client_ip;
+    1 "";
+  }
+
+  log_format main '$vm_client_ip - $remote_user [$time_local] "$request" '
+                   '$status $body_bytes_sent "$http_referer" '
+                   '"$http_user_agent"';
+  access_log /dev/stdout main;
+  error_log  /dev/stderr warn;
+
+  # Site-wide backstop. 120 requests/minute per client is far above any human
+  # browsing pattern (a page plus its assets is one burst, absorbed by
+  # burst=60) and far below what a scraper walking 173 pages would want.
+  limit_req_zone $vm_limit_key zone=site_zone:10m rate=120r/m;
+
+  # Tighter zone in front of the booking/contact API — the API itself
+  # enforces the real per-endpoint policy (see backend/src/rateLimit.js,
+  # e.g. 5 booking submissions / 15 min / IP); this just keeps abusive
+  # traffic from ever reaching the Node process at all.
+  limit_req_zone $vm_client_ip zone=api_zone:10m rate=30r/m;
+
+  # 429 (Too Many Requests) instead of nginx's default 503 — this is a rate
+  # limit being enforced, not a backend outage, and the two need different
+  # client retry behavior.
+  limit_req_status 429;
+
+  server {
+    listen ${PORT};
+    server_name virtual-marketer.de www.virtual-marketer.de _;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Keep Location headers relative. nginx otherwise builds an absolute URL
+    # from $host and the port it is listening on, which behind Cloud Run's TLS
+    # frontend means a visitor hitting /author/ would be redirected to
+    # http://virtual-marketer.de:8080/blog/ — wrong scheme, and a port that is
+    # not reachable from the internet. A relative Location is resolved by the
+    # client against the URL it actually requested, so it is correct behind
+    # any proxy without nginx having to be told about the outside world.
+    absolute_redirect off;
+
+    # ---- Security headers ----
+    # Included here for the base server context AND re-included inside every
+    # location block below that sets its own add_header (Cache-Control) —
+    # see docker/security-headers.conf for why.
+    include /etc/nginx/security-headers.conf;
+
+    # ---- Bot wall ----
+    # Before any routing, so a blocked crawler costs one 403 and no file I/O.
+    if ($vm_bad_bot) {
+      return 403;
+    }
+
+    # ---- Canonical host: www -> apex ----
+    # Both hostnames will be mapped to this service at the DNS cutover, so
+    # without this every page would answer 200 on two hostnames — the exact
+    # duplicate-content problem the canonical tags, the sitemap and the
+    # hreflang cleanup were all done to avoid. The <link rel=canonical> points
+    # at the apex, so a search engine would eventually work it out, but "301"
+    # is an instruction and "canonical" is only a hint.
+    #
+    # Note absolute_redirect is off above, which is right for path-only
+    # redirects but cannot express a change of HOST — so this Location is
+    # written out in full, and hardcodes https:// because that is what the
+    # Cloud Run frontend terminates. $request_uri keeps the path and query
+    # string intact, so a deep link survives the redirect.
+    if ($host = www.virtual-marketer.de) {
+      return 301 https://virtual-marketer.de$request_uri;
+    }
+
+    # ---- Legacy WordPress URL redirects (301, permanent) ----
+    # /home/ was a duplicate legacy WordPress homepage — canonicalize to /
+    location = /home/ { return 301 /; }
+    location = /home  { return 301 /; }
+
+    # Thin archive pages removed by scripts/prune-thin-archives.js. They are
+    # 301s rather than 404s so that whatever inbound links they still hold
+    # consolidate into /blog/ instead of being thrown away. ^~ so these win
+    # over the generic /blog/ prefix match.
+    #
+    # /blog/page/ is NOT redirected any more. It was, while /blog/ was a
+    # single unpaginated page and those URLs held nothing. The blog now
+    # builds real pagination there (scripts/generate-blog-posts.js), so this
+    # 301 would have made every page past the first unreachable — and
+    # silently, since a 301 to a working page does not look like a fault.
+    location ^~ /author/    { return 301 /blog/; }
+    location ^~ /tag/       { return 301 /blog/; }
+    location ^~ /category/  { return 301 /blog/; }
+
+    # WordPress admin/API surface no longer exists — do not 404-loop bots into it
+    location ^~ /wp-admin/  { return 410; }
+    location =  /wp-login.php { return 410; }
+    location ^~ /wp-json/   { return 410; }
+    location =  /xmlrpc.php { return 410; }
+
+    # Deny dotfiles and backup/source files
+    location ~ /\.          { deny all; }
+    location ~ \.(bak|sql|log|env)$ { deny all; }
+
+    # ---- Booking + contact API ----
+    # ${API_UPSTREAM} is substituted at container start (see
+    # docker/entrypoint.sh) because the two supported deployments disagree on
+    # where the API lives: on Cloud Run it is a sidecar container in the same
+    # instance, reachable on 127.0.0.1:4000, while under docker-compose it is
+    # a separate service reachable as api:4000 over the compose network.
+    # Templating one value keeps a single nginx config for both instead of
+    # forking it. No resolver directive either way — both forms resolve once
+    # at startup and never change for the life of the instance.
+    location ^~ /api/ {
+      limit_req zone=api_zone burst=10 nodelay;
+      include /etc/nginx/security-headers.conf;
+      add_header Cache-Control "no-store" always;
+      proxy_pass http://${API_UPSTREAM}/;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $vm_client_ip;
+      # Overwrite rather than append. $proxy_add_x_forwarded_for would append
+      # to whatever the client sent, letting a caller prepend a fake address
+      # that survives to the backend and defeats its per-IP rate limiting.
+      # Send exactly one address: this container's best view of the client,
+      # which behind Cloud Run is the leftmost X-Forwarded-For entry (see the
+      # $vm_client_ip note above), not $remote_addr — that would collapse
+      # every visitor onto a shared Google frontend address and make the
+      # API's own limiter meaningless.
+      proxy_set_header X-Forwarded-For $vm_client_ip;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_read_timeout 15s;
+      proxy_connect_timeout 5s;
+    }
+
+    # ---- Caching ----
+    location ~* \.(?:css|js|woff2?|ttf|eot|png|jpe?g|gif|webp|svg|avif|ico)$ {
+      include /etc/nginx/security-headers.conf;
+      expires 1y;
+      add_header Cache-Control "public, max-age=31536000, immutable";
+      access_log off;
+    }
+
+    # Crawler-facing files: short TTL so a robots/sitemap/llms change is
+    # picked up quickly rather than sitting in a CDN for a day.
+    location = /sitemap.xml {
+      include /etc/nginx/security-headers.conf;
+      expires 1h;
+      add_header Cache-Control "public, max-age=3600";
+    }
+    location = /sitemap_index.xml {
+      include /etc/nginx/security-headers.conf;
+      expires 1h;
+      add_header Cache-Control "public, max-age=3600";
+    }
+    location = /robots.txt {
+      include /etc/nginx/security-headers.conf;
+      expires 1h;
+      add_header Cache-Control "public, max-age=3600";
+    }
+    location = /llms.txt {
+      include /etc/nginx/security-headers.conf;
+      default_type text/plain;
+      expires 1h;
+      add_header Cache-Control "public, max-age=3600";
+    }
+
+    # ---- Clean URL routing (WordPress-style trailing-slash pages) ----
+    location / {
+      limit_req zone=site_zone burst=60 nodelay;
+      include /etc/nginx/security-headers.conf;
+      # =404 rather than /404.html: falling back to the file directly serves
+      # the 404 page with a 200 status, which tells crawlers every mistyped
+      # URL is a real page and is how soft-404s get indexed. Returning the
+      # status lets error_page below render the same page with a true 404.
+      try_files $uri $uri/ $uri/index.html =404;
+      add_header Cache-Control "public, max-age=3600, must-revalidate";
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+      internal;
+    }
+  }
+}
