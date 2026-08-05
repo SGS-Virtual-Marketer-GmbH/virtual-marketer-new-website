@@ -190,6 +190,213 @@
   .vm-footer-simple a{color:#6b7280}
 
 </style>
+<style id="vm-mobile-polish">
+/* ==========================================================================
+   Mobile polish — see scripts/mobile-polish.js
+   ========================================================================== */
+
+/* --- Applies at every width: things that were simply wrong ---------------- */
+
+/* A 565px-wide <img> inside a 375px column was forcing horizontal overflow.
+   body{overflow-x:hidden} was hiding the symptom; this fixes the cause, so
+   the image scales instead of being silently cropped. */
+img, video, iframe, canvas, svg { max-width: 100%; }
+img, video { height: auto; }
+
+/* In-page anchors landed underneath the fixed header. */
+html { scroll-padding-top: 76px; }
+
+@media (max-width: 1024px) {
+
+  /* Long tables and code blocks scroll in their own box rather than widening
+     the page. Scoped to mobile deliberately: display:block is what makes a
+     table scrollable, and it also switches off table layout — column widths
+     stop being distributed. That trade is right on a 375px screen and wrong
+     on a desktop one, so this must never escape the media query. */
+  table, pre { max-width: 100%; overflow-x: auto; display: block; }
+
+  /* --- 1. The header must be opaque --------------------------------------
+     Both the header and the Elementor section inside it are transparent, and
+     either one alone leaves the text showing through, so both are set. The
+     blur is what gives it the layered, app-like feel rather than a flat bar;
+     the -webkit- prefix is still required by Safari, which is most of the
+     phone traffic this matters for. */
+  #site-header.site-header,
+  #site-header .header-mobile > .elementor > .elementor-section,
+  #site-header .header-mobile .elementor-top-section {
+    background-color: rgba(255, 255, 255, 0.94);
+    -webkit-backdrop-filter: saturate(1.7) blur(16px);
+    backdrop-filter: saturate(1.7) blur(16px);
+  }
+  #site-header.site-header {
+    border-bottom: 1px solid rgba(36, 20, 23, 0.07);
+    /* Notch and Dynamic Island: content sits below the status bar instead of
+       under it. Resolves to 0 everywhere else, so it is safe unconditionally. */
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  /* --- 2. Logo -----------------------------------------------------------
+     The image was 30px tall inside a 22px box and clipped. Sizing the image
+     and letting the box follow is the fix; display:block removes the inline
+     baseline gap that caused the 8px mismatch in the first place. */
+  #site-header .header-mobile img {
+    height: 34px;
+    width: auto;
+    display: block;
+  }
+  #site-header .header-mobile > .elementor a { display: inline-flex; align-items: center; }
+
+  /* --- 3. Type scale -----------------------------------------------------
+     clamp() rather than a fixed size: the headline keeps scaling between the
+     narrowest phone and the tablet breakpoint instead of stepping. The upper
+     bounds are the theme's own desktop sizes, so nothing grows.
+
+     !important is load-bearing here and is not laziness. Elementor emits a
+     per-element selector for every heading it styles — the homepage h1 is
+     ".elementor-5668 .elementor-element.elementor-element-292329b2
+     .elementor-heading-title", four classes, and it already carries a
+     max-width:1024px override of its own setting 50px. There is no generic
+     selector that outranks a per-element one for every page without knowing
+     each element id, and there are hundreds of them across 173 pages.
+     Measured before writing this: without !important the h1 stayed at 50px
+     on a 375px viewport. */
+  h1, .elementor-widget-heading h1.elementor-heading-title {
+    font-size: clamp(28px, 8.2vw, 42px) !important;
+    line-height: 1.18 !important;
+  }
+  h2, .elementor-widget-heading h2.elementor-heading-title {
+    font-size: clamp(23px, 6.4vw, 32px) !important;
+    line-height: 1.24 !important;
+  }
+  h3, .elementor-widget-heading h3.elementor-heading-title {
+    font-size: clamp(19px, 5vw, 24px) !important;
+    line-height: 1.3 !important;
+  }
+  h1, h2, h3, h4 {
+    /* German compounds ("Produktdatenoptimierung") are long enough to overflow
+       a 375px column on their own. */
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  p, li { font-size: 16px; line-height: 1.65; }
+
+  /* --- 4. Tap targets ----------------------------------------------------
+     44px is Apple's minimum and 48dp Google's; 44 satisfies both once the
+     surrounding padding is counted.
+
+     Two exclusions, both found by looking at the rendered page rather than
+     by reasoning about the markup:
+       - Inline links inside prose. Enlarging those breaks paragraph leading.
+       - The burger, "#mmenu-toggle button". It is an empty <button> whose
+         bars are drawn with pseudo-elements, so forcing display:inline-flex
+         on it made the icon disappear entirely. It gets padding instead,
+         which enlarges the target without touching how it is drawn. */
+  .elementor-button,
+  input[type="submit"],
+  .vm-header-simple nav a,
+  .mmenu-wrapper a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mmenu-wrapper a { justify-content: flex-start; }
+
+  /* The burger's hit area is enlarged with a transparent overlay rather than
+     with padding. Its three bars are absolutely positioned against
+     .mmenu-toggle (left:0, top:50%), so padding moves the origin and the icon
+     drifts off-centre — it did, by 12px, on the first attempt. An ::after
+     overlay adds 12px of reachable area on every side and moves nothing.
+     Note ::after on the TOGGLE, not on the BUTTON: the button's own ::before
+     and ::after are two of the three bars. */
+  #mmenu-toggle { position: relative; }
+  #mmenu-toggle::after { content: ""; position: absolute; inset: -12px; }
+
+  /* --- The burger must be visible against the new white header ----------
+     The theme paints the burger white, because it was designed to sit
+     transparently over a dark hero image. Section 1 above gives the header an
+     opaque light background, which left the icon white on white — invisible
+     in the rendered screenshot, though nothing in the markup hints at it.
+     Repainting it in the brand's dark ink is the other half of that change.
+     The colour is set on all three bars: the button's own background is the
+     middle bar, its two pseudo-elements are the outer ones. */
+  #mmenu-toggle button,
+  #mmenu-toggle button::before,
+  #mmenu-toggle button::after {
+    background-color: #241417 !important;
+  }
+  #mmenu-toggle.active button { background-color: transparent !important; }
+
+  /* Primary calls to action span the column — the phone convention, and it
+     removes the half-width clipped button on the homepage hero. */
+  .elementor-widget-button .elementor-button { width: 100%; }
+
+  /* --- 5. The generated pages' header, compacted -------------------------
+     lib/page-chrome.js stacks .vm-header-simple into a column below 900px and
+     lets the six nav links wrap. Measured on a feature page at 375x812: the
+     bar came to roughly 200px tall — and it is sticky, so a quarter of the
+     screen was permanently occupied by navigation.
+
+     Instead: logo row on top, links in a single horizontally scrollable strip
+     underneath. That is the phone convention (a scrollable tab bar), it costs
+     about 100px, and no link is dropped — which hiding them behind a second
+     burger would have done. scrollbar-width:none hides the scrollbar without
+     disabling the scroll. */
+  .vm-header-simple {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin: 8px 10px 0;
+    padding: 10px 14px;
+  }
+  .vm-header-simple > a { justify-content: flex-start; }
+  .vm-header-simple > a img { height: 34px !important; }
+  .vm-header-simple nav {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .vm-header-simple nav::-webkit-scrollbar { display: none; }
+  .vm-header-simple nav a { flex: 0 0 auto; }
+
+  /* --- App feel ----------------------------------------------------------
+     The grey flash on tap is the single strongest "this is a web page" tell.
+     touch-action:manipulation removes the 300ms double-tap-zoom delay, so
+     buttons respond immediately. */
+  a, button, .elementor-button, summary {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  /* Rubber-banding at the end of a scroll container must not drag the page
+     behind it. "contain" keeps the browser's pull-to-refresh, which "none"
+     would remove — that gesture is expected on Android and taking it away
+     makes the site feel less native, not more. */
+  body { overscroll-behavior-y: contain; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+  /* iOS zooms the viewport when a focused field is under 16px. Nothing on the
+     site is today; this keeps that true if a form is added later. */
+  input, select, textarea { font-size: 16px; }
+
+  /* Bottom safe area, so the footer and any fixed CTA clear the home
+     indicator on a gesture-navigation phone. */
+  .vm-footer-simple, footer { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Users who ask for less motion get less motion — required for the animated
+   demos, which otherwise autoplay. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
 </head>
 <body class="vm-static-blog">
 
@@ -439,213 +646,7 @@
   <a href="/en/blog/automatisierte-produktbewertungen-wie-ki-das-vertrauen-steigert-und-informierte-entscheidungen-unterstuetzt/" class="active" lang="en" hreflang="en">EN</a>
 </div>
 <!-- vm-lang-switch:end -->
-<style id="vm-mobile-polish">
-/* ==========================================================================
-   Mobile polish — see scripts/mobile-polish.js
-   ========================================================================== */
 
-/* --- Applies at every width: things that were simply wrong ---------------- */
-
-/* A 565px-wide <img> inside a 375px column was forcing horizontal overflow.
-   body{overflow-x:hidden} was hiding the symptom; this fixes the cause, so
-   the image scales instead of being silently cropped. */
-img, video, iframe, canvas, svg { max-width: 100%; }
-img, video { height: auto; }
-
-/* In-page anchors landed underneath the fixed header. */
-html { scroll-padding-top: 76px; }
-
-@media (max-width: 1024px) {
-
-  /* Long tables and code blocks scroll in their own box rather than widening
-     the page. Scoped to mobile deliberately: display:block is what makes a
-     table scrollable, and it also switches off table layout — column widths
-     stop being distributed. That trade is right on a 375px screen and wrong
-     on a desktop one, so this must never escape the media query. */
-  table, pre { max-width: 100%; overflow-x: auto; display: block; }
-
-  /* --- 1. The header must be opaque --------------------------------------
-     Both the header and the Elementor section inside it are transparent, and
-     either one alone leaves the text showing through, so both are set. The
-     blur is what gives it the layered, app-like feel rather than a flat bar;
-     the -webkit- prefix is still required by Safari, which is most of the
-     phone traffic this matters for. */
-  #site-header.site-header,
-  #site-header .header-mobile > .elementor > .elementor-section,
-  #site-header .header-mobile .elementor-top-section {
-    background-color: rgba(255, 255, 255, 0.94);
-    -webkit-backdrop-filter: saturate(1.7) blur(16px);
-    backdrop-filter: saturate(1.7) blur(16px);
-  }
-  #site-header.site-header {
-    border-bottom: 1px solid rgba(36, 20, 23, 0.07);
-    /* Notch and Dynamic Island: content sits below the status bar instead of
-       under it. Resolves to 0 everywhere else, so it is safe unconditionally. */
-    padding-top: env(safe-area-inset-top, 0px);
-  }
-
-  /* --- 2. Logo -----------------------------------------------------------
-     The image was 30px tall inside a 22px box and clipped. Sizing the image
-     and letting the box follow is the fix; display:block removes the inline
-     baseline gap that caused the 8px mismatch in the first place. */
-  #site-header .header-mobile img {
-    height: 34px;
-    width: auto;
-    display: block;
-  }
-  #site-header .header-mobile > .elementor a { display: inline-flex; align-items: center; }
-
-  /* --- 3. Type scale -----------------------------------------------------
-     clamp() rather than a fixed size: the headline keeps scaling between the
-     narrowest phone and the tablet breakpoint instead of stepping. The upper
-     bounds are the theme's own desktop sizes, so nothing grows.
-
-     !important is load-bearing here and is not laziness. Elementor emits a
-     per-element selector for every heading it styles — the homepage h1 is
-     ".elementor-5668 .elementor-element.elementor-element-292329b2
-     .elementor-heading-title", four classes, and it already carries a
-     max-width:1024px override of its own setting 50px. There is no generic
-     selector that outranks a per-element one for every page without knowing
-     each element id, and there are hundreds of them across 173 pages.
-     Measured before writing this: without !important the h1 stayed at 50px
-     on a 375px viewport. */
-  h1, .elementor-widget-heading h1.elementor-heading-title {
-    font-size: clamp(28px, 8.2vw, 42px) !important;
-    line-height: 1.18 !important;
-  }
-  h2, .elementor-widget-heading h2.elementor-heading-title {
-    font-size: clamp(23px, 6.4vw, 32px) !important;
-    line-height: 1.24 !important;
-  }
-  h3, .elementor-widget-heading h3.elementor-heading-title {
-    font-size: clamp(19px, 5vw, 24px) !important;
-    line-height: 1.3 !important;
-  }
-  h1, h2, h3, h4 {
-    /* German compounds ("Produktdatenoptimierung") are long enough to overflow
-       a 375px column on their own. */
-    overflow-wrap: break-word;
-    hyphens: auto;
-  }
-  p, li { font-size: 16px; line-height: 1.65; }
-
-  /* --- 4. Tap targets ----------------------------------------------------
-     44px is Apple's minimum and 48dp Google's; 44 satisfies both once the
-     surrounding padding is counted.
-
-     Two exclusions, both found by looking at the rendered page rather than
-     by reasoning about the markup:
-       - Inline links inside prose. Enlarging those breaks paragraph leading.
-       - The burger, "#mmenu-toggle button". It is an empty <button> whose
-         bars are drawn with pseudo-elements, so forcing display:inline-flex
-         on it made the icon disappear entirely. It gets padding instead,
-         which enlarges the target without touching how it is drawn. */
-  .elementor-button,
-  input[type="submit"],
-  .vm-header-simple nav a,
-  .mmenu-wrapper a {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .mmenu-wrapper a { justify-content: flex-start; }
-
-  /* The burger's hit area is enlarged with a transparent overlay rather than
-     with padding. Its three bars are absolutely positioned against
-     .mmenu-toggle (left:0, top:50%), so padding moves the origin and the icon
-     drifts off-centre — it did, by 12px, on the first attempt. An ::after
-     overlay adds 12px of reachable area on every side and moves nothing.
-     Note ::after on the TOGGLE, not on the BUTTON: the button's own ::before
-     and ::after are two of the three bars. */
-  #mmenu-toggle { position: relative; }
-  #mmenu-toggle::after { content: ""; position: absolute; inset: -12px; }
-
-  /* --- The burger must be visible against the new white header ----------
-     The theme paints the burger white, because it was designed to sit
-     transparently over a dark hero image. Section 1 above gives the header an
-     opaque light background, which left the icon white on white — invisible
-     in the rendered screenshot, though nothing in the markup hints at it.
-     Repainting it in the brand's dark ink is the other half of that change.
-     The colour is set on all three bars: the button's own background is the
-     middle bar, its two pseudo-elements are the outer ones. */
-  #mmenu-toggle button,
-  #mmenu-toggle button::before,
-  #mmenu-toggle button::after {
-    background-color: #241417 !important;
-  }
-  #mmenu-toggle.active button { background-color: transparent !important; }
-
-  /* Primary calls to action span the column — the phone convention, and it
-     removes the half-width clipped button on the homepage hero. */
-  .elementor-widget-button .elementor-button { width: 100%; }
-
-  /* --- 5. The generated pages' header, compacted -------------------------
-     lib/page-chrome.js stacks .vm-header-simple into a column below 900px and
-     lets the six nav links wrap. Measured on a feature page at 375x812: the
-     bar came to roughly 200px tall — and it is sticky, so a quarter of the
-     screen was permanently occupied by navigation.
-
-     Instead: logo row on top, links in a single horizontally scrollable strip
-     underneath. That is the phone convention (a scrollable tab bar), it costs
-     about 100px, and no link is dropped — which hiding them behind a second
-     burger would have done. scrollbar-width:none hides the scrollbar without
-     disabling the scroll. */
-  .vm-header-simple {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    margin: 8px 10px 0;
-    padding: 10px 14px;
-  }
-  .vm-header-simple > a { justify-content: flex-start; }
-  .vm-header-simple > a img { height: 34px !important; }
-  .vm-header-simple nav {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    gap: 20px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  .vm-header-simple nav::-webkit-scrollbar { display: none; }
-  .vm-header-simple nav a { flex: 0 0 auto; }
-
-  /* --- App feel ----------------------------------------------------------
-     The grey flash on tap is the single strongest "this is a web page" tell.
-     touch-action:manipulation removes the 300ms double-tap-zoom delay, so
-     buttons respond immediately. */
-  a, button, .elementor-button, summary {
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-  /* Rubber-banding at the end of a scroll container must not drag the page
-     behind it. "contain" keeps the browser's pull-to-refresh, which "none"
-     would remove — that gesture is expected on Android and taking it away
-     makes the site feel less native, not more. */
-  body { overscroll-behavior-y: contain; }
-  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-
-  /* iOS zooms the viewport when a focused field is under 16px. Nothing on the
-     site is today; this keeps that true if a form is added later. */
-  input, select, textarea { font-size: 16px; }
-
-  /* Bottom safe area, so the footer and any fixed CTA clear the home
-     indicator on a gesture-navigation phone. */
-  .vm-footer-simple, footer { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
-}
-
-/* Users who ask for less motion get less motion — required for the animated
-   demos, which otherwise autoplay. */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-</style>
 <script>
 /**
  * Desktop overlap effects, neutralised on phones.
