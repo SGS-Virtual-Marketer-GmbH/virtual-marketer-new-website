@@ -26,6 +26,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { CHROME_CSS } = require('./lib/page-chrome');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -137,7 +138,17 @@ ${keywords ? `<meta name="keywords" content="${keywords}">\n` : ''}<meta name="r
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>\n` : ''}<link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
 <link rel="stylesheet" href="/${THEME_CSS.fontAwesome}">
 <link rel="stylesheet" href="/${THEME_CSS.style}">
-<style>${BASE_CSS}</style>
+<style>
+  /* The shared header/footer chrome. Without it these pages emitted
+     <header class="vm-header-simple"> with no rule to match it, so the logo
+     sat jammed in the corner and the six nav links rendered as unstyled
+     inline text — visible on /en/ as a row reading
+     "Solutions ⌄Blog API Request a model Contact Login" in default link blue.
+     lib/page-chrome.js exists precisely so a generator cannot emit the markup
+     without the styling; this file was the last one not using it. */
+  ${CHROME_CSS}
+  ${BASE_CSS}
+</style>
 </head>
 <body class="vm-static-blog">
 ${header()}
