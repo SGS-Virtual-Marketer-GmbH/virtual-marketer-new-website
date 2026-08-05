@@ -36,7 +36,7 @@ const DIST = path.join(__dirname, '../dist');
 const SOLUTIONS = [
   { href: '/ki-loesungen/agenten/', icon: 'robot', label: 'KI-Agenten für Marketing &amp; Ads' },
   { href: '/ki-loesungen/coding-api/', icon: 'code', label: 'Coding-API &amp; MCP-Server' },
-  { href: '/ki-loesungen/produktfotos-ki/', icon: 'camera', label: 'KI-Produktfotos &amp; Virtual Try-On' },
+  { href: '/ki-loesungen/produktfotos-ki/', icon: 'camera', label: 'Product Staging: KI-Produktfotos' },
   { href: '/ki-loesungen/feed-veredelung/', icon: 'feed', label: 'KI Feed-Veredelung' },
   { href: '/ki-loesungen/texte-generieren/', icon: 'text', label: 'KI-Textgenerierung' },
   { href: '/ki-loesungen/bilder-generieren/', icon: 'image', label: 'KI-Bildgenerierung' },
@@ -55,7 +55,7 @@ const SOLUTIONS = [
 const SOLUTIONS_EN = [
   { href: '/en/solutions/ai-agents/', icon: 'robot', label: 'AI Agents for Marketing &amp; Ads' },
   { href: '/en/solutions/coding-api/', icon: 'code', label: 'Coding API &amp; MCP Server' },
-  { href: '/en/solutions/ai-product-photos/', icon: 'camera', label: 'AI Product Photos &amp; Virtual Try-On' },
+  { href: '/en/solutions/ai-product-photos/', icon: 'camera', label: 'Product Staging: AI Product Photos' },
   { href: '/en/solutions/feed-enhance/', icon: 'feed', label: 'AI Feed Enhance' },
   { href: '/en/solutions/ai-text-generator/', icon: 'text', label: 'AI Text Generation' },
   { href: '/en/solutions/ai-image-generator/', icon: 'image', label: 'AI Image Generation' },

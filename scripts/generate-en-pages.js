@@ -260,7 +260,7 @@ function main() {
 
 <h2>What Virtual Marketer does</h2>
 <div class="card"><strong>AI Agents</strong> — specialist virtual employees for analytics, Google Ads, Meta Ads, SEO and customer care. <a href="/en/solutions/ai-agents/">Learn more &rarr;</a></div>
-<div class="card"><strong>AI Product Photos &amp; Virtual Try-On</strong> — professional on-model shots and product videos from a single photo. <a href="/en/solutions/ai-product-photos/">Learn more &rarr;</a></div>
+<div class="card"><strong>Product Staging</strong> — professional on-model shots and product videos from a single photo. <a href="/en/solutions/ai-product-photos/">Learn more &rarr;</a></div>
 <div class="card"><strong>Coding API &amp; MCP Server</strong> — Virtual Marketer Senior &amp; Junior in your IDE, one flat balance. <a href="/en/solutions/coding-api/">Learn more &rarr;</a></div>
 <div class="card"><strong>AI Feed Enhance</strong> — enrich and publish shopping feeds for Google, Meta and Bing. <a href="/en/solutions/feed-enhance/">Learn more &rarr;</a></div>
 <p><a href="/en/solutions/">See all AI solutions &rarr;</a></p>

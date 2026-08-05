@@ -71,7 +71,10 @@ const UI = {
     faqLabel: 'FAQ', faqTitle: 'Häufige Fragen',
     footerLinks: { privacy: 'Datenschutzerklärung', privacyHref: '/datenschutzerklaerung/', legal: 'Impressum', legalHref: '/impressum/' },
     allSolutions: 'Alle KI-Lösungen im Überblick',
-    tryonLabel: 'Virtuelle Anprobe', tryonTitle: 'Ein Modell, beliebig viele Outfits',
+    // Section label, not a product name — the feature is Product Staging and
+    // this section shows the fashion side of it. Naming it after the product
+    // would just repeat the page's own eyebrow two screens further down.
+    tryonLabel: 'Product Staging für Fashion', tryonTitle: 'Ein Modell, beliebig viele Outfits',
     tryonIntro: 'Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; gleiche Person, gleiche Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.',
     tryonBase: 'Referenzfoto', tryonNote: 'Illustratives Beispiel &#8211; alle Aufnahmen sind KI-generiert.',
   },
@@ -89,7 +92,7 @@ const UI = {
     faqLabel: 'FAQ', faqTitle: 'Frequently asked questions',
     footerLinks: { privacy: 'Privacy Policy', privacyHref: '/en/privacy-policy/', legal: 'Legal Notice', legalHref: '/en/legal-notice/' },
     allSolutions: 'All AI solutions at a glance',
-    tryonLabel: 'Virtual try-on', tryonTitle: 'One model, any number of outfits',
+    tryonLabel: 'Product Staging for fashion', tryonTitle: 'One model, any number of outfits',
     tryonIntro: 'A single reference photo of your fit model is enough. Every further garment is applied to it &#8211; same person, same pose, same lighting. For a few cents per image instead of a photo shoot.',
     tryonBase: 'Reference photo', tryonNote: 'Illustrative example &#8211; every shot here is AI-generated.',
   },
@@ -140,11 +143,23 @@ const FEATURES = [
     heroImage: '/product-pages/staging-hero.jpg',
     de: {
       seo: {
-        title: 'KI-Produktfotos & virtuelle Anprobe (Virtual Try-On)',
+        // The feature is called Product Staging. "Virtual Try-On" was used as
+        // its name here and is not one — appRegistry.ts calls the product
+        // "VM Product Staging" and lists try-on as one of its capabilities
+        // ("Anprobe für Fashion UND Szenen-Inszenierung für jedes andere
+        // Produkt"), which is also the accurate description: it stages any
+        // product in a scene, not only clothing on a person.
+        //
+        // "Anprobe" stays in the title and keywords, subordinate to the name.
+        // It is the term people actually search for, and dropping it to make
+        // the naming tidy would trade real traffic for nothing — the fix
+        // needed is that the product is named correctly, not that a capability
+        // becomes unsayable.
+        title: 'Product Staging – KI-Produktfotos auf Models & in Szenen',
         description: 'Produktfotos, On-Model-Bilder und Videos in Minuten statt Wochen — mit KI, ohne Fotostudio. Für Fashion, Retail und E-Commerce.',
-        keywords: 'KI Produktfotos, Produktbilder mit KI erstellen, virtuelle Anprobe, Virtual Try-On, KI Produktfotografie, On-Model Bilder KI',
+        keywords: 'Product Staging, KI Produktfotos, Produktbilder mit KI erstellen, virtuelle Anprobe, KI Produktfotografie, On-Model Bilder KI',
       },
-      eyebrow: 'KI Produktfotos &amp; Virtual Try-On',
+      eyebrow: 'Product Staging',
       tagline: 'Dein digitales Fotostudio.',
       intro: 'VM Product Staging macht aus einem einfachen Produktfoto professionelle On-Model-Aufnahmen, Lifestyle-Szenen und Produktvideos &#8211; in Minuten statt Wochen, für wenige Cent pro Bild statt eines Shootings.',
       audiences: [
@@ -204,11 +219,13 @@ const FEATURES = [
     },
     en: {
       seo: {
-        title: 'AI Product Photos & Virtual Try-On',
+        // See the German entry above for why the name changed and why the
+        // search term stays.
+        title: 'Product Staging – AI Product Photos on Models & in Scenes',
         description: 'Product photos, on-model shots and videos in minutes instead of weeks — with AI, no photo studio needed. For fashion, retail and e-commerce.',
-        keywords: 'AI product photography, AI product photo generator, virtual try-on, on-model images AI, product photos AI',
+        keywords: 'Product Staging, AI product photography, AI product photo generator, virtual try-on, on-model images AI, product photos AI',
       },
-      eyebrow: 'AI Product Photos &amp; Virtual Try-On',
+      eyebrow: 'Product Staging',
       tagline: 'Your digital photo studio.',
       intro: 'VM Product Staging turns a simple product photo into professional on-model shots, lifestyle scenes and product videos &#8211; in minutes instead of weeks, for a few cents per image instead of a photo shoot.',
       audiences: [

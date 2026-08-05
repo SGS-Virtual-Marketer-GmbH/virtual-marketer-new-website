@@ -115,8 +115,33 @@ const AI_TREES = ['product-pages'];
 /** Paths whose contents ship with a theme or plugin and are not ours. */
 const THIRD_PARTY_TREES = ['wp-content/themes', 'wp-content/plugins', 'wp-includes'];
 
+/**
+ * Hand-authored files that happen to live inside an AI tree.
+ *
+ * product-pages/ is overwhelmingly generated, so the whole directory is
+ * classified `ai`. staging-hero.jpg no longer belongs to that: it is
+ * rasterised from a hand-drawn SVG (assets/product-pages/staging-hero.svg,
+ * see scripts/make-staging-hero.js) after the generated version was replaced
+ * for showing a man beside a dress and a woman in a suit as the result.
+ *
+ * The marking has to follow the file, not the folder. The AI mark exists to
+ * satisfy EU AI Act Art. 50(2), and a disclosure regime is only worth
+ * anything if the disclosure is true in both directions — stamping
+ * "AI-generated" onto a drawing nobody generated devalues the same mark on
+ * the 160 images where it is a real statement.
+ */
+const HAND_AUTHORED = new Set([
+  'product-pages/staging-hero.jpg',
+  // The WebP twin is written later by scripts/use-webp.js, which carries no
+  // metadata across, so this entry only matters on a rebuild where the file
+  // already exists. Listed anyway: leaving it out would make the pair
+  // disagree about its own origin depending on build order.
+  'product-pages/staging-hero.webp',
+]);
+
 function classify(file) {
   const rel = path.relative(DIST, file).split(path.sep).join('/');
+  if (HAND_AUTHORED.has(rel)) return 'own';
   if (AI_TREES.some((t) => rel.startsWith(t + '/'))) return 'ai';
   if (THIRD_PARTY_TREES.some((t) => rel.startsWith(t + '/'))) return 'thirdparty';
   return 'own';

@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1376 768" width="1376" height="768">
+  <!--
+    Product Staging hero.
+
+    Replaces the previous artwork, which said something the product does not:
+    a MALE figure stood next to a dress, and the result panel showed a WOMAN —
+    wearing a blazer-and-skirt suit rather than the dress that went in. Both
+    halves of the promise were broken. The whole claim of Product Staging is
+    that the model you choose and the garment you upload are the ones that
+    come back, so an illustration in which neither survives the arrow argues
+    against the feature it is illustrating.
+
+    Here the same woman appears twice: on the left as the chosen model, on the
+    right wearing the exact dress from the input card — same silhouette, same
+    sleeveless cut, same vm-red, same bob. The left figure is in the neutral
+    "before" palette because no product has been applied to her yet.
+
+    Flat vector to match the other fifteen feature heroes, in the real brand
+    palette from vm-customer-web-ui/tailwind.config.js: vm-red #94152b /
+    vm-red-dark #700f2b, vm-blue #66a3ce / #a3cce9.
+
+    Rasterised to staging-hero.jpg by scripts/make-staging-hero.js — the page
+    references the JPG in three places that are not the <img> tag (og:image,
+    the JSON-LD Product image, and the WebP conversion), so rendering to that
+    filename keeps all of them working with no special case.
+  -->
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eaf3fa"/>
+      <stop offset="55%" stop-color="#f6fafd"/>
+      <stop offset="100%" stop-color="#dceaf5"/>
+    </linearGradient>
+    <linearGradient id="dressG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a41c33"/>
+      <stop offset="100%" stop-color="#700f2b"/>
+    </linearGradient>
+    <linearGradient id="resultBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b9d6ef"/>
+      <stop offset="100%" stop-color="#9bc2e4"/>
+    </linearGradient>
+    <filter id="soft" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#2a3f55" flood-opacity="0.15"/>
+    </filter>
+    <filter id="softer" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="7" stdDeviation="9" flood-color="#2a3f55" flood-opacity="0.13"/>
+    </filter>
+  </defs>
+
+  <rect width="1376" height="768" fill="#ffffff"/>
+
+  <!-- ============ the chosen model, before ============ -->
+  <g transform="translate(268,182)">
+    <!-- bob, drawn behind the face so it frames rather than covers it -->
+    <path d="M50 66 C50 32 70 12 96 12 C122 12 142 32 142 66 L142 132 C142 139 135 143 129 139 L124 104 L68 104 L63 139 C57 143 50 139 50 132 Z" fill="#c3ccd4"/>
+    <circle cx="96" cy="70" r="38" fill="#e5eaef"/>
+    <!-- Arms sit outside the torso and a shade darker than it. At the same
+         fill they merged into one silhouette and the figure read as a blob
+         rather than a person. -->
+    <rect x="28" y="142" width="20" height="112" rx="10" fill="#d1d9e1"/>
+    <rect x="144" y="142" width="20" height="112" rx="10" fill="#d1d9e1"/>
+    <!-- torso -->
+    <path d="M96 108 C68 108 52 126 52 152 L52 238 C52 250 61 258 73 258 L119 258 C131 258 140 250 140 238 L140 152 C140 126 124 108 96 108 Z" fill="#dfe5ea"/>
+    <!-- skirt and legs -->
+    <path d="M54 252 L138 252 L152 342 C153 352 146 358 136 358 L56 358 C46 358 39 352 40 342 Z" fill="#a9c8ec"/>
+    <rect x="64" y="352" width="26" height="118" rx="13" fill="#a9c8ec"/>
+    <rect x="102" y="352" width="26" height="118" rx="13" fill="#a9c8ec"/>
+  </g>
+
+  <!-- ============ the staging panel ============ -->
+  <g filter="url(#soft)">
+    <rect x="486" y="166" width="656" height="436" rx="30" fill="url(#panel)"/>
+  </g>
+  <rect x="486" y="166" width="656" height="436" rx="30" fill="none" stroke="#cfe1ef" stroke-width="2"/>
+
+  <!-- input card: the garment as uploaded -->
+  <g filter="url(#softer)">
+    <rect x="536" y="212" width="216" height="344" rx="20" fill="#f2f4f6"/>
+  </g>
+  <!-- sleeveless bodice, A-line skirt — the shape repeated on the model -->
+  <g transform="translate(644,262)">
+    <path d="M-30 0 C-20 12 -10 17 0 17 C10 17 20 12 30 0 L44 8 C50 12 52 20 49 27 L34 54 L37 110 L64 218 C66 226 60 234 52 234 L-52 234 C-60 234 -66 226 -64 218 L-37 110 L-34 54 L-49 27 C-52 20 -50 12 -44 8 Z" fill="url(#dressG)"/>
+  </g>
+
+  <!-- arrow -->
+  <path d="M770 372 h64 v-18 l38 30 -38 30 v-18 h-64 z" fill="#66a3ce"/>
+
+  <!-- result card: the same woman, wearing that same dress -->
+  <g filter="url(#softer)">
+    <rect x="892" y="206" width="212" height="356" rx="16" fill="url(#resultBg)"/>
+  </g>
+  <g transform="translate(942,236)">
+    <path d="M32 30 C32 12 43 0 56 0 C69 0 80 12 80 30 L80 66 C80 70 76 72 73 70 L70 52 L42 52 L39 70 C36 72 32 70 32 66 Z" fill="#c3ccd4"/>
+    <circle cx="56" cy="32" r="22" fill="#f1f3f5"/>
+    <!-- bare arms, matching the sleeveless cut of the input garment -->
+    <rect x="4" y="70" width="13" height="80" rx="6.5" fill="#f1f3f5"/>
+    <rect x="95" y="70" width="13" height="80" rx="6.5" fill="#f1f3f5"/>
+    <!-- the dress from the card, now worn -->
+    <path d="M34 54 C41 64 48 69 56 69 C64 69 71 64 78 54 L91 60 C97 64 99 72 96 78 L83 103 L86 148 L107 212 C109 220 103 228 95 228 L17 228 C9 228 3 220 5 212 L26 148 L29 103 L16 78 C13 72 15 64 21 60 Z" fill="url(#dressG)"/>
+    <rect x="38" y="224" width="16" height="58" rx="8" fill="#f1f3f5"/>
+    <rect x="58" y="224" width="16" height="58" rx="8" fill="#f1f3f5"/>
+  </g>
+</svg>
