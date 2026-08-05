@@ -587,10 +587,15 @@ is running or to roll back to a specific one.
 served by `ns01.1blu.de` / `ns02.1blu.de`. Nothing below has been done — it
 changes what the public sees, so it is a deliberate, separate step.
 
-1. **Verify the domain** (once per domain, in Search Console):
-   ```bash
-   gcloud domains verify virtual-marketer.de
-   ```
+**The domain is already verified.** `1und1.`, `denta-tec-com.`,
+`primeo-energie.`, `self-reliance.` and `voice-denta-tec-com.` are all mapped
+to Cloud Run services in this project today, which is only possible for a
+verified domain. `gcloud domains verify` is therefore not needed — that step
+was in this document before those mappings existed.
+
+1. **Lower the TTL, a day ahead.** It is 7200s today, so without this a
+   rollback takes two hours to take effect. Set 300s on the A records for
+   the apex and on `www`.
 
 2. **Create the mappings:**
    ```bash
@@ -601,18 +606,46 @@ changes what the public sees, so it is a deliberate, separate step.
      --domain=www.virtual-marketer.de --region=europe-west1 \
      --project=virtual-marketer-chat-bot
    ```
+   Both are needed. `www` is not decoration: nginx 301s it to the apex, but
+   the request has to reach the container before it can be redirected, and it
+   only does that if `www` is mapped.
 
-3. **Add the records it prints** in the 1blu DNS panel — four A records and
-   four AAAA for the apex, one CNAME for `www`. Lower the TTL to 300s a day
-   beforehand so a rollback is fast.
+3. **Add the records the command prints**, in the 1blu DNS panel. The shape
+   differs by host and this is not interchangeable:
+   - **apex** — four `A` and four `AAAA` records. A CNAME is not possible at
+     a zone apex, which is why Cloud Run hands out addresses here.
+   - **www** — a single `CNAME` to `ghs.googlehosted.com.`, the same target
+     the existing subdomains already use.
+
+   Take the values from the command's output rather than from this document;
+   they are per-project and printing them here would create a second copy to
+   go stale.
 
 4. **Wait for the managed certificate.** Cloud Run issues it only after DNS
-   resolves to Google, typically 15–60 minutes. The site will serve TLS errors
-   in between, so do this outside business hours.
+   resolves to Google, typically 15–60 minutes. The site serves TLS errors in
+   between, so do this outside business hours.
 
-5. **Afterwards:** resubmit `https://virtual-marketer.de/sitemap.xml` in Search
-   Console and confirm the 301s from `/tag/`, `/category/`, `/author/` and
-   `/blog/page/` resolve to `/blog/`.
+5. **Afterwards, check:**
+   - `https://virtual-marketer.de/` and `https://www.virtual-marketer.de/` —
+     the second must answer **301** to the first, with the path preserved.
+   - `/blog/`, `/blog/page/8/`, `/blog/kategorie/seo/`, `/en/blog/page/3/` —
+     all **200**. Note `/blog/page/` is real pagination now; an earlier
+     version of this document told you to confirm it **301s** to `/blog/`,
+     which was correct when those URLs held WordPress's thin archives and is
+     wrong today.
+   - `/tag/`, `/category/`, `/author/` — still **301** to `/blog/`.
+   - Resubmit `https://virtual-marketer.de/sitemap.xml` in Search Console.
+
+**One thing to decide before step 3.** The site sends
+`Strict-Transport-Security: max-age=31536000; includeSubDomains`. Once a
+browser has seen that on the apex it will refuse plain HTTP to *every*
+`*.virtual-marketer.de` host for a year, and the header is cached client-side,
+so removing it later does not release browsers that already have it. Checked
+against what exists today: `api.`, `login.` and the five mapped app
+subdomains all serve HTTPS correctly, and `mail.` runs no web service at all —
+it is the MX host, and SMTP/IMAP are unaffected by HSTS. So this is safe as
+it stands. It does mean **any subdomain added later must be HTTPS from the
+first day**, which is a constraint worth knowing before it bites.
 
 Keep the 1blu WordPress instance running but unreferenced until the new site
 has been live and indexed for a week — reverting is then just a DNS change.

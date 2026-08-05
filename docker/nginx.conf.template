@@ -129,6 +129,23 @@ http {
       return 403;
     }
 
+    # ---- Canonical host: www -> apex ----
+    # Both hostnames will be mapped to this service at the DNS cutover, so
+    # without this every page would answer 200 on two hostnames — the exact
+    # duplicate-content problem the canonical tags, the sitemap and the
+    # hreflang cleanup were all done to avoid. The <link rel=canonical> points
+    # at the apex, so a search engine would eventually work it out, but "301"
+    # is an instruction and "canonical" is only a hint.
+    #
+    # Note absolute_redirect is off above, which is right for path-only
+    # redirects but cannot express a change of HOST — so this Location is
+    # written out in full, and hardcodes https:// because that is what the
+    # Cloud Run frontend terminates. $request_uri keeps the path and query
+    # string intact, so a deep link survives the redirect.
+    if ($host = www.virtual-marketer.de) {
+      return 301 https://virtual-marketer.de$request_uri;
+    }
+
     # ---- Legacy WordPress URL redirects (301, permanent) ----
     # /home/ was a duplicate legacy WordPress homepage — canonicalize to /
     location = /home/ { return 301 /; }
