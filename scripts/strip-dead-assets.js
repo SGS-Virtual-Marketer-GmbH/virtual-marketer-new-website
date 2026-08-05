@@ -31,19 +31,23 @@
  *
  * DELIBERATELY KEPT
  *
- *   jquery.min.js            Elementor and the theme both require it.
- *   jquery-migrate           The theme is old enough to plausibly use APIs
- *                            that jQuery 3 removed. Removing it saves 13 KiB
- *                            and risks a silent break; not worth the trade.
  *   block-library CSS        Five pages carry wp-block-* markup.
- *   simple-likes             54 blog posts still render its button. The
+ *   simple-likes CSS         54 blog posts still render its button. The
  *                            button no longer does anything — it posts to a
  *                            WordPress admin-ajax endpoint that is gone — but
  *                            removing dead UI is a content decision, not an
  *                            asset one. Flagged, not silently deleted.
- *   Elementor runtime        webpack.runtime, frontend-modules, frontend,
- *                            elementor.js, elementor-header.js, scripts.js,
- *                            header-mobile.js — these lay out the pages.
+ *
+ * NOT KEPT ANY MORE — see scripts/replace-theme-js.js
+ *
+ * This header used to argue for keeping jQuery, jQuery Migrate and the
+ * Elementor runtime, on the grounds that "these lay out the pages". That was
+ * wrong, and it was wrong in the way assumptions usually are: nobody had
+ * measured it. Rendering the homepage with and without the entire script
+ * stack and diffing the two images pixel by pixel showed a 0.296% difference,
+ * all of it one CSS marquee caught mid-animation. The stack is removed there
+ * rather than here, because the mobile menu did depend on it and had to be
+ * reimplemented first.
  *
  * Runs late, after every generator has written its pages, and before
  * optimize.js.
@@ -77,6 +81,18 @@ const DEAD_SCRIPTS = [
   /imagesloaded(\.min)?\.js/i,            // only used by isotope/masonry
   /swiper(\.min)?\.js/i,                  // Elementor carousel — 0 carousels
   /royal_preloader/i,                     // preloader, already neutralised
+
+  /**
+   * Contact Form 7. There is not one wpcf7 form anywhere in dist/ — checked,
+   * zero matches for "wpcf7-form" across every page. Beyond being dead
+   * weight, its schema validator builds a Web Worker from a blob: URL, which
+   * the site's Content-Security-Policy correctly refuses. That refusal was
+   * the sole remaining Best Practices failure on the homepage; the honest fix
+   * is to stop shipping a validator for forms that do not exist, rather than
+   * to widen the CSP with worker-src blob: to accommodate it.
+   */
+  /contact-form-7\/includes\/swv\/js\/index/i,
+  /contact-form-7\/includes\/js\/index/i,
 ];
 
 const DEAD_STYLES = [
@@ -108,6 +124,7 @@ const DEAD_INLINE = [
   /var\s+wc_add_to_cart_params\s*=/,
   /var\s+woocommerce_params\s*=/,
   /var\s+wc_order_attribution\s*=/,
+  /var\s+wpcf7\s*=/,
 ];
 
 function findHtmlFiles(dir, results = []) {
