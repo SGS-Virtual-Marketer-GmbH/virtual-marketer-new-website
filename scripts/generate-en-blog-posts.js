@@ -26,6 +26,7 @@ const fs = require('fs');
 const path = require('path');
 const { CHROME_CSS } = require('./lib/page-chrome');
 const BI = require('./lib/blog-index');
+const { ARTICLE_CSS } = require('./lib/article-css');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -103,20 +104,7 @@ function pageShell({ titleEN, descriptionEN, keywordsEN, slug, dateISO, category
 <link rel="stylesheet" href="/${THEME_CSS.fontAwesome}">
 <link rel="stylesheet" href="/${THEME_CSS.style}">
 <style>
-  .vm-post{max-width:820px;margin:0 auto;padding:48px 20px 80px}
-  .vm-post .vm-meta{color:#6b7280;font-size:14px;margin-bottom:8px}
-  .vm-post .vm-category{display:inline-block;background:#fbecee;color:#94152b;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:16px}
-  .vm-post h1{font-size:2.1rem;line-height:1.25;margin-bottom:12px}
-  .vm-post h2{font-size:1.5rem;margin-top:2.2em}
-  .vm-post h3{font-size:1.2rem;margin-top:1.6em}
-  .vm-post p{line-height:1.75;font-size:1.05rem;color:#1f2937}
-  .vm-post ul,.vm-post ol{line-height:1.75;font-size:1.05rem;color:#1f2937;padding-left:1.4em}
-  .vm-post a{color:#94152b}
-  .vm-post .vm-cta{margin-top:56px;padding:28px;background:#f8f9fc;border-radius:12px;text-align:center}
-  .vm-post .vm-cta a{display:inline-block;margin-top:12px;padding:12px 24px;background:linear-gradient(90deg,#66a3ce,#94152b);color:#fff;border-radius:6px;text-decoration:none;font-weight:600}
-  .vm-post .vm-related{margin-top:40px}
-  .vm-post .vm-related ul{list-style:none;padding:0}
-  .vm-post .vm-related li{margin-bottom:8px}
+  ${ARTICLE_CSS}
   ${CHROME_CSS}
 </style>
 </head>

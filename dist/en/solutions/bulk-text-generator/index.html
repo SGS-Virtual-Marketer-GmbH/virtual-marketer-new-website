@@ -353,6 +353,30 @@
   .vm-header-simple nav{display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:flex-end}
   .vm-header-simple nav a{color:#241417;text-decoration:none;font-weight:500;font-size:15px;white-space:nowrap}
   .vm-header-simple nav a:hover{color:#94152b}
+
+  /* The solutions dropdown is a <details>/<summary>, not an <a>, so none of
+     the rules above reach it. Left alone it falls back to the browser default
+     and renders 16px/400 in grey beside 14px/500 in near-black — the one nav
+     item that looks like it belongs to a different site. Values copied from
+     the anchor rule above so the two cannot drift apart. */
+  .vm-header-simple nav > details > summary{
+    color:#241417;font-weight:500;font-size:15px;white-space:nowrap;
+    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:4px;
+  }
+  .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
+  .vm-header-simple nav > details > summary:hover{color:#94152b}
+
+  /* position:sticky above is disabled by ANY ancestor with a clipping
+     overflow, and the scraped theme's stylesheet sets overflow:hidden on
+     <body> — which is why the header on /blog/ and the feature pages scrolled
+     away despite being declared sticky. The same trap is documented in
+     scripts/make-header-sticky.js for the legacy header, where the answer was
+     position:fixed; here the cleaner fix is available, because these pages do
+     not use the theme's layout and nothing on them needs body to clip.
+     overflow-x stays hidden so a wide element still cannot scroll the page
+     sideways; only the vertical axis is released, which is the axis sticky
+     needs. */
+  body.vm-static-blog{overflow-x:hidden;overflow-y:visible}
   /* Login is the primary action in this bar — same gradient pill as the
      homepage header, so the two do not look like different sites. */
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]{
