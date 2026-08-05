@@ -1,0 +1,85 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+    run.googleapis.com/maxScale: '100'
+    run.googleapis.com/urls: '["https://virtual-marketer-website-394370849364.europe-west1.run.app","https://virtual-marketer-website-5xsu4ahv6q-ew.a.run.app"]'
+  labels:
+    cloud.googleapis.com/location: europe-west1
+  name: virtual-marketer-website
+  namespace: '394370849364'
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '4'
+        autoscaling.knative.dev/minScale: '0'
+        run.googleapis.com/cpu-throttling: 'true'
+        run.googleapis.com/execution-environment: gen2
+      labels:
+        run.googleapis.com/container-dependencies: '{"web":["api"]}'
+        run.googleapis.com/startupProbeType: Default
+    spec:
+      containerConcurrency: 200
+      containers:
+      - env:
+        - name: API_UPSTREAM
+          value: 127.0.0.1:4000
+        image: europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:v23
+        name: web
+        ports:
+        - containerPort: 8080
+          name: http1
+        resources:
+          limits:
+            cpu: '1'
+            memory: 512Mi
+        startupProbe:
+          failureThreshold: 1
+          periodSeconds: 240
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 240
+      - env:
+        - name: PORT
+          value: '4000'
+        - name: GOOGLE_CLOUD_PROJECT
+          value: virtual-marketer-chat-bot
+        - name: PUBLIC_BASE_URL
+          value: https://virtual-marketer.de
+        - name: SMTP_HOST
+          value: smtp.1blu.de
+        - name: SMTP_PORT
+          value: '465'
+        - name: SMTP_SECURE
+          value: 'true'
+        - name: SMTP_USER
+          value: b321726_0-ai-mailer
+        - name: SMTP_FROM
+          value: Virtual Marketer <ai@virtual-marketer.de>
+        - name: NOTIFY_TO
+          value: info@virtual-marketer.de
+        - name: SMTP_PASS
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: vm-website-smtp-pass
+        image: europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-api:v2
+        name: api
+        resources:
+          limits:
+            cpu: '1'
+            memory: 512Mi
+        startupProbe:
+          failureThreshold: 20
+          periodSeconds: 1
+          tcpSocket:
+            port: 4000
+          timeoutSeconds: 1
+      serviceAccountName: vm-website@virtual-marketer-chat-bot.iam.gserviceaccount.com
+      timeoutSeconds: 30
+  traffic:
+  - latestRevision: true
+    percent: 100

@@ -650,6 +650,44 @@ first day**, which is a constraint worth knowing before it bites.
 Keep the 1blu WordPress instance running but unreferenced until the new site
 has been live and indexed for a week — reverting is then just a DNS change.
 
+## The service spec is in the repo
+
+`deploy-service.yaml` is the Cloud Run service definition, exported from the
+running service. It was not version-controlled before, which meant the only
+copy of the two-container topology lived in whatever shell last touched it.
+
+Deploy with:
+
+```bash
+gcloud run services replace deploy-service.yaml \
+  --region=europe-west1 --project=virtual-marketer-chat-bot
+```
+
+**Two containers, two images.** The website image and the API image are built
+separately, and it is easy to rebuild one and believe you have shipped both —
+that happened: the model-request endpoint 404'd after a website-only deploy
+because the route lives in the API container.
+
+```bash
+docker build -t …/virtual-marketer-website:vNN .          # from the repo root
+docker build -t …/virtual-marketer-api:vNN backend/       # from backend/
+```
+
+**Container startup order.** nginx starts before the API sidecar is listening,
+so on a cold start the first request to `/api/` used to return 502 while the
+page itself served fine — losing exactly the visitor who came to book a demo.
+Fixed with two settings that only work together:
+
+- `run.googleapis.com/container-dependencies: '{"web":["api"]}'` on the
+  revision. Note this is an annotation, not a `dependsOn` field; the field
+  exists in Knative but `gcloud run services replace` rejects it.
+- a `tcpSocket` startupProbe on port 4000 in the API container. Without it
+  Cloud Run treats the container as started the moment the process launches,
+  so the dependency waits for nothing.
+
+Verified by idling the service to zero and hitting `/api/` first: 200, not
+502.
+
 ## Operational notes
 
 - **Secrets.** Only `SMTP_PASS` is in Secret Manager (`vm-website-smtp-pass`).
