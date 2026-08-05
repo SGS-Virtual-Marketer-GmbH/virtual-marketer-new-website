@@ -153,17 +153,49 @@
   .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
   .vm-header-simple nav > details > summary:hover{color:#94152b}
 
-  /* position:sticky above is disabled by ANY ancestor with a clipping
-     overflow, and the scraped theme's stylesheet sets overflow:hidden on
-     <body> — which is why the header on /blog/ and the feature pages scrolled
-     away despite being declared sticky. The same trap is documented in
-     scripts/make-header-sticky.js for the legacy header, where the answer was
-     position:fixed; here the cleaner fix is available, because these pages do
-     not use the theme's layout and nothing on them needs body to clip.
-     overflow-x stays hidden so a wide element still cannot scroll the page
-     sideways; only the vertical axis is released, which is the axis sticky
-     needs. */
-  body.vm-static-blog{overflow-x:hidden;overflow-y:visible}
+  /* position:sticky is disabled by ANY ancestor that is a scroll container,
+     and the scraped theme sets overflow-x:hidden on BOTH the root element
+     and the body element.
+
+     NOTE FOR ANYONE EDITING THIS COMMENT: do not write element names in
+     angle brackets here. This text ends up inside a style block in the head
+     of every generated page, and scripts/fix-nested-documents.js scans the
+     raw HTML for a body tag followed by a root tag to find pasted-in
+     documents. Angle-bracketed names in this comment read as real tags: an
+     earlier revision wrote them out and the unwrapper treated everything
+     from this comment to the end of the file as a nested document, stripping
+     the real body tag's class="vm-static-blog" — which silently disabled
+     every rule in this stylesheet. The unwrapper now masks style and script
+     regions before scanning, but prose that looks like markup is a trap
+     worth not re-laying.
+
+     WHY THE OBVIOUS FIX DID NOT WORK
+
+     The previous attempt here was overflow-x:hidden with overflow-y:visible
+     on the body — keep clipping sideways, release the axis sticky needs. It
+     reads correctly and it does nothing, because of a rule in the overflow
+     spec: when one axis is "hidden" and the other is "visible", the visible
+     one is coerced to "auto". A computed "auto" is a scroll container. So
+     the declaration that was supposed to free the header is what pinned it.
+
+     Measured on /blog/artikel-50-ki-inhalte-kennzeichnen/: computed
+     overflow was "hidden auto" on both the root and the body, and at scrollY
+     1500 the header sat at top:-1484 — i.e. it had scrolled away entirely.
+
+     "clip" is the value that does what "hidden" was being asked to do here:
+     it clips without creating a scroll container, so it does NOT coerce the
+     other axis, and visible survives. Same measurement after the change:
+     header at top:0, page still scrolls to 1500, and
+     scrollWidth === clientWidth, so nothing escapes sideways either.
+
+     The root element needs it too. Fixing only the body leaves the root
+     computing "hidden auto", and the header's nearest scrollport is then
+     still a box that never scrolls. Scoped with :has() so this reaches only
+     the generated pages — the theme's own layout on the legacy pages
+     genuinely relies on root clipping, and make-header-sticky.js solves
+     those with position:fixed instead. */
+  html:has(body.vm-static-blog){overflow-x:clip;overflow-y:visible}
+  body.vm-static-blog{overflow-x:clip;overflow-y:visible}
   /* Login is the primary action in this bar — same gradient pill as the
      homepage header, so the two do not look like different sites. */
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]{
@@ -402,6 +434,7 @@ html { scroll-padding-top: 76px; }
   }
 }
 </style>
+<style id="vm-ilink-style">.vm-ilink{color:#94152b;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}.vm-ilink:hover{color:#700f2b;text-decoration-thickness:2px}</style>
 </head>
 <body class="vm-static-blog">
 
@@ -612,10 +645,10 @@ html { scroll-padding-top: 76px; }
 
     <h2>Was ist Agentic AI – und warum ist es mehr als nur Automatisierung?</h2>
 <p>Marketing-Automation ist seit Jahren fester Bestandteil professioneller Kampagnenarbeit: Wenn ein Nutzer ein Formular ausfüllt, verschickt das System automatisch eine E-Mail. Wenn ein Warenkorb verlassen wird, folgt eine Erinnerung. Diese Systeme arbeiten regelbasiert – sie tun exakt das, was ein Mensch vorher definiert hat, nicht mehr und nicht weniger.</p>
-<p>Agentic AI verfolgt einen fundamental anderen Ansatz. Statt starrer Wenn-Dann-Regeln arbeiten KI-Agenten mit einem Ziel ("maximiere die Conversion-Rate bei gleichbleibendem Budget") und entwickeln selbstständig einen Plan, um dieses Ziel zu erreichen. Sie beobachten laufende Kampagnendaten, ziehen Schlüsse, treffen Entscheidungen und setzen diese direkt um – ohne dass für jeden einzelnen Schritt ein Mensch die Freigabe erteilen muss. Ein klassischer Chatbot beantwortet Fragen innerhalb eines vordefinierten Skripts. Ein Marketing-Agent hingegen kann eigenständig erkennen, dass eine Anzeigengruppe unterdurchschnittlich performt, das Budget zu einer besseren Zielgruppe verschieben, eine neue Anzeigenvariante generieren und deren Ergebnis wieder in die nächste Entscheidung einfließen lassen.</p>
+<p>Agentic AI verfolgt einen fundamental anderen Ansatz. Statt starrer Wenn-Dann-Regeln arbeiten <a href="/ki-loesungen/agenten/" class="vm-ilink">KI-Agenten</a> mit einem Ziel ("maximiere die Conversion-Rate bei gleichbleibendem Budget") und entwickeln selbstständig einen Plan, um dieses Ziel zu erreichen. Sie beobachten laufende Kampagnendaten, ziehen Schlüsse, treffen Entscheidungen und setzen diese direkt um – ohne dass für jeden einzelnen Schritt ein Mensch die Freigabe erteilen muss. Ein klassischer Chatbot beantwortet Fragen innerhalb eines vordefinierten Skripts. Ein Marketing-Agent hingegen kann eigenständig erkennen, dass eine Anzeigengruppe unterdurchschnittlich performt, das Budget zu einer besseren Zielgruppe verschieben, eine neue Anzeigenvariante generieren und deren Ergebnis wieder in die nächste Entscheidung einfließen lassen.</p>
 <p>Der entscheidende Unterschied liegt also in der Kombination aus autonomer Planung und autonomer Ausführung. Traditionelle Automatisierung führt aus, was Menschen vorgedacht haben. Agentic AI denkt innerhalb definierter Leitplanken selbst mit – und handelt entsprechend.</p>
 <p>Für das Verständnis hilft ein Vergleich mit menschlichen Rollen im Team: Ein regelbasiertes Automatisierungssystem verhält sich wie ein Praktikant, der eine detaillierte Checkliste abarbeitet – zuverlässig, aber ohne eigenes Urteilsvermögen bei unvorhergesehenen Situationen. Ein agentisches System verhält sich eher wie ein erfahrener Kampagnenmanager, dem ein Quartalsziel vorgegeben wird und der selbstständig entscheidet, welche Stellschrauben er wann bedient, um dieses Ziel zu erreichen. Der Mensch bleibt in beiden Fällen verantwortlich für die Zieldefinition – doch im agentischen Modell verschiebt sich die tägliche Ausführungsarbeit spürbar in Richtung Maschine.</p>
-<p>Technisch basiert diese Fähigkeit meist auf einer Kombination aus großen Sprachmodellen, die Kontext verstehen und Entscheidungen begründen können, sowie angebundenen Werkzeugen ("Tools"), über die der Agent tatsächlich in Werbekonten, CRM-Systeme oder E-Mail-Plattformen eingreifen kann. Diese Kopplung aus Sprachverständnis und Handlungsfähigkeit ist neu – frühere KI-Anwendungen im Marketing beschränkten sich meist auf Analyse oder Content-Erstellung, ohne selbst in Systeme einzugreifen.</p>
+<p>Technisch basiert diese Fähigkeit meist auf einer Kombination aus großen Sprachmodellen, die Kontext verstehen und Entscheidungen begründen können, sowie angebundenen Werkzeugen ("Tools"), über die der Agent tatsächlich in Werbekonten, CRM-Systeme oder E-Mail-Plattformen eingreifen kann. Diese Kopplung aus Sprachverständnis und Handlungsfähigkeit ist neu – frühere KI-Anwendungen im Marketing beschränkten sich meist auf Analyse oder <a href="/ki-loesungen/seo-content/" class="vm-ilink">Content-Erstellung</a>, ohne selbst in Systeme einzugreifen.</p>
 
 <h3>Drei Merkmale, die Agentic AI von klassischer Automation unterscheiden</h3>
 <ul>
@@ -627,7 +660,7 @@ html { scroll-padding-top: 76px; }
 <h2>Wie verbreitet ist Agentic AI im Marketing bereits?</h2>
 <p>Der Wandel vollzieht sich schneller, als viele Marketingverantwortliche erwarten. Laut aktuellen Branchenstudien setzt inzwischen ein erheblicher Teil der Marketingteams – Schätzungen bewegen sich um die 45 Prozent – bereits agentische Systeme in irgendeiner Form produktiv ein, sei es für Kampagnenoptimierung, Content-Generierung oder Lead-Qualifizierung. Gleichzeitig zeigen Erhebungen zur generativen KI insgesamt, dass mehr als 80 Prozent der Unternehmen generative KI-Anwendungen bereits im produktiven Einsatz haben oder sich in fortgeschrittenen Pilotphasen befinden.</p>
 <p>Diese Zahlen sollten mit der gebotenen Vorsicht gelesen werden – Erhebungsmethoden und Definitionen von "agentisch" unterscheiden sich je nach Studie erheblich. Der grundsätzliche Trend ist jedoch eindeutig: Agentic AI bewegt sich von der Nische in den Mainstream des professionellen Marketings, und der Abstand zwischen früher Adoption und breiter Marktreife schließt sich zusehends. Für deutsche Unternehmen bedeutet das vor allem eines: Wer jetzt noch abwartet, riskiert, dass Wettbewerber mit autonomeren, schnelleren Kampagnenprozessen einen strukturellen Vorsprung aufbauen.</p>
-<p>Bemerkenswert ist dabei ein zweiter Befund aus mehreren Erhebungen: Ein großer Teil der Unternehmen nutzt KI zwar bereits irgendwo im Marketing – etwa für Texterstellung oder Bildgenerierung –, doch nur ein deutlich kleinerer Anteil hat den Schritt zu echter Prozessautonomie vollzogen, bei der das System auch tatsächlich Budgets verschiebt oder Kampagnen ohne Freigabe pausiert. Diese Lücke zwischen "KI nutzen" und "KI Entscheidungen treffen lassen" ist genau der Bereich, in dem sich in den kommenden ein bis zwei Jahren die größte Dynamik entfalten dürfte – und in dem Unternehmen, die frühzeitig belastbare Prozesse etablieren, einen nachhaltigen Vorteil erzielen können. Besonders in Branchen mit hohem Media-Budget und vielen parallel laufenden Kampagnen – etwa E-Commerce, SaaS oder Finanzdienstleistungen – zeigt sich die Adoption bereits überdurchschnittlich stark, während klassische B2B-Industrieunternehmen in Deutschland hier historisch vorsichtiger agieren.</p>
+<p>Bemerkenswert ist dabei ein zweiter Befund aus mehreren Erhebungen: Ein großer Teil der Unternehmen nutzt KI zwar bereits irgendwo im Marketing – etwa für Texterstellung oder <a href="/ki-loesungen/bilder-generieren/" class="vm-ilink">Bildgenerierung</a> –, doch nur ein deutlich kleinerer Anteil hat den Schritt zu echter Prozessautonomie vollzogen, bei der das System auch tatsächlich Budgets verschiebt oder Kampagnen ohne Freigabe pausiert. Diese Lücke zwischen "KI nutzen" und "KI Entscheidungen treffen lassen" ist genau der Bereich, in dem sich in den kommenden ein bis zwei Jahren die größte Dynamik entfalten dürfte – und in dem Unternehmen, die frühzeitig belastbare Prozesse etablieren, einen nachhaltigen Vorteil erzielen können. Besonders in Branchen mit hohem Media-Budget und vielen parallel laufenden Kampagnen – etwa E-Commerce, SaaS oder Finanzdienstleistungen – zeigt sich die Adoption bereits überdurchschnittlich stark, während klassische B2B-Industrieunternehmen in Deutschland hier historisch vorsichtiger agieren.</p>
 
 <h2>Der wirtschaftliche Hebel: Was Marketing Automation tatsächlich an ROI liefert</h2>
 <p>Der Business Case für automatisierte und zunehmend agentische Marketingsysteme ist nicht nur ein technologisches, sondern vor allem ein betriebswirtschaftliches Argument. Nucleus-Research-Analysen zu Marketing-Automation-Programmen zeigen einen durchschnittlichen Return von <strong>5,44 US-Dollar pro investiertem Dollar</strong>. Programme im oberen Leistungsquartil – also Unternehmen, die Automatisierung konsequent mit sauberer Datenintegration, Multi-Touch-Attribution und intelligenter Segmentierung kombinieren – erreichen sogar Werte von bis zu <strong>8,71 US-Dollar pro investiertem Dollar</strong>.</p>

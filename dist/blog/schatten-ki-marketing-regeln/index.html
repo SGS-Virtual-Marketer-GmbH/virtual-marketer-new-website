@@ -153,17 +153,49 @@
   .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
   .vm-header-simple nav > details > summary:hover{color:#94152b}
 
-  /* position:sticky above is disabled by ANY ancestor with a clipping
-     overflow, and the scraped theme's stylesheet sets overflow:hidden on
-     <body> — which is why the header on /blog/ and the feature pages scrolled
-     away despite being declared sticky. The same trap is documented in
-     scripts/make-header-sticky.js for the legacy header, where the answer was
-     position:fixed; here the cleaner fix is available, because these pages do
-     not use the theme's layout and nothing on them needs body to clip.
-     overflow-x stays hidden so a wide element still cannot scroll the page
-     sideways; only the vertical axis is released, which is the axis sticky
-     needs. */
-  body.vm-static-blog{overflow-x:hidden;overflow-y:visible}
+  /* position:sticky is disabled by ANY ancestor that is a scroll container,
+     and the scraped theme sets overflow-x:hidden on BOTH the root element
+     and the body element.
+
+     NOTE FOR ANYONE EDITING THIS COMMENT: do not write element names in
+     angle brackets here. This text ends up inside a style block in the head
+     of every generated page, and scripts/fix-nested-documents.js scans the
+     raw HTML for a body tag followed by a root tag to find pasted-in
+     documents. Angle-bracketed names in this comment read as real tags: an
+     earlier revision wrote them out and the unwrapper treated everything
+     from this comment to the end of the file as a nested document, stripping
+     the real body tag's class="vm-static-blog" — which silently disabled
+     every rule in this stylesheet. The unwrapper now masks style and script
+     regions before scanning, but prose that looks like markup is a trap
+     worth not re-laying.
+
+     WHY THE OBVIOUS FIX DID NOT WORK
+
+     The previous attempt here was overflow-x:hidden with overflow-y:visible
+     on the body — keep clipping sideways, release the axis sticky needs. It
+     reads correctly and it does nothing, because of a rule in the overflow
+     spec: when one axis is "hidden" and the other is "visible", the visible
+     one is coerced to "auto". A computed "auto" is a scroll container. So
+     the declaration that was supposed to free the header is what pinned it.
+
+     Measured on /blog/artikel-50-ki-inhalte-kennzeichnen/: computed
+     overflow was "hidden auto" on both the root and the body, and at scrollY
+     1500 the header sat at top:-1484 — i.e. it had scrolled away entirely.
+
+     "clip" is the value that does what "hidden" was being asked to do here:
+     it clips without creating a scroll container, so it does NOT coerce the
+     other axis, and visible survives. Same measurement after the change:
+     header at top:0, page still scrolls to 1500, and
+     scrollWidth === clientWidth, so nothing escapes sideways either.
+
+     The root element needs it too. Fixing only the body leaves the root
+     computing "hidden auto", and the header's nearest scrollport is then
+     still a box that never scrolls. Scoped with :has() so this reaches only
+     the generated pages — the theme's own layout on the legacy pages
+     genuinely relies on root clipping, and make-header-sticky.js solves
+     those with position:fixed instead. */
+  html:has(body.vm-static-blog){overflow-x:clip;overflow-y:visible}
+  body.vm-static-blog{overflow-x:clip;overflow-y:visible}
   /* Login is the primary action in this bar — same gradient pill as the
      homepage header, so the two do not look like different sites. */
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]{
@@ -402,6 +434,7 @@ html { scroll-padding-top: 76px; }
   }
 }
 </style>
+<style id="vm-ilink-style">.vm-ilink{color:#94152b;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}.vm-ilink:hover{color:#700f2b;text-decoration-thickness:2px}</style>
 </head>
 <body class="vm-static-blog">
 
@@ -616,7 +649,7 @@ html { scroll-padding-top: 76px; }
 
 <h2>Warum entsteht Schatten-KI ausgerechnet im Marketing?</h2>
 
-<p>Drei Gründe kommen zusammen. Erstens ist der Nutzen sofort spürbar: Ein Entwurf für einen Newsletter, fünf Betreffzeilen, eine Zusammenfassung eines langen Berichts – das sind Aufgaben, bei denen ein Werkzeug in Minuten liefert, wofür sonst eine Stunde eingeplant war. Zweitens ist die Einstiegshürde null, weil die Werkzeuge im Browser laufen und keine Installation brauchen. Drittens ist der offizielle Weg oft langsamer als der inoffizielle: Wo eine Freigabe Wochen dauert, entscheidet sich das Team für die Variante, die heute funktioniert.
+<p>Drei Gründe kommen zusammen. Erstens ist der Nutzen sofort spürbar: Ein Entwurf für einen <a href="/ki-loesungen/mail-generator/" class="vm-ilink">Newsletter</a>, fünf Betreffzeilen, eine Zusammenfassung eines langen Berichts – das sind Aufgaben, bei denen ein Werkzeug in Minuten liefert, wofür sonst eine Stunde eingeplant war. Zweitens ist die Einstiegshürde null, weil die Werkzeuge im Browser laufen und keine Installation brauchen. Drittens ist der offizielle Weg oft langsamer als der inoffizielle: Wo eine Freigabe Wochen dauert, entscheidet sich das Team für die Variante, die heute funktioniert.
 
 </p>
 

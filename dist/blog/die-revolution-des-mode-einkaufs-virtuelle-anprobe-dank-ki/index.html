@@ -447,33 +447,45 @@ var simpleLikes = {"ajaxurl":"https://virtual-marketer.de/wp-admin/admin-ajax.ph
      so that one item falls through to the browser default: 16px/700 in grey
      beside the theme's own type.
 
-     Only layout is set here. Typography is copied from a real sibling anchor
-     at runtime, by the script below — see the comment there for why hardcoding
-     it was wrong. */
+     TYPOGRAPHY IS INHERITED, NOT RESTATED.
+
+     Two earlier attempts got this wrong in opposite directions. The first
+     copied the sibling anchor's computed font onto the summary at runtime;
+     it measured perfectly and painted nothing (see the script below). The
+     second moved the values into this rule as literals — and literals read
+     off one header variant are wrong on the other, which is how .header-static
+     ended up declaring DM Sans 13.5px/500 while its actual nav anchors render
+     Nunito Sans 16px/700. Measured on /impressum/: the summary was three
+     properties adrift from "Blog" and "API" sitting right beside it.
+
+     The way out is that the <li> is already correct. Measured on both
+     variants, the wrapping <li> computes exactly the anchor's font-family,
+     font-size and font-weight — the theme sets those high enough up to reach
+     both. So inheriting tracks the theme by construction and cannot drift
+     the way a literal does.
+
+     Only the two properties the <li> does NOT share with the anchor are
+     stated: colour (the <li> computes #6d6d6d, the anchors do not) and
+     line-height (33.75px against the anchors' 35px). */
   #site-header .main-navigation > ul > li > details > summary {
     padding: 10px 11px;
     display: flex;
     align-items: center;
     cursor: pointer;
-    /* Defaults for any variant not named below. Explicit rather than
-       inherited: a <summary> with no rule renders 16px/700 in the browser's
-       grey, which is a visible mismatch on every variant. */
-    font-family: "DM Sans", sans-serif;
-    font-size: 13.5px;
-    font-weight: 500;
-    color: #241417;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: 35px;
   }
-  /* The two header variants do not share nav typography, and this is the
-     whole reason the first fix looked right on one page and wrong on the
-     other: the values were read off the demo page and applied everywhere.
-     .header-overlay is the homepage; .header-static is everything else. */
+  /* Colour only — the one thing inheritance gets wrong, because the theme
+     colours the anchor rather than the list item.
+     .header-overlay is the homepage; .header-static is everything else.
+     Both values are read off the sibling anchors of that variant. */
   #site-header.header-overlay .main-navigation > ul > li > details > summary {
-    font-size: 18px;
     color: #0a1636;
   }
   #site-header.header-static .main-navigation > ul > li > details > summary {
-    font-size: 13.5px;
-    color: #241417;
+    color: #1a1b1e;
   }
   #site-header .main-navigation > ul > li > details > summary:hover { color: #94152b; }
   #site-header .main-navigation > ul > li > details { display: flex; align-items: center; }
@@ -724,6 +736,7 @@ html { scroll-padding-top: 76px; }
   <meta property="og:title" content="Die Revolution des Mode-Einkaufs: Virtuelle Anprobe dank KI">
   <meta property="og:description" content="In den letzten Jahren hat sich der Einkauf von Kleidung immer mehr in den digitalen Bereich verlagert.">
   <meta property="og:image" content="https://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png">
+<style id="vm-ilink-style">.vm-ilink{color:#94152b;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}.vm-ilink:hover{color:#700f2b;text-decoration-thickness:2px}</style>
 </head>
 <body class="wp-singular post-template-default single single-post postid-57924 single-format-standard wp-theme-engitech theme-engitech select-core-1.6 woocommerce-no-js royal_preloader woocommerce-active wpb-js-composer js-comp-ver-6.7.0 vc_responsive elementor-default elementor-kit-41 engitech-theme-ver-1.6.1 wordpress-version-7.0.1">
 <div id="royal_preloader" data-width="100" data-height="127" data-url="/wp-content/uploads/2023/04/Virtual-Marketer-Logo-128x128-New.png" data-color="#0a0f2b" data-bgcolor="#fff"></div><div id="page" class="site">
@@ -1247,7 +1260,7 @@ html { scroll-padding-top: 76px; }
         <div class="entry-summary">
             <p>In den letzten Jahren hat sich der Einkauf von Kleidung immer mehr in den digitalen Bereich verlagert. Immer mehr Menschen kaufen ihre Kleidung online, sei es aus Bequemlichkeit, Zeitmangel oder der größeren Auswahl. Doch gerade der Bereich der Mode ist auch mit gewissen Herausforderungen verbunden. Eine davon ist die Frage, wie man sicherstellen kann, dass die gekaufte Kleidung auch tatsächlich passt und gefällt.</p>
 <p>Hier kommen virtuelle Anproben dank KI ins Spiel. Künstliche Intelligenz wird bereits in vielen Bereichen des Mode-Einkaufs eingesetzt, um den Kunden beim Online-Shopping zu unterstützen. Beispielsweise gibt es bereits Algorithmen, die basierend auf den Maßen des Kunden und der Größentabelle der jeweiligen Marke berechnen können, welche Größe am besten passt. Diese Technologie ist zwar schon hilfreich, aber sie hat ihre Grenzen.</p>
-<p>Die virtuelle Anprobe dank KI geht jedoch noch einen Schritt weiter. Mit Hilfe von Computer Vision Technologie können Kunden ihre gewünschten Kleidungsstücke auf ihrem digitalen Abbild sehen. Sie benötigen lediglich ein Foto von sich selbst und die Software verwendet dann Algorithmen, um die Kleidung virtuell auf den Körper zu legen. Das Ergebnis ist ein realistisches Bild davon, wie das Kleidungsstück auf sie aussieht.</p>
+<p>Die <a href="/ki-loesungen/produktfotos-ki/" class="vm-ilink">virtuelle Anprobe</a> dank KI geht jedoch noch einen Schritt weiter. Mit Hilfe von Computer Vision Technologie können Kunden ihre gewünschten Kleidungsstücke auf ihrem digitalen Abbild sehen. Sie benötigen lediglich ein Foto von sich selbst und die Software verwendet dann Algorithmen, um die Kleidung virtuell auf den Körper zu legen. Das Ergebnis ist ein realistisches Bild davon, wie das Kleidungsstück auf sie aussieht.</p>
 <p>Die Vorteile dieser Technologie liegen auf der Hand. Kunden können die Kleidung virtuell anprobieren, bevor sie sie kaufen, um sicherzustellen, dass sie passt und gefällt. Dies spart nicht nur Zeit und Geld, sondern reduziert auch die Notwendigkeit des Rückversands. So können sowohl die Kunden als auch die Unternehmen Kosten sparen.</p>
 <p>Darüber hinaus können Kunden mit virtuellen Anproben auch unterschiedliche Stile und Kombinationen ausprobieren, ohne tatsächlich Kleidungsstücke kaufen und zurückgeben zu müssen. Dies kann den Kunden helfen, neue Looks zu entdecken und ihr Styling zu verbessern.</p>
 <p>Virtuelle Anproben dank KI bieten jedoch nicht nur Vorteile für die Kunden, sondern auch für die Unternehmen. Durch die Reduzierung des Rückversands und der damit verbundenen Kosten können Unternehmen ihre Effizienz verbessern und ihre Gewinne steigern. Darüber hinaus können sie mithilfe der Daten, die bei der Nutzung der virtuellen Anprobe gesammelt werden, das Einkaufserlebnis ihrer Kunden personalisieren und verbessern.</p>
@@ -1267,37 +1280,47 @@ html { scroll-padding-top: 76px; }
     <input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" /></label>
 	<button type="submit" class="search-submit"><svg class="vm-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10.5 3a7.5 7.5 0 1 1-4.6 13.43l-.02.02-.68-.68A7.5 7.5 0 0 1 10.5 3Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z"/><path d="m15.6 17.02 1.42-1.42 4.4 4.4-1.42 1.42Z"/></svg></button>
     </form></section><section id="recent_news-1" class="widget widget_recent_news"><h5 class="widget-title">Aktuelle Beiträge</h5>            <ul class="recent-news clearfix">
-                                                <li class="clearfix"> 
-                                        <div class="entry-header">
+                <li class="clearfix">
+                    <div class="entry-header">
                         <h6>
-                            <a href="/blog/edge-ai-die-revolution-der-kuenstlichen-intelligenz-wie-intelligente-geraete-unsere-zukunft-gestalten/">&#8222;Edge AI: Die Revolution der Künstlichen Intelligenz – Wie intelligente Geräte unsere Zukunft gestalten&#8220;</a>
+                            <a href="/blog/artikel-50-ki-inhalte-kennzeichnen/">Artikel 50 gilt: KI-Inhalte jetzt richtig kennzeichnen</a>
                         </h6>
-                                                <span class="post-on">
-                            <span class="entry-date">Juli 22, 2025</span>
-                        </span>
-                                            </div>
+                        <span class="post-on"><span class="entry-date">4. August 2026</span></span>
+                    </div>
                 </li>
-                                                <li class="clearfix"> 
-                                        <div class="entry-header">
+                <li class="clearfix">
+                    <div class="entry-header">
                         <h6>
-                            <a href="/blog/multimodale-ki-die-zukunft-des-verstaendnisses-von-text-bild-und-ton/">&#8222;Multimodale KI: Die Zukunft des Verständnisses von Text, Bild und Ton&#8220;</a>
+                            <a href="/blog/personalisierung-vs-datenschutz-gdpr-2026/">KI-gesteuerte Personalisierung vs. Datenschutz: GDPR-konform in 2026</a>
                         </h6>
-                                                <span class="post-on">
-                            <span class="entry-date">Juli 21, 2025</span>
-                        </span>
-                                            </div>
+                        <span class="post-on"><span class="entry-date">4. August 2026</span></span>
+                    </div>
                 </li>
-                                                <li class="clearfix"> 
-                                        <div class="entry-header">
+                <li class="clearfix">
+                    <div class="entry-header">
                         <h6>
-                            <a href="/blog/die-zukunft-des-shoppings-visual-search-und-ki-revolutionieren-das-einkaufen-online/">&#8222;Die Zukunft des Shoppings: Visual Search und KI revolutionieren das Einkaufen online&#8220;</a>
+                            <a href="/blog/seo-im-zeitalter-der-ki-suche/">SEO im Zeitalter der KI-Suche: Von Keywords zu E-E-A-T</a>
                         </h6>
-                                                <span class="post-on">
-                            <span class="entry-date">Mai 15, 2024</span>
-                        </span>
-                                            </div>
+                        <span class="post-on"><span class="entry-date">28. Juli 2026</span></span>
+                    </div>
                 </li>
-                            </ul>
+                <li class="clearfix">
+                    <div class="entry-header">
+                        <h6>
+                            <a href="/blog/digital-omnibus-ki-fristen-2026/">Digital Omnibus: welche KI-Fristen jetzt gelten</a>
+                        </h6>
+                        <span class="post-on"><span class="entry-date">21. Juli 2026</span></span>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="entry-header">
+                        <h6>
+                            <a href="/blog/agentic-ai-marketing-kampagnen/">Agentic AI für automatisierte Marketing-Kampagnen</a>
+                        </h6>
+                        <span class="post-on"><span class="entry-date">21. Juli 2026</span></span>
+                    </div>
+                </li>
+            </ul>
     </section></aside><!-- #secondary -->
 			</div>
 		</div>	

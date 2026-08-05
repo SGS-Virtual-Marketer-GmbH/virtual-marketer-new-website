@@ -65,17 +65,47 @@ function findHtmlFiles(dir, results = []) {
 }
 
 /**
+ * Blanks out <style>, <script> and comment bodies, replacing them with the
+ * same number of spaces so every offset in the result still refers to the
+ * same character of the original.
+ *
+ * WHY THIS IS NECESSARY
+ *
+ * The scan below looks for markup by pattern, and CSS and JS are full of
+ * prose that matches. A comment in scripts/lib/page-chrome.js explaining
+ * which overflow rules apply to the body and root elements wrote those
+ * element names in angle brackets; that text ships inside a style block in
+ * the head of every generated page. The scan then found a "body tag" in the
+ * head, a "root tag" after it, the document's real closing tag at the end —
+ * and unwrapped the entire page as if it were a pasted-in document, which
+ * stripped the real body tag's class attribute. The pages looked fine and
+ * every rule keyed on that class had silently stopped applying.
+ *
+ * Masking rather than skipping keeps the rest of the function offset-based
+ * and unchanged, and it fixes the whole class of problem instead of the one
+ * comment that exposed it.
+ */
+function maskInertRegions(html) {
+  return html.replace(
+    /<style\b[^>]*>[\s\S]*?<\/style>|<script\b[^>]*>[\s\S]*?<\/script>|<!--[\s\S]*?-->/gi,
+    (m) => ' '.repeat(m.length)
+  );
+}
+
+/**
  * Locates a nested <html> that starts after the outer <body>. Returns null
  * when the page is well-formed, which is the case for all but three pages.
  */
 function findNestedDocument(html) {
-  const outerBody = html.search(/<body[\s>]/i);
+  const scan = maskInertRegions(html);
+
+  const outerBody = scan.search(/<body[\s>]/i);
   if (outerBody === -1) return null;
 
-  const inner = [...html.matchAll(/<html[\s>]/gi)].find((m) => m.index > outerBody);
+  const inner = [...scan.matchAll(/<html[\s>]/gi)].find((m) => m.index > outerBody);
   if (!inner) return null;
 
-  const closeHtml = html.toLowerCase().indexOf('</html>', inner.index);
+  const closeHtml = scan.toLowerCase().indexOf('</html>', inner.index);
   if (closeHtml === -1) return null;
 
   return { start: inner.index, end: closeHtml + '</html>'.length };
