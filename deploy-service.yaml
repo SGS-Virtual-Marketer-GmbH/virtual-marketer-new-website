@@ -27,7 +27,7 @@ spec:
       - env:
         - name: API_UPSTREAM
           value: 127.0.0.1:4000
-        image: europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:v23
+        image: europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:v24
         name: web
         ports:
         - containerPort: 8080
