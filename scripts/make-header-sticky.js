@@ -56,6 +56,32 @@ const SNIPPET = `<style id="${MARKER}">
   };
   window.addEventListener('scroll', onScroll, { passive:true });
   onScroll();
+
+  /**
+   * Give the page back the space the header used to occupy.
+   *
+   * Only for .header-static. The homepage's .header-overlay was always an
+   * overlay — its hero is drawn to start underneath the bar, so reserving
+   * space there would push the whole design down by the header's height.
+   * .header-static was not: those pages were laid out with the header in
+   * normal flow, so taking it out of flow slid every one of them up
+   * underneath it. On /modell-anfragen/ that put the h1 behind the nav.
+   *
+   * Measured rather than hardcoded — the bar is 146px on pages that carry the
+   * dark top strip and 96px on those that do not, and it changes again at the
+   * mobile breakpoint.
+   */
+  if (h.classList.contains('header-static')) {
+    var pad = function(){
+      document.body.style.paddingTop = h.offsetHeight + 'px';
+    };
+    pad();
+    window.addEventListener('load', pad);
+    var t;
+    window.addEventListener('resize', function(){
+      clearTimeout(t); t = setTimeout(pad, 150);
+    }, { passive:true });
+  }
 })();
 </script>`;
 

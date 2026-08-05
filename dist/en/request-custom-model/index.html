@@ -116,6 +116,12 @@
   .vm-en .fact{background:var(--vm-gray-100);border-radius:10px;padding:16px 18px;font-size:15px;}
 
 </style>
+<link rel="stylesheet" href="/assets/model-request/model-request.css">
+<style id="vm-model-request-section">
+  .vm-mr-section{max-width:760px;margin:0 auto;padding:8px 20px 64px;}
+  .vm-mr-section h2{font-size:26px;margin:0 0 10px;color:#241417;}
+  .vm-mr-lede{color:#4a4143;line-height:1.6;margin:0 0 28px;max-width:60ch;}
+</style>
 
   <script type="application/ld+json">
 {
@@ -408,6 +414,15 @@
 <p>Book your free strategy call today and let's discuss your goals.</p>
 <a class="btn" href="/en/demo/">Book a demo</a>
 </main>
+
+<section class="vm-mr-section">
+  <h2>Request a model</h2>
+  <p class="vm-mr-lede">Describe what your model should do. The more concrete your examples, the more precise the proposal you get back from us.</p>
+  <div data-vm-model-request data-locale="en"></div>
+  <noscript>
+    <div class="vm-mr-nojs"><p>This form needs JavaScript. You can also write to us directly at <a href="mailto:info@virtual-marketer.de?subject=Custom model request">info@virtual-marketer.de</a> — tell us your domain, whether you need a new model or a change to an existing one, and one example each of an ideal input and output.</p></div>
+  </noscript>
+</section>
 <footer style="max-width:1140px;margin:64px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
   &copy; 2026 SGS Virtual Marketer GmbH &middot;
   <a href="/en/privacy-policy/">Privacy Policy</a> &middot;
@@ -430,6 +445,7 @@
   <a href="/en/request-custom-model/" class="active" lang="en" hreflang="en">EN</a>
 </div>
 <!-- vm-lang-switch:end -->
+<script defer src="/assets/model-request/model-request.js"></script>
 <style id="vm-mobile-polish">
 /* ==========================================================================
    Mobile polish — see scripts/mobile-polish.js

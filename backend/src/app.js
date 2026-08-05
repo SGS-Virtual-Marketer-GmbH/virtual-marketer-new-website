@@ -3,6 +3,7 @@
 const express = require('express');
 const bookingsRouter = require('./routes/bookings');
 const contactRouter = require('./routes/contact');
+const modelRequestsRouter = require('./routes/model-requests');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.set('trust proxy', 1);
 
 app.use('/bookings', bookingsRouter);
 app.use('/contact', contactRouter);
+app.use('/model-requests', modelRequestsRouter);
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 

@@ -48,6 +48,7 @@ const firestore = new Firestore({
 const prefix = config.firestore.collectionPrefix;
 const bookingsCol = firestore.collection(`${prefix}bookings`);
 const contactsCol = firestore.collection(`${prefix}contact_submissions`);
+const modelRequestsCol = firestore.collection(`${prefix}model_requests`);
 
 function withId(doc) {
   return doc.exists ? { id: doc.id, ...doc.data() } : null;
@@ -175,4 +176,50 @@ const contacts = {
   },
 };
 
-module.exports = { firestore, bookings, contacts };
+/**
+ * Custom-model requests, replacing the Google Form the page used to embed.
+ *
+ * Deliberately the same shape as `contacts`: create, rate-limit by email,
+ * double opt-in confirm, sweep. The payload differs — a model request carries
+ * roughly twenty fields across two branches — but the lifecycle is identical,
+ * and a second lifecycle would be a second thing to get wrong.
+ *
+ * The branch-specific answers live in a nested `details` object rather than as
+ * twenty top-level columns. Firestore does not care, and it keeps the document
+ * readable: someone opening it sees which branch was taken and only the fields
+ * that branch actually has.
+ */
+const modelRequests = {
+  async create(row) {
+    const nowIso = new Date().toISOString();
+    const ref = modelRequestsCol.doc();
+    await ref.create({ ...row, status: 'pending', confirmed_at: null, created_at: nowIso });
+    return ref.id;
+  },
+
+  async countRecentByEmail(email, sinceIso) {
+    const snap = await modelRequestsCol.where('email', '==', email).limit(200).get();
+    return snap.docs.filter((d) => d.data().created_at > sinceIso).length;
+  },
+
+  async getById(id) {
+    if (!id) return null;
+    return withId(await modelRequestsCol.doc(id).get());
+  },
+
+  async confirm(id, nowIso) {
+    return firestore.runTransaction(async (tx) => {
+      const ref = modelRequestsCol.doc(id);
+      const doc = await tx.get(ref);
+      if (!doc.exists || doc.data().status !== 'pending') return false;
+      tx.update(ref, { status: 'confirmed', confirmed_at: nowIso });
+      return true;
+    });
+  },
+
+  sweepExpired(nowIso) {
+    return sweep(modelRequestsCol, nowIso);
+  },
+};
+
+module.exports = { firestore, bookings, contacts, modelRequests };

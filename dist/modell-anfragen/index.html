@@ -430,6 +430,12 @@ var simpleLikes = {"ajaxurl":"https://virtual-marketer.de/wp-admin/admin-ajax.ph
   #page{visibility:visible!important;opacity:1!important}
 </style>
 <!-- vm-fix-preloader:end -->
+<link rel="stylesheet" href="/assets/model-request/model-request.css">
+<style id="vm-model-request-section">
+  .vm-mr-section{max-width:760px;margin:0 auto;padding:8px 20px 64px;}
+  .vm-mr-section h2{font-size:26px;margin:0 0 10px;color:#241417;}
+  .vm-mr-lede{color:#4a4143;line-height:1.6;margin:0 0 28px;max-width:60ch;}
+</style>
 
 
   <!-- SEO Meta Tags -->
@@ -1056,7 +1062,15 @@ var simpleLikes = {"ajaxurl":"https://virtual-marketer.de/wp-admin/admin-ajax.ph
 			<div class="elementor-widget-wrap elementor-element-populated">
 						<div class="elementor-element elementor-element-d98fd6b elementor-widget elementor-widget-html" data-id="d98fd6b" data-element_type="widget" data-e-type="widget" data-widget_type="html.default">
 				<div class="elementor-widget-container">
-					<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfxQQkRMSKNnwIKMwLSrxDTfhyb361Wr666YbwmF3QwQkzW2g/viewform?embedded=true" width="1000" height="3000" frameborder="0" marginheight="0" marginwidth="0">Wird geladen…</iframe>				</div>
+					
+<section class="vm-mr-section">
+  <h2>Modell-Anfrage</h2>
+  <p class="vm-mr-lede">Beschreiben Sie, was Ihr Modell können soll. Je konkreter Ihre Beispiele, desto genauer der Vorschlag, den Sie von uns zurückbekommen.</p>
+  <div data-vm-model-request data-locale="de"></div>
+  <noscript>
+    <div class="vm-mr-nojs"><p>Für dieses Formular wird JavaScript benötigt. Schreiben Sie uns alternativ direkt an <a href="mailto:info@virtual-marketer.de?subject=Modell-Anfrage">info@virtual-marketer.de</a> — nennen Sie darin Ihre Domain, ob ein neues Modell entstehen oder ein bestehendes angepasst werden soll, und je ein Beispiel für idealen Input und Output.</p></div>
+  </noscript>
+</section>				</div>
 				</div>
 				<div class="elementor-element elementor-element-4c18267 elementor-widget elementor-widget-spacer" data-id="4c18267" data-element_type="widget" data-e-type="widget" data-widget_type="spacer.default">
 				<div class="elementor-widget-container">
@@ -1266,29 +1280,68 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
   };
   window.addEventListener('scroll', onScroll, { passive:true });
   onScroll();
+
+  /**
+   * Give the page back the space the header used to occupy.
+   *
+   * Only for .header-static. The homepage's .header-overlay was always an
+   * overlay — its hero is drawn to start underneath the bar, so reserving
+   * space there would push the whole design down by the header's height.
+   * .header-static was not: those pages were laid out with the header in
+   * normal flow, so taking it out of flow slid every one of them up
+   * underneath it. On /modell-anfragen/ that put the h1 behind the nav.
+   *
+   * Measured rather than hardcoded — the bar is 146px on pages that carry the
+   * dark top strip and 96px on those that do not, and it changes again at the
+   * mobile breakpoint.
+   */
+  if (h.classList.contains('header-static')) {
+    var pad = function(){
+      document.body.style.paddingTop = h.offsetHeight + 'px';
+    };
+    pad();
+    window.addEventListener('load', pad);
+    var t;
+    window.addEventListener('resize', function(){
+      clearTimeout(t); t = setTimeout(pad, 150);
+    }, { passive:true });
+  }
 })();
 </script>
+<script defer src="/assets/model-request/model-request.js"></script>
 <style id="vm-legacy-header-fix">
   /* 1 — make the solutions <summary> look like the links beside it.
-     The first attempt here assumed a height problem and set height:100%.
-     Measured afterwards, the boxes were already the same 55px — what differs
-     is the type. The theme styles its nav anchors but has no rule for a
-     <summary>, so that one item falls back to the browser default and renders
-     16px/700 in grey next to 13.5px/500 in near-black:
+     The theme styles its nav anchors and has no rule at all for a <summary>,
+     so that one item falls through to the browser default: 16px/700 in grey
+     beside the theme's own type.
 
-         a        13.5px  weight 500  #241417  padding 10px 11px
-         summary  16px    weight 700  #6d6d6d  padding 10px 0
-
-     Matching all four is the fix. Sizes are copied from the anchors rather
-     than invented, so a future theme change moves both together. */
+     Only layout is set here. Typography is copied from a real sibling anchor
+     at runtime, by the script below — see the comment there for why hardcoding
+     it was wrong. */
   #site-header .main-navigation > ul > li > details > summary {
-    font-size: 13.5px;
-    font-weight: 500;
-    line-height: 17.55px;
-    color: #241417;
     padding: 10px 11px;
     display: flex;
     align-items: center;
+    cursor: pointer;
+    /* Defaults for any variant not named below. Explicit rather than
+       inherited: a <summary> with no rule renders 16px/700 in the browser's
+       grey, which is a visible mismatch on every variant. */
+    font-family: "DM Sans", sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #241417;
+  }
+  /* The two header variants do not share nav typography, and this is the
+     whole reason the first fix looked right on one page and wrong on the
+     other: the values were read off the demo page and applied everywhere.
+     .header-overlay is the homepage; .header-static is everything else. */
+  #site-header.header-overlay .main-navigation > ul > li > details > summary {
+    font-size: 18px;
+    color: #0a1636;
+  }
+  #site-header.header-static .main-navigation > ul > li > details > summary {
+    font-size: 13.5px;
+    color: #241417;
   }
   #site-header .main-navigation > ul > li > details > summary:hover { color: #94152b; }
   #site-header .main-navigation > ul > li > details { display: flex; align-items: center; }
@@ -1321,18 +1374,19 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
 </style>
 <script>
 /**
- * Vertically aligns the solutions <summary> with the sibling nav links.
+ * Vertically aligns the solutions <summary> with the nav links beside it.
  *
- * Measured rather than hardcoded, because the offset is neither a round
- * number nor stated anywhere in the markup. The theme lays its nav anchors
- * out 61px below the top of their own <li> — the anchor's box actually
- * extends past the bottom of its parent — while the <summary>, for which the
- * theme has no rule at all, sits flush at the top. Writing "top: 61px" here
- * would fix today's build and drift silently the first time the theme's
- * padding changes.
+ * Measured rather than hardcoded: the theme lays its anchors out below the
+ * top of their own <li>, by an amount that is neither round nor stated in the
+ * markup, and it differs between the two header variants.
  *
- * So: read one real anchor's offset and apply the same to the summary. With
- * no anchor to compare against, this does nothing.
+ * Typography is NOT set here, though it was for one revision. Copying the
+ * sibling anchor's computed font and colour onto the summary produced an
+ * element that measured perfectly — 116x55, 18px, navy — and rendered
+ * nothing: a fresh headless capture showed the label simply absent. Rather
+ * than keep a mechanism whose failure mode is invisible text, the typography
+ * moved to the stylesheet above, per header variant, where what it does can
+ * be read off the rule.
  */
 (function () {
   function align() {
@@ -1348,6 +1402,10 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
     }
     if (!ref) return;
 
+    // Only the vertical offset is set here. Copying the sibling's typography
+    // at runtime was tried and reverted: it measured correctly in the DOM —
+    // 18px, navy, right box — and painted nothing at all in a fresh render,
+    // and the styles now live in CSS where their effect is inspectable.
     summary.style.position = 'relative';
     summary.style.top = '0px';
 
