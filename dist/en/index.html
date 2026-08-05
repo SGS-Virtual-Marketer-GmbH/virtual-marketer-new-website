@@ -117,6 +117,34 @@
   .vm-en .card{background:#fff;border:1px solid var(--vm-gray-200);border-radius:14px;padding:22px;margin-bottom:14px;}
   .vm-en .fact{background:var(--vm-gray-100);border-radius:10px;padding:16px 18px;font-size:15px;}
 
+  /* Homepage blocks. Grid rather than flex so the three pillars keep equal
+     heights without a min-height guess, and collapse to one column on a
+     phone without a second rule. */
+  .vm-en .pillars{display:grid;gap:14px;grid-template-columns:1fr;}
+  @media (min-width:760px){.vm-en .pillars{grid-template-columns:repeat(3,minmax(0,1fr));}}
+  .vm-en .pillars .card{margin-bottom:0;}
+  .vm-en .pillars .card strong{display:block;font-size:16px;margin-bottom:6px;color:var(--vm-red);}
+  .vm-en .pillars .card p{margin:0;font-size:15px;}
+
+  .vm-en .steps{counter-reset:step;list-style:none;padding:0;margin:0 0 20px;}
+  .vm-en .steps li{counter-increment:step;position:relative;padding:0 0 0 46px;margin-bottom:16px;}
+  .vm-en .steps li::before{
+    content:counter(step);position:absolute;left:0;top:-2px;
+    width:30px;height:30px;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--vm-red);color:#fff;font-weight:700;font-size:14px;
+  }
+
+  /* <details> for the FAQ: it is an accordion the browser already
+     implements, so it opens without JavaScript and is announced correctly
+     by a screen reader. */
+  .vm-en .faq{border:1px solid var(--vm-gray-200);border-radius:12px;padding:14px 18px;margin-bottom:10px;background:#fff;}
+  .vm-en .faq summary{cursor:pointer;font-weight:600;list-style:none;}
+  .vm-en .faq summary::-webkit-details-marker{display:none;}
+  .vm-en .faq summary::after{content:'+';float:right;color:var(--vm-red);font-weight:700;}
+  .vm-en .faq[open] summary::after{content:'−';}
+  .vm-en .faq p{margin:12px 0 0;font-size:15px;}
+
 </style>
 </head>
 <body class="vm-static-blog">
@@ -318,25 +346,72 @@
 </header>
 <main class="vm-en">
 
+<!-- Mirrors the German homepage section for section — hero, positioning,
+     three pillars, the four-step process, industries, solutions and FAQ.
+     It used to be a hero plus a flat list of cards, which read as a
+     placeholder next to the German page rather than as its English edition.
+     The copy is translated from that page, not newly invented, so the two
+     make the same promises. -->
 <span class="eyebrow">Made in Germany</span>
 <h1>Reliable. Automated. Efficient. The AI marketing solution from Germany.</h1>
 <p class="lede">Virtual Marketer trains custom AI models on your brand voice and puts them to work across product descriptions, product photography, marketing campaigns, coding and autonomous AI agents.</p>
 <a class="btn" href="/en/demo/">Book a demo</a>
+
+<h2>Your data-driven, customer-centric marketing professional</h2>
+<p>Virtual Marketer works around the clock, saves time and cost, and gives you a real competitive edge. It thinks and acts consistently from your customers' point of view — across every touchpoint and every channel.</p>
+<p>Website copy, shopping and search ads, social ads, chatbots or voicebots: Virtual Marketer operates on one unified data foundation, in real time and across channels.</p>
+
+<h2>What makes it different</h2>
+<div class="pillars">
+  <div class="card">
+    <strong>Unique models</strong>
+    <p>Not a generic prompt wrapper. Your own model is trained on your brand voice, your product data and your tone — so what it writes sounds like you, not like everyone else.</p>
+  </div>
+  <div class="card">
+    <strong>German company</strong>
+    <p>SGS Virtual Marketer GmbH, founded 2022, based in Bad Homburg. Where your data is stored and processed is contractually agreed — Germany-only or elsewhere in the EU on request.</p>
+  </div>
+  <div class="card">
+    <strong>Seamless integration</strong>
+    <p>API-first: every product is usable programmatically, not locked behind a single interface. It connects to the tools, ad platforms and data sources you already run.</p>
+  </div>
+</div>
+
+<h2>From your data to results</h2>
+<ol class="steps">
+  <li><strong>Extraction &amp; data activation</strong> — we read your product, catalogue and feed data and make it usable for a model.</li>
+  <li><strong>Model training</strong> — a model is trained on your brand voice against real examples of the input and output you want.</li>
+  <li><strong>Flow setup &amp; client testing</strong> — the model is wired into your channels and tested against your own material before anything goes live.</li>
+  <li><strong>Rollout &amp; iteration</strong> — it runs in production, and keeps being adjusted as your catalogue and campaigns change.</li>
+</ol>
+
+<h2>Tailored solutions for every industry</h2>
+<p>E-commerce, retail, manufacturing, publishing, universities, energy and services — the model is built around your catalogue and your audience, so the industry it fits is yours.</p>
 
 <h2>What Virtual Marketer does</h2>
 <div class="card"><strong>AI Agents</strong> — specialist virtual employees for analytics, Google Ads, Meta Ads, SEO and customer care. <a href="/en/solutions/ai-agents/">Learn more &rarr;</a></div>
 <div class="card"><strong>AI Product Photos &amp; Virtual Try-On</strong> — professional on-model shots and product videos from a single photo. <a href="/en/solutions/ai-product-photos/">Learn more &rarr;</a></div>
 <div class="card"><strong>Coding API &amp; MCP Server</strong> — Virtual Marketer Senior &amp; Junior in your IDE, one flat balance. <a href="/en/solutions/coding-api/">Learn more &rarr;</a></div>
 <div class="card"><strong>AI Feed Enhance</strong> — enrich and publish shopping feeds for Google, Meta and Bing. <a href="/en/solutions/feed-enhance/">Learn more &rarr;</a></div>
-<p><a href="/en/solutions/">See all 11 AI solutions &rarr;</a></p>
+<p><a href="/en/solutions/">See all AI solutions &rarr;</a></p>
 
-<h2>Why Virtual Marketer</h2>
-<ul>
-  <li><strong>API-first &amp; flexible</strong> — every product is usable programmatically, not locked behind a single UI.</li>
-  <li><strong>Unique, brand-trained models</strong> — not a generic prompt wrapper; your own AI models learn your brand voice.</li>
-  <li><strong>German company</strong> — SGS Virtual Marketer GmbH, founded 2022, based in Bad Homburg, Germany.</li>
-  <li><strong>Seamless integration</strong> — connects to your existing tools, ad platforms and data sources.</li>
-</ul>
+<h2>Frequently asked questions</h2>
+<details class="faq">
+  <summary>How do I know whether Virtual Marketer fits my company?</summary>
+  <p>Ahead of any engagement our marketing and data science specialists evaluate your data, your channels and your goals, and tell you which of our solutions actually apply — and which do not.</p>
+</details>
+<details class="faq">
+  <summary>How long does onboarding take?</summary>
+  <p>It depends on scope, from a single solution to full integration with your existing systems. Demand is high enough that we do not promise a fixed date; we agree a concrete schedule with you after the first conversation.</p>
+</details>
+<details class="faq">
+  <summary>What does it cost?</summary>
+  <p>There are no standard packages at fixed prices. Virtual Marketer is tailored to your company — the number of models, the data volume and the integration effort all shape the quote.</p>
+</details>
+<details class="faq">
+  <summary>Where is my data stored and processed?</summary>
+  <p>The exact location is agreed per contract. On request we process and store your data exclusively in Germany or in other EU/EEA data centres. Without such an agreement we select a cost-efficient location. See our <a href="/en/privacy-policy/">privacy policy</a> for details.</p>
+</details>
 
 <h2>Ready to see it in action?</h2>
 <p>Book a free, no-obligation demo and see Virtual Marketer live.</p>

@@ -115,6 +115,34 @@
   .vm-en .card{background:#fff;border:1px solid var(--vm-gray-200);border-radius:14px;padding:22px;margin-bottom:14px;}
   .vm-en .fact{background:var(--vm-gray-100);border-radius:10px;padding:16px 18px;font-size:15px;}
 
+  /* Homepage blocks. Grid rather than flex so the three pillars keep equal
+     heights without a min-height guess, and collapse to one column on a
+     phone without a second rule. */
+  .vm-en .pillars{display:grid;gap:14px;grid-template-columns:1fr;}
+  @media (min-width:760px){.vm-en .pillars{grid-template-columns:repeat(3,minmax(0,1fr));}}
+  .vm-en .pillars .card{margin-bottom:0;}
+  .vm-en .pillars .card strong{display:block;font-size:16px;margin-bottom:6px;color:var(--vm-red);}
+  .vm-en .pillars .card p{margin:0;font-size:15px;}
+
+  .vm-en .steps{counter-reset:step;list-style:none;padding:0;margin:0 0 20px;}
+  .vm-en .steps li{counter-increment:step;position:relative;padding:0 0 0 46px;margin-bottom:16px;}
+  .vm-en .steps li::before{
+    content:counter(step);position:absolute;left:0;top:-2px;
+    width:30px;height:30px;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--vm-red);color:#fff;font-weight:700;font-size:14px;
+  }
+
+  /* <details> for the FAQ: it is an accordion the browser already
+     implements, so it opens without JavaScript and is announced correctly
+     by a screen reader. */
+  .vm-en .faq{border:1px solid var(--vm-gray-200);border-radius:12px;padding:14px 18px;margin-bottom:10px;background:#fff;}
+  .vm-en .faq summary{cursor:pointer;font-weight:600;list-style:none;}
+  .vm-en .faq summary::-webkit-details-marker{display:none;}
+  .vm-en .faq summary::after{content:'+';float:right;color:var(--vm-red);font-weight:700;}
+  .vm-en .faq[open] summary::after{content:'−';}
+  .vm-en .faq p{margin:12px 0 0;font-size:15px;}
+
 </style>
 <link rel="stylesheet" href="/assets/model-request/model-request.css">
 <style id="vm-model-request-section">
