@@ -36,11 +36,20 @@ docker compose up --build   # http://localhost:8080
 ├── dist/                    # Build output — deployable static site (gitignored... see note below)
 ├── content/blog/            # Body content (HTML fragments) for the 11 new posts
 ├── blog-posts.json          # Metadata for the 11 new posts (title, date, keywords, ...)
-├── scripts/
+├── scripts/                  # ~53-step build pipeline; `npm run build` runs them in order
 │   ├── build.js              # WordPress export → cleaned static HTML
 │   ├── generate-blog-posts.js # Renders content/blog/*.html into dist/blog/<slug>/
-│   ├── seo-optimize.js       # Injects meta tags, Schema.org JSON-LD, OG tags
-│   ├── generate-sitemap.js   # Auto-generates sitemap.xml/robots.txt from dist/ (run last)
+│   ├── generate-feature-pages.js  # The 16 product pages, DE + EN (exports header/footer)
+│   ├── generate-impressum.js      # § 5 DDG / § 18 MStV legal notice
+│   ├── generate-accessibility-statement.js  # BFSG statement, DE + EN, + footer links
+│   ├── generate-model-request-page.js       # /modell-anfragen/ body, DE + EN
+│   ├── refresh-recent-posts.js    # Rebuilds the "Aktuelle Beiträge" widget from real dates
+│   ├── internal-links.js     # Keyword→URL internal linking across the blog (Linkinator)
+│   ├── fix-a11y.js           # Landmarks, icon labels, in-text underlines, empty headings
+│   ├── fix-contrast.js       # Darkens button-gradient stops until white text passes 4.5:1
+│   ├── prune-font-formats.js # Drops eot/ttf/svg/woff where a woff2 exists
+│   ├── seo-optimize.js       # Injects meta tags, Schema.org JSON-LD, OG tags, hreflang
+│   ├── generate-sitemap.js   # Auto-generates sitemap.xml/robots.txt from dist/
 │   └── analyze.js            # Site inventory / size report
 ├── docker/
 │   ├── nginx.conf            # Hardened server config (security headers, redirects, caching)
