@@ -78,19 +78,51 @@ const CONTACT_MAIL = 'info@virtual-marketer.de';
 /**
  * The enforcement body named by the BFSG for services.
  *
- * Named, not addressed. The MLBF's postal address and case-intake email are
- * details this build cannot verify, and a wrong address on a page whose whole
- * purpose is to give someone a working route to complain would defeat the
- * page. The name plus the fact that it is the competent body is enough for a
- * reader to find it; a fabricated address is not.
+ * Named, not addressed — and that is what the law asks for. Anlage 3 Nr. 1
+ * BFSGV requires the "Angabe der zuständigen Marktüberwachungsbehörde", which
+ * is naming it; no provision of the BFSG or the BFSGV asks for a postal
+ * address or a case-intake contact.
+ *
+ * It would also be the wrong thing to guess at. This is the one page whose
+ * purpose is to give someone a working route to complain, so a plausible but
+ * unverified address would defeat it more thoroughly than no address at all.
  */
 const ENFORCEMENT_DE =
   'Marktüberwachungsstelle der Länder für die Barrierefreiheit von Produkten und Dienstleistungen (MLBF)';
 const ENFORCEMENT_EN =
   'Market Surveillance Authority of the German Federal States for the Accessibility of Products and Services (MLBF)';
 
+/**
+ * WHAT ANLAGE 3 NR. 1 BFSGV ACTUALLY ASKS FOR
+ *
+ * Checked against the legal text rather than assumed, because an earlier
+ * version of this file carried the MLBF's postal address as an open item and
+ * that was wrong — there is no address requirement anywhere in the BFSG.
+ *
+ *   1. a general description of the service                    — NOT YET HERE
+ *   2. explanations needed to understand how the service works — NOT YET HERE
+ *   3. how the accessibility requirements are met              — covered
+ *   4. "Angabe der zuständigen Marktüberwachungsbehörde"       — covered
+ *
+ * Item 4 is satisfied by *naming* the authority. The wording is "Angabe",
+ * and the Bundesfachstelle's own guidance reads it the same way; nothing
+ * requires a postal address or a case-intake contact. The MLBF is named in
+ * the enforcement section, so that item is closed.
+ *
+ * Items 1 and 2 are genuinely absent, and the reason is structural: this page
+ * was modelled on the public-sector statement under Directive (EU) 2016/2102
+ * and BITV 2.0, which is a conformance declaration about a website. Anlage 3
+ * is a different document — it is about the *service*, and expects it to be
+ * described. The two overlap on item 3 and diverge either side of it.
+ *
+ * That is not fixed here yet because it is a content decision about how the
+ * offering is described, and because § 3 Abs. 3 Satz 1 BFSG exempts
+ * microenterprises that provide services from the requirements, which is the
+ * case here — so nothing is currently in breach. It matters the moment the
+ * company outgrows the exemption.
+ */
 const OPEN_ITEMS = [
-  'MLBF postal address and case-intake contact — deliberately not printed, because they could not be verified at build time. Add them once confirmed.',
+  'Anlage 3 Nr. 1 BFSGV items 1 and 2 (a general description of the service, and what a user needs to understand how it works) are not on this page — it follows the public-sector conformance template instead. Not a breach today: § 3 Abs. 3 S. 1 BFSG exempts microenterprise service providers. Add them if the company outgrows the exemption, or sooner if belt-and-braces is wanted.',
 ];
 
 const CSS_ID = 'vm-a11y-statement-style';
