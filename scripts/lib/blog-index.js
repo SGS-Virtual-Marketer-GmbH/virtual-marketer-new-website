@@ -293,6 +293,7 @@ const LANGS = {
     prev: 'Zurück',
     next: 'Weiter',
     navLabel: 'Seitennavigation',
+    catNavLabel: 'Kategorien',
     one: '1 Beitrag',
     manySuffix: 'Beiträge',
     empty: 'Keine Beiträge gefunden. Andere Schreibweise oder Kategorie „Alle“ versuchen.',
@@ -310,6 +311,7 @@ const LANGS = {
     prev: 'Previous',
     next: 'Next',
     navLabel: 'Pagination',
+    catNavLabel: 'Categories',
     one: '1 post',
     manySuffix: 'posts',
     empty: 'No posts found. Try a different spelling, or the \u201cAll\u201d category.',
@@ -359,10 +361,23 @@ function toolsHtml({ categories, activeCategory, lang = 'de' }) {
       <input type="search" id="vm-blog-q" placeholder="${L.searchPlaceholder}" autocomplete="off"
              aria-label="${L.searchLabel}" aria-describedby="vm-blog-nojs">
     </label>
-    <div class="vm-blog-chips" role="list">
+    <!-- A <nav>, not a div with role="list".
+
+         role="list" makes a promise ARIA then enforces: every child must be a
+         listitem. The children here are bare <a> chips, so axe reported
+         aria-required-children on /blog/ and the whole group was announced as
+         a broken list. Adding role="listitem" to the anchors would satisfy the
+         checker and make it worse — the role would replace "link" in the
+         announcement, so a screen reader would stop calling them links.
+
+         These are category filters, which is navigation, so <nav> with a name
+         is what they actually are. It also gives screen-reader users a labelled
+         landmark to jump to. Layout is untouched: the flex container is
+         .vm-blog-chips itself and <nav> is a block box exactly as <div> was. -->
+    <nav class="vm-blog-chips" aria-label="${esc(L.catNavLabel)}">
       ${chip(L.all, L.base, !activeCategory)}
       ${categories.map((c) => chip(c.label, `${L.catBase}${c.slug}/`, c.label === activeCategory)).join('\n      ')}
-    </div>
+    </nav>
     <noscript><p class="vm-blog-count" id="vm-blog-nojs">${L.noJs}</p></noscript>
     <p class="vm-blog-count" id="vm-blog-count" hidden></p>
   </div>

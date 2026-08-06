@@ -43,6 +43,48 @@ const path = require('path');
 const DIST = path.join(__dirname, '../dist');
 const MARKER = 'data-vm-a11y';
 
+/**
+ * 5 — link-in-text-block.
+ *
+ * WCAG 1.4.1: information must not be conveyed by colour alone. The theme
+ * distinguishes links inside body copy only by colour, which Lighthouse flags
+ * on every page and which genuinely fails for the ~8% of men with a colour
+ * vision deficiency — the site's own brand red against grey body text is
+ * close to indistinguishable with deuteranopia.
+ *
+ * SCOPED TO RUNNING TEXT, NOT "ALL LINKS"
+ *
+ * The naive fix, `a { text-decoration: underline }`, would underline the nav,
+ * the footer, the CTA buttons and every card that happens to be wrapped in an
+ * anchor — links whose purpose is already obvious from their position and
+ * shape, and which WCAG does not require to be underlined. It would look
+ * broken and it would not be more accessible.
+ *
+ * So this targets anchors that are children of a paragraph or a list item —
+ * the definition of "a block of text" the rule is about — and then excludes
+ * the things that live inside prose but are not prose links: the theme's
+ * button classes, the icon-only social row, and anything already carrying its
+ * own decoration.
+ *
+ * text-underline-offset keeps the line off the descenders, so it reads as
+ * typography rather than as a browser default.
+ */
+const LINK_STYLE_ID = 'vm-a11y-links';
+const LINK_STYLE = `<style id="${LINK_STYLE_ID}">
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):not([aria-hidden="true"]){
+  text-decoration:underline;
+  text-underline-offset:2px;
+  text-decoration-thickness:1px;
+}
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):hover{
+  text-decoration-thickness:2px;
+}
+/* The share row and any icon-only link inside a list item: an underline under
+   a glyph is noise, and the link is not a text link. */
+:is(p,li) > a:has(> svg:only-child),
+:is(p,li) > a:has(> i:only-child){text-decoration:none}
+</style>`;
+
 /** Icon-only controls → the label a screen reader should announce. */
 const LABELS = [
   [/class=["'][^"']*\bmmenu-close\b[^"']*["']/i, 'Menü schließen', 'Close menu'],
@@ -64,7 +106,7 @@ function main() {
   console.log('\n♿ Accessibility repairs...\n');
 
   let pages = 0;
-  const fixed = { labels: 0, burger: 0, tablist: 0, main: 0 };
+  const fixed = { labels: 0, burger: 0, tablist: 0, main: 0, links: 0 };
 
   for (const file of findHtmlFiles(DIST)) {
     let html = fs.readFileSync(file, 'utf-8');
@@ -123,6 +165,15 @@ function main() {
       if (html !== before) fixed.main++;
     }
 
+    // 5 — links in running text must not be signalled by colour alone.
+    if (!html.includes(LINK_STYLE_ID)) {
+      const headEnd = html.search(/<\/head>/i);
+      if (headEnd !== -1) {
+        html = html.slice(0, headEnd) + LINK_STYLE + '\n' + html.slice(headEnd);
+        fixed.links++;
+      }
+    }
+
     if (html !== original) {
       fs.writeFileSync(file, html);
       pages++;
@@ -134,6 +185,7 @@ function main() {
   console.log(`   • ${fixed.burger} burger button(s) named`);
   console.log(`   • ${fixed.tablist} accordion container(s) given role="tablist"`);
   console.log(`   • ${fixed.main} page(s) given a main landmark`);
+  console.log(`   • ${fixed.links} page(s) given the in-text link underline rule`);
 
   const stillMissing = findHtmlFiles(DIST).filter((f) => {
     const h = fs.readFileSync(f, 'utf-8');

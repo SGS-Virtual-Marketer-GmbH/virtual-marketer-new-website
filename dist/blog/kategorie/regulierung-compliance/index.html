@@ -356,6 +356,20 @@ html { scroll-padding-top: 76px; }
   }
 }
 </style>
+<style id="vm-a11y-links">
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):not([aria-hidden="true"]){
+  text-decoration:underline;
+  text-underline-offset:2px;
+  text-decoration-thickness:1px;
+}
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):hover{
+  text-decoration-thickness:2px;
+}
+/* The share row and any icon-only link inside a list item: an underline under
+   a glyph is noise, and the link is not a text link. */
+:is(p,li) > a:has(> svg:only-child),
+:is(p,li) > a:has(> i:only-child){text-decoration:none}
+</style>
 
 
   <!-- SEO: canonical + hreflang (auto) -->
@@ -581,7 +595,20 @@ html { scroll-padding-top: 76px; }
       <input type="search" id="vm-blog-q" placeholder="Beiträge durchsuchen …" autocomplete="off"
              aria-label="Beiträge durchsuchen" aria-describedby="vm-blog-nojs">
     </label>
-    <div class="vm-blog-chips" role="list">
+    <!-- A <nav>, not a div with role="list".
+
+         role="list" makes a promise ARIA then enforces: every child must be a
+         listitem. The children here are bare <a> chips, so axe reported
+         aria-required-children on /blog/ and the whole group was announced as
+         a broken list. Adding role="listitem" to the anchors would satisfy the
+         checker and make it worse — the role would replace "link" in the
+         announcement, so a screen reader would stop calling them links.
+
+         These are category filters, which is navigation, so <nav> with a name
+         is what they actually are. It also gives screen-reader users a labelled
+         landmark to jump to. Layout is untouched: the flex container is
+         .vm-blog-chips itself and <nav> is a block box exactly as <div> was. -->
+    <nav class="vm-blog-chips" aria-label="Kategorien">
       <a href="/blog/" data-cat="Alle">Alle</a>
       <a href="/blog/kategorie/ai-trends/" data-cat="AI-Trends">AI-Trends</a>
       <a href="/blog/kategorie/archiv/" data-cat="Archiv">Archiv</a>
@@ -589,7 +616,7 @@ html { scroll-padding-top: 76px; }
       <a href="/blog/kategorie/regulierung-compliance/" data-cat="Regulierung &amp; Compliance" class="is-active">Regulierung &amp; Compliance</a>
       <a href="/blog/kategorie/seo/" data-cat="SEO">SEO</a>
       <a href="/blog/kategorie/use-cases/" data-cat="Use Cases">Use Cases</a>
-    </div>
+    </nav>
     <noscript><p class="vm-blog-count" id="vm-blog-nojs">Suche und Filter brauchen JavaScript. Ohne JavaScript funktionieren die Kategorie-Links und die Seitennavigation unten weiterhin.</p></noscript>
     <p class="vm-blog-count" id="vm-blog-count" hidden></p>
   </div>

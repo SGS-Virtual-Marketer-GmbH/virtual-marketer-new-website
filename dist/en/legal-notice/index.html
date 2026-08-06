@@ -383,6 +383,20 @@ html { scroll-padding-top: 76px; }
   }
 }
 </style>
+<style id="vm-a11y-links">
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):not([aria-hidden="true"]){
+  text-decoration:underline;
+  text-underline-offset:2px;
+  text-decoration-thickness:1px;
+}
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):hover{
+  text-decoration-thickness:2px;
+}
+/* The share row and any icon-only link inside a list item: an underline under
+   a glyph is noise, and the link is not a text link. */
+:is(p,li) > a:has(> svg:only-child),
+:is(p,li) > a:has(> i:only-child){text-decoration:none}
+</style>
 
   <script type="application/ld+json">
 {
