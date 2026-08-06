@@ -110,26 +110,102 @@ const SCENES = [
  * Each model gets a distinct look rather than a shared uniform, so the row
  * reads as a casting board instead of a set of variations on one person.
  */
+/**
+ * THE NAMES AND THE CAST ARE THE PRODUCT'S, NOT INVENTED HERE
+ *
+ * Product Staging ships ten preset models — NOA, SABRINA, AMARA, LENA, YUKI,
+ * GRETA, ADAM, MALIK, JONAS, KEN — documented in
+ * vm-customer-web-ui/docs/guides/vm-product-staging.md. The website used to
+ * show six models of its own naming, so the line-up a visitor saw was not the
+ * line-up they would find after signing up. These are the real ten.
+ *
+ * WHY THE CAST IS NOT TEN BEAUTIFUL TWENTY-FIVE-YEAR-OLDS
+ *
+ * The competitor research is unusually clear on this. SCAYLE Studios' own FAQ
+ * concedes that "more diverse and everyday model appearances" are still in
+ * beta, and carries a user asking for exactly that because the generated
+ * models look too beautiful to sell to their customers. A shop selling to
+ * forty-year-olds cannot use a cast of twenty-five-year-old size-6 models —
+ * the clothes do not look like they will look.
+ *
+ * The product builds custom models from attribute chips including age and
+ * body, so it can already do this; the preset cast should show it. GRETA is
+ * in her fifties and plus-size, JONAS is an ordinary-build man in his
+ * forties. That is a real differentiator against the field, and it is only
+ * credible if the pictures show it.
+ */
 const FASHION_MODELS = [
-  { id: 'ruby',  file: 'model-ruby-base.jpg',  pose: 'hand on hip, chin lifted, confident editorial stance',
-    who: 'a striking woman in her mid twenties with long wavy copper-red hair and prominent freckles across her face and shoulders, fair skin, slim athletic build',
-    look: 'a cream ribbed knit top and high-waisted wide-leg camel trousers with tan boots' },
-  { id: 'nadia', file: 'model-nadia-base.jpg', pose: 'one hand in pocket, weight on one leg, relaxed powerful stance',
-    who: 'a beautiful curvy Black woman in her late twenties with a voluminous natural afro, warm deep skin tone, full hourglass figure',
-    look: 'a tailored emerald green jumpsuit with gold hoop earrings and heeled sandals' },
-  { id: 'kai',   file: 'model-kai-base.jpg',   pose: 'arms crossed, shoulder angled to camera, cool streetwear attitude',
-    who: 'a handsome East Asian man in his late twenties with an undercut hairstyle, lean sharp features, slim tall build',
-    look: 'an oversized charcoal bomber jacket, black tapered trousers and white high-top sneakers' },
-  { id: 'marco', file: 'model-marco-base.jpg', pose: 'relaxed beach stance, one hand running through hair, easy smile',
-    who: 'a very attractive Mediterranean man in his early thirties with tousled dark hair, light stubble, tanned skin and a defined athletic beach physique',
-    look: 'an open linen shirt over swim shorts, barefoot' },
-  { id: 'lena',  file: 'model-lena-base.jpg',  pose: 'seated-height relaxed lean, hands clasped, soft approachable posture',
+  { id: 'noa',     file: 'model-noa-base.jpg',     pose: 'hands in pockets, square to camera, calm neutral stance',
+    who: 'a striking androgynous model in their mid twenties with a sharp platinum-blonde crop, fair skin, lean frame',
+    look: 'a boxy off-white shirt over straight black trousers and black loafers' },
+  { id: 'sabrina', file: 'model-sabrina-base.jpg', pose: 'hand on hip, chin lifted, confident editorial stance',
+    who: 'a beautiful Latina woman in her early thirties with long dark wavy hair, warm olive skin and a curvy hourglass figure',
+    look: 'a rust-red wrap dress with tan heeled sandals' },
+  { id: 'amara',   file: 'model-amara-base.jpg',   pose: 'walking stride toward camera, fabric in motion, runway energy',
+    who: 'a glamorous Black woman in her late twenties with a voluminous natural afro, warm deep skin tone, tall statuesque build',
+    look: 'a flowing deep burgundy maxi dress with layered gold jewellery' },
+  { id: 'lena',    file: 'model-lena-base.jpg',    pose: 'relaxed lean, hands clasped, soft approachable posture',
     who: 'a lovely petite Scandinavian woman in her early thirties with a short blonde bob and pale blue eyes, slender frame',
     look: 'a soft oversized grey cashmere sweater dress with white trainers' },
-  { id: 'amara', file: 'model-amara-base.jpg', pose: 'walking stride toward camera, fabric in motion, runway energy',
-    who: 'a glamorous South Asian woman in her late twenties with long glossy dark hair, warm brown skin, tall statuesque build',
-    look: 'a flowing deep burgundy maxi dress with layered gold jewellery' },
+  { id: 'yuki',    file: 'model-yuki-base.jpg',    pose: 'one shoulder angled to camera, arms loose, quiet poise',
+    who: 'an elegant East Asian woman in her mid twenties with long straight black hair and clear porcelain skin, slim petite build',
+    look: 'a pale blue oversized blazer over a white tee and cropped ecru trousers' },
+  { id: 'greta',   file: 'model-greta-base.jpg',   pose: 'standing square, hands relaxed at her sides, warm open expression',
+    who: 'a warm, attractive woman in her mid fifties with a silver-grey bob, soft laughter lines and a full plus-size figure, fair skin',
+    look: 'a well-cut navy midi dress with a leather belt and low block heels' },
+  { id: 'adam',    file: 'model-adam-base.jpg',    pose: 'arms crossed, weight on one leg, easy confidence',
+    who: 'a handsome white man in his early thirties with short dark hair, light stubble and a defined athletic build',
+    look: 'a charcoal crew-neck knit, dark indigo jeans and brown leather boots' },
+  { id: 'malik',   file: 'model-malik-base.jpg',   pose: 'one hand in pocket, shoulder to camera, streetwear attitude',
+    who: 'a striking Black man in his late twenties with short twists, deep skin tone and a broad muscular build',
+    look: 'an oversized sand-coloured bomber jacket, black tapered trousers and white high-top sneakers' },
+  { id: 'jonas',   file: 'model-jonas-base.jpg',   pose: 'standing naturally, hands at his sides, friendly unposed expression',
+    who: 'a likeable white man in his mid forties with greying short hair, glasses and an ordinary everyday build with a slight belly',
+    look: 'a mid-blue casual shirt worn untucked over chinos and suede sneakers' },
+  { id: 'ken',     file: 'model-ken-base.jpg',     pose: 'hands in jacket pockets, chin level, composed editorial stance',
+    who: 'a handsome East Asian man in his thirties with an undercut hairstyle, sharp features and a tall slim build',
+    look: 'a stone-grey unstructured suit over a black tee and white minimal sneakers' },
 ];
+
+/**
+ * The one comparison that sells this product.
+ *
+ * Every competitor page leads with the finished on-model shot, which proves
+ * nothing on its own — a good photograph is what a photographer sells too.
+ * The argument only lands when the input is visible beside it, and the input
+ * is deliberately unflattering: the creased, flat-lit packshot on a white
+ * sweep that a warehouse phone actually produces. That is the picture a shop
+ * recognises as their own.
+ *
+ * The on-model shot is conditioned on the flat lay rather than written from
+ * a prompt, so it is demonstrably the same garment — same colour, same
+ * buttons, same collar. A pair generated independently would be two nice
+ * photographs of two different shirts, and the page would be making a claim
+ * its own illustration quietly breaks.
+ */
+const BEFORE_AFTER = {
+  before: {
+    file: 'staging-before-flatlay.jpg',
+    prompt:
+      'A plain, unglamorous e-commerce packshot: a sage-green cotton button-down shirt laid ' +
+      'flat on a plain white background, shot from directly above under flat even light. The ' +
+      'shirt is visibly creased and wrinkled from packaging, the sleeves lie slightly unevenly, ' +
+      'one collar point curls up. No model, no styling, no props, no shadows of interest — an ' +
+      'ordinary catalogue photo taken quickly in a warehouse. Sharp focus, true colour, ' +
+      'vertical 3:4 framing.',
+  },
+  after: {
+    file: 'staging-after-onmodel.jpg',
+    instruction:
+      'Use the garment in the reference image exactly: the same sage-green cotton button-down ' +
+      'shirt, the same colour, the same buttons, collar and pocket detail. Now show it worn by ' +
+      'an attractive woman in her late twenties with long dark hair, styled well and pressed ' +
+      'smooth, tucked into high-waisted cream trousers. She stands on a warm off-white seamless ' +
+      'studio backdrop under soft professional lighting, relaxed confident stance, full body ' +
+      'visible from head to feet. High-end e-commerce on-model product photograph, sharp focus, ' +
+      'vertical 3:4 framing.',
+  },
+};
 
 /**
  * Scenes the demo lets a visitor drop a model into. Keys match the ids used
@@ -418,6 +494,41 @@ async function main() {
       } catch (e) {
         console.log(`FAILED — ${e.message}`);
       }
+    }
+  }
+
+  // Flat lay in, on-model out. The second is conditioned on the first so the
+  // page's own illustration cannot contradict the claim it illustrates.
+  const flatPath = path.join(OUT_DIR, BEFORE_AFTER.before.file);
+  if (wanted(BEFORE_AFTER.before.file) || wanted(BEFORE_AFTER.after.file)) {
+    if (!fs.existsSync(flatPath) || FORCE) {
+      process.stdout.write(`   ${BEFORE_AFTER.before.file} ... `);
+      // No STYLE here on purpose: the shared photographic direction asks for
+      // editorial lighting and shallow depth of field, and this image has to
+      // look like the opposite of that.
+      const img = await request(key, [{ text: BEFORE_AFTER.before.prompt }]);
+      const kb = await save(img, BEFORE_AFTER.before.file, 800);
+      console.log(`${kb} KB`);
+      made++;
+    } else {
+      skipped++;
+    }
+
+    if (wanted(BEFORE_AFTER.after.file) && (!exists(BEFORE_AFTER.after.file) || FORCE)) {
+      process.stdout.write(`   ${BEFORE_AFTER.after.file} ... `);
+      try {
+        const img = await request(key, [
+          { inlineData: { mimeType: 'image/jpeg', data: fs.readFileSync(flatPath).toString('base64') } },
+          { text: BEFORE_AFTER.after.instruction },
+        ]);
+        const kb = await save(img, BEFORE_AFTER.after.file, 800);
+        console.log(`${kb} KB`);
+        made++;
+      } catch (e) {
+        console.log(`FAILED — ${e.message}`);
+      }
+    } else if (exists(BEFORE_AFTER.after.file)) {
+      skipped++;
     }
   }
 

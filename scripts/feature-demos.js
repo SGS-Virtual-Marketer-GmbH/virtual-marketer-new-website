@@ -281,12 +281,12 @@ function vmdAvatars(ids, files) {
  * the result pane exists to do.
  */
 const STAGING_MODELS = [
-  { avatar: 'model-kai-studio.jpg', result: 'model-kai-studio.jpg' },
-  { avatar: 'model-nadia-studio.jpg', result: 'model-nadia-studio.jpg' },
-  { avatar: 'model-ruby-studio.jpg', result: 'model-ruby-studio.jpg' },
+  { avatar: 'model-sabrina-studio.jpg', result: 'model-sabrina-studio.jpg' },
+  { avatar: 'model-malik-studio.jpg', result: 'model-malik-studio.jpg' },
+  { avatar: 'model-greta-studio.jpg', result: 'model-greta-studio.jpg' },
 ];
 /** Which of the three the animation settles on. */
-const STAGING_PICK = 1;
+const STAGING_PICK = 0;
 
 function buildDemo(view, locale) {
   const de = locale === 'de';

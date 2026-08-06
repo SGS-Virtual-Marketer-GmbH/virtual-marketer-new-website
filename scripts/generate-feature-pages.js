@@ -77,6 +77,30 @@ const UI = {
     tryonLabel: 'Product Staging für Fashion', tryonTitle: 'Ein Modell, beliebig viele Outfits',
     tryonIntro: 'Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; dieselbe Person, frei wählbare Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.',
     tryonBase: 'Referenzfoto', tryonNote: 'Illustratives Beispiel &#8211; alle Aufnahmen sind KI-generiert.',
+
+    baLabel: 'Vorher / Nachher', baTitle: 'Aus dem Katalogfoto, das Sie ohnehin haben',
+    baIntro: 'Links das Foto, wie es aus dem Lager kommt: flach ausgelegt, zerknittert, hartes Licht. Rechts dasselbe Hemd &#8211; gleiche Farbe, gleiche Knöpfe, gleicher Kragen &#8211; getragen, gebügelt, im Studio. Dazwischen liegt kein Shooting, sondern ein Upload.',
+    baBefore: 'Flat-Lay aus dem Lager', baAfter: 'Fertiges Shop-Bild',
+    baBeforeTag: 'Vorher', baAfterTag: 'Nachher',
+    baNote: 'Beide Bilder sind KI-generiert. Das rechte wurde aus dem linken erzeugt, nicht separat &#8211; deshalb ist es dasselbe Kleidungsstück.',
+
+    modelsLabel: 'Models', modelsTitle: 'Fertige Models &#8211; oder Ihre eigenen',
+    modelsIntro: 'Sie müssen kein Model buchen und keins erfinden. Nutzen Sie die fertige Besetzung ab der ersten Minute, oder legen Sie ein eigenes Model an, das in Ihrem gesamten Katalog dieselbe Person bleibt.',
+    modelsCustomH: 'Ihre eigenen Models',
+    modelsCustomP: 'Ein eigenes Model entsteht aus Attributen &#8211; Geschlecht, Alter, Statur, Hautton, Ausdruck, Haare &#8211; oder aus dem Foto einer konkreten Person, etwa Ihres Fit-Modells.',
+    modelsCustomBullets: [
+      'Pro Workspace gespeichert und in jeder Generierung als Referenz genutzt',
+      'Dieselbe Person über den gesamten Katalog hinweg &#8211; kein wechselndes Gesicht pro Artikel',
+      'Passt die Besetzung an Ihre Kundschaft an, nicht Ihre Kundschaft an die Besetzung',
+    ],
+    modelsPresetH: '{n} fertige Models',
+    modelsPresetP: 'Die feste Besetzung steht sofort bereit, ohne Einrichtung, ohne eigenes Bildmaterial.',
+    modelsPresetBullets: [
+      'Verschiedene Altersgruppen, Staturen und Hauttöne &#8211; nicht zehnmal dieselbe Figur',
+      'Frei kombinierbar mit 12 Szenen, vier Perspektiven und fünf Bildformaten',
+      'Ideal, um ein Sortiment zu testen, bevor Sie ein eigenes Model anlegen',
+    ],
+    modelsNote: 'Die gezeigte Besetzung entspricht den Models im Produkt. Alle Aufnahmen sind KI-generiert.',
   },
   en: {
     nav: { solutions: 'Solutions', blog: 'Blog', api: 'API', request: 'Request a model', contact: 'Contact', login: 'Login' },
@@ -95,6 +119,30 @@ const UI = {
     tryonLabel: 'Product Staging for fashion', tryonTitle: 'One model, any number of outfits',
     tryonIntro: 'A single reference photo of your fit model is enough. Every further garment is applied to it &#8211; same person, any pose you like, same lighting. For a few cents per image instead of a photo shoot.',
     tryonBase: 'Reference photo', tryonNote: 'Illustrative example &#8211; every shot here is AI-generated.',
+
+    baLabel: 'Before / after', baTitle: 'From the catalogue photo you already have',
+    baIntro: 'On the left, the photo as it comes out of the warehouse: laid flat, creased, hard light. On the right the same shirt &#8211; same colour, same buttons, same collar &#8211; worn, pressed, in a studio. What sits between them is an upload, not a photo shoot.',
+    baBefore: 'Warehouse flat lay', baAfter: 'Finished shop image',
+    baBeforeTag: 'Before', baAfterTag: 'After',
+    baNote: 'Both images are AI-generated. The right one was generated from the left one rather than separately &#8211; which is why it is the same garment.',
+
+    modelsLabel: 'Models', modelsTitle: 'A ready-made cast &#8211; or your own',
+    modelsIntro: 'You do not have to book a model, and you do not have to invent one. Use the ready-made cast from the first minute, or create your own model that stays the same person across your entire catalogue.',
+    modelsCustomH: 'Your own models',
+    modelsCustomP: 'A custom model is built from attributes &#8211; gender, age, body, skin tone, expression, hair &#8211; or from a photo of a specific person, such as your own fit model.',
+    modelsCustomBullets: [
+      'Stored per workspace and used as the reference in every generation',
+      'The same person across the whole catalogue &#8211; not a new face on every item',
+      'Fits the cast to your customers, rather than your customers to the cast',
+    ],
+    modelsPresetH: '{n} ready-made models',
+    modelsPresetP: 'The fixed cast is available immediately, with no setup and no imagery of your own.',
+    modelsPresetBullets: [
+      'A range of ages, builds and skin tones &#8211; not the same figure ten times',
+      'Combine freely with 12 scenes, four perspectives and five aspect ratios',
+      'Good for testing a range before you create a model of your own',
+    ],
+    modelsNote: 'The cast shown here matches the models in the product. Every shot is AI-generated.',
   },
 };
 
@@ -1906,6 +1954,120 @@ function tryonSection(f, lang) {
   </section>`;
 }
 
+/**
+ * Flat lay in, on-model out.
+ *
+ * The page led with finished on-model photographs, which prove nothing by
+ * themselves — a good photograph is also what a photographer sells. The
+ * argument only lands when the *input* is next to the output, and the input
+ * here is deliberately the creased, flat-lit packshot a warehouse phone
+ * actually produces. A shop recognises that picture as their own, which is
+ * the whole point.
+ *
+ * Both images come from one generation chain (see BEFORE_AFTER in
+ * scripts/generate-ai-images.js): the on-model shot is conditioned on the
+ * flat lay, so it is provably the same shirt rather than two nice photos of
+ * two different shirts.
+ */
+function beforeAfterSection(f, lang) {
+  if (f.slug !== 'produktfotos-ki') return '';
+  const before = path.join(ROOT, 'assets/product-pages/staging-before-flatlay.jpg');
+  const after = path.join(ROOT, 'assets/product-pages/staging-after-onmodel.jpg');
+  if (!fs.existsSync(before) || !fs.existsSync(after)) return '';
+  const t = UI[lang];
+
+  const shot = (src, caption, kind) => `
+        <figure class="vm-ba-shot vm-ba-${kind}">
+          <picture>
+            <source srcset="${src.replace(/\.jpg$/, '.webp')}" type="image/webp">
+            <img src="${src}" alt="${caption}" loading="lazy" decoding="async">
+          </picture>
+          <figcaption><span class="vm-ba-tag">${kind === 'before' ? t.baBeforeTag : t.baAfterTag}</span>${caption}</figcaption>
+        </figure>`;
+
+  return `
+  <section class="vm-ba" aria-labelledby="ba-h">
+    <p class="section-label">${t.baLabel}</p>
+    <h2 class="section-title" id="ba-h">${t.baTitle}</h2>
+    <p class="impact-note">${t.baIntro}</p>
+    <div class="vm-ba-row">
+      ${shot('/product-pages/staging-before-flatlay.jpg', t.baBefore, 'before')}
+      <div class="vm-ba-arrow" aria-hidden="true">&rarr;</div>
+      ${shot('/product-pages/staging-after-onmodel.jpg', t.baAfter, 'after')}
+    </div>
+    <p class="vm-tryon-note">${t.baNote}</p>
+  </section>`;
+}
+
+/**
+ * The model line-up, and the distinction that actually matters.
+ *
+ * Two questions a visitor has and the page did not answer: is there a cast I
+ * can use today without setting anything up, and can I have *my* model? The
+ * product answers both — ten presets, plus custom models built from attribute
+ * chips or from a photo of a real person, stored per workspace and reused as
+ * a reference so the same face runs through the whole catalogue.
+ *
+ * The names here are the product's real ten, not a set invented for the
+ * website, so the line-up on the landing page is the line-up after signing
+ * up. See vm-customer-web-ui/docs/guides/vm-product-staging.md.
+ *
+ * The cast deliberately includes a woman in her fifties and a man of ordinary
+ * build. Competitors in this category ship ten twenty-five-year-olds and get
+ * asked for everyday models in their own FAQ; a shop selling to
+ * forty-year-olds cannot use a cast that makes the clothes look like they
+ * will not look. Showing it is the difference between the claim and the
+ * proof.
+ */
+const PRESET_MODELS = ['sabrina', 'amara', 'greta', 'yuki', 'malik', 'noa', 'jonas', 'adam', 'lena', 'ken'];
+
+function modelsSection(f, lang) {
+  if (f.slug !== 'produktfotos-ki') return '';
+  const t = UI[lang];
+  const available = PRESET_MODELS.filter((id) =>
+    fs.existsSync(path.join(ROOT, `assets/product-pages/model-${id}-studio.jpg`))
+  );
+  if (!available.length) return '';
+
+  const card = (id) => `
+        <figure class="vm-model-card">
+          <picture>
+            <source srcset="/product-pages/model-${id}-studio.webp" type="image/webp">
+            <img src="/product-pages/model-${id}-studio.jpg" alt="${id.toUpperCase()}" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>${id.toUpperCase()}</figcaption>
+        </figure>`;
+
+  return `
+  <section class="vm-models" aria-labelledby="models-h">
+    <p class="section-label">${t.modelsLabel}</p>
+    <h2 class="section-title" id="models-h">${t.modelsTitle}</h2>
+    <p class="impact-note">${t.modelsIntro}</p>
+
+    <div class="vm-models-split">
+      <div class="vm-model-panel is-custom">
+        <h3>${t.modelsCustomH}</h3>
+        <p>${t.modelsCustomP}</p>
+        <ul>
+          ${t.modelsCustomBullets.map((b) => `<li>${b}</li>`).join('\n          ')}
+        </ul>
+      </div>
+      <div class="vm-model-panel">
+        <h3>${t.modelsPresetH.replace('{n}', available.length)}</h3>
+        <p>${t.modelsPresetP}</p>
+        <ul>
+          ${t.modelsPresetBullets.map((b) => `<li>${b}</li>`).join('\n          ')}
+        </ul>
+      </div>
+    </div>
+
+    <div class="vm-models-row">
+      ${available.map(card).join('\n      ')}
+    </div>
+    <p class="vm-tryon-note">${t.modelsNote}</p>
+  </section>`;
+}
+
 function pagePath(f, lang) {
   return lang === 'en' ? `/en/solutions/${f.slugEn}/` : `/ki-loesungen/${f.slug}/`;
 }
@@ -2115,6 +2277,45 @@ ${animDemo ? DEMO_STYLE : ''}
     .vm-fp .vm-tryon-row{grid-template-columns:repeat(2,1fr);gap:12px;}
   }
 
+  /* Before / after. The arrow between them is the whole argument, so it gets
+     its own grid column rather than being tucked into a caption. */
+  .vm-fp .vm-ba-row{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;margin-top:22px;}
+  .vm-fp .vm-ba-shot{margin:0;}
+  .vm-fp .vm-ba-shot picture{display:block;border-radius:14px;overflow:hidden;background:var(--vm-gray-100);}
+  .vm-fp .vm-ba-shot img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;background:#fff;}
+  .vm-fp .vm-ba-shot figcaption{margin-top:10px;font-size:14px;font-weight:600;color:var(--vm-gray-900);text-align:center;}
+  .vm-fp .vm-ba-tag{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+  .vm-fp .vm-ba-before .vm-ba-tag{color:var(--vm-gray-600,#6b7280);}
+  .vm-fp .vm-ba-after .vm-ba-tag{color:var(--vm-red);}
+  .vm-fp .vm-ba-after picture{box-shadow:0 6px 20px rgba(36,20,23,.14);}
+  .vm-fp .vm-ba-arrow{font-size:30px;color:var(--vm-red);line-height:1;}
+
+  /* Two panels, and the custom one is the one we want read first — it is the
+     answer to "can I have my model", which is the objection that stops a
+     shop from buying. */
+  .vm-fp .vm-models-split{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px;}
+  .vm-fp .vm-model-panel{background:#fff;border:1px solid var(--vm-gray-200);border-radius:16px;padding:24px 26px;}
+  .vm-fp .vm-model-panel.is-custom{border-top:3px solid var(--vm-red);}
+  .vm-fp .vm-model-panel h3{margin:0 0 8px;font-size:18px;color:var(--vm-gray-900);}
+  .vm-fp .vm-model-panel p{margin:0 0 12px;font-size:15px;line-height:1.6;}
+  .vm-fp .vm-model-panel ul{margin:0;padding-left:20px;}
+  .vm-fp .vm-model-panel li{font-size:14.5px;line-height:1.55;margin-bottom:6px;}
+
+  .vm-fp .vm-models-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:26px;}
+  .vm-fp .vm-model-card{margin:0;}
+  .vm-fp .vm-model-card picture{display:block;border-radius:12px;overflow:hidden;background:var(--vm-gray-100);}
+  .vm-fp .vm-model-card img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;}
+  .vm-fp .vm-model-card figcaption{margin-top:8px;font-size:12.5px;font-weight:700;letter-spacing:.05em;color:var(--vm-gray-600,#6b7280);text-align:center;}
+
+  @media (max-width:780px){
+    /* The arrow becomes a row divider once the pair stacks; pointing right at
+       an image that is now underneath would be worse than pointing down. */
+    .vm-fp .vm-ba-row{grid-template-columns:1fr;gap:14px;}
+    .vm-fp .vm-ba-arrow{transform:rotate(90deg);justify-self:center;}
+    .vm-fp .vm-models-split{grid-template-columns:1fr;}
+    .vm-fp .vm-models-row{grid-template-columns:repeat(3,1fr);gap:10px;}
+  }
+
   /* Panels slide-and-fade instead of hard-cutting, and the active step
      button shows a progress bar that drains over the autoplay interval so
      the advance is anticipated rather than sudden. Both are suppressed under
@@ -2224,7 +2425,9 @@ ${header(lang)}
       ${c.audiences.map((a) => `<div class="audience-card"><b>${a.label}</b><span>${a.detail}</span></div>`).join('\n      ')}
     </div>
   </section>
+${beforeAfterSection(f, lang)}
 ${tryonSection(f, lang)}
+${modelsSection(f, lang)}
 ${sceneSection(f, lang)}
 
   ${c.impact ? `<section aria-labelledby="impact-h">

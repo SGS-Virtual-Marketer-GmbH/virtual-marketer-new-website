@@ -270,6 +270,45 @@
     .vm-fp .vm-tryon-row{grid-template-columns:repeat(2,1fr);gap:12px;}
   }
 
+  /* Before / after. The arrow between them is the whole argument, so it gets
+     its own grid column rather than being tucked into a caption. */
+  .vm-fp .vm-ba-row{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;margin-top:22px;}
+  .vm-fp .vm-ba-shot{margin:0;}
+  .vm-fp .vm-ba-shot picture{display:block;border-radius:14px;overflow:hidden;background:var(--vm-gray-100);}
+  .vm-fp .vm-ba-shot img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;background:#fff;}
+  .vm-fp .vm-ba-shot figcaption{margin-top:10px;font-size:14px;font-weight:600;color:var(--vm-gray-900);text-align:center;}
+  .vm-fp .vm-ba-tag{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+  .vm-fp .vm-ba-before .vm-ba-tag{color:var(--vm-gray-600,#6b7280);}
+  .vm-fp .vm-ba-after .vm-ba-tag{color:var(--vm-red);}
+  .vm-fp .vm-ba-after picture{box-shadow:0 6px 20px rgba(36,20,23,.14);}
+  .vm-fp .vm-ba-arrow{font-size:30px;color:var(--vm-red);line-height:1;}
+
+  /* Two panels, and the custom one is the one we want read first — it is the
+     answer to "can I have my model", which is the objection that stops a
+     shop from buying. */
+  .vm-fp .vm-models-split{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px;}
+  .vm-fp .vm-model-panel{background:#fff;border:1px solid var(--vm-gray-200);border-radius:16px;padding:24px 26px;}
+  .vm-fp .vm-model-panel.is-custom{border-top:3px solid var(--vm-red);}
+  .vm-fp .vm-model-panel h3{margin:0 0 8px;font-size:18px;color:var(--vm-gray-900);}
+  .vm-fp .vm-model-panel p{margin:0 0 12px;font-size:15px;line-height:1.6;}
+  .vm-fp .vm-model-panel ul{margin:0;padding-left:20px;}
+  .vm-fp .vm-model-panel li{font-size:14.5px;line-height:1.55;margin-bottom:6px;}
+
+  .vm-fp .vm-models-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:26px;}
+  .vm-fp .vm-model-card{margin:0;}
+  .vm-fp .vm-model-card picture{display:block;border-radius:12px;overflow:hidden;background:var(--vm-gray-100);}
+  .vm-fp .vm-model-card img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;}
+  .vm-fp .vm-model-card figcaption{margin-top:8px;font-size:12.5px;font-weight:700;letter-spacing:.05em;color:var(--vm-gray-600,#6b7280);text-align:center;}
+
+  @media (max-width:780px){
+    /* The arrow becomes a row divider once the pair stacks; pointing right at
+       an image that is now underneath would be worse than pointing down. */
+    .vm-fp .vm-ba-row{grid-template-columns:1fr;gap:14px;}
+    .vm-fp .vm-ba-arrow{transform:rotate(90deg);justify-self:center;}
+    .vm-fp .vm-models-split{grid-template-columns:1fr;}
+    .vm-fp .vm-models-row{grid-template-columns:repeat(3,1fr);gap:10px;}
+  }
+
   /* Panels slide-and-fade instead of hard-cutting, and the active step
      button shows a progress bar that drains over the autoplay interval so
      the advance is anticipated rather than sudden. Both are suppressed under
@@ -893,6 +932,8 @@ html { scroll-padding-top: 76px; }
       <div class="audience-card"><b>Agencies</b><span>Manage several client sites with one keyword map per client.</span></div>
     </div>
   </section>
+
+
 
 
   <figure class="vm-scene-figure">
