@@ -2814,4 +2814,4 @@ function main() {
 // of the nav would drift the moment a link changes.
 if (require.main === module) main();
 
-module.exports = { header, footer, UI, CHROME_CSS };
+module.exports = { header, footer, UI, CHROME_CSS, FEATURES };

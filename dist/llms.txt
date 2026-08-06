@@ -46,7 +46,7 @@ Virtual Marketer ist eine KI-Marketingplattform der SGS Virtual Marketer GmbH. D
 
 ## English — Core pages
 
-- [Virtual Marketer — AI Marketing Solutions from Germany](https://virtual-marketer.de/en/): Custom AI models for product descriptions, product photos, AI agents, coding and more — reliable, automated, efficient. Made in Germany.
+- [AI Marketing Solutions from Germany | Virtual Marketer](https://virtual-marketer.de/en/): Reliable, automated, efficient: custom AI models for product copy, ads, images, video and customer communication. Built and run in Germany.
 - [About Us | Virtual Marketer](https://virtual-marketer.de/en/about/): Meet the team behind Virtual Marketer — the AI marketing solution from Germany.
 - [Accessibility Statement | Virtual Marketer](https://virtual-marketer.de/en/accessibility/): Accessibility statement under the German Accessibility Strengthening Act (BFSG) for virtual-marketer.de — conformance status, known limitations and how to…
 - [Contact | Virtual Marketer](https://virtual-marketer.de/en/contact/): Contact Virtual Marketer — send us a message via the contact form or reach us directly by email.
