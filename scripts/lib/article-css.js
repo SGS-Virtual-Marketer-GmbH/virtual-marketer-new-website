@@ -110,7 +110,9 @@ const ARTICLE_CSS = `
   }
   .vm-post .vm-cta a{
     display:inline-block;margin-top:12px;padding:13px 26px;
-    background:linear-gradient(90deg,#66a3ce,#94152b);
+    /* Deepened vm-blue, not vm-blue: white on #66a3ce is 2.7:1 and fails
+       WCAG 1.4.3. Same hue, 4.6:1. See scripts/fix-legacy-header.js. */
+    background:linear-gradient(90deg,#3d7ba8,#94152b);
     color:#fff;border-radius:8px;text-decoration:none;font-weight:700;
   }
   .vm-post .vm-cta a:hover{background:linear-gradient(90deg,#94152b,#700f2b);color:#fff}

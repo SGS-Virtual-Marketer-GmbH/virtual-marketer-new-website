@@ -52,6 +52,7 @@ const DE_TO_EN = {
   '/ki-loesungen/interne-verlinkung/': '/en/solutions/internal-linking/',
   '/ki-loesungen/mail-generator/': '/en/solutions/ai-email-generator/',
   '/impressum/': '/en/legal-notice/',
+  '/barrierefreiheit/': '/en/accessibility/',
   '/datenschutzerklaerung/': '/en/privacy-policy/',
   '/nutzungsbedingungen/': '/en/terms-of-service/',
   '/faqs/': '/en/faqs/',

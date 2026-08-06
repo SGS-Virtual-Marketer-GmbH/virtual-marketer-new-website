@@ -17,9 +17,9 @@
 <meta property="og:description" content="Book a no-obligation demo and see Virtual Marketer live in action.">
 <meta property="og:url" content="https://virtual-marketer.de/en/demo/">
 <meta name="twitter:card" content="summary">
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/bootstrap.css%3Fver=4.0.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/font-awesome.min.css%3Fver=7.0.1.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/style.css%3Fver=7.0.1.css">
+<link rel="stylesheet" href="/assets/css/vm-a80b91e97a.css" media="all">
+
+
 <style>
   /* The shared header/footer chrome. Without it these pages emitted
      <header class="vm-header-simple"> with no rule to match it, so the logo
@@ -53,21 +53,53 @@
   .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
   .vm-header-simple nav > details > summary:hover{color:#94152b}
 
-  /* position:sticky above is disabled by ANY ancestor with a clipping
-     overflow, and the scraped theme's stylesheet sets overflow:hidden on
-     <body> — which is why the header on /blog/ and the feature pages scrolled
-     away despite being declared sticky. The same trap is documented in
-     scripts/make-header-sticky.js for the legacy header, where the answer was
-     position:fixed; here the cleaner fix is available, because these pages do
-     not use the theme's layout and nothing on them needs body to clip.
-     overflow-x stays hidden so a wide element still cannot scroll the page
-     sideways; only the vertical axis is released, which is the axis sticky
-     needs. */
-  body.vm-static-blog{overflow-x:hidden;overflow-y:visible}
+  /* position:sticky is disabled by ANY ancestor that is a scroll container,
+     and the scraped theme sets overflow-x:hidden on BOTH the root element
+     and the body element.
+
+     NOTE FOR ANYONE EDITING THIS COMMENT: do not write element names in
+     angle brackets here. This text ends up inside a style block in the head
+     of every generated page, and scripts/fix-nested-documents.js scans the
+     raw HTML for a body tag followed by a root tag to find pasted-in
+     documents. Angle-bracketed names in this comment read as real tags: an
+     earlier revision wrote them out and the unwrapper treated everything
+     from this comment to the end of the file as a nested document, stripping
+     the real body tag's class="vm-static-blog" — which silently disabled
+     every rule in this stylesheet. The unwrapper now masks style and script
+     regions before scanning, but prose that looks like markup is a trap
+     worth not re-laying.
+
+     WHY THE OBVIOUS FIX DID NOT WORK
+
+     The previous attempt here was overflow-x:hidden with overflow-y:visible
+     on the body — keep clipping sideways, release the axis sticky needs. It
+     reads correctly and it does nothing, because of a rule in the overflow
+     spec: when one axis is "hidden" and the other is "visible", the visible
+     one is coerced to "auto". A computed "auto" is a scroll container. So
+     the declaration that was supposed to free the header is what pinned it.
+
+     Measured on /blog/artikel-50-ki-inhalte-kennzeichnen/: computed
+     overflow was "hidden auto" on both the root and the body, and at scrollY
+     1500 the header sat at top:-1484 — i.e. it had scrolled away entirely.
+
+     "clip" is the value that does what "hidden" was being asked to do here:
+     it clips without creating a scroll container, so it does NOT coerce the
+     other axis, and visible survives. Same measurement after the change:
+     header at top:0, page still scrolls to 1500, and
+     scrollWidth === clientWidth, so nothing escapes sideways either.
+
+     The root element needs it too. Fixing only the body leaves the root
+     computing "hidden auto", and the header's nearest scrollport is then
+     still a box that never scrolls. Scoped with :has() so this reaches only
+     the generated pages — the theme's own layout on the legacy pages
+     genuinely relies on root clipping, and make-header-sticky.js solves
+     those with position:fixed instead. */
+  html:has(body.vm-static-blog){overflow-x:clip;overflow-y:visible}
+  body.vm-static-blog{overflow-x:clip;overflow-y:visible}
   /* Login is the primary action in this bar — same gradient pill as the
      homepage header, so the two do not look like different sites. */
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]{
-    background:linear-gradient(90deg,#66a3ce,#94152b);
+    background:linear-gradient(90deg,#3d7ba8,#94152b);
     color:#fff;padding:11px 26px;border-radius:10px;font-weight:600;
   }
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]:hover{
@@ -144,314 +176,6 @@
   .vm-en .faq p{margin:12px 0 0;font-size:15px;}
 
 </style>
-
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebPage",
-      "@id": "https://virtual-marketer.de/en/demo/#webpage",
-      "url": "https://virtual-marketer.de/en/demo/",
-      "name": "Book a Demo | Virtual Marketer",
-      "description": "Book a no-obligation demo and see Virtual Marketer live in action.",
-      "inLanguage": "en",
-      "isPartOf": {
-        "@id": "https://virtual-marketer.de/#website"
-      },
-      "about": {
-        "@id": "https://virtual-marketer.de/#organization"
-      },
-      "breadcrumb": {
-        "@id": "https://virtual-marketer.de/en/demo/#breadcrumb"
-      }
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://virtual-marketer.de/en/demo/#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://virtual-marketer.de/en/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Book a demo",
-          "item": "https://virtual-marketer.de/en/demo/"
-        }
-      ]
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://virtual-marketer.de/#website",
-      "url": "https://virtual-marketer.de/",
-      "name": "Virtual Marketer",
-      "description": "Translating Ideas into Success",
-      "publisher": {
-        "@id": "https://virtual-marketer.de/#organization"
-      },
-      "inLanguage": "en"
-    },
-    {
-      "@type": "Organization",
-      "@id": "https://virtual-marketer.de/#organization",
-      "name": "Virtual Marketer",
-      "legalName": "SGS Virtual Marketer GmbH",
-      "foundingDate": "2022",
-      "url": "https://virtual-marketer.de/",
-      "logo": {
-        "@type": "ImageObject",
-        "@id": "https://virtual-marketer.de/#/schema/logo/image/",
-        "url": "https://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png",
-        "contentUrl": "https://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png",
-        "width": 500,
-        "height": 500,
-        "caption": "SGS Virtual Marketer GmbH"
-      },
-      "image": {
-        "@id": "https://virtual-marketer.de/#/schema/logo/image/"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "Sales",
-        "email": "info@virtual-marketer.de"
-      }
-    }
-  ]
-}
-  </script>
-</head>
-<body class="vm-static-blog">
-<header class="vm-header-simple">
-  <a href="/en/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.webp" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none" width="512" height="512"></a>
-  <nav>
-    <details class="vm-solutions-dd">
-    <summary>Solutions</summary>
-    <div class="vm-solutions-panel" data-title="Solutions">
-      <button type="button" class="vm-solutions-close" aria-label="Menü schließen">&times;</button>
-      <ul class="vm-solutions-grid">
-        <li><a href="/en/solutions/ai-agents/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></span><span class="vm-sol-tx">AI Agents for Marketing &amp; Ads</span></a></li>
-        <li><a href="/en/solutions/coding-api/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span><span class="vm-sol-tx">Coding API &amp; MCP Server</span></a></li>
-        <li><a href="/en/solutions/ai-product-photos/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="vm-sol-tx">AI Product Photos &amp; Virtual Try-On</span></a></li>
-        <li><a href="/en/solutions/feed-enhance/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16M4 12h16M4 19h9"/></svg></span><span class="vm-sol-tx">AI Feed Enhance</span></a></li>
-        <li><a href="/en/solutions/ai-text-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 6h14M5 12h14M5 18h8"/></svg></span><span class="vm-sol-tx">AI Text Generation</span></a></li>
-        <li><a href="/en/solutions/ai-image-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg></span><span class="vm-sol-tx">AI Image Generation</span></a></li>
-        <li><a href="/en/solutions/ai-video-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/></svg></span><span class="vm-sol-tx">AI Video Generation</span></a></li>
-        <li><a href="/en/solutions/ai-seo-content/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span class="vm-sol-tx">AI SEO Content</span></a></li>
-        <li><a href="/en/solutions/campaign-builder/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10v4h4l6 4V6l-6 4H4z"/><path d="M18 9a4 4 0 010 6"/></svg></span><span class="vm-sol-tx">AI Campaign Builder</span></a></li>
-        <li><a href="/en/solutions/internal-linking/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 006 0l3-3a4 4 0 10-6-6l-1 1"/><path d="M14 10a4 4 0 00-6 0l-3 3a4 4 0 106 6l1-1"/></svg></span><span class="vm-sol-tx">Internal Linking</span></a></li>
-        <li><a href="/en/solutions/ai-email-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg></span><span class="vm-sol-tx">AI Email Generator</span></a></li>
-        <li><a href="/en/solutions/social-publisher/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.5 11l6-4M8.5 13l6 4"/></svg></span><span class="vm-sol-tx">AI Social Publisher</span></a></li>
-        <li><a href="/en/solutions/bulk-text-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 13l8 4 8-4"/></svg></span><span class="vm-sol-tx">AI Bulk Generator</span></a></li>
-        <li><a href="/en/solutions/ai-files/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="vm-sol-tx">Files &amp; Reports</span></a></li>
-        <li><a href="/en/solutions/feed-optimizer/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8h10M18 8h2M4 16h4M12 16h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/></svg></span><span class="vm-sol-tx">Feed Optimizer</span></a></li>
-        <li><a href="/en/solutions/chat-insights/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12a7 7 0 01-7 7H8l-4 3v-5a7 7 0 017-9h2a7 7 0 017 4z"/></svg></span><span class="vm-sol-tx">Chat Insights</span></a></li>
-      </ul>
-      <ul class="vm-solutions-foot"><li><a href="/en/solutions/">All solutions at a glance &rarr;</a></li></ul>
-    </div>
-  </details><style>
-  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
-  /* Vertical alignment with the sibling nav links.
-     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
-     while a bare <summary> is only as tall as its text, so with both boxes
-     starting at the same y the label sat 11px above "Blog" and "API".
-     Stretching the wrapper to the flex row's height and centring inside it
-     matches whatever the theme happens to use, instead of hardcoding this
-     theme's padding and breaking again the next time it changes. */
-  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
-  .vm-solutions-dd{align-self:stretch;}
-  /* align-self:stretch above computes correctly but the theme's flex row still
-     leaves the item at its content height, so the summary is matched to the
-     sibling anchors' box directly: they are line-height 35px inside 10px
-     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
-     only when replacing the legacy theme nav — so it cannot leak into
-     .vm-header-simple, where the generated pages set their own metrics. */
-  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
-  .vm-solutions-dd > summary{
-    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
-    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
-  }
-  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
-  .vm-solutions-dd > summary::marker{content:'';}
-  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
-     the label's baseline the way a "▾" character does. */
-  .vm-solutions-dd > summary::after{
-    content:'';width:7px;height:7px;flex:0 0 auto;
-    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
-    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
-  }
-  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
-  .vm-solutions-dd > summary,
-  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
-
-  .vm-solutions-panel{
-    position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
-    width:min(820px,calc(100vw - 32px));
-    background:#fff;border:1px solid #ece4e5;border-radius:18px;
-    box-shadow:0 28px 68px rgba(36,20,23,.20);
-    padding:18px;margin:0;z-index:99999;
-  }
-  .vm-solutions-grid{
-    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
-    margin:0;padding:0;list-style:none;
-  }
-  .vm-solutions-grid li{margin:0;padding:0;}
-  /* Two classes in the selector on purpose. The theme styles these links via
-     .main-navigation ul li li a (one class, four elements) and
-     .main-navigation ul > li > a, both of which outrank a bare
-     .vm-solutions-grid a. Class count is compared before element count, so
-     scoping to the panel wins cleanly without resorting to !important. */
-  .vm-solutions-panel .vm-solutions-grid a{
-    display:flex;align-items:center;gap:11px;
-    padding:10px 11px;border-radius:10px;
-    color:#241417;text-decoration:none;
-    /* The theme uppercases and nowraps its nav links. Inherited into a
-       three-column grid that produced the overlap this panel was reported
-       for: labels ran straight through their neighbours instead of wrapping.
-       Both are reset here rather than fought with !important elsewhere. */
-    text-transform:none;white-space:normal;
-    font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
-  }
-  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
-  .vm-sol-ic{
-    flex:0 0 auto;display:grid;place-items:center;
-    width:32px;height:32px;border-radius:9px;
-    background:#f6eff0;color:#94152b;
-  }
-  .vm-sol-ic svg{width:17px;height:17px;display:block;}
-  .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
-  .vm-sol-tx{min-width:0;}
-  .vm-solutions-foot{
-    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
-  }
-  .vm-solutions-panel .vm-solutions-foot a{
-    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
-    text-decoration:none;padding:4px 12px;text-transform:none;
-  }
-  .vm-solutions-foot a:hover{text-decoration:underline;}
-
-  /* --- Mobile: a real full-screen drawer -------------------------------
-     Below 900px the panel used to render inline, which pushed the whole
-     header open and buried the page under a 16-item list. It is now an
-     overlay pinned to the viewport with its own header and scroll area, so
-     it behaves like a drawer instead of an expanding accordion. */
-  @media (max-width:900px){
-    .vm-solutions-dd{position:static;}
-    .vm-solutions-panel{
-      position:fixed;inset:0;top:0;left:0;transform:none;
-      width:100vw;height:100dvh;max-height:100dvh;
-      border:0;border-radius:0;box-shadow:none;
-      padding:calc(env(safe-area-inset-top) + 64px) 16px calc(env(safe-area-inset-bottom) + 24px);
-      overflow-y:auto;-webkit-overflow-scrolling:touch;
-      animation:vmDrawerIn .18s ease-out;
-    }
-    .vm-solutions-panel::before{
-      content:attr(data-title);
-      position:fixed;top:0;left:0;right:0;height:56px;
-      display:flex;align-items:center;padding:0 16px;
-      background:#fff;border-bottom:1px solid #ece4e5;
-      font-weight:700;font-size:16px;color:#241417;
-    }
-    .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
-    .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
-    .vm-sol-ic{width:36px;height:36px;}
-    .vm-sol-ic svg{width:19px;height:19px;}
-    .vm-solutions-foot a{font-size:15px;}
-    /* Stop the page behind the drawer from scrolling with it. */
-    html:has(.vm-solutions-dd[open]) body{overflow:hidden;}
-  }
-  @keyframes vmDrawerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-  /* The legacy theme already has a full-screen off-canvas menu, and it slides
-     in with a transform. A transformed ancestor becomes the containing block
-     for position:fixed, so the drawer above rendered *inside* it landed one
-     viewport off-screen (measured at left:375 on a 375px viewport). Inside
-     that wrapper the panel therefore renders inline and lets the theme's own
-     drawer be the drawer — nesting a second full-screen overlay inside the
-     first is the actual mistake. The fixed drawer still applies on the
-     generated pages, whose header has no off-canvas container. */
-  @media (max-width:900px){
-    .mmenu-wrapper .vm-solutions-panel{
-      position:static;width:auto;height:auto;max-height:none;
-      padding:4px 0 0;overflow:visible;animation:none;
-    }
-    .mmenu-wrapper .vm-solutions-panel::before{display:none;}
-    .mmenu-wrapper .vm-solutions-close{display:none;}
-    .mmenu-wrapper .vm-solutions-grid a{padding:11px 8px;font-size:14px;}
-  }
-  .vm-solutions-close{display:none;}
-  @media (max-width:900px){
-    .vm-solutions-close{
-      display:block;position:fixed;top:8px;right:10px;z-index:1;
-      width:40px;height:40px;border:0;background:none;
-      font-size:30px;line-height:1;color:#241417;cursor:pointer;
-    }
-  }
-</style>
-<script>
-(function(){
-  // <details> has no concept of "dismiss" — without this the panel stays open
-  // until the summary is clicked again, which feels broken next to every other
-  // menu on the web.
-  document.addEventListener('click', function(e){
-    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
-      if(!d.contains(e.target)) d.removeAttribute('open');
-    });
-  });
-  document.addEventListener('click', function(e){
-    if(!e.target.closest('.vm-solutions-close')) return;
-    var d = e.target.closest('details.vm-solutions-dd');
-    if(d) d.removeAttribute('open');
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key !== 'Escape') return;
-    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
-      d.removeAttribute('open');
-    });
-  });
-})();
-</script>
-    <a href="/en/blog/">Blog</a>
-    <a href="https://api.virtual-marketer.de/documentation/">API</a>
-    <a href="/en/request-custom-model/">Request a model</a>
-    <a href="/en/contact/">Contact</a>
-    <a href="https://login.virtual-marketer.de/">Login</a>
-  </nav>
-</header>
-<main class="vm-en">
-
-<span class="eyebrow">Demo</span>
-<h1>Book a Demo</h1>
-<p class="lede">See Virtual Marketer live &#8211; your AI marketing solution from Germany. Pick a slot below (Mon&ndash;Fri, 2&ndash;8pm CET/CEST) or reach us directly at <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>.</p>
-<div id="vm-booking-widget" data-locale="en"></div>
-<link rel="stylesheet" href="/assets/booking-widget/booking-widget.css">
-<script src="/assets/booking-widget/booking-widget.js" defer></script>
-</main>
-<footer style="max-width:1140px;margin:64px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
-  &copy; 2026 SGS Virtual Marketer GmbH &middot;
-  <a href="/en/privacy-policy/">Privacy Policy</a> &middot;
-  <a href="/en/legal-notice/">Legal Notice</a> &middot;
-  <a href="/en/terms-of-service/">Terms of Service</a>
-</footer>
-<!-- vm-lang-switch:start -->
-<style>
-  #vm-lang-switch{position:fixed;top:16px;right:16px;z-index:99998;display:flex;align-items:center;gap:6px;background:#ffffffee;backdrop-filter:blur(6px);border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-  #vm-lang-switch a{color:#6b7280;text-decoration:none;padding:2px 6px;border-radius:999px}
-  #vm-lang-switch a.active{color:#fff;background:#1a202c}
-  /* Bottom-LEFT on mobile, not bottom-right: the legacy theme's own
-     "back to top" button (#back-to-top) is fixed bottom-right at this same
-     viewport width and was overlapping this widget — confirmed by
-     measuring both elements' actual rendered rects at 375x812. */
-  @media (max-width:640px){#vm-lang-switch{top:auto;bottom:16px;right:auto;left:16px}}
-</style>
-<div id="vm-lang-switch" role="navigation" aria-label="Sprache wählen / Language">
-  <a href="/virtual-marketer-demo/" class="" lang="de" hreflang="de">DE</a>
-  <a href="/en/demo/" class="active" lang="en" hreflang="en">EN</a>
-</div>
-<!-- vm-lang-switch:end -->
 <style id="vm-mobile-polish">
 /* ==========================================================================
    Mobile polish — see scripts/mobile-polish.js
@@ -659,6 +383,329 @@ html { scroll-padding-top: 76px; }
   }
 }
 </style>
+<style id="vm-a11y-links">
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):not([aria-hidden="true"]){
+  text-decoration:underline;
+  text-underline-offset:2px;
+  text-decoration-thickness:1px;
+}
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):hover{
+  text-decoration-thickness:2px;
+}
+/* The share row and any icon-only link inside a list item: an underline under
+   a glyph is noise, and the link is not a text link. */
+:is(p,li) > a:has(> svg:only-child),
+:is(p,li) > a:has(> i:only-child){text-decoration:none}
+</style>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://virtual-marketer.de/en/demo/#webpage",
+      "url": "https://virtual-marketer.de/en/demo/",
+      "name": "Book a Demo | Virtual Marketer",
+      "description": "Book a no-obligation demo and see Virtual Marketer live in action.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://virtual-marketer.de/#website"
+      },
+      "about": {
+        "@id": "https://virtual-marketer.de/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://virtual-marketer.de/en/demo/#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://virtual-marketer.de/en/demo/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://virtual-marketer.de/en/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Book a demo",
+          "item": "https://virtual-marketer.de/en/demo/"
+        }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://virtual-marketer.de/#website",
+      "url": "https://virtual-marketer.de/",
+      "name": "Virtual Marketer",
+      "description": "Translating Ideas into Success",
+      "publisher": {
+        "@id": "https://virtual-marketer.de/#organization"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://virtual-marketer.de/#organization",
+      "name": "Virtual Marketer",
+      "legalName": "SGS Virtual Marketer GmbH",
+      "foundingDate": "2022",
+      "url": "https://virtual-marketer.de/",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://virtual-marketer.de/#/schema/logo/image/",
+        "url": "https://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png",
+        "contentUrl": "https://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png",
+        "width": 500,
+        "height": 500,
+        "caption": "SGS Virtual Marketer GmbH"
+      },
+      "image": {
+        "@id": "https://virtual-marketer.de/#/schema/logo/image/"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Sales",
+        "email": "info@virtual-marketer.de"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body class="vm-static-blog">
+<header class="vm-header-simple">
+  <a href="/en/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.webp" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none" width="512" height="512"></a>
+  <nav>
+    <details class="vm-solutions-dd">
+    <summary>Solutions</summary>
+    <div class="vm-solutions-panel" data-title="Solutions">
+      <button type="button" class="vm-solutions-close" aria-label="Menü schließen">&times;</button>
+      <ul class="vm-solutions-grid">
+        <li><a href="/en/solutions/ai-agents/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></span><span class="vm-sol-tx">AI Agents for Marketing &amp; Ads</span></a></li>
+        <li><a href="/en/solutions/coding-api/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span><span class="vm-sol-tx">Coding API &amp; MCP Server</span></a></li>
+        <li><a href="/en/solutions/ai-product-photos/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="vm-sol-tx">Product Staging: AI Product Photos</span></a></li>
+        <li><a href="/en/solutions/feed-enhance/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16M4 12h16M4 19h9"/></svg></span><span class="vm-sol-tx">AI Feed Enhance</span></a></li>
+        <li><a href="/en/solutions/ai-text-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 6h14M5 12h14M5 18h8"/></svg></span><span class="vm-sol-tx">AI Text Generation</span></a></li>
+        <li><a href="/en/solutions/ai-image-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg></span><span class="vm-sol-tx">AI Image Generation</span></a></li>
+        <li><a href="/en/solutions/ai-video-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/></svg></span><span class="vm-sol-tx">AI Video Generation</span></a></li>
+        <li><a href="/en/solutions/ai-seo-content/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span class="vm-sol-tx">AI SEO Content</span></a></li>
+        <li><a href="/en/solutions/campaign-builder/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10v4h4l6 4V6l-6 4H4z"/><path d="M18 9a4 4 0 010 6"/></svg></span><span class="vm-sol-tx">AI Campaign Builder</span></a></li>
+        <li><a href="/en/solutions/internal-linking/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 006 0l3-3a4 4 0 10-6-6l-1 1"/><path d="M14 10a4 4 0 00-6 0l-3 3a4 4 0 106 6l1-1"/></svg></span><span class="vm-sol-tx">Internal Linking</span></a></li>
+        <li><a href="/en/solutions/ai-email-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg></span><span class="vm-sol-tx">AI Email Generator</span></a></li>
+        <li><a href="/en/solutions/social-publisher/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.5 11l6-4M8.5 13l6 4"/></svg></span><span class="vm-sol-tx">AI Social Publisher</span></a></li>
+        <li><a href="/en/solutions/bulk-text-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 13l8 4 8-4"/></svg></span><span class="vm-sol-tx">AI Bulk Generator</span></a></li>
+        <li><a href="/en/solutions/ai-files/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="vm-sol-tx">Files &amp; Reports</span></a></li>
+        <li><a href="/en/solutions/feed-optimizer/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8h10M18 8h2M4 16h4M12 16h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/></svg></span><span class="vm-sol-tx">Feed Optimizer</span></a></li>
+        <li><a href="/en/solutions/chat-insights/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12a7 7 0 01-7 7H8l-4 3v-5a7 7 0 017-9h2a7 7 0 017 4z"/></svg></span><span class="vm-sol-tx">Chat Insights</span></a></li>
+      </ul>
+      <ul class="vm-solutions-foot"><li><a href="/en/solutions/">All solutions at a glance &rarr;</a></li></ul>
+    </div>
+  </details><style>
+  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
+  /* Vertical alignment with the sibling nav links.
+     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
+     while a bare <summary> is only as tall as its text, so with both boxes
+     starting at the same y the label sat 11px above "Blog" and "API".
+     Stretching the wrapper to the flex row's height and centring inside it
+     matches whatever the theme happens to use, instead of hardcoding this
+     theme's padding and breaking again the next time it changes. */
+  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
+  .vm-solutions-dd{align-self:stretch;}
+  /* align-self:stretch above computes correctly but the theme's flex row still
+     leaves the item at its content height, so the summary is matched to the
+     sibling anchors' box directly: they are line-height 35px inside 10px
+     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
+     only when replacing the legacy theme nav — so it cannot leak into
+     .vm-header-simple, where the generated pages set their own metrics. */
+  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
+  .vm-solutions-dd > summary{
+    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
+    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
+  }
+  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
+  .vm-solutions-dd > summary::marker{content:'';}
+  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
+     the label's baseline the way a "▾" character does. */
+  .vm-solutions-dd > summary::after{
+    content:'';width:7px;height:7px;flex:0 0 auto;
+    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
+  }
+  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
+  .vm-solutions-dd > summary,
+  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
+
+  .vm-solutions-panel{
+    position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
+    width:min(820px,calc(100vw - 32px));
+    background:#fff;border:1px solid #ece4e5;border-radius:18px;
+    box-shadow:0 28px 68px rgba(36,20,23,.20);
+    padding:18px;margin:0;z-index:99999;
+  }
+  .vm-solutions-grid{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
+    margin:0;padding:0;list-style:none;
+  }
+  .vm-solutions-grid li{margin:0;padding:0;}
+  /* Two classes in the selector on purpose. The theme styles these links via
+     .main-navigation ul li li a (one class, four elements) and
+     .main-navigation ul > li > a, both of which outrank a bare
+     .vm-solutions-grid a. Class count is compared before element count, so
+     scoping to the panel wins cleanly without resorting to !important. */
+  .vm-solutions-panel .vm-solutions-grid a{
+    display:flex;align-items:center;gap:11px;
+    padding:10px 11px;border-radius:10px;
+    color:#241417;text-decoration:none;
+    /* The theme uppercases and nowraps its nav links. Inherited into a
+       three-column grid that produced the overlap this panel was reported
+       for: labels ran straight through their neighbours instead of wrapping.
+       Both are reset here rather than fought with !important elsewhere. */
+    text-transform:none;white-space:normal;
+    font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
+  }
+  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
+  .vm-sol-ic{
+    flex:0 0 auto;display:grid;place-items:center;
+    width:32px;height:32px;border-radius:9px;
+    background:#f6eff0;color:#94152b;
+  }
+  .vm-sol-ic svg{width:17px;height:17px;display:block;}
+  .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
+  .vm-sol-tx{min-width:0;}
+  .vm-solutions-foot{
+    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
+  }
+  .vm-solutions-panel .vm-solutions-foot a{
+    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
+    text-decoration:none;padding:4px 12px;text-transform:none;
+  }
+  .vm-solutions-foot a:hover{text-decoration:underline;}
+
+  /* --- Mobile: a real full-screen drawer -------------------------------
+     Below 900px the panel used to render inline, which pushed the whole
+     header open and buried the page under a 16-item list. It is now an
+     overlay pinned to the viewport with its own header and scroll area, so
+     it behaves like a drawer instead of an expanding accordion. */
+  @media (max-width:900px){
+    .vm-solutions-dd{position:static;}
+    .vm-solutions-panel{
+      position:fixed;inset:0;top:0;left:0;transform:none;
+      width:100vw;height:100dvh;max-height:100dvh;
+      border:0;border-radius:0;box-shadow:none;
+      padding:calc(env(safe-area-inset-top) + 64px) 16px calc(env(safe-area-inset-bottom) + 24px);
+      overflow-y:auto;-webkit-overflow-scrolling:touch;
+      animation:vmDrawerIn .18s ease-out;
+    }
+    .vm-solutions-panel::before{
+      content:attr(data-title);
+      position:fixed;top:0;left:0;right:0;height:56px;
+      display:flex;align-items:center;padding:0 16px;
+      background:#fff;border-bottom:1px solid #ece4e5;
+      font-weight:700;font-size:16px;color:#241417;
+    }
+    .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
+    .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
+    .vm-sol-ic{width:36px;height:36px;}
+    .vm-sol-ic svg{width:19px;height:19px;}
+    .vm-solutions-foot a{font-size:15px;}
+    /* Stop the page behind the drawer from scrolling with it. */
+    html:has(.vm-solutions-dd[open]) body{overflow:hidden;}
+  }
+  @keyframes vmDrawerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* The legacy theme already has a full-screen off-canvas menu, and it slides
+     in with a transform. A transformed ancestor becomes the containing block
+     for position:fixed, so the drawer above rendered *inside* it landed one
+     viewport off-screen (measured at left:375 on a 375px viewport). Inside
+     that wrapper the panel therefore renders inline and lets the theme's own
+     drawer be the drawer — nesting a second full-screen overlay inside the
+     first is the actual mistake. The fixed drawer still applies on the
+     generated pages, whose header has no off-canvas container. */
+  @media (max-width:900px){
+    .mmenu-wrapper .vm-solutions-panel{
+      position:static;width:auto;height:auto;max-height:none;
+      padding:4px 0 0;overflow:visible;animation:none;
+    }
+    .mmenu-wrapper .vm-solutions-panel::before{display:none;}
+    .mmenu-wrapper .vm-solutions-close{display:none;}
+    .mmenu-wrapper .vm-solutions-grid a{padding:11px 8px;font-size:14px;}
+  }
+  .vm-solutions-close{display:none;}
+  @media (max-width:900px){
+    .vm-solutions-close{
+      display:block;position:fixed;top:8px;right:10px;z-index:1;
+      width:40px;height:40px;border:0;background:none;
+      font-size:30px;line-height:1;color:#241417;cursor:pointer;
+    }
+  }
+</style>
+<script>
+(function(){
+  // <details> has no concept of "dismiss" — without this the panel stays open
+  // until the summary is clicked again, which feels broken next to every other
+  // menu on the web.
+  document.addEventListener('click', function(e){
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      if(!d.contains(e.target)) d.removeAttribute('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.vm-solutions-close')) return;
+    var d = e.target.closest('details.vm-solutions-dd');
+    if(d) d.removeAttribute('open');
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape') return;
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      d.removeAttribute('open');
+    });
+  });
+})();
+</script>
+    <a href="/en/blog/">Blog</a>
+    <a href="https://api.virtual-marketer.de/documentation/">API</a>
+    <a href="/en/request-custom-model/">Request a model</a>
+    <a href="/en/contact/">Contact</a>
+    <a href="https://login.virtual-marketer.de/">Login</a>
+  </nav>
+</header>
+<main class="vm-en">
+
+<span class="eyebrow">Demo</span>
+<h1>Book a Demo</h1>
+<p class="lede">See Virtual Marketer live &#8211; your AI marketing solution from Germany. Pick a slot below (Mon&ndash;Fri, 2&ndash;8pm CET/CEST) or reach us directly at <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>.</p>
+<div id="vm-booking-widget" data-locale="en"></div>
+<link rel="stylesheet" href="/assets/booking-widget/booking-widget.css">
+<script src="/assets/booking-widget/booking-widget.js" defer></script>
+</main>
+<footer style="max-width:1140px;margin:64px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
+  &copy; 2026 SGS Virtual Marketer GmbH &middot;
+  <a href="/en/privacy-policy/">Privacy Policy</a> &middot;
+  <a href="/en/legal-notice/">Legal Notice</a> <a href="/en/accessibility/">Accessibility</a> &middot;
+  <a href="/en/terms-of-service/">Terms of Service</a>
+</footer>
+<!-- vm-lang-switch:start -->
+<style>
+  #vm-lang-switch{position:fixed;top:16px;right:16px;z-index:99998;display:flex;align-items:center;gap:6px;background:#ffffffee;backdrop-filter:blur(6px);border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  #vm-lang-switch a{color:#6b7280;text-decoration:none;padding:2px 6px;border-radius:999px}
+  #vm-lang-switch a.active{color:#fff;background:#1a202c}
+  /* Bottom-LEFT on mobile, not bottom-right: the legacy theme's own
+     "back to top" button (#back-to-top) is fixed bottom-right at this same
+     viewport width and was overlapping this widget — confirmed by
+     measuring both elements' actual rendered rects at 375x812. */
+  @media (max-width:640px){#vm-lang-switch{top:auto;bottom:16px;right:auto;left:16px}}
+</style>
+<div id="vm-lang-switch" role="navigation" aria-label="Sprache wählen / Language">
+  <a href="/virtual-marketer-demo/" class="" lang="de" hreflang="de">DE</a>
+  <a href="/en/demo/" class="active" lang="en" hreflang="en">EN</a>
+</div>
+<!-- vm-lang-switch:end -->
+
 <script>
 /**
  * Desktop overlap effects, neutralised on phones.

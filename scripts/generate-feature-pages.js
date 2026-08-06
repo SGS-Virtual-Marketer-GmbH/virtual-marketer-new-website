@@ -69,11 +69,38 @@ const UI = {
     valueLabel: 'Ihr Mehrwert', valueTitle: 'Was Sie davon haben',
     howLabel: 'Ablauf', howTitle: 'So funktioniert’s',
     faqLabel: 'FAQ', faqTitle: 'Häufige Fragen',
-    footerLinks: { privacy: 'Datenschutzerklärung', privacyHref: '/datenschutzerklaerung/', legal: 'Impressum', legalHref: '/impressum/' },
+    footerLinks: { privacy: 'Datenschutzerklärung', privacyHref: '/datenschutzerklaerung/', legal: 'Impressum', legalHref: '/impressum/', a11y: 'Barrierefreiheit', a11yHref: '/barrierefreiheit/' },
     allSolutions: 'Alle KI-Lösungen im Überblick',
-    tryonLabel: 'Virtuelle Anprobe', tryonTitle: 'Ein Modell, beliebig viele Outfits',
-    tryonIntro: 'Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; gleiche Person, gleiche Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.',
+    // Section label, not a product name — the feature is Product Staging and
+    // this section shows the fashion side of it. Naming it after the product
+    // would just repeat the page's own eyebrow two screens further down.
+    tryonLabel: 'Product Staging für Fashion', tryonTitle: 'Ein Modell, beliebig viele Outfits',
+    tryonIntro: 'Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; dieselbe Person, frei wählbare Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.',
     tryonBase: 'Referenzfoto', tryonNote: 'Illustratives Beispiel &#8211; alle Aufnahmen sind KI-generiert.',
+
+    baLabel: 'Vorher / Nachher', baTitle: 'Aus dem Katalogfoto, das Sie ohnehin haben',
+    baIntro: 'Links das Foto, wie es aus dem Lager kommt: flach ausgelegt, zerknittert, hartes Licht. Rechts dasselbe Hemd &#8211; gleiche Farbe, gleiche Knöpfe, gleicher Kragen &#8211; getragen, gebügelt, im Studio. Dazwischen liegt kein Shooting, sondern ein Upload.',
+    baBefore: 'Flat-Lay aus dem Lager', baAfter: 'Fertiges Shop-Bild',
+    baBeforeTag: 'Vorher', baAfterTag: 'Nachher',
+    baNote: 'Beide Bilder sind KI-generiert. Das rechte wurde aus dem linken erzeugt, nicht separat &#8211; deshalb ist es dasselbe Kleidungsstück.',
+
+    modelsLabel: 'Models', modelsTitle: 'Fertige Models &#8211; oder Ihre eigenen',
+    modelsIntro: 'Sie müssen kein Model buchen und keins erfinden. Nutzen Sie die fertige Besetzung ab der ersten Minute, oder legen Sie ein eigenes Model an, das in Ihrem gesamten Katalog dieselbe Person bleibt.',
+    modelsCustomH: 'Ihre eigenen Models',
+    modelsCustomP: 'Ein eigenes Model entsteht aus Attributen &#8211; Geschlecht, Alter, Statur, Hautton, Ausdruck, Haare &#8211; oder aus dem Foto einer konkreten Person, etwa Ihres Fit-Modells.',
+    modelsCustomBullets: [
+      'Pro Workspace gespeichert und in jeder Generierung als Referenz genutzt',
+      'Dieselbe Person über den gesamten Katalog hinweg &#8211; kein wechselndes Gesicht pro Artikel',
+      'Passt die Besetzung an Ihre Kundschaft an, nicht Ihre Kundschaft an die Besetzung',
+    ],
+    modelsPresetH: '{n} fertige Models',
+    modelsPresetP: 'Die feste Besetzung steht sofort bereit, ohne Einrichtung, ohne eigenes Bildmaterial.',
+    modelsPresetBullets: [
+      'Verschiedene Altersgruppen, Staturen und Hauttöne &#8211; nicht zehnmal dieselbe Figur',
+      'Frei kombinierbar mit 12 Szenen, vier Perspektiven und fünf Bildformaten',
+      'Ideal, um ein Sortiment zu testen, bevor Sie ein eigenes Model anlegen',
+    ],
+    modelsNote: 'Die gezeigte Besetzung entspricht den Models im Produkt. Alle Aufnahmen sind KI-generiert.',
   },
   en: {
     nav: { solutions: 'Solutions', blog: 'Blog', api: 'API', request: 'Request a model', contact: 'Contact', login: 'Login' },
@@ -87,11 +114,35 @@ const UI = {
     valueLabel: 'Business value', valueTitle: 'What you get',
     howLabel: 'How it works', howTitle: 'How it works',
     faqLabel: 'FAQ', faqTitle: 'Frequently asked questions',
-    footerLinks: { privacy: 'Privacy Policy', privacyHref: '/en/privacy-policy/', legal: 'Legal Notice', legalHref: '/en/legal-notice/' },
+    footerLinks: { privacy: 'Privacy Policy', privacyHref: '/en/privacy-policy/', legal: 'Legal Notice', legalHref: '/en/legal-notice/', a11y: 'Accessibility', a11yHref: '/en/accessibility/' },
     allSolutions: 'All AI solutions at a glance',
-    tryonLabel: 'Virtual try-on', tryonTitle: 'One model, any number of outfits',
-    tryonIntro: 'A single reference photo of your fit model is enough. Every further garment is applied to it &#8211; same person, same pose, same lighting. For a few cents per image instead of a photo shoot.',
+    tryonLabel: 'Product Staging for fashion', tryonTitle: 'One model, any number of outfits',
+    tryonIntro: 'A single reference photo of your fit model is enough. Every further garment is applied to it &#8211; same person, any pose you like, same lighting. For a few cents per image instead of a photo shoot.',
     tryonBase: 'Reference photo', tryonNote: 'Illustrative example &#8211; every shot here is AI-generated.',
+
+    baLabel: 'Before / after', baTitle: 'From the catalogue photo you already have',
+    baIntro: 'On the left, the photo as it comes out of the warehouse: laid flat, creased, hard light. On the right the same shirt &#8211; same colour, same buttons, same collar &#8211; worn, pressed, in a studio. What sits between them is an upload, not a photo shoot.',
+    baBefore: 'Warehouse flat lay', baAfter: 'Finished shop image',
+    baBeforeTag: 'Before', baAfterTag: 'After',
+    baNote: 'Both images are AI-generated. The right one was generated from the left one rather than separately &#8211; which is why it is the same garment.',
+
+    modelsLabel: 'Models', modelsTitle: 'A ready-made cast &#8211; or your own',
+    modelsIntro: 'You do not have to book a model, and you do not have to invent one. Use the ready-made cast from the first minute, or create your own model that stays the same person across your entire catalogue.',
+    modelsCustomH: 'Your own models',
+    modelsCustomP: 'A custom model is built from attributes &#8211; gender, age, body, skin tone, expression, hair &#8211; or from a photo of a specific person, such as your own fit model.',
+    modelsCustomBullets: [
+      'Stored per workspace and used as the reference in every generation',
+      'The same person across the whole catalogue &#8211; not a new face on every item',
+      'Fits the cast to your customers, rather than your customers to the cast',
+    ],
+    modelsPresetH: '{n} ready-made models',
+    modelsPresetP: 'The fixed cast is available immediately, with no setup and no imagery of your own.',
+    modelsPresetBullets: [
+      'A range of ages, builds and skin tones &#8211; not the same figure ten times',
+      'Combine freely with 12 scenes, four perspectives and five aspect ratios',
+      'Good for testing a range before you create a model of your own',
+    ],
+    modelsNote: 'The cast shown here matches the models in the product. Every shot is AI-generated.',
   },
 };
 
@@ -123,7 +174,8 @@ function footer(lang) {
   return `<footer style="max-width:1140px;margin:64px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
   &copy; 2026 SGS Virtual Marketer GmbH &middot;
   <a href="${f.privacyHref}">${f.privacy}</a> &middot;
-  <a href="${f.legalHref}">${f.legal}</a>
+  <a href="${f.legalHref}">${f.legal}</a> &middot;
+  <a href="${f.a11yHref}">${f.a11y}</a>
 </footer>`;
 }
 
@@ -140,13 +192,25 @@ const FEATURES = [
     heroImage: '/product-pages/staging-hero.jpg',
     de: {
       seo: {
-        title: 'KI-Produktfotos & virtuelle Anprobe (Virtual Try-On)',
+        // The feature is called Product Staging. "Virtual Try-On" was used as
+        // its name here and is not one — appRegistry.ts calls the product
+        // "VM Product Staging" and lists try-on as one of its capabilities
+        // ("Anprobe für Fashion UND Szenen-Inszenierung für jedes andere
+        // Produkt"), which is also the accurate description: it stages any
+        // product in a scene, not only clothing on a person.
+        //
+        // "Anprobe" stays in the title and keywords, subordinate to the name.
+        // It is the term people actually search for, and dropping it to make
+        // the naming tidy would trade real traffic for nothing — the fix
+        // needed is that the product is named correctly, not that a capability
+        // becomes unsayable.
+        title: 'Product Staging – KI-Produktfotos auf Models & in Szenen',
         description: 'Produktfotos, On-Model-Bilder und Videos in Minuten statt Wochen — mit KI, ohne Fotostudio. Für Fashion, Retail und E-Commerce.',
-        keywords: 'KI Produktfotos, Produktbilder mit KI erstellen, virtuelle Anprobe, Virtual Try-On, KI Produktfotografie, On-Model Bilder KI',
+        keywords: 'Product Staging, KI Produktfotos, Produktbilder mit KI erstellen, virtuelle Anprobe, KI Produktfotografie, On-Model Bilder KI',
       },
-      eyebrow: 'KI Produktfotos &amp; Virtual Try-On',
-      tagline: 'Dein digitales Fotostudio.',
-      intro: 'VM Product Staging macht aus einem einfachen Produktfoto professionelle On-Model-Aufnahmen, Lifestyle-Szenen und Produktvideos &#8211; in Minuten statt Wochen, für wenige Cent pro Bild statt eines Shootings.',
+      eyebrow: 'Product Staging',
+      tagline: 'Das Shooting, das Sie nie wieder buchen m&uuml;ssen.',
+      intro: 'Ein Fotoshooting kostet 50 bis 150 &euro; pro fertigem Bild und blockiert Wochen. Product Staging macht aus einem einzigen Produktfoto On-Model-Aufnahmen, Lifestyle-Szenen und Videos &#8211; in Minuten, f&uuml;r wenige Cent pro Bild.',
       audiences: [
         { label: 'Fashion &amp; Apparel E-Commerce', detail: 'Laufend neue Kollektionen, ohne für jede ein Shooting zu buchen.' },
         { label: 'Retail-Marken mit wechselndem Sortiment', detail: 'Konsistente Bildsprache über hunderte SKUs hinweg.' },
@@ -204,13 +268,15 @@ const FEATURES = [
     },
     en: {
       seo: {
-        title: 'AI Product Photos & Virtual Try-On',
+        // See the German entry above for why the name changed and why the
+        // search term stays.
+        title: 'Product Staging – AI Product Photos on Models & in Scenes',
         description: 'Product photos, on-model shots and videos in minutes instead of weeks — with AI, no photo studio needed. For fashion, retail and e-commerce.',
-        keywords: 'AI product photography, AI product photo generator, virtual try-on, on-model images AI, product photos AI',
+        keywords: 'Product Staging, AI product photography, AI product photo generator, virtual try-on, on-model images AI, product photos AI',
       },
-      eyebrow: 'AI Product Photos &amp; Virtual Try-On',
-      tagline: 'Your digital photo studio.',
-      intro: 'VM Product Staging turns a simple product photo into professional on-model shots, lifestyle scenes and product videos &#8211; in minutes instead of weeks, for a few cents per image instead of a photo shoot.',
+      eyebrow: 'Product Staging',
+      tagline: 'The shoot you never have to book again.',
+      intro: 'A photo shoot costs &euro;50&ndash;150 per finished image and ties up weeks. Product Staging turns one product photo into on-model shots, lifestyle scenes and videos &#8211; in minutes, for a few cents an image.',
       audiences: [
         { label: 'Fashion &amp; apparel e-commerce', detail: 'New collections constantly, without booking a shoot for every drop.' },
         { label: 'Retail brands with a changing catalog', detail: 'Consistent visuals across hundreds of SKUs.' },
@@ -287,8 +353,8 @@ const FEATURES = [
         keywords: 'KI Agenten Marketing, autonome KI Mitarbeiter, KI Agent Google Ads, Marketing Automatisierung KI, virtueller Mitarbeiter KI, KI Agent SEO',
       },
       eyebrow: 'KI-Agenten &amp; Automatisierung',
-      tagline: 'Ihr virtuelles Team, rund um die Uhr im Einsatz.',
-      intro: 'Virtual Marketer Agents 2.0 sind spezialisierte virtuelle Mitarbeiter, die nicht nur Fragen beantworten &#8211; sie verbinden sich mit Ihren Werkzeugen, führen die Analyse durch und übernehmen die von Ihnen freigegebenen Aktionen. Einmal einrichten, dann im Chat ansprechen, per Webhook aus jedem System beauftragen oder nach Zeitplan arbeiten lassen.',
+      tagline: 'Kollegen, die nachts durcharbeiten.',
+      intro: 'Die meisten KI-Werkzeuge antworten und h&ouml;ren dann auf. Agents 2.0 greifen auf Ihre Systeme zu, f&uuml;hren die Analyse durch und erledigen die Aufgaben, die Sie freigegeben haben &#8211; im Chat, per Webhook aus jedem System oder nach Zeitplan, w&auml;hrend Sie schlafen.',
       audiences: [
         { label: 'Marketing-Teams mit mehreren Ad-Konten', detail: 'Analytics, Google Ads und Meta Ads im Blick behalten, ohne täglich manuell nachzuschauen.' },
         { label: 'Agenturen mit vielen Kundenkonten', detail: 'Ein Agent pro Spezialgebiet, wiederverwendbar über alle Konten hinweg.' },
@@ -349,8 +415,8 @@ const FEATURES = [
         keywords: 'AI marketing agents, autonomous AI employees, AI agent Google Ads, marketing automation AI, virtual employee AI, AI agent SEO',
       },
       eyebrow: 'AI Agents &amp; Automation',
-      tagline: 'Your virtual team, on call around the clock.',
-      intro: 'Virtual Marketer Agents 2.0 are specialist virtual employees that don’t just answer questions &#8211; they connect to your tools, do the analysis, and take the actions you approve. Set one up once, then talk to it in chat, hand it a task from any system via webhook, or let it run on a schedule while you sleep.',
+      tagline: 'Colleagues who work through the night.',
+      intro: 'Most AI tools answer a question and stop there. Agents 2.0 reach into your systems, do the analysis and carry out the tasks you approved &#8211; in chat, by webhook from any system, or on a schedule while you sleep.',
       audiences: [
         { label: 'Marketing teams with multiple ad accounts', detail: 'Keep an eye on analytics, Google Ads and Meta Ads without checking manually every day.' },
         { label: 'Agencies with many client accounts', detail: 'One agent per specialty, reusable across every account.' },
@@ -414,13 +480,13 @@ const FEATURES = [
     heroCaption: 'Coding API & MCP',
     de: {
       seo: {
-        title: 'Coding-API & MCP-Server — Virtual Marketer Senior & Junior für dein IDE',
+        title: 'Coding-API & MCP-Server — Virtual Marketer Senior & Junior für Ihre IDE',
         description: 'OpenAI- und Anthropic-kompatible Coding-API mit zwei Modellstufen. Nutzbar in Cursor, Cline, aider & Co. — eine Basis-URL, ein Guthaben.',
         keywords: 'OpenAI kompatible API, KI Coding API, Cursor eigenes Modell, Coding Assistent API, MCP Server, KI für Entwickler',
       },
       eyebrow: 'Coding-API &amp; MCP-Server',
-      tagline: 'Virtual Marketer, direkt in deinem Editor.',
-      intro: 'Die Coding-API stellt zwei entwicklergerechte Modelle bereit &#8211; Virtual Marketer Senior und Virtual Marketer Junior &#8211; hinter einem standardisierten, OpenAI-kompatiblen Endpunkt. Richte ein beliebiges Coding-Werkzeug mit „OpenAI-kompatiblem&#8220; Anbieter darauf aus und erhalte sauberen, korrekten Code mit Streaming und vollem Tool-/Function-Calling &#8211; abgerechnet über dasselbe Guthaben wie alles andere.',
+      tagline: 'Ihr Modell, in dem Editor, den Sie schon benutzen.',
+      intro: 'Keine neue Oberfl&auml;che, kein zweites Abo. Ein OpenAI-kompatibler Endpunkt gibt Ihnen Virtual Marketer Senior und Junior in jedem Coding-Werkzeug, das einen eigenen Anbieter zul&auml;sst &#8211; mit Streaming, vollem Function-Calling und demselben Guthaben wie alles andere.',
       audiences: [
         { label: 'Interne Entwickler-Teams', detail: 'Ein Guthaben für Coding und alle anderen VM-Tools, statt separater IDE-Abos.' },
         { label: 'Digitalagenturen mit eigener Entwicklung', detail: 'Ein Endpunkt für alle Projekte und Kunden, egal welches Tool das Team nutzt.' },
@@ -453,7 +519,7 @@ const FEATURES = [
         { q: 'Mit welchen Werkzeugen funktioniert es?', a: 'Mit allem, das eine eigene OpenAI-Basis-URL und einen Schlüssel erlaubt &#8211; gängige IDE-Assistenten und Agenten, aider, die offiziellen OpenAI-SDKs, curl und eigene Skripte.' },
         { q: 'Was sind Senior und Junior?', a: 'Senior ist das Top-Reasoning-Modell für Architektur, knifflige Bugs und große Refactorings; Junior ist eine schnellere, kosteneffiziente Stufe für schnelle Änderungen und Aufrufe in großer Menge.' },
         { q: 'Werden Streaming und Tools unterstützt?', a: 'Ja. Setze stream: true für Token-Streaming und übergib die Standardfelder tools / tool_choice für Function-Calling &#8211; genau wie bei der OpenAI-API.' },
-        { q: 'Wie wird abgerechnet?', a: 'Die Nutzung wird über dein Virtual-Marketer-Wortguthaben abgerechnet, wie bei jedem anderen Produkt.' },
+        { q: 'Wie wird abgerechnet?', a: 'Die Nutzung wird über Ihr Virtual-Marketer-Wortguthaben abgerechnet, wie bei jedem anderen Produkt.' },
       ],
       demo: {
         steps: [
@@ -479,8 +545,8 @@ const FEATURES = [
         keywords: 'OpenAI compatible API, AI coding API, Cursor custom model, coding assistant API, MCP server, AI for developers',
       },
       eyebrow: 'Coding API &amp; MCP Server',
-      tagline: 'Virtual Marketer, right inside your editor.',
-      intro: 'The Coding API gives you two developer-grade models &#8211; Virtual Marketer Senior and Virtual Marketer Junior &#8211; behind a standard, OpenAI-compatible endpoint. Point any coding tool that supports a custom OpenAI provider at it and you get clean, correct code with streaming and full tool/function calling, billed to the same balance as everything else.',
+      tagline: 'Your model, in the editor you already use.',
+      intro: 'No new interface, no second subscription. One OpenAI-compatible endpoint puts Virtual Marketer Senior and Junior inside any coding tool that accepts a custom provider &#8211; with streaming, full function calling, and the same balance as everything else.',
       audiences: [
         { label: 'In-house developer teams', detail: 'One balance for coding and every other VM tool, instead of separate IDE subscriptions.' },
         { label: 'Digital agencies with their own dev team', detail: 'One endpoint for every project and client, whatever tool the team uses.' },
@@ -545,8 +611,8 @@ const FEATURES = [
         keywords: 'Google Shopping Feed optimieren KI, Produktfeed anreichern, Feed Management KI, Merchant Center Feed KI, Shopping Feed Software',
       },
       eyebrow: 'KI Feed-Veredelung',
-      tagline: 'Perfekte Produktfeeds, im Autopilot.',
-      intro: 'VM Feed Enhance importiert Ihre Produktfeeds, bereinigt und veredelt sie mit dem VM Product Enhancer und veröffentlicht einen stets aktuellen, validierten Google-Shopping-Feed unter einer festen URL.',
+      tagline: 'Ein Feed, der nicht mehr abgelehnt wird.',
+      intro: 'Abgelehnte Artikel im Merchant Center kosten Sichtbarkeit an genau den Produkten, die verkaufen sollen. Feed Enhance importiert Ihre Feeds, bereinigt und veredelt jeden Artikel und ver&ouml;ffentlicht einen validierten Shopping-Feed unter einer festen URL &#8211; t&auml;glich aktuell, ohne dass jemand danach sehen muss.',
       audiences: [
         { label: 'E-Commerce-Teams mit Shopping-Feeds', detail: 'Google, Meta und Bing Shopping aus einer Quelle pflegen statt drei separaten Exporten.' },
         { label: 'Agenturen mit mehreren Merchant-Center-Konten', detail: 'Ein Werkzeug für alle Kundenfeeds, mit klaren Regeln pro Konto.' },
@@ -578,7 +644,7 @@ const FEATURES = [
       faq: [
         { q: 'Welche Formate kann ich importieren?', a: 'Google Shopping XML (RSS/Atom), CSV, TSV und JSON. Das Format wird automatisch erkannt.' },
         { q: 'Läuft AI bei jedem Update über den ganzen Katalog?', a: 'Nein. Ergebnisse werden pro Produkt gecacht &#8211; AI läuft nur für neue Produkte oder bei geänderten Daten.' },
-        { q: 'Kann ich eigene VM-Modelle nutzen?', a: 'Ja. In jedem AI-Schritt wählst du den VM Product Enhancer (Standard) oder eines deiner eigenen Virtual-Marketer-Modelle.' },
+        { q: 'Kann ich eigene VM-Modelle nutzen?', a: 'Ja. In jedem AI-Schritt wählen Sie den VM Product Enhancer (Standard) oder eines Ihrer eigenen Virtual-Marketer-Modelle.' },
       ],
       demo: {
         steps: [
@@ -602,8 +668,8 @@ const FEATURES = [
         keywords: 'Google Shopping feed AI optimizer, product feed enrichment, feed management AI, Merchant Center feed AI, shopping feed software',
       },
       eyebrow: 'AI Feed Enhance',
-      tagline: 'Perfect product feeds, on autopilot.',
-      intro: 'VM Feed Enhance imports your product feeds, cleans and enriches them with the VM Product Enhancer and publishes an always-fresh, validated Google Shopping feed under a permanent URL.',
+      tagline: 'A feed that stops getting rejected.',
+      intro: 'Disapproved items in Merchant Center cost you visibility on exactly the products meant to sell. Feed Enhance imports your feeds, cleans and enriches every item and publishes a validated Shopping feed at a permanent URL &#8211; refreshed daily, with nobody having to watch it.',
       audiences: [
         { label: 'E-commerce teams running shopping feeds', detail: 'Maintain Google, Meta and Bing Shopping from one source instead of three separate exports.' },
         { label: 'Agencies with multiple Merchant Center accounts', detail: 'One tool for every client feed, with clear rules per account.' },
@@ -663,12 +729,12 @@ const FEATURES = [
     de: {
       seo: {
         title: 'KI-Texte für Produktbeschreibungen — einzeln oder im Bulk',
-        description: 'Produktbeschreibungen mit deinen markentrainierten KI-Modellen generieren — einzeln oder für hunderte Zeilen per CSV/Excel.',
+        description: 'Produktbeschreibungen mit Ihren markentrainierten KI-Modellen generieren — einzeln oder für hunderte Zeilen per CSV/Excel.',
         keywords: 'Produktbeschreibungen KI generieren, KI Texter Bulk, CSV Produkttexte KI, Produkttexte automatisch schreiben',
       },
       eyebrow: 'KI-Textgenerierung',
-      tagline: 'Ein perfekter Text nach dem anderen &#8211; oder hunderte auf einmal.',
-      intro: 'Der Einzel-Generator erstellt individuelle Texte mit Ihren markentrainierten Virtual-Marketer-Modellen. Der Bulk-Generator skaliert das auf hunderte Zeilen: CSV oder Excel hochladen, Spalten zuordnen, Texte für jede Zeile generieren &#8211; mit Fortschritt, Wiederholungen und CSV-Export.',
+      tagline: 'Ein Text in Ihrer Sprache. Oder tausend.',
+      intro: 'Generische KI-Texte erkennt Ihr Kunde sofort &#8211; und Ihr Wettbewerber nutzt dasselbe Modell. Ihre markentrainierten Modelle schreiben in Ihrer Tonalit&auml;t: einzeln, oder f&uuml;r hunderte Zeilen aus einer CSV, mit Fortschritt, Wiederholungen und Export.',
       audiences: [
         { label: 'Shops mit großem Produktkatalog', detail: 'Hunderte Beschreibungen in einem Durchlauf statt einzeln von Hand.' },
         { label: 'Content-Teams', detail: 'Kategorietexte und Snippets in der eigenen Markenstimme.' },
@@ -685,7 +751,7 @@ const FEATURES = [
         compliance: 'Fehlgeschlagene Zeilen werden markiert und können einzeln wiederholt werden &#8211; ganze Batches müssen nie neu laufen.',
       },
       valueBullets: [
-        'Deine Markensprache, in jedem Modell trainiert',
+        'Ihre Markensprache, in jedem Modell trainiert',
         'Hunderte Texte pro Durchlauf statt einzeln',
         'Spalten-Mapping für jedes Dateiformat',
         'Sicher: einzelne Zeilen testen vor dem Volllauf',
@@ -721,8 +787,8 @@ const FEATURES = [
         keywords: 'AI product description generator, bulk AI copywriter, CSV product text AI, automatic product copy generator',
       },
       eyebrow: 'AI Text Generation',
-      tagline: 'One perfect text at a time &#8211; or hundreds at once.',
-      intro: 'The Single Generator creates individual texts with your brand-trained Virtual Marketer models. The Bulk Generator scales that to hundreds of rows: upload a CSV or Excel file, map your columns, and generate texts for every row &#8211; with progress tracking, retries and CSV export.',
+      tagline: 'One text in your voice. Or a thousand.',
+      intro: 'Customers spot generic AI copy instantly &#8211; and your competitor is using the same model. Your brand-trained models write in your tone of voice: one at a time, or across hundreds of rows from a CSV, with progress, retries and export.',
       audiences: [
         { label: 'Shops with a large product catalog', detail: 'Hundreds of descriptions in one run instead of writing them by hand.' },
         { label: 'Content teams', detail: 'Category texts and snippets in your own brand voice.' },
@@ -780,12 +846,12 @@ const FEATURES = [
     de: {
       seo: {
         title: 'KI-Bildgenerator für Marketing & Produktbilder',
-        description: 'Marketing-Visuals aus Text oder Referenzbildern erstellen — mit deinen markentrainierten Virtual-Marketer-Modellen.',
+        description: 'Marketing-Visuals aus Text oder Referenzbildern erstellen — mit Ihren markentrainierten Virtual-Marketer-Modellen.',
         keywords: 'KI Bildgenerator Marketing, Produktbilder mit KI erstellen, KI Bilder für Unternehmen, Marketing Visuals KI',
       },
       eyebrow: 'KI-Bildgenerierung',
-      tagline: 'Bilder, die verkaufen.',
-      intro: 'Der Bild-Generator erstellt Marketing-Visuals aus einer Beschreibung &#8211; optional geführt von Referenzbildern für Stil oder Produkttreue.',
+      tagline: 'Kampagnenbilder ohne Stockfoto-Kompromiss.',
+      intro: 'Das passende Stockfoto gibt es nie &#8211; es gibt nur das, was am n&auml;chsten dran ist. Beschreiben Sie stattdessen das Bild, das Sie wirklich brauchen, und steuern Sie Stil oder Produkttreue &uuml;ber Referenzbilder.',
       audiences: [
         { label: 'Kleine Marketing-Teams', detail: 'Marketing-Bilder erstellen, ohne eine eigene Grafik-Abteilung zu brauchen.' },
         { label: 'E-Commerce-Shops', detail: 'Produktvisuals für Anzeigen und Kategorie-Seiten in mehreren Formaten.' },
@@ -835,8 +901,8 @@ const FEATURES = [
         keywords: 'AI image generator marketing, AI product photo generator, AI images for business, marketing visuals AI',
       },
       eyebrow: 'AI Image Generation',
-      tagline: 'Pictures that sell.',
-      intro: 'The Image Generator creates marketing visuals from a description &#8211; optionally guided by reference images for style or product fidelity.',
+      tagline: 'Campaign visuals without the stock-photo compromise.',
+      intro: 'The right stock photo never exists &#8211; only the closest one does. Describe the image you actually need instead, and steer style or product fidelity with reference images.',
       audiences: [
         { label: 'Small marketing teams', detail: 'Create marketing images without needing an in-house design department.' },
         { label: 'E-commerce shops', detail: 'Product visuals for ads and category pages in multiple formats.' },
@@ -894,8 +960,8 @@ const FEATURES = [
         keywords: 'KI Video generieren Marketing, KI Videogenerator, Marketing Video KI Tool, KI Werbevideo erstellen',
       },
       eyebrow: 'KI-Videogenerierung',
-      tagline: 'Bewegtbild für dein Marketing.',
-      intro: 'Kurze Marketing-Videos aus einem Prompt erstellen, Referenzbilder animieren, Start-/Endframes steuern oder bestehende Clips verlängern.',
+      tagline: 'Aus dem Bild, das Sie schon haben, wird Bewegtbild.',
+      intro: 'Video ist das Format, das am besten performt, und das teuerste in der Produktion. Erzeugen Sie kurze Clips aus einem Prompt, animieren Sie ein vorhandenes Produktbild, steuern Sie Start- und Endframe oder verl&auml;ngern Sie bestehendes Material.',
       audiences: [
         { label: 'Social- &amp; Performance-Marketer', detail: 'Short-Form-Ads schnell produzieren, ohne Videoteam.' },
         { label: 'Kleine Teams ohne Videoproduktion', detail: 'Vom Prompt zum fertigen Clip in einem Werkzeug.' },
@@ -947,8 +1013,8 @@ const FEATURES = [
         keywords: 'AI video generator marketing, AI marketing video tool, AI ad video generator, text to video marketing',
       },
       eyebrow: 'AI Video Generation',
-      tagline: 'Motion for your marketing.',
-      intro: 'Create short marketing videos from a prompt, animate reference images, control first/last frames or extend existing clips.',
+      tagline: 'The image you already have, in motion.',
+      intro: 'Video is the format that performs best and costs the most to produce. Generate short clips from a prompt, animate a product image you already have, control first and last frame, or extend footage you already shot.',
       audiences: [
         { label: 'Social &amp; performance marketers', detail: 'Produce short-form ads fast, without a video team.' },
         { label: 'Small teams without video production', detail: 'From prompt to finished clip in one tool.' },
@@ -1003,13 +1069,13 @@ const FEATURES = [
     heroCaption: 'Content Generator',
     de: {
       seo: {
-        title: 'KI-SEO-Content aus deiner Sitemap — Blogartikel automatisch',
-        description: 'Themen direkt aus deiner Sitemap, vollständige Artikel inklusive Hero-Bildern — kontextbewusst statt generisch.',
+        title: 'KI-SEO-Content aus Ihrer Sitemap — Blogartikel automatisch',
+        description: 'Themen direkt aus Ihrer Sitemap, vollständige Artikel inklusive Hero-Bildern — kontextbewusst statt generisch.',
         keywords: 'KI SEO Content Generator, Blogartikel automatisch erstellen KI, KI Content aus Sitemap, SEO Text Generator',
       },
       eyebrow: 'KI-SEO-Content',
-      tagline: 'Content, der rankt.',
-      intro: 'Der Content-Generator liest Themen aus Ihren Sitemap-Quellen, extrahiert Seitenkontext und schreibt vollständige Artikel &#8211; optional mit generierten Hero-Bildern.',
+      tagline: 'Artikel, die f&uuml;r Ihre Themen ranken.',
+      intro: 'Content-Marketing scheitert selten an der Idee, sondern daran, dass niemand zum Schreiben kommt. Der Content-Generator liest Ihre Sitemap, erkennt Themen und Kontext Ihrer Seiten und liefert fertige Artikel &#8211; auf Wunsch mit Hero-Bild.',
       audiences: [
         { label: 'Inhouse-SEO-Teams', detail: 'Content-Produktion ohne Agentur-Budget skalieren.' },
         { label: 'Content-Marketer mit großem Themenplan', detail: 'Artikel direkt aus der eigenen Seitenstruktur, statt aus dem Nichts.' },
@@ -1058,8 +1124,8 @@ const FEATURES = [
         keywords: 'AI SEO content generator, automatic blog article generator AI, AI content from sitemap, SEO text generator',
       },
       eyebrow: 'AI SEO Content',
-      tagline: 'Content that ranks.',
-      intro: 'The Content Generator reads topics from your sitemap sources, extracts page context and writes complete articles &#8211; optionally with generated hero images.',
+      tagline: 'Articles that rank for your topics.',
+      intro: 'Content marketing rarely fails on ideas; it fails because nobody gets round to writing. The Content Generator reads your sitemap, picks up the topics and context of your pages, and delivers finished articles &#8211; with a hero image if you want one.',
       audiences: [
         { label: 'In-house SEO teams', detail: 'Scale content production without an agency budget.' },
         { label: 'Content marketers with a big topic backlog', detail: 'Articles grounded in your own site structure, not written from nothing.' },
@@ -1112,12 +1178,12 @@ const FEATURES = [
     de: {
       seo: {
         title: 'KI-Kampagnen-Builder — von der Idee zu fertigen Assets',
-        description: 'Konzepte, Skripte, Videos, Banner und PDFs in einem geführten 4-Schritte-Workflow — konsistent mit deiner Markenidentität.',
+        description: 'Konzepte, Skripte, Videos, Banner und PDFs in einem geführten 4-Schritte-Workflow — konsistent mit Ihrer Markenidentität.',
         keywords: 'KI Marketingkampagne erstellen, KI Kampagnen Generator, Creative Automation KI, KI Werbekampagne automatisch',
       },
       eyebrow: 'KI-Kampagnen-Builder',
-      tagline: 'Die komplette Kampagne in vier Schritten.',
-      intro: 'Der Campaign Builder führt vom Briefing zu fertigen Assets: Konzepte, Skripte, Szenenbilder, Videos, Banner und PDF-Dokumente &#8211; konsistent mit Ihrer Markenidentität.',
+      tagline: 'Vom Briefing zur fertigen Kampagne, an einem Nachmittag.',
+      intro: 'Zwischen Briefing und den ersten Assets liegen sonst Wochen und drei Dienstleister. Der Campaign Builder liefert Konzepte, Skripte, Szenenbilder, Videos, Banner und PDFs in einem Durchlauf &#8211; durchg&auml;ngig in Ihrer Markenidentit&auml;t.',
       audiences: [
         { label: 'Gründer &amp; Marketing-Manager', detail: 'Kampagnen ohne Agentur-Anbindung produzieren.' },
         { label: 'Agenturen', detail: 'Schneller pitchen &#8211; vom Briefing zu fertigen Assets in einem Workflow.' },
@@ -1170,8 +1236,8 @@ const FEATURES = [
         keywords: 'AI campaign generator, AI marketing campaign builder, creative automation AI, AI ad campaign generator',
       },
       eyebrow: 'AI Campaign Builder',
-      tagline: 'A full campaign in four steps.',
-      intro: 'The Campaign Builder guides you from briefing to finished assets: concepts, scripts, scene images, videos, banners and PDF documents &#8211; consistent with your brand identity.',
+      tagline: 'From briefing to finished campaign in an afternoon.',
+      intro: 'Between a briefing and the first assets there are usually weeks and three suppliers. The Campaign Builder produces concepts, scripts, scene images, videos, banners and PDFs in a single pass &#8211; all in your brand identity.',
       audiences: [
         { label: 'Founders &amp; marketing managers', detail: 'Produce campaigns without an agency relationship.' },
         { label: 'Agencies', detail: 'Pitch faster &#8211; from briefing to finished assets in one workflow.' },
@@ -1228,12 +1294,12 @@ const FEATURES = [
     de: {
       seo: {
         title: 'Interne Verlinkung automatisch — KI-Linkinator für SEO',
-        description: 'Keyword→URL-Karte aus deiner Sitemap, automatisch in jeden Text eingewoben — einzeln oder im Bulk, CMS-unabhängig.',
+        description: 'Keyword→URL-Karte aus Ihrer Sitemap, automatisch in jeden Text eingewoben — einzeln oder im Bulk, CMS-unabhängig.',
         keywords: 'interne Verlinkung Tool, automatische interne Links SEO, SEO interne Verlinkung Software, Linkinator SEO',
       },
       eyebrow: 'Interne Verlinkung',
-      tagline: 'Interne Verlinkung im Autopilot.',
-      intro: 'Der Linkinator baut eine Keyword&rarr;URL-Karte aus Ihrer Sitemap und fügt interne Links in beliebige Texte ein &#8211; einzeln oder im Batch, unabhängig vom verwendeten CMS.',
+      tagline: 'Die interne Verlinkung, zu der sonst niemand kommt.',
+      intro: 'Interne Links sind der g&uuml;nstigste Rankinghebel, den es gibt, und der erste, der liegen bleibt. Der Linkinator baut aus Ihrer Sitemap eine Keyword&rarr;URL-Karte und setzt Links an der ersten passenden Stelle im Text &#8211; einzeln oder im Batch, unabh&auml;ngig vom CMS.',
       audiences: [
         { label: 'Inhouse-SEOs', detail: 'Interne Verlinkung über große Content-Bibliotheken hinweg, ohne manuelle Link-Suche.' },
         { label: 'Agenturen', detail: 'Mehrere Kunden-Websites mit einer Keyword-Karte pro Kunde betreuen.' },
@@ -1261,8 +1327,8 @@ const FEATURES = [
         keywords: 'internal linking tool, automatic internal links SEO, SEO internal linking software, internal link builder AI',
       },
       eyebrow: 'Internal Linking',
-      tagline: 'Internal linking on autopilot.',
-      intro: 'The Linkinator builds a keyword&rarr;URL map from your sitemap and injects internal links into any text &#8211; single or in bulk, independent of the CMS you use.',
+      tagline: 'The internal linking nobody ever gets to.',
+      intro: 'Internal links are the cheapest ranking lever there is, and the first thing to slip. The Linkinator builds a keyword&rarr;URL map from your sitemap and places links at the first matching phrase in any text &#8211; single or in bulk, whatever CMS you run.',
       audiences: [
         { label: 'In-house SEOs', detail: 'Internal linking across large content libraries, without manual link-hunting.' },
         { label: 'Agencies', detail: 'Manage several client sites with one keyword map per client.' },
@@ -1293,13 +1359,13 @@ const FEATURES = [
     heroCaption: 'Mail Generator (Beta)',
     de: {
       seo: {
-        title: 'KI-E-Mail-Generator — erstellen und über dein eigenes SMTP versenden',
-        description: 'Marketing-E-Mail generieren, in der Vorschau prüfen und direkt über dein eigenes SMTP versenden — alles an einem Ort (Beta).',
+        title: 'KI-E-Mail-Generator — erstellen und über Ihr eigenes SMTP versenden',
+        description: 'Marketing-E-Mail generieren, in der Vorschau prüfen und direkt über Ihr eigenes SMTP versenden — alles an einem Ort (Beta).',
         keywords: 'KI E-Mail Marketing Text generieren, Newsletter KI Texter, Marketing Email KI Generator deutsch',
       },
       eyebrow: 'KI-E-Mail-Generator (Beta)',
-      tagline: 'Von der Idee in die Inbox.',
-      intro: 'Generieren Sie eine Marketing-E-Mail mit Ihrem VM-Mail-Modell, prüfen Sie sie in der Vorschau und versenden Sie sie über Ihr eigenes SMTP &#8211; alles an einem Ort.',
+      tagline: 'Schreiben, pr&uuml;fen, senden &#8211; ohne Werkzeugwechsel.',
+      intro: 'Der Weg von der Idee zur versendeten Kampagne f&uuml;hrt sonst durch drei Werkzeuge und zwei Exporte. Hier schreibt Ihr VM-Mail-Modell die E-Mail, Sie pr&uuml;fen sie in der Vorschau und versenden &uuml;ber Ihr eigenes SMTP.',
       audiences: [
         { label: 'Kleine Marketing-Teams', detail: 'E-Mail-Texte ohne eigene ESP-KI erstellen.' },
         { label: 'Solo-Marketer', detail: 'Vorhandene SMTP-Infrastruktur und Absender-Reputation weiter nutzen, statt zu wechseln.' },
@@ -1325,8 +1391,8 @@ const FEATURES = [
         keywords: 'AI email marketing generator, AI newsletter writer, AI marketing email tool',
       },
       eyebrow: 'AI Email Generator (Beta)',
-      tagline: 'From idea to inbox.',
-      intro: 'Generate a marketing email with your VM mail model, preview it and send it through your own SMTP &#8211; all in one place.',
+      tagline: 'Write it, check it, send it &#8211; without switching tools.',
+      intro: 'Getting from idea to sent campaign normally means three tools and two exports. Here your VM mail model writes the email, you check it in preview, and you send it through your own SMTP.',
       audiences: [
         { label: 'Small marketing teams', detail: 'Create email copy without a dedicated ESP AI feature.' },
         { label: 'Solo marketers', detail: 'Keep using your existing SMTP infrastructure and sender reputation instead of switching.' },
@@ -1358,8 +1424,8 @@ const FEATURES = [
         keywords: 'LinkedIn Beiträge automatisch posten, Social Media KI Tool, LinkedIn Automatisierung, KI Social Media Planer, Social Posts KI generieren',
       },
       eyebrow: 'KI Social Publisher',
-      tagline: 'Deine LinkedIn-Präsenz im Autopilot.',
-      intro: 'VM Social Publisher erstellt eine konsistente Persona für deine Marke und schreibt und illustriert LinkedIn-Beiträge nach festem Zeitplan oder durch autonomes Scannen deiner Themen-Nische &#8211; immer mit deinem Referenzbild für visuelle Konsistenz und standardmäßig mit Freigabe-Pflicht.',
+      tagline: 'LinkedIn, das weiterl&auml;uft, wenn die Woche voll ist.',
+      intro: 'Die meisten Unternehmensprofile schlafen nach sechs Wochen ein. Social Publisher legt eine feste Persona f&uuml;r Ihre Marke an und schreibt und bebildert Beitr&auml;ge nach Plan oder aus Ihrer Themen-Nische heraus &#8211; visuell konsistent &uuml;ber Ihr Referenzbild, und standardm&auml;&szlig;ig erst nach Ihrer Freigabe.',
       audiences: [
         { label: 'Marketing-Teams ohne Zeit fürs tägliche Posten', detail: 'Regelmäßige, markenkonforme Beiträge, ohne jeden Tag selbst zu texten.' },
         { label: 'Gründer:innen &amp; Personal Brands', detail: 'Sichtbar bleiben auf LinkedIn, während das Tagesgeschäft läuft.' },
@@ -1369,19 +1435,19 @@ const FEATURES = [
         'Wiederverwendbare Personas: Name, Hintergrundinfo, Referenzbild und Wahl des Textmodells',
         'Feste wöchentliche Zeitfenster oder autonomes stündliches Themen-Scanning mit Relevanz-Schwelle',
         'Optionale Beschränkung auf ein aktives Zeitfenster nach Wochentag und Stunde',
-        'Auto-Publish ist standardmäßig aus &#8211; Beiträge warten auf deine Freigabe',
+        'Auto-Publish ist standardmäßig aus &#8211; Beiträge warten auf Ihre Freigabe',
         'Ein Klick für „Jetzt generieren&#8220; und „Jetzt veröffentlichen&#8220; zur manuellen Kontrolle',
         'Optionales sichtbares Wasserzeichen auf generierten Bildern',
       ],
       howTo: [
         'LinkedIn einmalig unter Einstellungen &rarr; Konnektoren &rarr; Zugriff verbinden.',
-        'Persona erstellen &#8211; Name, Hintergrundinfo und Referenzbild festlegen (oder aus deinem LinkedIn-Profil importieren).',
+        'Persona erstellen &#8211; Name, Hintergrundinfo und Referenzbild festlegen (oder aus Ihrem LinkedIn-Profil importieren).',
         'Zeitplan erstellen: feste Zeiten oder autonomes Scanning, optional mit aktivem Zeitfenster.',
         'Generierte Beiträge im Tab „Beiträge&#8220; oder unter Einstellungen &rarr; Konnektoren &rarr; Freigaben prüfen und veröffentlichen.',
       ],
       faq: [
-        { q: 'Werden Beiträge automatisch veröffentlicht?', a: 'Nur wenn du Auto-Publish für einen Zeitplan aktivierst. Standardmäßig wartet jeder generierte Beitrag auf deine Freigabe.' },
-        { q: 'Kann ich auch manuell posten?', a: 'Ja &#8211; nutze „Jetzt generieren&#8220; mit einer Persona und optionalem Thema, dann „Jetzt veröffentlichen&#8220;, wenn du bereit bist.' },
+        { q: 'Werden Beiträge automatisch veröffentlicht?', a: 'Nur wenn Sie Auto-Publish für einen Zeitplan aktivieren. Standardmäßig wartet jeder generierte Beitrag auf Ihre Freigabe.' },
+        { q: 'Kann ich auch manuell posten?', a: 'Ja &#8211; nutzen Sie „Jetzt generieren&#8220; mit einer Persona und optionalem Thema, dann „Jetzt veröffentlichen&#8220;, wenn Sie bereit sind.' },
         { q: 'Welche Plattformen werden unterstützt?', a: 'Aktuell LinkedIn; weitere Plattformen sind geplant.' },
       ],
     },
@@ -1392,8 +1458,8 @@ const FEATURES = [
         keywords: 'auto post LinkedIn AI, social media AI tool, LinkedIn automation, AI social media scheduler, generate social posts AI',
       },
       eyebrow: 'AI Social Publisher',
-      tagline: 'Your LinkedIn presence, on autopilot.',
-      intro: 'VM Social Publisher creates a consistent persona for your brand, then writes and illustrates LinkedIn posts on a fixed schedule or by autonomously scanning your topic niche &#8211; always with your reference image for visual consistency, and approval-gated by default.',
+      tagline: 'A LinkedIn presence that survives a busy week.',
+      intro: 'Most company profiles go quiet after six weeks. Social Publisher sets a fixed persona for your brand, then writes and illustrates posts on a schedule or from your topic niche &#8211; visually consistent through your reference image, and approval-gated by default.',
       audiences: [
         { label: 'Marketing teams without time to post daily', detail: 'Regular, on-brand posts without writing them yourself every day.' },
         { label: 'Founders &amp; personal brands', detail: 'Stay visible on LinkedIn while the day-to-day business runs.' },
@@ -1432,8 +1498,8 @@ const FEATURES = [
         keywords: 'Produkttexte in Masse generieren, Bulk KI Texte, CSV Produktbeschreibungen KI, Produkttexte automatisch erstellen, Excel Texte generieren',
       },
       eyebrow: 'KI Bulk-Generator',
-      tagline: 'Content-Produktion skalieren.',
-      intro: 'CSV- oder Excel-Datei hochladen, Spalten zuordnen und Texte für jede Zeile generieren &#8211; mit Fortschritt, Wiederholungen und CSV-Export.',
+      tagline: 'Tausend Produkttexte, ein Upload.',
+      intro: 'Ein Katalog mit 5.000 Artikeln bekommt von Hand nie gute Beschreibungen. Laden Sie CSV oder Excel hoch, ordnen Sie die Spalten zu und generieren Sie Texte f&uuml;r jede Zeile &#8211; mit Fortschritt, Wiederholungen und Export.',
       audiences: [
         { label: 'Shops mit großem Sortiment', detail: 'Hunderte Produktbeschreibungen pro Durchlauf statt einzeln von Hand.' },
         { label: 'Marktplatz-Händler', detail: 'Ein Dateiformat rein, fertige Texte als CSV zurück in jedes System.' },
@@ -1461,8 +1527,8 @@ const FEATURES = [
         keywords: 'bulk product descriptions AI, CSV product copy generator, batch AI text generation, generate product texts from spreadsheet',
       },
       eyebrow: 'AI Bulk Generator',
-      tagline: 'Scale your content production.',
-      intro: 'Upload a CSV or Excel file, map your columns, and generate texts for every row &#8211; with progress tracking, retries and CSV export.',
+      tagline: 'A thousand product texts, one upload.',
+      intro: 'A 5,000-item catalogue never gets good descriptions by hand. Upload a CSV or Excel file, map the columns and generate text for every row &#8211; with progress, retries and export.',
       audiences: [
         { label: 'Shops with large catalogs', detail: 'Hundreds of product descriptions per batch instead of one by one.' },
         { label: 'Marketplace sellers', detail: 'One file format in, finished texts back out as CSV for any system.' },
@@ -1496,8 +1562,8 @@ const FEATURES = [
         keywords: 'KI Berichte Ablage, KI Agent Ergebnisse verwalten, automatische Reports KI, KI Präsentationen erstellen, Dokumente KI Agenten',
       },
       eyebrow: 'Dateien &amp; Berichte',
-      tagline: 'Jeder Bericht, einen Klick entfernt.',
-      intro: 'Die Dateien-Ansicht sammelt alles, was Ihre virtuellen Mitarbeiter produzieren &#8211; Berichte, Präsentationen und Notizen &#8211; in einer durchsuchbaren Ablage. Ordner durchstöbern, Berichte formatiert lesen, Präsentationen im Vollbild-Folienmodus abspielen und eigene Notizen direkt neben den Agenten-Ergebnissen führen.',
+      tagline: 'Alles, was Ihre Agenten produzieren, an einem Ort.',
+      intro: 'Ergebnisse, die im Chatverlauf verschwinden, sind keine Ergebnisse. Jeder Bericht, jede Pr&auml;sentation und jede Notiz Ihrer virtuellen Mitarbeiter landet in einer durchsuchbaren Ablage &#8211; formatiert lesbar, als Vollbild-Folien abspielbar, mit Platz f&uuml;r Ihre eigenen Notizen daneben.',
       audiences: [
         { label: 'Teams mit laufenden KI-Agenten', detail: 'Morgendliche Reports und Audits landen automatisch sortiert in der Ablage.' },
         { label: 'Führungskräfte', detail: 'Agenten-Präsentationen direkt im Vollbild vorführen, ohne Umweg über andere Tools.' },
@@ -1530,8 +1596,8 @@ const FEATURES = [
         keywords: 'AI agent reports library, manage AI agent output, automatic AI reports, AI presentations, AI agent documents',
       },
       eyebrow: 'Files &amp; Reports',
-      tagline: 'Every report, one click away.',
-      intro: 'The Files view collects everything your virtual employees produce &#8211; reports, presentations and notes &#8211; in one searchable library. Browse folders, read reports with rich formatting, play presentations in full-screen slide mode and keep your own notes right next to the agent output.',
+      tagline: 'Everything your agents produce, in one place.',
+      intro: 'Results that vanish into a chat history are not results. Every report, deck and note your virtual employees produce lands in a searchable library &#8211; properly formatted, playable as full-screen slides, with room for your own notes beside it.',
       audiences: [
         { label: 'Teams running AI agents', detail: 'Morning reports and audits land in the library automatically, already organized.' },
         { label: 'Executives', detail: 'Play agent-built presentations full-screen, no detour through other tools.' },
@@ -1570,8 +1636,8 @@ const FEATURES = [
         keywords: 'Produktbeschreibungen optimieren KI, Shopping Feed Beschreibungen verbessern, Feed Texte KI, Google Shopping Feed optimieren',
       },
       eyebrow: 'Feed-Optimierung',
-      tagline: 'Bessere Beschreibungen, schnell.',
-      intro: 'Der Feed-Optimizer lädt deinen Shopping-Feed, filtert Produkte und schreibt Beschreibungen im Batch mit deinen VM-Modellen um.',
+      tagline: 'Bessere Produkttexte, im gesamten Sortiment.',
+      intro: 'Die Beschreibung entscheidet &uuml;ber Klick und Retoure &#8211; und stammt meist unver&auml;ndert vom Hersteller. Der Feed-Optimizer l&auml;dt Ihren Shopping-Feed, l&auml;sst Sie filtern und schreibt die Beschreibungen im Batch mit Ihren VM-Modellen neu.',
       audiences: [
         { label: 'Shops mit bestehendem Google-Shopping-Feed', detail: 'Schwache Herstellertexte gezielt neu schreiben, ohne das Feed-Setup anzufassen.' },
         { label: 'E-Commerce-Teams', detail: 'Nach Kategorie oder Marke filtern und genau die Produkte verbessern, die es brauchen.' },
@@ -1598,8 +1664,8 @@ const FEATURES = [
         keywords: 'optimize product descriptions AI, improve shopping feed descriptions, feed copy AI, optimize Google Shopping feed',
       },
       eyebrow: 'Feed Optimization',
-      tagline: 'Better descriptions, fast.',
-      intro: 'The Feed Optimizer loads your shopping feed, lets you filter products and rewrites their descriptions in batches with your VM models.',
+      tagline: 'Better product copy, across the whole range.',
+      intro: 'The description decides the click and the return &#8211; and it usually came straight from the manufacturer. The Feed Optimizer loads your shopping feed, lets you filter, and rewrites the descriptions in batches with your VM models.',
       audiences: [
         { label: 'Shops with an existing Google Shopping feed', detail: 'Rewrite weak manufacturer copy without touching your feed setup.' },
         { label: 'E-commerce teams', detail: 'Filter by category or brand and improve exactly the products that need it.' },
@@ -1632,8 +1698,8 @@ const FEATURES = [
         keywords: 'Chatbot Analyse, Chat Auswertung KI, Kundenfragen analysieren, Sentiment Analyse Chatbot, Chatbot Insights',
       },
       eyebrow: 'Chat-Insights',
-      tagline: 'Wissen, was Kunden fragen.',
-      intro: 'Der Agent-Viewer lädt die Session-Logs deines Chat-Agenten und analysiert Stimmung und Themen &#8211; du siehst, was Kunden wirklich wollen.',
+      tagline: 'Ihre Kunden sagen Ihnen l&auml;ngst, was fehlt.',
+      intro: 'In den Chatverl&auml;ufen Ihres Agenten steht, woran Kaufentscheidungen scheitern &#8211; gelesen hat sie nie jemand. Chat-Insights wertet die Sessions aus und zeigt Stimmung, wiederkehrende Themen und offene Fragen.',
       audiences: [
         { label: 'Shops mit Virtual-Marketer-Chat-Agent', detail: 'Aus echten Kundengesprächen lernen, statt zu raten.' },
         { label: 'Produkt- &amp; Content-Teams', detail: 'Häufige Fragen zeigen, welche Infos auf Produktseiten fehlen.' },
@@ -1649,7 +1715,7 @@ const FEATURES = [
         'Analyse lesen.',
       ],
       faq: [
-        { q: 'Woher kommen die Sessions?', a: 'Aus deinem Virtual-Marketer-Chat-Agent-Deployment.' },
+        { q: 'Woher kommen die Sessions?', a: 'Aus Ihrem Virtual-Marketer-Chat-Agent-Deployment.' },
       ],
     },
     en: {
@@ -1659,8 +1725,8 @@ const FEATURES = [
         keywords: 'chatbot analytics, AI chat analysis, analyze customer questions, chatbot sentiment analysis, chatbot insights',
       },
       eyebrow: 'Chat Insights',
-      tagline: 'Know what your customers ask.',
-      intro: 'The Agent Viewer pulls your chat agent session logs and analyzes sentiment and topics so you see what customers really want.',
+      tagline: 'Your customers are already telling you what is missing.',
+      intro: 'Your agent chat logs contain the reasons deals stall &#8211; nobody has ever read them. Chat Insights analyses the sessions and shows sentiment, recurring themes and unanswered questions.',
       audiences: [
         { label: 'Shops running the Virtual Marketer chat agent', detail: 'Learn from real customer conversations instead of guessing.' },
         { label: 'Product &amp; content teams', detail: 'Frequent questions reveal what information your product pages are missing.' },
@@ -1889,6 +1955,120 @@ function tryonSection(f, lang) {
   </section>`;
 }
 
+/**
+ * Flat lay in, on-model out.
+ *
+ * The page led with finished on-model photographs, which prove nothing by
+ * themselves — a good photograph is also what a photographer sells. The
+ * argument only lands when the *input* is next to the output, and the input
+ * here is deliberately the creased, flat-lit packshot a warehouse phone
+ * actually produces. A shop recognises that picture as their own, which is
+ * the whole point.
+ *
+ * Both images come from one generation chain (see BEFORE_AFTER in
+ * scripts/generate-ai-images.js): the on-model shot is conditioned on the
+ * flat lay, so it is provably the same shirt rather than two nice photos of
+ * two different shirts.
+ */
+function beforeAfterSection(f, lang) {
+  if (f.slug !== 'produktfotos-ki') return '';
+  const before = path.join(ROOT, 'assets/product-pages/staging-before-flatlay.jpg');
+  const after = path.join(ROOT, 'assets/product-pages/staging-after-onmodel.jpg');
+  if (!fs.existsSync(before) || !fs.existsSync(after)) return '';
+  const t = UI[lang];
+
+  const shot = (src, caption, kind) => `
+        <figure class="vm-ba-shot vm-ba-${kind}">
+          <picture>
+            <source srcset="${src.replace(/\.jpg$/, '.webp')}" type="image/webp">
+            <img src="${src}" alt="${caption}" loading="lazy" decoding="async">
+          </picture>
+          <figcaption><span class="vm-ba-tag">${kind === 'before' ? t.baBeforeTag : t.baAfterTag}</span>${caption}</figcaption>
+        </figure>`;
+
+  return `
+  <section class="vm-ba" aria-labelledby="ba-h">
+    <p class="section-label">${t.baLabel}</p>
+    <h2 class="section-title" id="ba-h">${t.baTitle}</h2>
+    <p class="impact-note">${t.baIntro}</p>
+    <div class="vm-ba-row">
+      ${shot('/product-pages/staging-before-flatlay.jpg', t.baBefore, 'before')}
+      <div class="vm-ba-arrow" aria-hidden="true">&rarr;</div>
+      ${shot('/product-pages/staging-after-onmodel.jpg', t.baAfter, 'after')}
+    </div>
+    <p class="vm-tryon-note">${t.baNote}</p>
+  </section>`;
+}
+
+/**
+ * The model line-up, and the distinction that actually matters.
+ *
+ * Two questions a visitor has and the page did not answer: is there a cast I
+ * can use today without setting anything up, and can I have *my* model? The
+ * product answers both — ten presets, plus custom models built from attribute
+ * chips or from a photo of a real person, stored per workspace and reused as
+ * a reference so the same face runs through the whole catalogue.
+ *
+ * The names here are the product's real ten, not a set invented for the
+ * website, so the line-up on the landing page is the line-up after signing
+ * up. See vm-customer-web-ui/docs/guides/vm-product-staging.md.
+ *
+ * The cast deliberately includes a woman in her fifties and a man of ordinary
+ * build. Competitors in this category ship ten twenty-five-year-olds and get
+ * asked for everyday models in their own FAQ; a shop selling to
+ * forty-year-olds cannot use a cast that makes the clothes look like they
+ * will not look. Showing it is the difference between the claim and the
+ * proof.
+ */
+const PRESET_MODELS = ['sabrina', 'amara', 'greta', 'yuki', 'malik', 'noa', 'jonas', 'adam', 'lena', 'ken'];
+
+function modelsSection(f, lang) {
+  if (f.slug !== 'produktfotos-ki') return '';
+  const t = UI[lang];
+  const available = PRESET_MODELS.filter((id) =>
+    fs.existsSync(path.join(ROOT, `assets/product-pages/model-${id}-studio.jpg`))
+  );
+  if (!available.length) return '';
+
+  const card = (id) => `
+        <figure class="vm-model-card">
+          <picture>
+            <source srcset="/product-pages/model-${id}-studio.webp" type="image/webp">
+            <img src="/product-pages/model-${id}-studio.jpg" alt="${id.toUpperCase()}" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>${id.toUpperCase()}</figcaption>
+        </figure>`;
+
+  return `
+  <section class="vm-models" aria-labelledby="models-h">
+    <p class="section-label">${t.modelsLabel}</p>
+    <h2 class="section-title" id="models-h">${t.modelsTitle}</h2>
+    <p class="impact-note">${t.modelsIntro}</p>
+
+    <div class="vm-models-split">
+      <div class="vm-model-panel is-custom">
+        <h3>${t.modelsCustomH}</h3>
+        <p>${t.modelsCustomP}</p>
+        <ul>
+          ${t.modelsCustomBullets.map((b) => `<li>${b}</li>`).join('\n          ')}
+        </ul>
+      </div>
+      <div class="vm-model-panel">
+        <h3>${t.modelsPresetH.replace('{n}', available.length)}</h3>
+        <p>${t.modelsPresetP}</p>
+        <ul>
+          ${t.modelsPresetBullets.map((b) => `<li>${b}</li>`).join('\n          ')}
+        </ul>
+      </div>
+    </div>
+
+    <div class="vm-models-row">
+      ${available.map(card).join('\n      ')}
+    </div>
+    <p class="vm-tryon-note">${t.modelsNote}</p>
+  </section>`;
+}
+
 function pagePath(f, lang) {
   return lang === 'en' ? `/en/solutions/${f.slugEn}/` : `/ki-loesungen/${f.slug}/`;
 }
@@ -2098,6 +2278,45 @@ ${animDemo ? DEMO_STYLE : ''}
     .vm-fp .vm-tryon-row{grid-template-columns:repeat(2,1fr);gap:12px;}
   }
 
+  /* Before / after. The arrow between them is the whole argument, so it gets
+     its own grid column rather than being tucked into a caption. */
+  .vm-fp .vm-ba-row{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;margin-top:22px;}
+  .vm-fp .vm-ba-shot{margin:0;}
+  .vm-fp .vm-ba-shot picture{display:block;border-radius:14px;overflow:hidden;background:var(--vm-gray-100);}
+  .vm-fp .vm-ba-shot img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;background:#fff;}
+  .vm-fp .vm-ba-shot figcaption{margin-top:10px;font-size:14px;font-weight:600;color:var(--vm-gray-900);text-align:center;}
+  .vm-fp .vm-ba-tag{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+  .vm-fp .vm-ba-before .vm-ba-tag{color:var(--vm-gray-600,#6b7280);}
+  .vm-fp .vm-ba-after .vm-ba-tag{color:var(--vm-red);}
+  .vm-fp .vm-ba-after picture{box-shadow:0 6px 20px rgba(36,20,23,.14);}
+  .vm-fp .vm-ba-arrow{font-size:30px;color:var(--vm-red);line-height:1;}
+
+  /* Two panels, and the custom one is the one we want read first — it is the
+     answer to "can I have my model", which is the objection that stops a
+     shop from buying. */
+  .vm-fp .vm-models-split{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px;}
+  .vm-fp .vm-model-panel{background:#fff;border:1px solid var(--vm-gray-200);border-radius:16px;padding:24px 26px;}
+  .vm-fp .vm-model-panel.is-custom{border-top:3px solid var(--vm-red);}
+  .vm-fp .vm-model-panel h3{margin:0 0 8px;font-size:18px;color:var(--vm-gray-900);}
+  .vm-fp .vm-model-panel p{margin:0 0 12px;font-size:15px;line-height:1.6;}
+  .vm-fp .vm-model-panel ul{margin:0;padding-left:20px;}
+  .vm-fp .vm-model-panel li{font-size:14.5px;line-height:1.55;margin-bottom:6px;}
+
+  .vm-fp .vm-models-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:26px;}
+  .vm-fp .vm-model-card{margin:0;}
+  .vm-fp .vm-model-card picture{display:block;border-radius:12px;overflow:hidden;background:var(--vm-gray-100);}
+  .vm-fp .vm-model-card img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;}
+  .vm-fp .vm-model-card figcaption{margin-top:8px;font-size:12.5px;font-weight:700;letter-spacing:.05em;color:var(--vm-gray-600,#6b7280);text-align:center;}
+
+  @media (max-width:780px){
+    /* The arrow becomes a row divider once the pair stacks; pointing right at
+       an image that is now underneath would be worse than pointing down. */
+    .vm-fp .vm-ba-row{grid-template-columns:1fr;gap:14px;}
+    .vm-fp .vm-ba-arrow{transform:rotate(90deg);justify-self:center;}
+    .vm-fp .vm-models-split{grid-template-columns:1fr;}
+    .vm-fp .vm-models-row{grid-template-columns:repeat(3,1fr);gap:10px;}
+  }
+
   /* Panels slide-and-fade instead of hard-cutting, and the active step
      button shows a progress bar that drains over the autoplay interval so
      the advance is anticipated rather than sudden. Both are suppressed under
@@ -2207,7 +2426,9 @@ ${header(lang)}
       ${c.audiences.map((a) => `<div class="audience-card"><b>${a.label}</b><span>${a.detail}</span></div>`).join('\n      ')}
     </div>
   </section>
+${beforeAfterSection(f, lang)}
 ${tryonSection(f, lang)}
+${modelsSection(f, lang)}
 ${sceneSection(f, lang)}
 
   ${c.impact ? `<section aria-labelledby="impact-h">
@@ -2538,10 +2759,10 @@ ${header('de')}
 <main class="vm-hub">
   <span class="eyebrow">KI-Lösungen</span>
   <h1>Individuelle KI-Lösungen</h1>
-  <p class="lede">Jedes Virtual-Marketer-Produkt auf dieser Seite ist real und heute im Einsatz. Wählen Sie eine Lösung, um zu sehen, für wen sie gedacht ist, wie sie funktioniert &#8211; und wie sie im Produkt aussieht, mit Live-Demo direkt auf der Seite.</p>
+  <p class="lede">In jedem Marketing-Team bleibt dieselbe Arbeit liegen: Produktbilder, Texte für tausend Artikel, Feeds pflegen, Berichte schreiben. Dafür sind diese ${FEATURES.length} Werkzeuge gebaut &#8211; alle heute bei Kunden im Einsatz. Öffnen Sie eines und sehen Sie es in der Demo arbeiten, bevor Sie mit uns sprechen.</p>
 
   <h2>Alle KI-Lösungen im Überblick</h2>
-  <p>Jede Karte führt zur ausführlichen Produktseite mit animierter Live-Demo.</p>
+  <p>Jede Karte führt zur Produktseite &#8211; mit Zielgruppe, Ablauf und einer Demo, die zeigt, wie es im Produkt aussieht.</p>
 ${hubGridSection('de', { withHeading: false, inline: true })}
   <h2>Individuelle KI-Modelle für Ihre Marke</h2>
   <p>Hinter vielen dieser Lösungen stehen individuell trainierte Virtual-Marketer-Modelle: KI, die Ihre Markensprache, Ihre Produkte und Ihre Zielgruppe kennt &#8211; statt generischer Texte von der Stange. Wir trainieren Ihr Modell auf Ihren Daten und stellen es in allen Werkzeugen bereit.</p>
@@ -2587,4 +2808,10 @@ function main() {
   console.log(`\n✅ ${FEATURES.length * 2} feature page(s) generated (${FEATURES.length} DE + ${FEATURES.length} EN)\n`);
 }
 
-main();
+// Guarded so other generators can borrow the shared header and footer without
+// triggering a full feature-page build on require. scripts/generate-
+// accessibility-statement.js needs exactly the same chrome, and a second copy
+// of the nav would drift the moment a link changes.
+if (require.main === module) main();
+
+module.exports = { header, footer, UI, CHROME_CSS };

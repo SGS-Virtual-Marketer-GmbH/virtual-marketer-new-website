@@ -165,6 +165,28 @@ http {
     location ^~ /tag/       { return 301 /blog/; }
     location ^~ /category/  { return 301 /blog/; }
 
+    # The Yoast-era sitemaps. Search Console still holds the submission from
+    # 2024 — /post-sitemap.xml is listed there as "Erfolgreich, 43 Seiten",
+    # last read 13.03.2025 — and until this redirect existed it answered 404,
+    # so the entry would have flipped to an error on Google's next read and
+    # the 43 URLs it still vouches for would have been dropped rather than
+    # handed over to the sitemap that replaced them.
+    #
+    # 301 rather than 404 for the same reason the archive pages above are:
+    # these URLs carry accumulated trust and inbound references. Google
+    # follows a sitemap redirect and indexes the target, so the old
+    # submission keeps working instead of needing to be deleted by hand.
+    #
+    # sitemap-index.xml (hyphen) is Yoast's older spelling of the file that
+    # scripts/generate-sitemap.js now writes as sitemap_index.xml, and
+    # wp-sitemap.xml is WordPress core's own since 5.5. Neither was
+    # necessarily ever live here, but both are guessed by crawlers.
+    location ~ ^/(post|page|category|post_tag|author|attachment|product)-sitemap[0-9]*\.xml$ {
+      return 301 /sitemap.xml;
+    }
+    location = /sitemap-index.xml { return 301 /sitemap_index.xml; }
+    location = /wp-sitemap.xml    { return 301 /sitemap_index.xml; }
+
     # WordPress admin/API surface no longer exists — do not 404-loop bots into it
     location ^~ /wp-admin/  { return 410; }
     location =  /wp-login.php { return 410; }

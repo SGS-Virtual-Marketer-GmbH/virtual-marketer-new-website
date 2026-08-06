@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Erklärung zur Barrierefreiheit | Virtual Marketer</title>
+<meta name="description" content="Erklärung zur Barrierefreiheit nach dem Barrierefreiheitsstärkungsgesetz (BFSG) für virtual-marketer.de — Konformitätsstatus, bekannte Einschränkungen und…">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://virtual-marketer.de/barrierefreiheit/">
+<link rel="alternate" hreflang="de" href="https://virtual-marketer.de/barrierefreiheit/">
+<link rel="alternate" hreflang="en" href="https://virtual-marketer.de/en/accessibility/">
+<link rel="alternate" hreflang="x-default" href="https://virtual-marketer.de/barrierefreiheit/">
+<style>
+  body{margin:0;font-family:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#241417;background:#fff}
+  .vm-legal-page{max-width:1140px;margin:0 auto;padding:40px 20px 72px}
+  .vm-legal-page h1{font-size:32px;line-height:1.25;margin:0 0 6px;color:#241417}
+  .vm-legal-page .eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94152b;background:#fbecee;padding:5px 12px;border-radius:999px;margin-bottom:14px}
+  @media (max-width:1023px){.vm-legal-page h1{font-size:26px}}
+</style>
+<style id="vm-a11y-statement-style">
+  .vm-legal{max-width:820px;margin:0 auto;padding:8px 0}
+  .vm-legal .vm-legal-intro{
+    font-size:17px;line-height:1.7;color:#4b5563;
+    padding-bottom:18px;border-bottom:1px solid #e7dfe0;margin:0 0 8px;
+  }
+  .vm-legal h2{
+    font-size:20px !important;font-weight:700;color:#241417;
+    margin:38px 0 12px;line-height:1.35;
+  }
+  .vm-legal h2:first-of-type{margin-top:8px}
+  .vm-legal p{margin:0 0 14px;line-height:1.8;color:#4b5563;font-size:16px}
+  .vm-legal ul{margin:0 0 14px;padding-left:22px}
+  .vm-legal li{line-height:1.8;color:#4b5563;font-size:16px;margin-bottom:6px}
+  .vm-legal a{color:#94152b;text-decoration:underline;text-underline-offset:2px}
+  .vm-legal a:hover{color:#700f2b}
+  .vm-legal .vm-legal-card{
+    background:#faf7f7;border:1px solid #e7dfe0;border-left:3px solid #94152b;
+    border-radius:10px;padding:18px 20px;margin:0 0 14px;
+  }
+  .vm-legal .vm-legal-card p{margin:0;line-height:1.85}
+  .vm-legal .vm-legal-card strong{color:#241417}
+  .vm-legal .vm-status{font-weight:600;color:#241417}
+  @media (max-width:1023px){
+    /* scripts/mobile-polish.js clamps every h2 to a minimum of 23px below
+       1024px with !important. Without a matching !important these headings
+       would be larger on a phone than on a desktop. */
+    .vm-legal h2{font-size:18px !important;margin-top:30px}
+    .vm-legal .vm-legal-card{padding:16px}
+  }
+</style>
+<style>
+  .vm-header-simple{
+    position:sticky;top:0;z-index:9990;
+    max-width:1140px;margin:16px auto 0;padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    background:#fff;border-radius:14px;
+    box-shadow:0 6px 24px rgba(36,20,23,.10);
+  }
+  .vm-header-simple > a{display:flex;align-items:center;flex:0 0 auto}
+  .vm-header-simple nav{display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:flex-end}
+  .vm-header-simple nav a{color:#241417;text-decoration:none;font-weight:500;font-size:15px;white-space:nowrap}
+  .vm-header-simple nav a:hover{color:#94152b}
+
+  /* The solutions dropdown is a <details>/<summary>, not an <a>, so none of
+     the rules above reach it. Left alone it falls back to the browser default
+     and renders 16px/400 in grey beside 14px/500 in near-black — the one nav
+     item that looks like it belongs to a different site. Values copied from
+     the anchor rule above so the two cannot drift apart. */
+  .vm-header-simple nav > details > summary{
+    color:#241417;font-weight:500;font-size:15px;white-space:nowrap;
+    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:4px;
+  }
+  .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
+  .vm-header-simple nav > details > summary:hover{color:#94152b}
+
+  /* position:sticky is disabled by ANY ancestor that is a scroll container,
+     and the scraped theme sets overflow-x:hidden on BOTH the root element
+     and the body element.
+
+     NOTE FOR ANYONE EDITING THIS COMMENT: do not write element names in
+     angle brackets here. This text ends up inside a style block in the head
+     of every generated page, and scripts/fix-nested-documents.js scans the
+     raw HTML for a body tag followed by a root tag to find pasted-in
+     documents. Angle-bracketed names in this comment read as real tags: an
+     earlier revision wrote them out and the unwrapper treated everything
+     from this comment to the end of the file as a nested document, stripping
+     the real body tag's class="vm-static-blog" — which silently disabled
+     every rule in this stylesheet. The unwrapper now masks style and script
+     regions before scanning, but prose that looks like markup is a trap
+     worth not re-laying.
+
+     WHY THE OBVIOUS FIX DID NOT WORK
+
+     The previous attempt here was overflow-x:hidden with overflow-y:visible
+     on the body — keep clipping sideways, release the axis sticky needs. It
+     reads correctly and it does nothing, because of a rule in the overflow
+     spec: when one axis is "hidden" and the other is "visible", the visible
+     one is coerced to "auto". A computed "auto" is a scroll container. So
+     the declaration that was supposed to free the header is what pinned it.
+
+     Measured on /blog/artikel-50-ki-inhalte-kennzeichnen/: computed
+     overflow was "hidden auto" on both the root and the body, and at scrollY
+     1500 the header sat at top:-1484 — i.e. it had scrolled away entirely.
+
+     "clip" is the value that does what "hidden" was being asked to do here:
+     it clips without creating a scroll container, so it does NOT coerce the
+     other axis, and visible survives. Same measurement after the change:
+     header at top:0, page still scrolls to 1500, and
+     scrollWidth === clientWidth, so nothing escapes sideways either.
+
+     The root element needs it too. Fixing only the body leaves the root
+     computing "hidden auto", and the header's nearest scrollport is then
+     still a box that never scrolls. Scoped with :has() so this reaches only
+     the generated pages — the theme's own layout on the legacy pages
+     genuinely relies on root clipping, and make-header-sticky.js solves
+     those with position:fixed instead. */
+  html:has(body.vm-static-blog){overflow-x:clip;overflow-y:visible}
+  body.vm-static-blog{overflow-x:clip;overflow-y:visible}
+  /* Login is the primary action in this bar — same gradient pill as the
+     homepage header, so the two do not look like different sites. */
+  .vm-header-simple nav a[href*="login.virtual-marketer.de"]{
+    background:linear-gradient(90deg,#3d7ba8,#94152b);
+    color:#fff;padding:11px 26px;border-radius:10px;font-weight:600;
+  }
+  .vm-header-simple nav a[href*="login.virtual-marketer.de"]:hover{
+    background:linear-gradient(90deg,#94152b,#700f2b);color:#fff;
+  }
+
+  /* Below ~900px the six nav items no longer fit beside the logo, so the bar
+     stacks: logo on its own line, nav wrapping under it, centred. Without
+     this the nav overflowed the bar and pushed the page horizontally. */
+  @media (max-width:900px){
+    .vm-header-simple{
+      flex-direction:column;align-items:stretch;gap:14px;
+      margin:12px 12px 0;padding:14px 16px;
+      /* Stays sticky on mobile as well — it was switched to static here,
+         which meant the nav scrolled away exactly on the screens where
+         getting back to it costs the most. */
+    }
+    .vm-header-simple > a{justify-content:center}
+    .vm-header-simple nav{justify-content:center;gap:18px}
+    .vm-header-simple nav a{font-size:14px}
+    .vm-header-simple nav a[href*="login.virtual-marketer.de"]{padding:9px 20px}
+  }
+
+  .vm-footer-simple{max-width:1140px;margin:40px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px}
+  .vm-footer-simple a{color:#6b7280}
+</style>
+</head>
+<body class="vm-static-blog">
+<header class="vm-header-simple">
+  <a href="/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none"></a>
+  <nav>
+    <a href="/ki-loesungen/">Lösungen</a>
+    <a href="/blog/">Blog</a>
+    <a href="https://api.virtual-marketer.de/documentation/">API</a>
+    <a href="/modell-anfragen/">Modell anfragen</a>
+    <a href="/kontakt/">Kontakt</a>
+    <a href="https://login.virtual-marketer.de/">Login</a>
+  </nav>
+</header>
+<main class="vm-legal-page">
+  <span class="eyebrow">Barrierefreiheit</span>
+  <h1>Erklärung zur Barrierefreiheit</h1>
+  <div class="vm-legal">
+
+<p class="vm-legal-intro">Die SGS Virtual Marketer GmbH ist bemüht, ihre Website barrierefrei zugänglich zu machen. Diese Erklärung gilt für die Website <strong>virtual-marketer.de</strong> einschließlich aller Unterseiten und der englischsprachigen Fassung unter /en/. Rechtsgrundlage ist das Barrierefreiheitsstärkungsgesetz (BFSG), das seit dem 28. Juni 2025 gilt.</p>
+
+<h2>Stand der Vereinbarkeit mit den Anforderungen</h2>
+<p><span class="vm-status">Diese Website ist mit den Anforderungen teilweise vereinbar.</span> Als Maßstab dienen die Web Content Accessibility Guidelines (WCAG) 2.1 auf Konformitätsstufe AA sowie die harmonisierte europäische Norm EN 301 549.</p>
+<p>„Teilweise vereinbar“ bedeutet: Die überwiegende Zahl der Anforderungen wird erfüllt, einzelne benannte Punkte jedoch nicht. Diese Punkte sind unten aufgeführt.</p>
+
+<h2>Nicht barrierefreie Inhalte</h2>
+<p>Die folgende Einschränkung ist uns bekannt:</p>
+<ul>
+  <li><strong>Reihenfolge der Überschriftenebenen (WCAG 1.3.1).</strong> Auf den aus dem früheren Content-Management-System übernommenen Seiten wird die kleine Auszeichnungszeile über einer Abschnittsüberschrift technisch als Überschrift sechster Ordnung ausgegeben. Dadurch folgt auf eine Überschrift zweiter Ordnung eine Überschrift sechster Ordnung, und die Ebenen springen. Für die Navigation per Überschriftenliste kann das irritierend sein. Der Inhalt selbst ist vollständig lesbar und mit der Tastatur erreichbar.</li>
+</ul>
+<p>Der Grund für die noch bestehende Einschränkung: Die Auszeichnungszeile ist inhaltlich keine Überschrift und müsste als Absatz ausgezeichnet werden. Das Layout dieser Altseiten wird jedoch über genau diese Überschriftenebene gestaltet, sodass eine Umstellung die Gestaltung dieser Seiten verändert. Die Umstellung ist vorgesehen; ein verbindliches Datum nennen wir hier bewusst nicht, solange keines feststeht.</p>
+
+<h2>Was bereits umgesetzt ist</h2>
+<ul>
+  <li>Alle Seiten haben einen Hauptinhaltsbereich als Landmarke und eine eindeutige Hauptüberschrift.</li>
+  <li>Bedienelemente, die nur aus einem Symbol bestehen, haben einen für Screenreader lesbaren Namen.</li>
+  <li>Links im Fließtext sind zusätzlich zur Farbe unterstrichen, sind also nicht allein durch Farbe erkennbar (WCAG 1.4.1).</li>
+  <li>Text erfüllt das Kontrastverhältnis von mindestens 4,5:1 gegenüber seinem Hintergrund, einschließlich der Beschriftung auf farbigen Schaltflächen (WCAG 1.4.3).</li>
+  <li>Die Seiten sind responsiv und ohne horizontales Scrollen bis zu einer Breite von 320 Pixeln nutzbar.</li>
+  <li>Die Website lädt keine externen Schriftarten, Skripte oder Tracker, die die Bedienung verzögern oder blockieren könnten.</li>
+</ul>
+
+<h2>Erstellung dieser Erklärung</h2>
+<p>Diese Erklärung wurde am 6. August 2026 erstellt. Grundlage ist eine Selbstbewertung: eine automatisierte Prüfung aller Seiten der Website auf Kontrastverhältnisse, Überschriftenstruktur, Landmarken und zugängliche Namen von Bedienelementen, ergänzt durch manuelle Prüfungen im Browser auf Desktop- und Mobilgrößen. Eine Prüfung durch eine externe Stelle hat nicht stattgefunden.</p>
+
+<h2>Barriere melden</h2>
+<div class="vm-legal-card">
+  <p>Ist Ihnen eine Barriere aufgefallen, oder benötigen Sie eine Information von dieser Website in einer zugänglichen Form? Schreiben Sie uns an <a href="mailto:info@virtual-marketer.de?subject=Barrierefreiheit">info@virtual-marketer.de</a>. Bitte nennen Sie die betroffene Seite und beschreiben Sie kurz, was nicht funktioniert hat. Wir antworten so schnell wie möglich und stellen den Inhalt auf Wunsch in einer anderen Form bereit.</p>
+</div>
+<p>Kontaktmöglichkeiten und die vollständigen Angaben zum Anbieter finden Sie im <a href="/impressum/">Impressum</a>.</p>
+
+<h2>Durchsetzungsverfahren</h2>
+<p>Wenn Sie auf Ihre Meldung keine zufriedenstellende Antwort erhalten, können Sie sich an die zuständige Marktüberwachungsbehörde wenden: die Marktüberwachungsstelle der Länder für die Barrierefreiheit von Produkten und Dienstleistungen (MLBF). Sie überwacht die Einhaltung der Anforderungen des BFSG für Dienstleistungen und nimmt entsprechende Hinweise von Verbraucherinnen und Verbrauchern entgegen.</p>
+
+  </div>
+</main>
+<footer style="max-width:1140px;margin:64px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
+  &copy; 2026 SGS Virtual Marketer GmbH &middot;
+  <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> &middot;
+  <a href="/impressum/">Impressum</a> &middot;
+  <a href="/barrierefreiheit/">Barrierefreiheit</a>
+</footer>
+</body>
+</html>

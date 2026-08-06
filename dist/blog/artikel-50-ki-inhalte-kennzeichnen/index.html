@@ -29,9 +29,9 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Artikel 50 gilt: KI-Inhalte jetzt richtig kennzeichnen","description":"Seit 2. August 2026 gelten die Transparenzpflichten. Welche drei Fälle betroffen sind, welche nicht, und wer die Einhaltung in Deutschland überwacht.","datePublished":"2026-08-04","dateModified":"2026-08-04","author":{"@type":"Organization","name":"Virtual Marketer"},"publisher":{"@type":"Organization","name":"Virtual Marketer","logo":{"@type":"ImageObject","url":"/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://virtual-marketer.de/blog/artikel-50-ki-inhalte-kennzeichnen/"},"inLanguage":"de"}</script>
 
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/bootstrap.css%3Fver=4.0.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/font-awesome.min.css%3Fver=7.0.1.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/style.css%3Fver=7.0.1.css">
+<link rel="stylesheet" href="/assets/css/vm-a80b91e97a.css" media="all">
+
+
 <style>
   
   .vm-post{
@@ -105,7 +105,9 @@
   }
   .vm-post .vm-cta a{
     display:inline-block;margin-top:12px;padding:13px 26px;
-    background:linear-gradient(90deg,#66a3ce,#94152b);
+    /* Deepened vm-blue, not vm-blue: white on #66a3ce is 2.7:1 and fails
+       WCAG 1.4.3. Same hue, 4.6:1. See scripts/fix-legacy-header.js. */
+    background:linear-gradient(90deg,#3d7ba8,#94152b);
     color:#fff;border-radius:8px;text-decoration:none;font-weight:700;
   }
   .vm-post .vm-cta a:hover{background:linear-gradient(90deg,#94152b,#700f2b);color:#fff}
@@ -153,21 +155,53 @@
   .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
   .vm-header-simple nav > details > summary:hover{color:#94152b}
 
-  /* position:sticky above is disabled by ANY ancestor with a clipping
-     overflow, and the scraped theme's stylesheet sets overflow:hidden on
-     <body> — which is why the header on /blog/ and the feature pages scrolled
-     away despite being declared sticky. The same trap is documented in
-     scripts/make-header-sticky.js for the legacy header, where the answer was
-     position:fixed; here the cleaner fix is available, because these pages do
-     not use the theme's layout and nothing on them needs body to clip.
-     overflow-x stays hidden so a wide element still cannot scroll the page
-     sideways; only the vertical axis is released, which is the axis sticky
-     needs. */
-  body.vm-static-blog{overflow-x:hidden;overflow-y:visible}
+  /* position:sticky is disabled by ANY ancestor that is a scroll container,
+     and the scraped theme sets overflow-x:hidden on BOTH the root element
+     and the body element.
+
+     NOTE FOR ANYONE EDITING THIS COMMENT: do not write element names in
+     angle brackets here. This text ends up inside a style block in the head
+     of every generated page, and scripts/fix-nested-documents.js scans the
+     raw HTML for a body tag followed by a root tag to find pasted-in
+     documents. Angle-bracketed names in this comment read as real tags: an
+     earlier revision wrote them out and the unwrapper treated everything
+     from this comment to the end of the file as a nested document, stripping
+     the real body tag's class="vm-static-blog" — which silently disabled
+     every rule in this stylesheet. The unwrapper now masks style and script
+     regions before scanning, but prose that looks like markup is a trap
+     worth not re-laying.
+
+     WHY THE OBVIOUS FIX DID NOT WORK
+
+     The previous attempt here was overflow-x:hidden with overflow-y:visible
+     on the body — keep clipping sideways, release the axis sticky needs. It
+     reads correctly and it does nothing, because of a rule in the overflow
+     spec: when one axis is "hidden" and the other is "visible", the visible
+     one is coerced to "auto". A computed "auto" is a scroll container. So
+     the declaration that was supposed to free the header is what pinned it.
+
+     Measured on /blog/artikel-50-ki-inhalte-kennzeichnen/: computed
+     overflow was "hidden auto" on both the root and the body, and at scrollY
+     1500 the header sat at top:-1484 — i.e. it had scrolled away entirely.
+
+     "clip" is the value that does what "hidden" was being asked to do here:
+     it clips without creating a scroll container, so it does NOT coerce the
+     other axis, and visible survives. Same measurement after the change:
+     header at top:0, page still scrolls to 1500, and
+     scrollWidth === clientWidth, so nothing escapes sideways either.
+
+     The root element needs it too. Fixing only the body leaves the root
+     computing "hidden auto", and the header's nearest scrollport is then
+     still a box that never scrolls. Scoped with :has() so this reaches only
+     the generated pages — the theme's own layout on the legacy pages
+     genuinely relies on root clipping, and make-header-sticky.js solves
+     those with position:fixed instead. */
+  html:has(body.vm-static-blog){overflow-x:clip;overflow-y:visible}
+  body.vm-static-blog{overflow-x:clip;overflow-y:visible}
   /* Login is the primary action in this bar — same gradient pill as the
      homepage header, so the two do not look like different sites. */
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]{
-    background:linear-gradient(90deg,#66a3ce,#94152b);
+    background:linear-gradient(90deg,#3d7ba8,#94152b);
     color:#fff;padding:11px 26px;border-radius:10px;font-weight:600;
   }
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]:hover{
@@ -195,322 +229,6 @@
   .vm-footer-simple a{color:#6b7280}
 
 </style>
-</head>
-<body class="vm-static-blog">
-
-<header class="vm-header-simple">
-  <a href="/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.webp" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none" width="512" height="512"></a>
-  <nav>
-    <details class="vm-solutions-dd">
-    <summary>Lösungen</summary>
-    <div class="vm-solutions-panel" data-title="Lösungen">
-      <button type="button" class="vm-solutions-close" aria-label="Menü schließen">&times;</button>
-      <ul class="vm-solutions-grid">
-        <li><a href="/ki-loesungen/agenten/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></span><span class="vm-sol-tx">KI-Agenten für Marketing &amp; Ads</span></a></li>
-        <li><a href="/ki-loesungen/coding-api/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span><span class="vm-sol-tx">Coding-API &amp; MCP-Server</span></a></li>
-        <li><a href="/ki-loesungen/produktfotos-ki/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="vm-sol-tx">KI-Produktfotos &amp; Virtual Try-On</span></a></li>
-        <li><a href="/ki-loesungen/feed-veredelung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16M4 12h16M4 19h9"/></svg></span><span class="vm-sol-tx">KI Feed-Veredelung</span></a></li>
-        <li><a href="/ki-loesungen/texte-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 6h14M5 12h14M5 18h8"/></svg></span><span class="vm-sol-tx">KI-Textgenerierung</span></a></li>
-        <li><a href="/ki-loesungen/bilder-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg></span><span class="vm-sol-tx">KI-Bildgenerierung</span></a></li>
-        <li><a href="/ki-loesungen/videos-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/></svg></span><span class="vm-sol-tx">KI-Videogenerierung</span></a></li>
-        <li><a href="/ki-loesungen/seo-content/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span class="vm-sol-tx">KI-SEO-Content</span></a></li>
-        <li><a href="/ki-loesungen/kampagnen-builder/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10v4h4l6 4V6l-6 4H4z"/><path d="M18 9a4 4 0 010 6"/></svg></span><span class="vm-sol-tx">KI-Kampagnen-Builder</span></a></li>
-        <li><a href="/ki-loesungen/interne-verlinkung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 006 0l3-3a4 4 0 10-6-6l-1 1"/><path d="M14 10a4 4 0 00-6 0l-3 3a4 4 0 106 6l1-1"/></svg></span><span class="vm-sol-tx">Interne Verlinkung</span></a></li>
-        <li><a href="/ki-loesungen/mail-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg></span><span class="vm-sol-tx">KI-E-Mail-Generator</span></a></li>
-        <li><a href="/ki-loesungen/social-publisher/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.5 11l6-4M8.5 13l6 4"/></svg></span><span class="vm-sol-tx">KI Social Publisher</span></a></li>
-        <li><a href="/ki-loesungen/bulk-texte/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 13l8 4 8-4"/></svg></span><span class="vm-sol-tx">KI Bulk-Generator</span></a></li>
-        <li><a href="/ki-loesungen/ki-dateien/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="vm-sol-tx">Dateien &amp; Berichte</span></a></li>
-        <li><a href="/ki-loesungen/feed-optimierung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8h10M18 8h2M4 16h4M12 16h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/></svg></span><span class="vm-sol-tx">Feed-Optimizer</span></a></li>
-        <li><a href="/ki-loesungen/chat-insights/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12a7 7 0 01-7 7H8l-4 3v-5a7 7 0 017-9h2a7 7 0 017 4z"/></svg></span><span class="vm-sol-tx">Chat-Insights</span></a></li>
-      </ul>
-      <ul class="vm-solutions-foot"><li><a href="/ki-loesungen/">Alle Lösungen im Überblick &rarr;</a></li></ul>
-    </div>
-  </details><style>
-  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
-  /* Vertical alignment with the sibling nav links.
-     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
-     while a bare <summary> is only as tall as its text, so with both boxes
-     starting at the same y the label sat 11px above "Blog" and "API".
-     Stretching the wrapper to the flex row's height and centring inside it
-     matches whatever the theme happens to use, instead of hardcoding this
-     theme's padding and breaking again the next time it changes. */
-  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
-  .vm-solutions-dd{align-self:stretch;}
-  /* align-self:stretch above computes correctly but the theme's flex row still
-     leaves the item at its content height, so the summary is matched to the
-     sibling anchors' box directly: they are line-height 35px inside 10px
-     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
-     only when replacing the legacy theme nav — so it cannot leak into
-     .vm-header-simple, where the generated pages set their own metrics. */
-  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
-  .vm-solutions-dd > summary{
-    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
-    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
-  }
-  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
-  .vm-solutions-dd > summary::marker{content:'';}
-  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
-     the label's baseline the way a "▾" character does. */
-  .vm-solutions-dd > summary::after{
-    content:'';width:7px;height:7px;flex:0 0 auto;
-    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
-    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
-  }
-  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
-  .vm-solutions-dd > summary,
-  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
-
-  .vm-solutions-panel{
-    position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
-    width:min(820px,calc(100vw - 32px));
-    background:#fff;border:1px solid #ece4e5;border-radius:18px;
-    box-shadow:0 28px 68px rgba(36,20,23,.20);
-    padding:18px;margin:0;z-index:99999;
-  }
-  .vm-solutions-grid{
-    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
-    margin:0;padding:0;list-style:none;
-  }
-  .vm-solutions-grid li{margin:0;padding:0;}
-  /* Two classes in the selector on purpose. The theme styles these links via
-     .main-navigation ul li li a (one class, four elements) and
-     .main-navigation ul > li > a, both of which outrank a bare
-     .vm-solutions-grid a. Class count is compared before element count, so
-     scoping to the panel wins cleanly without resorting to !important. */
-  .vm-solutions-panel .vm-solutions-grid a{
-    display:flex;align-items:center;gap:11px;
-    padding:10px 11px;border-radius:10px;
-    color:#241417;text-decoration:none;
-    /* The theme uppercases and nowraps its nav links. Inherited into a
-       three-column grid that produced the overlap this panel was reported
-       for: labels ran straight through their neighbours instead of wrapping.
-       Both are reset here rather than fought with !important elsewhere. */
-    text-transform:none;white-space:normal;
-    font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
-  }
-  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
-  .vm-sol-ic{
-    flex:0 0 auto;display:grid;place-items:center;
-    width:32px;height:32px;border-radius:9px;
-    background:#f6eff0;color:#94152b;
-  }
-  .vm-sol-ic svg{width:17px;height:17px;display:block;}
-  .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
-  .vm-sol-tx{min-width:0;}
-  .vm-solutions-foot{
-    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
-  }
-  .vm-solutions-panel .vm-solutions-foot a{
-    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
-    text-decoration:none;padding:4px 12px;text-transform:none;
-  }
-  .vm-solutions-foot a:hover{text-decoration:underline;}
-
-  /* --- Mobile: a real full-screen drawer -------------------------------
-     Below 900px the panel used to render inline, which pushed the whole
-     header open and buried the page under a 16-item list. It is now an
-     overlay pinned to the viewport with its own header and scroll area, so
-     it behaves like a drawer instead of an expanding accordion. */
-  @media (max-width:900px){
-    .vm-solutions-dd{position:static;}
-    .vm-solutions-panel{
-      position:fixed;inset:0;top:0;left:0;transform:none;
-      width:100vw;height:100dvh;max-height:100dvh;
-      border:0;border-radius:0;box-shadow:none;
-      padding:calc(env(safe-area-inset-top) + 64px) 16px calc(env(safe-area-inset-bottom) + 24px);
-      overflow-y:auto;-webkit-overflow-scrolling:touch;
-      animation:vmDrawerIn .18s ease-out;
-    }
-    .vm-solutions-panel::before{
-      content:attr(data-title);
-      position:fixed;top:0;left:0;right:0;height:56px;
-      display:flex;align-items:center;padding:0 16px;
-      background:#fff;border-bottom:1px solid #ece4e5;
-      font-weight:700;font-size:16px;color:#241417;
-    }
-    .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
-    .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
-    .vm-sol-ic{width:36px;height:36px;}
-    .vm-sol-ic svg{width:19px;height:19px;}
-    .vm-solutions-foot a{font-size:15px;}
-    /* Stop the page behind the drawer from scrolling with it. */
-    html:has(.vm-solutions-dd[open]) body{overflow:hidden;}
-  }
-  @keyframes vmDrawerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-  /* The legacy theme already has a full-screen off-canvas menu, and it slides
-     in with a transform. A transformed ancestor becomes the containing block
-     for position:fixed, so the drawer above rendered *inside* it landed one
-     viewport off-screen (measured at left:375 on a 375px viewport). Inside
-     that wrapper the panel therefore renders inline and lets the theme's own
-     drawer be the drawer — nesting a second full-screen overlay inside the
-     first is the actual mistake. The fixed drawer still applies on the
-     generated pages, whose header has no off-canvas container. */
-  @media (max-width:900px){
-    .mmenu-wrapper .vm-solutions-panel{
-      position:static;width:auto;height:auto;max-height:none;
-      padding:4px 0 0;overflow:visible;animation:none;
-    }
-    .mmenu-wrapper .vm-solutions-panel::before{display:none;}
-    .mmenu-wrapper .vm-solutions-close{display:none;}
-    .mmenu-wrapper .vm-solutions-grid a{padding:11px 8px;font-size:14px;}
-  }
-  .vm-solutions-close{display:none;}
-  @media (max-width:900px){
-    .vm-solutions-close{
-      display:block;position:fixed;top:8px;right:10px;z-index:1;
-      width:40px;height:40px;border:0;background:none;
-      font-size:30px;line-height:1;color:#241417;cursor:pointer;
-    }
-  }
-</style>
-<script>
-(function(){
-  // <details> has no concept of "dismiss" — without this the panel stays open
-  // until the summary is clicked again, which feels broken next to every other
-  // menu on the web.
-  document.addEventListener('click', function(e){
-    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
-      if(!d.contains(e.target)) d.removeAttribute('open');
-    });
-  });
-  document.addEventListener('click', function(e){
-    if(!e.target.closest('.vm-solutions-close')) return;
-    var d = e.target.closest('details.vm-solutions-dd');
-    if(d) d.removeAttribute('open');
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key !== 'Escape') return;
-    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
-      d.removeAttribute('open');
-    });
-  });
-})();
-</script>
-    <a href="/blog/">Blog</a>
-    <a href="https://api.virtual-marketer.de/documentation/">API</a>
-    <a href="/modell-anfragen/">Modell anfragen</a>
-    <a href="/kontakt/">Kontakt</a>
-    <a href="https://login.virtual-marketer.de/">Login</a>
-  </nav>
-</header>
-
-<main class="vm-post">
-  <article>
-    <span class="vm-category">Regulierung & Compliance</span>
-    <h1>Artikel 50 gilt: KI-Inhalte jetzt richtig kennzeichnen</h1>
-    <div class="vm-meta">
-      <span>4. August 2026</span> · <span>Virtual Marketer Team</span>
-    </div>
-
-    <p>Seit dem 2. August 2026 gelten die Transparenzpflichten nach Artikel 50 der EU-KI-Verordnung. Für Marketingabteilungen bedeutet das drei konkrete Dinge: Wer mit einem KI-System kommuniziert, muss das erkennen können; realistisch wirkende künstliche Darstellungen realer Personen, Orte oder Ereignisse müssen offengelegt werden; und KI-erzeugte Texte zu Angelegenheiten von öffentlichem Interesse müssen gekennzeichnet werden, sofern kein Mensch sie geprüft und redaktionell verantwortet hat. Alles andere – Produkttexte, Anzeigen, Newsletter – ist von dieser Pflicht nicht erfasst.</p>
-
-<p>Fast zeitgleich hat Deutschland die nationale Aufsicht geregelt: Das KI-Marktüberwachungs- und Innovationsförderungs-Gesetz ist am 29. Juli 2026 in Kraft getreten und macht die Bundesnetzagentur zur zentralen Marktüberwachungsbehörde, Anlaufstelle und Beschwerdestelle für die KI-Verordnung. Sie richtet zugleich einen KI-Service-Desk und KI-Reallabore ein – also Beratungs- und Erprobungsangebote, nicht nur Kontrolle.</p>
-
-<h2>Was gilt für Betreiber konkret?</h2>
-
-<table>
-<thead>
-<tr><th>Situation im Marketing</th><th>Pflicht seit 2. August 2026</th></tr>
-</thead>
-<tbody>
-<tr><td>Chatbot, Voicebot, automatisierte Antwort im Messenger</td><td>Hinweis, dass eine Maschine antwortet – außer es ist aus dem Zusammenhang offensichtlich</td></tr>
-<tr><td>Generiertes Testimonial, nachgebildete Stimme, künstliche Darstellung eines realen Ortes</td><td>sichtbare Offenlegung, dass die Darstellung künstlich erzeugt oder verändert ist</td></tr>
-<tr><td>Generierter Text zu einer Angelegenheit von öffentlichem Interesse</td><td>Kennzeichnung – entfällt bei menschlicher Prüfung mit redaktioneller Verantwortung</td></tr>
-<tr><td>Systeme zur Emotionserkennung oder biometrischen Kategorisierung</td><td>Information der betroffenen Personen</td></tr>
-<tr><td>Produktbeschreibung, Anzeigentext, Newsletter, Social-Post</td><td>keine gesonderte Kennzeichnungspflicht aus Artikel 50</td></tr>
-</tbody>
-</table>
-
-<p>Die letzte Zeile ist die, die in den vergangenen Monaten am häufigsten falsch verstanden wurde. Es gibt keine allgemeine Pflicht, jeden mit KI-Unterstützung entstandenen Werbetext als solchen auszuweisen. Wer trotzdem pauschal kennzeichnet, verstößt gegen nichts – erzeugt aber Aufwand ohne Nutzen und lenkt Aufmerksamkeit von den Fällen ab, in denen die Offenlegung tatsächlich verlangt wird.</p>
-
-<h3>Was Anbieter tun müssen, und was das für Sie heißt</h3>
-
-<p>Die maschinenlesbare Markierung generierter Inhalte ist Aufgabe der Anbieter der eingesetzten Systeme, nicht der Marketingabteilung. Für bereits vor dem 2. August 2026 auf dem Markt befindliche Systeme sieht die im Juli 2026 beschlossene Änderungsverordnung – der Digital Omnibus – eine Übergangsfrist von vier Monaten vor. Praktisch heißt das: Verlassen Sie sich in den kommenden Monaten nicht darauf, dass jede Ausgabe bereits technisch markiert ist. Fragen Sie beim Anbieter nach, ab wann markiert wird und in welcher Form, und legen Sie die Antwort ab.</p>
-
-<h2>Wie sieht eine Kennzeichnung aus, die trägt?</h2>
-
-<p>Die Verordnung schreibt keine bestimmte Gestaltung vor. Der von der EU-Kommission am 10. Juni 2026 veröffentlichte Verhaltenskodex zur Kennzeichnung KI-erzeugter Inhalte nennt als Möglichkeiten unter anderem das öffentlich verfügbare EU-Symbol oder gleichwertige Hinweise, bei Tonaufnahmen auch eine gesprochene Ansage. Aus der Praxis lassen sich vier Anforderungen ableiten:</p>
-
-<ul>
-<li><strong>Am Inhalt, nicht in den Nutzungsbedingungen.</strong> Ein Satz im Kleingedruckten erfüllt den Zweck nicht.</li>
-<li><strong>Vor der Wahrnehmung, nicht danach.</strong> Beim Chatbot in der Begrüßung, beim Bild in unmittelbarer Nähe, beim Video am Anfang.</li>
-<li><strong>Einheitlich über alle Kanäle.</strong> Uneinheitliche Hinweise wirken beliebig und laden zu Rückfragen ein.</li>
-<li><strong>Ohne Entschuldigungston.</strong> »Diese Stimme wurde künstlich erzeugt« ist eine Information. Formulierungen, die den Einsatz rechtfertigen, wirken defensiv und lenken vom Inhalt ab.</li>
-</ul>
-
-<h3>Der Aufwand wird als hoch empfunden – zu Recht?</h3>
-
-<p>Die Bitkom-Studie »Künstliche Intelligenz in Deutschland« vom Februar 2026 zeigt ein deutliches Stimmungsbild: 93 Prozent der vom AI Act betroffenen Unternehmen sehen mit dessen Umsetzung einen »eher« oder »sehr« hohen Aufwand verbunden, 56 Prozent aller befragten Unternehmen stimmen der Aussage zu, dass die Verordnung mehr Nachteile als Vorteile für deutsche Unternehmen schaffe. Grundlage ist eine repräsentative telefonische Befragung von 604 Unternehmen ab 20 Beschäftigten.</p>
-
-<p>Für die Transparenzpflichten selbst lässt sich dieser Eindruck aus der Praxis nur teilweise bestätigen. Der eigentliche Aufwand liegt selten in der Kennzeichnung, sondern davor: Zu wissen, welche Systeme im Haus überhaupt Ausgaben mit Außenwirkung erzeugen. Wo diese Inventur existiert, ist die Umsetzung eine Sache von Tagen. Wo sie fehlt, wird sie jetzt unter Zeitdruck nachgeholt – und genau das erklärt einen Großteil des empfundenen Aufwands.</p>
-
-<h2>Eine Prüfliste für die kommenden Wochen</h2>
-
-<p>Für die meisten Marketingabteilungen ist die Umsetzung überschaubar, wenn sie strukturiert angegangen wird. Sechs Punkte reichen.</p>
-
-<ol>
-<li><strong>Liste aller Anwendungen mit Außenwirkung</strong> – inklusive der KI-Funktionen, die in Shop-, Newsletter- und Werbesystemen mitgeliefert werden und die niemand bewusst eingeführt hat.</li>
-<li><strong>Rolle je Anwendung bestimmen:</strong> Betreiber oder Anbieter. Wer ein System unter eigenem Namen bereitstellt oder wesentlich verändert, kann in die Anbieterrolle geraten.</li>
-<li><strong>Betroffene Fallgruppen markieren:</strong> Dialogsysteme, Deepfakes, Texte zu Angelegenheiten von öffentlichem Interesse, Emotionserkennung.</li>
-<li><strong>Hinweise einbauen</strong> – am Inhalt, vor der Wahrnehmung, einheitlich über alle Kanäle.</li>
-<li><strong>Freigabe nachvollziehbar machen:</strong> wer prüft, woraufhin, und wo ist das dokumentiert.</li>
-<li><strong>Anbieterauskünfte ablegen:</strong> ob und wie markiert wird, ab wann, und ob der Verhaltenskodex unterzeichnet wurde.</li>
-</ol>
-
-<h3>Der Punkt, an dem es in der Praxis hakt</h3>
-
-<p>Erfahrungsgemäß ist nicht die Kennzeichnung das Problem, sondern Punkt eins. In gewachsenen Marketingorganisationen weiß niemand vollständig, welche Systeme im Einsatz sind – weil KI-Funktionen zunehmend Bestandteil von Werkzeugen sind, die als etwas anderes eingekauft wurden. Die Inventur setzt deshalb sinnvoll nicht bei der Softwareliste an, sondern bei den Arbeitsschritten: Von der Idee bis zur Veröffentlichung wird für jeden Schritt gefragt, ob dort automatisch etwas erzeugt wird.</p>
-
-<p>Wo dieser Durchgang bereits im Frühjahr stattgefunden hat, ist die Umsetzung eine Sache weniger Handgriffe. Wo er fehlt, sollte er jetzt nachgeholt werden – er ist ohnehin die Grundlage für die nächsten regulatorischen Termine und zugleich für jede sinnvolle Diskussion darüber, wo sich der Einsatz wirtschaftlich lohnt.</p>
-
-<h3>Was sich in der Praxis nun beobachten lässt</h3>
-
-<p>In den ersten Wochen zeigt sich erfahrungsgemäß dreierlei. Erstens werden Hinweise oft zu defensiv formuliert – lange Erklärungen, warum ein Werkzeug eingesetzt wurde, obwohl eine sachliche Feststellung genügt. Zweitens wird zu viel gekennzeichnet, weil im Zweifel alle Ausgaben mit einem Hinweis versehen werden; das schwächt die Aussagekraft dort, wo sie gebraucht wird. Drittens fehlen Hinweise ausgerechnet bei automatisierten Antworten in Kanälen, an die niemand gedacht hat: Messenger, Bewertungsplattformen, Kommentarfunktionen.</p>
-
-<p>Ein kurzer Durchgang durch alle Kanäle, in denen automatisch geantwortet wird, ist deshalb die lohnendste Kontrolle der kommenden Wochen – und sie dauert selten länger als einen Vormittag.</p>
-
-<h3>Was die Aufsicht in der Anfangszeit erwarten dürfte</h3>
-
-<p>Aus dem Zuschnitt des KI-Marktüberwachungs- und Innovationsförderungs-Gesetzes lässt sich ablesen, dass die erste Phase auf Beratung und Beschwerdebearbeitung angelegt ist – Service-Desk und Reallabore sind ausdrücklich Teil des Auftrags. Wer eine nachvollziehbare Einordnung seiner Anwendungen vorlegen kann, steht deshalb auch dann gut da, wenn im Einzelfall eine andere Bewertung vertretbar wäre. Was fehlt, ist nicht die perfekte Kennzeichnung, sondern die begründete Entscheidung.</p>
-
-<h2>Häufige Fragen</h2>
-
-<h3>Wer kontrolliert das in Deutschland?</h3>
-<p>Seit dem 29. Juli 2026 ist die Bundesnetzagentur zentrale Marktüberwachungsbehörde, Anlaufstelle und Beschwerdestelle für die KI-Verordnung. Sie bietet zugleich Unterstützungsangebote wie einen KI-Service-Desk und Reallabore an. Bestehende Zuständigkeiten anderer Marktüberwachungsbehörden bleiben daneben erhalten.</p>
-
-<h3>Was kostet ein Verstoß?</h3>
-<p>Für Verstöße gegen die Transparenzpflichten sieht die KI-Verordnung Geldbußen von bis zu 15 Millionen Euro oder 3 Prozent des weltweiten Jahresumsatzes vor, je nachdem, welcher Betrag höher ist; für kleine und mittlere Unternehmen gilt der niedrigere Wert als Obergrenze. Praktisch relevanter ist für die meisten Häuser jedoch der Vertrauensschaden, wenn eine nicht offengelegte künstliche Darstellung entdeckt wird.</p>
-
-<h3>Was ist mit der Pflicht zur KI-Kompetenz?</h3>
-<p>Artikel 4 gilt bereits seit dem 2. Februar 2025. Neu ist, dass die Aufsichts- und Durchsetzungsvorschriften der Verordnung ab dem 3. August 2026 greifen. Ein Nachweis über Zertifikate wird nach den Antworten der EU-Kommission vom 12. Mai 2025 nicht verlangt – wohl aber ein nachvollziehbarer Kenntnisstand, den man intern dokumentieren sollte.</p>
-
-<p>Wer die drei betroffenen Fallgruppen im eigenen Haus benannt, die Hinweise eingebaut und die Freigabe dokumentiert hat, ist an dieser Stelle fertig. Der nächste Termin liegt ohnehin schon im Kalender: Am 27. September 2026 gelten die neuen UWG-Regeln zu Umweltaussagen – und die betreffen deutlich mehr Produkttexte als Artikel 50.</p>
-
-
-    <div class="vm-cta">
-      <strong>Bereit für KI-Marketinglösungen?</strong>
-      <p>Erfahren Sie in einer unverbindlichen Demo, wie Virtual Marketer Ihr Marketing automatisiert.</p>
-      <a href="/virtual-marketer-demo/">Demo buchen</a>
-    </div>
-
-    <div class="vm-related">
-      <h3>Weitere Artikel</h3>
-      <ul>
-        <li><a href="/blog/personalisierung-vs-datenschutz-gdpr-2026/">KI-gesteuerte Personalisierung vs. Datenschutz: GDPR-konform in 2026</a></li>
-        <li><a href="/blog/seo-im-zeitalter-der-ki-suche/">SEO im Zeitalter der KI-Suche: Von Keywords zu E-E-A-T</a></li>
-        <li><a href="/blog/digital-omnibus-ki-fristen-2026/">Digital Omnibus: welche KI-Fristen jetzt gelten</a></li>
-      </ul>
-    </div>
-  </article>
-</main>
-
-<footer class="vm-footer-simple">
-  &copy; 2026 SGS Virtual Marketer GmbH &middot;
-  <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> &middot;
-  <a href="/impressum/">Impressum</a>
-</footer>
-
 <style id="vm-mobile-polish">
 /* ==========================================================================
    Mobile polish — see scripts/mobile-polish.js
@@ -718,6 +436,338 @@ html { scroll-padding-top: 76px; }
   }
 }
 </style>
+<style id="vm-a11y-links">
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):not([aria-hidden="true"]){
+  text-decoration:underline;
+  text-underline-offset:2px;
+  text-decoration-thickness:1px;
+}
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):hover{
+  text-decoration-thickness:2px;
+}
+/* The share row and any icon-only link inside a list item: an underline under
+   a glyph is noise, and the link is not a text link. */
+:is(p,li) > a:has(> svg:only-child),
+:is(p,li) > a:has(> i:only-child){text-decoration:none}
+</style>
+<style id="vm-ilink-style">.vm-ilink{color:#94152b;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}.vm-ilink:hover{color:#700f2b;text-decoration-thickness:2px}</style>
+</head>
+<body class="vm-static-blog">
+
+<header class="vm-header-simple">
+  <a href="/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.webp" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none" width="512" height="512"></a>
+  <nav>
+    <details class="vm-solutions-dd">
+    <summary>Lösungen</summary>
+    <div class="vm-solutions-panel" data-title="Lösungen">
+      <button type="button" class="vm-solutions-close" aria-label="Menü schließen">&times;</button>
+      <ul class="vm-solutions-grid">
+        <li><a href="/ki-loesungen/agenten/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></span><span class="vm-sol-tx">KI-Agenten für Marketing &amp; Ads</span></a></li>
+        <li><a href="/ki-loesungen/coding-api/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span><span class="vm-sol-tx">Coding-API &amp; MCP-Server</span></a></li>
+        <li><a href="/ki-loesungen/produktfotos-ki/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="vm-sol-tx">Product Staging: KI-Produktfotos</span></a></li>
+        <li><a href="/ki-loesungen/feed-veredelung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16M4 12h16M4 19h9"/></svg></span><span class="vm-sol-tx">KI Feed-Veredelung</span></a></li>
+        <li><a href="/ki-loesungen/texte-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 6h14M5 12h14M5 18h8"/></svg></span><span class="vm-sol-tx">KI-Textgenerierung</span></a></li>
+        <li><a href="/ki-loesungen/bilder-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg></span><span class="vm-sol-tx">KI-Bildgenerierung</span></a></li>
+        <li><a href="/ki-loesungen/videos-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/></svg></span><span class="vm-sol-tx">KI-Videogenerierung</span></a></li>
+        <li><a href="/ki-loesungen/seo-content/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span class="vm-sol-tx">KI-SEO-Content</span></a></li>
+        <li><a href="/ki-loesungen/kampagnen-builder/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10v4h4l6 4V6l-6 4H4z"/><path d="M18 9a4 4 0 010 6"/></svg></span><span class="vm-sol-tx">KI-Kampagnen-Builder</span></a></li>
+        <li><a href="/ki-loesungen/interne-verlinkung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 006 0l3-3a4 4 0 10-6-6l-1 1"/><path d="M14 10a4 4 0 00-6 0l-3 3a4 4 0 106 6l1-1"/></svg></span><span class="vm-sol-tx">Interne Verlinkung</span></a></li>
+        <li><a href="/ki-loesungen/mail-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg></span><span class="vm-sol-tx">KI-E-Mail-Generator</span></a></li>
+        <li><a href="/ki-loesungen/social-publisher/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.5 11l6-4M8.5 13l6 4"/></svg></span><span class="vm-sol-tx">KI Social Publisher</span></a></li>
+        <li><a href="/ki-loesungen/bulk-texte/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 13l8 4 8-4"/></svg></span><span class="vm-sol-tx">KI Bulk-Generator</span></a></li>
+        <li><a href="/ki-loesungen/ki-dateien/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="vm-sol-tx">Dateien &amp; Berichte</span></a></li>
+        <li><a href="/ki-loesungen/feed-optimierung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8h10M18 8h2M4 16h4M12 16h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/></svg></span><span class="vm-sol-tx">Feed-Optimizer</span></a></li>
+        <li><a href="/ki-loesungen/chat-insights/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12a7 7 0 01-7 7H8l-4 3v-5a7 7 0 017-9h2a7 7 0 017 4z"/></svg></span><span class="vm-sol-tx">Chat-Insights</span></a></li>
+      </ul>
+      <ul class="vm-solutions-foot"><li><a href="/ki-loesungen/">Alle Lösungen im Überblick &rarr;</a></li></ul>
+    </div>
+  </details><style>
+  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
+  /* Vertical alignment with the sibling nav links.
+     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
+     while a bare <summary> is only as tall as its text, so with both boxes
+     starting at the same y the label sat 11px above "Blog" and "API".
+     Stretching the wrapper to the flex row's height and centring inside it
+     matches whatever the theme happens to use, instead of hardcoding this
+     theme's padding and breaking again the next time it changes. */
+  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
+  .vm-solutions-dd{align-self:stretch;}
+  /* align-self:stretch above computes correctly but the theme's flex row still
+     leaves the item at its content height, so the summary is matched to the
+     sibling anchors' box directly: they are line-height 35px inside 10px
+     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
+     only when replacing the legacy theme nav — so it cannot leak into
+     .vm-header-simple, where the generated pages set their own metrics. */
+  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
+  .vm-solutions-dd > summary{
+    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
+    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
+  }
+  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
+  .vm-solutions-dd > summary::marker{content:'';}
+  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
+     the label's baseline the way a "▾" character does. */
+  .vm-solutions-dd > summary::after{
+    content:'';width:7px;height:7px;flex:0 0 auto;
+    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
+  }
+  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
+  .vm-solutions-dd > summary,
+  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
+
+  .vm-solutions-panel{
+    position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
+    width:min(820px,calc(100vw - 32px));
+    background:#fff;border:1px solid #ece4e5;border-radius:18px;
+    box-shadow:0 28px 68px rgba(36,20,23,.20);
+    padding:18px;margin:0;z-index:99999;
+  }
+  .vm-solutions-grid{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
+    margin:0;padding:0;list-style:none;
+  }
+  .vm-solutions-grid li{margin:0;padding:0;}
+  /* Two classes in the selector on purpose. The theme styles these links via
+     .main-navigation ul li li a (one class, four elements) and
+     .main-navigation ul > li > a, both of which outrank a bare
+     .vm-solutions-grid a. Class count is compared before element count, so
+     scoping to the panel wins cleanly without resorting to !important. */
+  .vm-solutions-panel .vm-solutions-grid a{
+    display:flex;align-items:center;gap:11px;
+    padding:10px 11px;border-radius:10px;
+    color:#241417;text-decoration:none;
+    /* The theme uppercases and nowraps its nav links. Inherited into a
+       three-column grid that produced the overlap this panel was reported
+       for: labels ran straight through their neighbours instead of wrapping.
+       Both are reset here rather than fought with !important elsewhere. */
+    text-transform:none;white-space:normal;
+    font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
+  }
+  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
+  .vm-sol-ic{
+    flex:0 0 auto;display:grid;place-items:center;
+    width:32px;height:32px;border-radius:9px;
+    background:#f6eff0;color:#94152b;
+  }
+  .vm-sol-ic svg{width:17px;height:17px;display:block;}
+  .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
+  .vm-sol-tx{min-width:0;}
+  .vm-solutions-foot{
+    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
+  }
+  .vm-solutions-panel .vm-solutions-foot a{
+    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
+    text-decoration:none;padding:4px 12px;text-transform:none;
+  }
+  .vm-solutions-foot a:hover{text-decoration:underline;}
+
+  /* --- Mobile: a real full-screen drawer -------------------------------
+     Below 900px the panel used to render inline, which pushed the whole
+     header open and buried the page under a 16-item list. It is now an
+     overlay pinned to the viewport with its own header and scroll area, so
+     it behaves like a drawer instead of an expanding accordion. */
+  @media (max-width:900px){
+    .vm-solutions-dd{position:static;}
+    .vm-solutions-panel{
+      position:fixed;inset:0;top:0;left:0;transform:none;
+      width:100vw;height:100dvh;max-height:100dvh;
+      border:0;border-radius:0;box-shadow:none;
+      padding:calc(env(safe-area-inset-top) + 64px) 16px calc(env(safe-area-inset-bottom) + 24px);
+      overflow-y:auto;-webkit-overflow-scrolling:touch;
+      animation:vmDrawerIn .18s ease-out;
+    }
+    .vm-solutions-panel::before{
+      content:attr(data-title);
+      position:fixed;top:0;left:0;right:0;height:56px;
+      display:flex;align-items:center;padding:0 16px;
+      background:#fff;border-bottom:1px solid #ece4e5;
+      font-weight:700;font-size:16px;color:#241417;
+    }
+    .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
+    .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
+    .vm-sol-ic{width:36px;height:36px;}
+    .vm-sol-ic svg{width:19px;height:19px;}
+    .vm-solutions-foot a{font-size:15px;}
+    /* Stop the page behind the drawer from scrolling with it. */
+    html:has(.vm-solutions-dd[open]) body{overflow:hidden;}
+  }
+  @keyframes vmDrawerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* The legacy theme already has a full-screen off-canvas menu, and it slides
+     in with a transform. A transformed ancestor becomes the containing block
+     for position:fixed, so the drawer above rendered *inside* it landed one
+     viewport off-screen (measured at left:375 on a 375px viewport). Inside
+     that wrapper the panel therefore renders inline and lets the theme's own
+     drawer be the drawer — nesting a second full-screen overlay inside the
+     first is the actual mistake. The fixed drawer still applies on the
+     generated pages, whose header has no off-canvas container. */
+  @media (max-width:900px){
+    .mmenu-wrapper .vm-solutions-panel{
+      position:static;width:auto;height:auto;max-height:none;
+      padding:4px 0 0;overflow:visible;animation:none;
+    }
+    .mmenu-wrapper .vm-solutions-panel::before{display:none;}
+    .mmenu-wrapper .vm-solutions-close{display:none;}
+    .mmenu-wrapper .vm-solutions-grid a{padding:11px 8px;font-size:14px;}
+  }
+  .vm-solutions-close{display:none;}
+  @media (max-width:900px){
+    .vm-solutions-close{
+      display:block;position:fixed;top:8px;right:10px;z-index:1;
+      width:40px;height:40px;border:0;background:none;
+      font-size:30px;line-height:1;color:#241417;cursor:pointer;
+    }
+  }
+</style>
+<script>
+(function(){
+  // <details> has no concept of "dismiss" — without this the panel stays open
+  // until the summary is clicked again, which feels broken next to every other
+  // menu on the web.
+  document.addEventListener('click', function(e){
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      if(!d.contains(e.target)) d.removeAttribute('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.vm-solutions-close')) return;
+    var d = e.target.closest('details.vm-solutions-dd');
+    if(d) d.removeAttribute('open');
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape') return;
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      d.removeAttribute('open');
+    });
+  });
+})();
+</script>
+    <a href="/blog/">Blog</a>
+    <a href="https://api.virtual-marketer.de/documentation/">API</a>
+    <a href="/modell-anfragen/">Modell anfragen</a>
+    <a href="/kontakt/">Kontakt</a>
+    <a href="https://login.virtual-marketer.de/">Login</a>
+  </nav>
+</header>
+
+<main class="vm-post">
+  <article>
+    <span class="vm-category">Regulierung & Compliance</span>
+    <h1>Artikel 50 gilt: KI-Inhalte jetzt richtig kennzeichnen</h1>
+    <div class="vm-meta">
+      <span>4. August 2026</span> · <span>Virtual Marketer Team</span>
+    </div>
+
+    <p>Seit dem 2. August 2026 gelten die Transparenzpflichten nach Artikel 50 der EU-KI-Verordnung. Für Marketingabteilungen bedeutet das drei konkrete Dinge: Wer mit einem KI-System kommuniziert, muss das erkennen können; realistisch wirkende künstliche Darstellungen realer Personen, Orte oder Ereignisse müssen offengelegt werden; und KI-erzeugte Texte zu Angelegenheiten von öffentlichem Interesse müssen gekennzeichnet werden, sofern kein Mensch sie geprüft und redaktionell verantwortet hat. Alles andere – <a href="/ki-loesungen/texte-generieren/" class="vm-ilink">Produkttexte</a>, Anzeigen, <a href="/ki-loesungen/mail-generator/" class="vm-ilink">Newsletter</a> – ist von dieser Pflicht nicht erfasst.</p>
+
+<p>Fast zeitgleich hat Deutschland die nationale Aufsicht geregelt: Das KI-Marktüberwachungs- und Innovationsförderungs-Gesetz ist am 29. Juli 2026 in Kraft getreten und macht die Bundesnetzagentur zur zentralen Marktüberwachungsbehörde, Anlaufstelle und Beschwerdestelle für die KI-Verordnung. Sie richtet zugleich einen KI-Service-Desk und KI-Reallabore ein – also Beratungs- und Erprobungsangebote, nicht nur Kontrolle.</p>
+
+<h2>Was gilt für Betreiber konkret?</h2>
+
+<table>
+<thead>
+<tr><th>Situation im Marketing</th><th>Pflicht seit 2. August 2026</th></tr>
+</thead>
+<tbody>
+<tr><td>Chatbot, Voicebot, automatisierte Antwort im Messenger</td><td>Hinweis, dass eine Maschine antwortet – außer es ist aus dem Zusammenhang offensichtlich</td></tr>
+<tr><td>Generiertes Testimonial, nachgebildete Stimme, künstliche Darstellung eines realen Ortes</td><td>sichtbare Offenlegung, dass die Darstellung künstlich erzeugt oder verändert ist</td></tr>
+<tr><td>Generierter Text zu einer Angelegenheit von öffentlichem Interesse</td><td>Kennzeichnung – entfällt bei menschlicher Prüfung mit redaktioneller Verantwortung</td></tr>
+<tr><td>Systeme zur Emotionserkennung oder biometrischen Kategorisierung</td><td>Information der betroffenen Personen</td></tr>
+<tr><td>Produktbeschreibung, Anzeigentext, Newsletter, Social-Post</td><td>keine gesonderte Kennzeichnungspflicht aus Artikel 50</td></tr>
+</tbody>
+</table>
+
+<p>Die letzte Zeile ist die, die in den vergangenen Monaten am häufigsten falsch verstanden wurde. Es gibt keine allgemeine Pflicht, jeden mit KI-Unterstützung entstandenen Werbetext als solchen auszuweisen. Wer trotzdem pauschal kennzeichnet, verstößt gegen nichts – erzeugt aber Aufwand ohne Nutzen und lenkt Aufmerksamkeit von den Fällen ab, in denen die Offenlegung tatsächlich verlangt wird.</p>
+
+<h3>Was Anbieter tun müssen, und was das für Sie heißt</h3>
+
+<p>Die maschinenlesbare Markierung generierter Inhalte ist Aufgabe der Anbieter der eingesetzten Systeme, nicht der Marketingabteilung. Für bereits vor dem 2. August 2026 auf dem Markt befindliche Systeme sieht die im Juli 2026 beschlossene Änderungsverordnung – der Digital Omnibus – eine Übergangsfrist von vier Monaten vor. Praktisch heißt das: Verlassen Sie sich in den kommenden Monaten nicht darauf, dass jede Ausgabe bereits technisch markiert ist. Fragen Sie beim Anbieter nach, ab wann markiert wird und in welcher Form, und legen Sie die Antwort ab.</p>
+
+<h2>Wie sieht eine Kennzeichnung aus, die trägt?</h2>
+
+<p>Die Verordnung schreibt keine bestimmte Gestaltung vor. Der von der EU-Kommission am 10. Juni 2026 veröffentlichte Verhaltenskodex zur Kennzeichnung KI-erzeugter Inhalte nennt als Möglichkeiten unter anderem das öffentlich verfügbare EU-Symbol oder gleichwertige Hinweise, bei Tonaufnahmen auch eine gesprochene Ansage. Aus der Praxis lassen sich vier Anforderungen ableiten:</p>
+
+<ul>
+<li><strong>Am Inhalt, nicht in den Nutzungsbedingungen.</strong> Ein Satz im Kleingedruckten erfüllt den Zweck nicht.</li>
+<li><strong>Vor der Wahrnehmung, nicht danach.</strong> Beim Chatbot in der Begrüßung, beim Bild in unmittelbarer Nähe, beim Video am Anfang.</li>
+<li><strong>Einheitlich über alle Kanäle.</strong> Uneinheitliche Hinweise wirken beliebig und laden zu Rückfragen ein.</li>
+<li><strong>Ohne Entschuldigungston.</strong> »Diese Stimme wurde künstlich erzeugt« ist eine Information. Formulierungen, die den Einsatz rechtfertigen, wirken defensiv und lenken vom Inhalt ab.</li>
+</ul>
+
+<h3>Der Aufwand wird als hoch empfunden – zu Recht?</h3>
+
+<p>Die Bitkom-Studie »Künstliche Intelligenz in Deutschland« vom Februar 2026 zeigt ein deutliches Stimmungsbild: 93 Prozent der vom AI Act betroffenen Unternehmen sehen mit dessen Umsetzung einen »eher« oder »sehr« hohen Aufwand verbunden, 56 Prozent aller befragten Unternehmen stimmen der Aussage zu, dass die Verordnung mehr Nachteile als Vorteile für deutsche Unternehmen schaffe. Grundlage ist eine repräsentative telefonische Befragung von 604 Unternehmen ab 20 Beschäftigten.</p>
+
+<p>Für die Transparenzpflichten selbst lässt sich dieser Eindruck aus der Praxis nur teilweise bestätigen. Der eigentliche Aufwand liegt selten in der Kennzeichnung, sondern davor: Zu wissen, welche Systeme im Haus überhaupt Ausgaben mit Außenwirkung erzeugen. Wo diese Inventur existiert, ist die Umsetzung eine Sache von Tagen. Wo sie fehlt, wird sie jetzt unter Zeitdruck nachgeholt – und genau das erklärt einen Großteil des empfundenen Aufwands.</p>
+
+<h2>Eine Prüfliste für die kommenden Wochen</h2>
+
+<p>Für die meisten Marketingabteilungen ist die Umsetzung überschaubar, wenn sie strukturiert angegangen wird. Sechs Punkte reichen.</p>
+
+<ol>
+<li><strong>Liste aller Anwendungen mit Außenwirkung</strong> – inklusive der KI-Funktionen, die in Shop-, Newsletter- und Werbesystemen mitgeliefert werden und die niemand bewusst eingeführt hat.</li>
+<li><strong>Rolle je Anwendung bestimmen:</strong> Betreiber oder Anbieter. Wer ein System unter eigenem Namen bereitstellt oder wesentlich verändert, kann in die Anbieterrolle geraten.</li>
+<li><strong>Betroffene Fallgruppen markieren:</strong> Dialogsysteme, Deepfakes, Texte zu Angelegenheiten von öffentlichem Interesse, Emotionserkennung.</li>
+<li><strong>Hinweise einbauen</strong> – am Inhalt, vor der Wahrnehmung, einheitlich über alle Kanäle.</li>
+<li><strong>Freigabe nachvollziehbar machen:</strong> wer prüft, woraufhin, und wo ist das dokumentiert.</li>
+<li><strong>Anbieterauskünfte ablegen:</strong> ob und wie markiert wird, ab wann, und ob der Verhaltenskodex unterzeichnet wurde.</li>
+</ol>
+
+<h3>Der Punkt, an dem es in der Praxis hakt</h3>
+
+<p>Erfahrungsgemäß ist nicht die Kennzeichnung das Problem, sondern Punkt eins. In gewachsenen Marketingorganisationen weiß niemand vollständig, welche Systeme im Einsatz sind – weil KI-Funktionen zunehmend Bestandteil von Werkzeugen sind, die als etwas anderes eingekauft wurden. Die Inventur setzt deshalb sinnvoll nicht bei der Softwareliste an, sondern bei den Arbeitsschritten: Von der Idee bis zur Veröffentlichung wird für jeden Schritt gefragt, ob dort automatisch etwas erzeugt wird.</p>
+
+<p>Wo dieser Durchgang bereits im Frühjahr stattgefunden hat, ist die Umsetzung eine Sache weniger Handgriffe. Wo er fehlt, sollte er jetzt nachgeholt werden – er ist ohnehin die Grundlage für die nächsten regulatorischen Termine und zugleich für jede sinnvolle Diskussion darüber, wo sich der Einsatz wirtschaftlich lohnt.</p>
+
+<h3>Was sich in der Praxis nun beobachten lässt</h3>
+
+<p>In den ersten Wochen zeigt sich erfahrungsgemäß dreierlei. Erstens werden Hinweise oft zu defensiv formuliert – lange Erklärungen, warum ein Werkzeug eingesetzt wurde, obwohl eine sachliche Feststellung genügt. Zweitens wird zu viel gekennzeichnet, weil im Zweifel alle Ausgaben mit einem Hinweis versehen werden; das schwächt die Aussagekraft dort, wo sie gebraucht wird. Drittens fehlen Hinweise ausgerechnet bei automatisierten Antworten in Kanälen, an die niemand gedacht hat: Messenger, Bewertungsplattformen, Kommentarfunktionen.</p>
+
+<p>Ein kurzer Durchgang durch alle Kanäle, in denen automatisch geantwortet wird, ist deshalb die lohnendste Kontrolle der kommenden Wochen – und sie dauert selten länger als einen Vormittag.</p>
+
+<h3>Was die Aufsicht in der Anfangszeit erwarten dürfte</h3>
+
+<p>Aus dem Zuschnitt des KI-Marktüberwachungs- und Innovationsförderungs-Gesetzes lässt sich ablesen, dass die erste Phase auf Beratung und Beschwerdebearbeitung angelegt ist – Service-Desk und Reallabore sind ausdrücklich Teil des Auftrags. Wer eine nachvollziehbare Einordnung seiner Anwendungen vorlegen kann, steht deshalb auch dann gut da, wenn im Einzelfall eine andere Bewertung vertretbar wäre. Was fehlt, ist nicht die perfekte Kennzeichnung, sondern die begründete Entscheidung.</p>
+
+<h2>Häufige Fragen</h2>
+
+<h3>Wer kontrolliert das in Deutschland?</h3>
+<p>Seit dem 29. Juli 2026 ist die Bundesnetzagentur zentrale Marktüberwachungsbehörde, Anlaufstelle und Beschwerdestelle für die KI-Verordnung. Sie bietet zugleich Unterstützungsangebote wie einen KI-Service-Desk und Reallabore an. Bestehende Zuständigkeiten anderer Marktüberwachungsbehörden bleiben daneben erhalten.</p>
+
+<h3>Was kostet ein Verstoß?</h3>
+<p>Für Verstöße gegen die Transparenzpflichten sieht die KI-Verordnung Geldbußen von bis zu 15 Millionen Euro oder 3 Prozent des weltweiten Jahresumsatzes vor, je nachdem, welcher Betrag höher ist; für kleine und mittlere Unternehmen gilt der niedrigere Wert als Obergrenze. Praktisch relevanter ist für die meisten Häuser jedoch der Vertrauensschaden, wenn eine nicht offengelegte künstliche Darstellung entdeckt wird.</p>
+
+<h3>Was ist mit der Pflicht zur KI-Kompetenz?</h3>
+<p>Artikel 4 gilt bereits seit dem 2. Februar 2025. Neu ist, dass die Aufsichts- und Durchsetzungsvorschriften der Verordnung ab dem 3. August 2026 greifen. Ein Nachweis über Zertifikate wird nach den Antworten der EU-Kommission vom 12. Mai 2025 nicht verlangt – wohl aber ein nachvollziehbarer Kenntnisstand, den man intern dokumentieren sollte.</p>
+
+<p>Wer die drei betroffenen Fallgruppen im eigenen Haus benannt, die Hinweise eingebaut und die Freigabe dokumentiert hat, ist an dieser Stelle fertig. Der nächste Termin liegt ohnehin schon im Kalender: Am 27. September 2026 gelten die neuen UWG-Regeln zu Umweltaussagen – und die betreffen deutlich mehr Produkttexte als Artikel 50.</p>
+
+
+    <div class="vm-cta">
+      <strong>Bereit für KI-Marketinglösungen?</strong>
+      <p>Erfahren Sie in einer unverbindlichen Demo, wie Virtual Marketer Ihr Marketing automatisiert.</p>
+      <a href="/virtual-marketer-demo/">Demo buchen</a>
+    </div>
+
+    <div class="vm-related">
+      <h3>Weitere Artikel</h3>
+      <ul>
+        <li><a href="/blog/personalisierung-vs-datenschutz-gdpr-2026/">KI-gesteuerte Personalisierung vs. Datenschutz: GDPR-konform in 2026</a></li>
+        <li><a href="/blog/seo-im-zeitalter-der-ki-suche/">SEO im Zeitalter der KI-Suche: Von Keywords zu E-E-A-T</a></li>
+        <li><a href="/blog/digital-omnibus-ki-fristen-2026/">Digital Omnibus: welche KI-Fristen jetzt gelten</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer class="vm-footer-simple">
+  &copy; 2026 SGS Virtual Marketer GmbH &middot;
+  <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> &middot;
+  <a href="/impressum/">Impressum</a> <a href="/barrierefreiheit/">Barrierefreiheit</a>
+</footer>
+
+
 <script>
 /**
  * Desktop overlap effects, neutralised on phones.

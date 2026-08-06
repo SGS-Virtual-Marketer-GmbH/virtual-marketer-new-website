@@ -75,7 +75,7 @@ function escapeAttr(s) {
 // The title-cleaning rules moved to lib/title-cleanup.js so that the blog
 // archive, which harvests legacy titles at pipeline step 5, applies exactly
 // the same ones this step applies at step 28. See that file's header.
-const { firstSuggestion, stripWrappingQuotes, clauseTrim } = require('./lib/title-cleanup');
+const { firstSuggestion, stripWrappingQuotes, pickClause } = require('./lib/title-cleanup');
 
 function setMeta(html, re, value) {
   return html.replace(re, (tag) => tag.replace(/content=(["'])[\s\S]*?\1/i, `content="${escapeAttr(value)}"`));
@@ -128,7 +128,7 @@ function main() {
           debranded++;
         }
       }
-      const cut = clauseTrim(candidate);
+      const cut = pickClause(candidate);
       if (cut) {
         next = cut;
         trimmed++;

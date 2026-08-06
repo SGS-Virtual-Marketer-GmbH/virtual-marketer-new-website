@@ -37,33 +37,45 @@ const CSS = `<style id="${MARKER}">
      so that one item falls through to the browser default: 16px/700 in grey
      beside the theme's own type.
 
-     Only layout is set here. Typography is copied from a real sibling anchor
-     at runtime, by the script below — see the comment there for why hardcoding
-     it was wrong. */
+     TYPOGRAPHY IS INHERITED, NOT RESTATED.
+
+     Two earlier attempts got this wrong in opposite directions. The first
+     copied the sibling anchor's computed font onto the summary at runtime;
+     it measured perfectly and painted nothing (see the script below). The
+     second moved the values into this rule as literals — and literals read
+     off one header variant are wrong on the other, which is how .header-static
+     ended up declaring DM Sans 13.5px/500 while its actual nav anchors render
+     Nunito Sans 16px/700. Measured on /impressum/: the summary was three
+     properties adrift from "Blog" and "API" sitting right beside it.
+
+     The way out is that the <li> is already correct. Measured on both
+     variants, the wrapping <li> computes exactly the anchor's font-family,
+     font-size and font-weight — the theme sets those high enough up to reach
+     both. So inheriting tracks the theme by construction and cannot drift
+     the way a literal does.
+
+     Only the two properties the <li> does NOT share with the anchor are
+     stated: colour (the <li> computes #6d6d6d, the anchors do not) and
+     line-height (33.75px against the anchors' 35px). */
   #site-header .main-navigation > ul > li > details > summary {
     padding: 10px 11px;
     display: flex;
     align-items: center;
     cursor: pointer;
-    /* Defaults for any variant not named below. Explicit rather than
-       inherited: a <summary> with no rule renders 16px/700 in the browser's
-       grey, which is a visible mismatch on every variant. */
-    font-family: "DM Sans", sans-serif;
-    font-size: 13.5px;
-    font-weight: 500;
-    color: #241417;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: 35px;
   }
-  /* The two header variants do not share nav typography, and this is the
-     whole reason the first fix looked right on one page and wrong on the
-     other: the values were read off the demo page and applied everywhere.
-     .header-overlay is the homepage; .header-static is everything else. */
+  /* Colour only — the one thing inheritance gets wrong, because the theme
+     colours the anchor rather than the list item.
+     .header-overlay is the homepage; .header-static is everything else.
+     Both values are read off the sibling anchors of that variant. */
   #site-header.header-overlay .main-navigation > ul > li > details > summary {
-    font-size: 18px;
     color: #0a1636;
   }
   #site-header.header-static .main-navigation > ul > li > details > summary {
-    font-size: 13.5px;
-    color: #241417;
+    color: #1a1b1e;
   }
   #site-header .main-navigation > ul > li > details > summary:hover { color: #94152b; }
   #site-header .main-navigation > ul > li > details { display: flex; align-items: center; }
@@ -71,10 +83,17 @@ const CSS = `<style id="${MARKER}">
 
   /* 2 — the call to action, in the brand's own colours.
      Specificity: .octf-btn.octf-btn-primary is two classes, so prefixing with
-     the #site-header id wins without !important. */
+     the #site-header id wins without !important.
+
+     The blue stop is vm-blue deepened, not vm-blue itself. White on vm-blue
+     (#66a3ce) is 2.7:1 — it fails WCAG 1.4.3 outright, and this is the
+     primary CTA on every page, so it is the single worst contrast defect on
+     the site. Same hue (206 deg), lower lightness: white on #3d7ba8 is
+     4.6:1, and every pixel further along the gradient is darker still, so
+     the whole pill passes. */
   #site-header .octf-btn.octf-btn-primary,
   #site-header a.octf-btn-primary {
-    background: linear-gradient(90deg, #66a3ce, #94152b);
+    background: linear-gradient(90deg, #3d7ba8, #94152b);
     border-color: transparent;
     color: #fff;
   }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Social Publisher — Schedule &amp; Autonomously Publish LinkedIn Posts</title>
+<title>Schedule &amp; Autonomously Publish LinkedIn Posts</title>
 <meta name="description" content="Persona-driven LinkedIn posts on a fixed schedule or via autonomous topic scanning — with human approval built in by default.">
 <meta name="keywords" content="auto post LinkedIn AI, social media AI tool, LinkedIn automation, AI social media scheduler, generate social posts AI">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -15,7 +15,7 @@
 <meta property="og:type" content="product">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Virtual Marketer">
-<meta property="og:title" content="AI Social Publisher — Schedule &amp; Autonomously Publish LinkedIn Posts">
+<meta property="og:title" content="Schedule &amp; Autonomously Publish LinkedIn Posts">
 <meta property="og:description" content="Persona-driven LinkedIn posts on a fixed schedule or via autonomous topic scanning — with human approval built in by default.">
 <meta property="og:url" content="https://virtual-marketer.de/en/solutions/social-publisher/">
 <meta property="og:image" content="https://virtual-marketer.de/product-pages/social-hero.jpg">
@@ -27,9 +27,9 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"AI Social Publisher — Schedule & Autonomously Publish LinkedIn Posts","description":"Persona-driven LinkedIn posts on a fixed schedule or via autonomous topic scanning — with human approval built in by default.","image":"https://virtual-marketer.de/product-pages/social-hero.jpg","brand":{"@type":"Brand","name":"Virtual Marketer"}}</script>
 
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/bootstrap.css%3Fver=4.0.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/font-awesome.min.css%3Fver=7.0.1.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/style.css%3Fver=7.0.1.css">
+<link rel="stylesheet" href="/assets/css/vm-a80b91e97a.css" media="all">
+
+
 <style>
   :root{
     --vm-red:#94152b; --vm-red-dark:#700f2b; --vm-blue:#66a3ce; --vm-blue-light:#a3cce9;
@@ -206,6 +206,17 @@
   .vmd-imgbox.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .vmd-avatar.vmd-hasimg { background: none; overflow: hidden; }
   .vmd-avatar.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Avatars cut from a full-body shot. object-fit:cover centres on the frame,
+     which on a head-to-toe photo is the waist — so the circle shows a torso
+     and no face. Pulling the crop to the top of the image puts the head in
+     the circle, which is the only part of a 44px avatar that reads. */
+  .vmd-avatars-face .vmd-avatar.vmd-hasimg img { object-position: 50% 4%; }
+  /* The result pane holds a head-to-toe fashion photo, and the point of it is
+     that you can see the garment on the model. A 130px-tall cover crop showed
+     a midriff with the head cut off. Taller, and contained rather than
+     cropped, so the whole figure is in frame. */
+  .vmd-imgbox.vmd-imgbox-full { height: 250px; background: var(--vm-gray-100); }
+  .vmd-imgbox.vmd-imgbox-full img { object-fit: contain; }
   .vmd-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.9); left: 4%; transition: left 2.6s linear; }
 
   .vmd-email { border: 1px solid var(--vm-gray-200); border-radius: 12px; overflow: hidden; background: #fff; }
@@ -257,6 +268,45 @@
   .vm-fp .vm-tryon-note{margin-top:18px;font-size:14px;color:var(--vm-gray-600,#6b7280);}
   @media (max-width:780px){
     .vm-fp .vm-tryon-row{grid-template-columns:repeat(2,1fr);gap:12px;}
+  }
+
+  /* Before / after. The arrow between them is the whole argument, so it gets
+     its own grid column rather than being tucked into a caption. */
+  .vm-fp .vm-ba-row{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;margin-top:22px;}
+  .vm-fp .vm-ba-shot{margin:0;}
+  .vm-fp .vm-ba-shot picture{display:block;border-radius:14px;overflow:hidden;background:var(--vm-gray-100);}
+  .vm-fp .vm-ba-shot img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;background:#fff;}
+  .vm-fp .vm-ba-shot figcaption{margin-top:10px;font-size:14px;font-weight:600;color:var(--vm-gray-900);text-align:center;}
+  .vm-fp .vm-ba-tag{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+  .vm-fp .vm-ba-before .vm-ba-tag{color:var(--vm-gray-600,#6b7280);}
+  .vm-fp .vm-ba-after .vm-ba-tag{color:var(--vm-red);}
+  .vm-fp .vm-ba-after picture{box-shadow:0 6px 20px rgba(36,20,23,.14);}
+  .vm-fp .vm-ba-arrow{font-size:30px;color:var(--vm-red);line-height:1;}
+
+  /* Two panels, and the custom one is the one we want read first — it is the
+     answer to "can I have my model", which is the objection that stops a
+     shop from buying. */
+  .vm-fp .vm-models-split{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px;}
+  .vm-fp .vm-model-panel{background:#fff;border:1px solid var(--vm-gray-200);border-radius:16px;padding:24px 26px;}
+  .vm-fp .vm-model-panel.is-custom{border-top:3px solid var(--vm-red);}
+  .vm-fp .vm-model-panel h3{margin:0 0 8px;font-size:18px;color:var(--vm-gray-900);}
+  .vm-fp .vm-model-panel p{margin:0 0 12px;font-size:15px;line-height:1.6;}
+  .vm-fp .vm-model-panel ul{margin:0;padding-left:20px;}
+  .vm-fp .vm-model-panel li{font-size:14.5px;line-height:1.55;margin-bottom:6px;}
+
+  .vm-fp .vm-models-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:26px;}
+  .vm-fp .vm-model-card{margin:0;}
+  .vm-fp .vm-model-card picture{display:block;border-radius:12px;overflow:hidden;background:var(--vm-gray-100);}
+  .vm-fp .vm-model-card img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;}
+  .vm-fp .vm-model-card figcaption{margin-top:8px;font-size:12.5px;font-weight:700;letter-spacing:.05em;color:var(--vm-gray-600,#6b7280);text-align:center;}
+
+  @media (max-width:780px){
+    /* The arrow becomes a row divider once the pair stacks; pointing right at
+       an image that is now underneath would be worse than pointing down. */
+    .vm-fp .vm-ba-row{grid-template-columns:1fr;gap:14px;}
+    .vm-fp .vm-ba-arrow{transform:rotate(90deg);justify-self:center;}
+    .vm-fp .vm-models-split{grid-template-columns:1fr;}
+    .vm-fp .vm-models-row{grid-template-columns:repeat(3,1fr);gap:10px;}
   }
 
   /* Panels slide-and-fade instead of hard-cutting, and the active step
@@ -366,21 +416,53 @@
   .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
   .vm-header-simple nav > details > summary:hover{color:#94152b}
 
-  /* position:sticky above is disabled by ANY ancestor with a clipping
-     overflow, and the scraped theme's stylesheet sets overflow:hidden on
-     <body> — which is why the header on /blog/ and the feature pages scrolled
-     away despite being declared sticky. The same trap is documented in
-     scripts/make-header-sticky.js for the legacy header, where the answer was
-     position:fixed; here the cleaner fix is available, because these pages do
-     not use the theme's layout and nothing on them needs body to clip.
-     overflow-x stays hidden so a wide element still cannot scroll the page
-     sideways; only the vertical axis is released, which is the axis sticky
-     needs. */
-  body.vm-static-blog{overflow-x:hidden;overflow-y:visible}
+  /* position:sticky is disabled by ANY ancestor that is a scroll container,
+     and the scraped theme sets overflow-x:hidden on BOTH the root element
+     and the body element.
+
+     NOTE FOR ANYONE EDITING THIS COMMENT: do not write element names in
+     angle brackets here. This text ends up inside a style block in the head
+     of every generated page, and scripts/fix-nested-documents.js scans the
+     raw HTML for a body tag followed by a root tag to find pasted-in
+     documents. Angle-bracketed names in this comment read as real tags: an
+     earlier revision wrote them out and the unwrapper treated everything
+     from this comment to the end of the file as a nested document, stripping
+     the real body tag's class="vm-static-blog" — which silently disabled
+     every rule in this stylesheet. The unwrapper now masks style and script
+     regions before scanning, but prose that looks like markup is a trap
+     worth not re-laying.
+
+     WHY THE OBVIOUS FIX DID NOT WORK
+
+     The previous attempt here was overflow-x:hidden with overflow-y:visible
+     on the body — keep clipping sideways, release the axis sticky needs. It
+     reads correctly and it does nothing, because of a rule in the overflow
+     spec: when one axis is "hidden" and the other is "visible", the visible
+     one is coerced to "auto". A computed "auto" is a scroll container. So
+     the declaration that was supposed to free the header is what pinned it.
+
+     Measured on /blog/artikel-50-ki-inhalte-kennzeichnen/: computed
+     overflow was "hidden auto" on both the root and the body, and at scrollY
+     1500 the header sat at top:-1484 — i.e. it had scrolled away entirely.
+
+     "clip" is the value that does what "hidden" was being asked to do here:
+     it clips without creating a scroll container, so it does NOT coerce the
+     other axis, and visible survives. Same measurement after the change:
+     header at top:0, page still scrolls to 1500, and
+     scrollWidth === clientWidth, so nothing escapes sideways either.
+
+     The root element needs it too. Fixing only the body leaves the root
+     computing "hidden auto", and the header's nearest scrollport is then
+     still a box that never scrolls. Scoped with :has() so this reaches only
+     the generated pages — the theme's own layout on the legacy pages
+     genuinely relies on root clipping, and make-header-sticky.js solves
+     those with position:fixed instead. */
+  html:has(body.vm-static-blog){overflow-x:clip;overflow-y:visible}
+  body.vm-static-blog{overflow-x:clip;overflow-y:visible}
   /* Login is the primary action in this bar — same gradient pill as the
      homepage header, so the two do not look like different sites. */
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]{
-    background:linear-gradient(90deg,#66a3ce,#94152b);
+    background:linear-gradient(90deg,#3d7ba8,#94152b);
     color:#fff;padding:11px 26px;border-radius:10px;font-weight:600;
   }
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]:hover{
@@ -408,493 +490,6 @@
   .vm-footer-simple a{color:#6b7280}
 
 </style>
-</head>
-<body class="vm-static-blog">
-<header class="vm-header-simple">
-  <a href="/en/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.webp" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none" width="512" height="512"></a>
-  <nav>
-    <details class="vm-solutions-dd">
-    <summary>Solutions</summary>
-    <div class="vm-solutions-panel" data-title="Solutions">
-      <button type="button" class="vm-solutions-close" aria-label="Menü schließen">&times;</button>
-      <ul class="vm-solutions-grid">
-        <li><a href="/en/solutions/ai-agents/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></span><span class="vm-sol-tx">AI Agents for Marketing &amp; Ads</span></a></li>
-        <li><a href="/en/solutions/coding-api/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span><span class="vm-sol-tx">Coding API &amp; MCP Server</span></a></li>
-        <li><a href="/en/solutions/ai-product-photos/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="vm-sol-tx">AI Product Photos &amp; Virtual Try-On</span></a></li>
-        <li><a href="/en/solutions/feed-enhance/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16M4 12h16M4 19h9"/></svg></span><span class="vm-sol-tx">AI Feed Enhance</span></a></li>
-        <li><a href="/en/solutions/ai-text-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 6h14M5 12h14M5 18h8"/></svg></span><span class="vm-sol-tx">AI Text Generation</span></a></li>
-        <li><a href="/en/solutions/ai-image-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg></span><span class="vm-sol-tx">AI Image Generation</span></a></li>
-        <li><a href="/en/solutions/ai-video-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/></svg></span><span class="vm-sol-tx">AI Video Generation</span></a></li>
-        <li><a href="/en/solutions/ai-seo-content/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span class="vm-sol-tx">AI SEO Content</span></a></li>
-        <li><a href="/en/solutions/campaign-builder/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10v4h4l6 4V6l-6 4H4z"/><path d="M18 9a4 4 0 010 6"/></svg></span><span class="vm-sol-tx">AI Campaign Builder</span></a></li>
-        <li><a href="/en/solutions/internal-linking/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 006 0l3-3a4 4 0 10-6-6l-1 1"/><path d="M14 10a4 4 0 00-6 0l-3 3a4 4 0 106 6l1-1"/></svg></span><span class="vm-sol-tx">Internal Linking</span></a></li>
-        <li><a href="/en/solutions/ai-email-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg></span><span class="vm-sol-tx">AI Email Generator</span></a></li>
-        <li><a href="/en/solutions/social-publisher/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.5 11l6-4M8.5 13l6 4"/></svg></span><span class="vm-sol-tx">AI Social Publisher</span></a></li>
-        <li><a href="/en/solutions/bulk-text-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 13l8 4 8-4"/></svg></span><span class="vm-sol-tx">AI Bulk Generator</span></a></li>
-        <li><a href="/en/solutions/ai-files/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="vm-sol-tx">Files &amp; Reports</span></a></li>
-        <li><a href="/en/solutions/feed-optimizer/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8h10M18 8h2M4 16h4M12 16h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/></svg></span><span class="vm-sol-tx">Feed Optimizer</span></a></li>
-        <li><a href="/en/solutions/chat-insights/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12a7 7 0 01-7 7H8l-4 3v-5a7 7 0 017-9h2a7 7 0 017 4z"/></svg></span><span class="vm-sol-tx">Chat Insights</span></a></li>
-      </ul>
-      <ul class="vm-solutions-foot"><li><a href="/en/solutions/">All solutions at a glance &rarr;</a></li></ul>
-    </div>
-  </details><style>
-  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
-  /* Vertical alignment with the sibling nav links.
-     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
-     while a bare <summary> is only as tall as its text, so with both boxes
-     starting at the same y the label sat 11px above "Blog" and "API".
-     Stretching the wrapper to the flex row's height and centring inside it
-     matches whatever the theme happens to use, instead of hardcoding this
-     theme's padding and breaking again the next time it changes. */
-  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
-  .vm-solutions-dd{align-self:stretch;}
-  /* align-self:stretch above computes correctly but the theme's flex row still
-     leaves the item at its content height, so the summary is matched to the
-     sibling anchors' box directly: they are line-height 35px inside 10px
-     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
-     only when replacing the legacy theme nav — so it cannot leak into
-     .vm-header-simple, where the generated pages set their own metrics. */
-  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
-  .vm-solutions-dd > summary{
-    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
-    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
-  }
-  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
-  .vm-solutions-dd > summary::marker{content:'';}
-  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
-     the label's baseline the way a "▾" character does. */
-  .vm-solutions-dd > summary::after{
-    content:'';width:7px;height:7px;flex:0 0 auto;
-    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
-    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
-  }
-  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
-  .vm-solutions-dd > summary,
-  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
-
-  .vm-solutions-panel{
-    position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
-    width:min(820px,calc(100vw - 32px));
-    background:#fff;border:1px solid #ece4e5;border-radius:18px;
-    box-shadow:0 28px 68px rgba(36,20,23,.20);
-    padding:18px;margin:0;z-index:99999;
-  }
-  .vm-solutions-grid{
-    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
-    margin:0;padding:0;list-style:none;
-  }
-  .vm-solutions-grid li{margin:0;padding:0;}
-  /* Two classes in the selector on purpose. The theme styles these links via
-     .main-navigation ul li li a (one class, four elements) and
-     .main-navigation ul > li > a, both of which outrank a bare
-     .vm-solutions-grid a. Class count is compared before element count, so
-     scoping to the panel wins cleanly without resorting to !important. */
-  .vm-solutions-panel .vm-solutions-grid a{
-    display:flex;align-items:center;gap:11px;
-    padding:10px 11px;border-radius:10px;
-    color:#241417;text-decoration:none;
-    /* The theme uppercases and nowraps its nav links. Inherited into a
-       three-column grid that produced the overlap this panel was reported
-       for: labels ran straight through their neighbours instead of wrapping.
-       Both are reset here rather than fought with !important elsewhere. */
-    text-transform:none;white-space:normal;
-    font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
-  }
-  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
-  .vm-sol-ic{
-    flex:0 0 auto;display:grid;place-items:center;
-    width:32px;height:32px;border-radius:9px;
-    background:#f6eff0;color:#94152b;
-  }
-  .vm-sol-ic svg{width:17px;height:17px;display:block;}
-  .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
-  .vm-sol-tx{min-width:0;}
-  .vm-solutions-foot{
-    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
-  }
-  .vm-solutions-panel .vm-solutions-foot a{
-    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
-    text-decoration:none;padding:4px 12px;text-transform:none;
-  }
-  .vm-solutions-foot a:hover{text-decoration:underline;}
-
-  /* --- Mobile: a real full-screen drawer -------------------------------
-     Below 900px the panel used to render inline, which pushed the whole
-     header open and buried the page under a 16-item list. It is now an
-     overlay pinned to the viewport with its own header and scroll area, so
-     it behaves like a drawer instead of an expanding accordion. */
-  @media (max-width:900px){
-    .vm-solutions-dd{position:static;}
-    .vm-solutions-panel{
-      position:fixed;inset:0;top:0;left:0;transform:none;
-      width:100vw;height:100dvh;max-height:100dvh;
-      border:0;border-radius:0;box-shadow:none;
-      padding:calc(env(safe-area-inset-top) + 64px) 16px calc(env(safe-area-inset-bottom) + 24px);
-      overflow-y:auto;-webkit-overflow-scrolling:touch;
-      animation:vmDrawerIn .18s ease-out;
-    }
-    .vm-solutions-panel::before{
-      content:attr(data-title);
-      position:fixed;top:0;left:0;right:0;height:56px;
-      display:flex;align-items:center;padding:0 16px;
-      background:#fff;border-bottom:1px solid #ece4e5;
-      font-weight:700;font-size:16px;color:#241417;
-    }
-    .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
-    .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
-    .vm-sol-ic{width:36px;height:36px;}
-    .vm-sol-ic svg{width:19px;height:19px;}
-    .vm-solutions-foot a{font-size:15px;}
-    /* Stop the page behind the drawer from scrolling with it. */
-    html:has(.vm-solutions-dd[open]) body{overflow:hidden;}
-  }
-  @keyframes vmDrawerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-  /* The legacy theme already has a full-screen off-canvas menu, and it slides
-     in with a transform. A transformed ancestor becomes the containing block
-     for position:fixed, so the drawer above rendered *inside* it landed one
-     viewport off-screen (measured at left:375 on a 375px viewport). Inside
-     that wrapper the panel therefore renders inline and lets the theme's own
-     drawer be the drawer — nesting a second full-screen overlay inside the
-     first is the actual mistake. The fixed drawer still applies on the
-     generated pages, whose header has no off-canvas container. */
-  @media (max-width:900px){
-    .mmenu-wrapper .vm-solutions-panel{
-      position:static;width:auto;height:auto;max-height:none;
-      padding:4px 0 0;overflow:visible;animation:none;
-    }
-    .mmenu-wrapper .vm-solutions-panel::before{display:none;}
-    .mmenu-wrapper .vm-solutions-close{display:none;}
-    .mmenu-wrapper .vm-solutions-grid a{padding:11px 8px;font-size:14px;}
-  }
-  .vm-solutions-close{display:none;}
-  @media (max-width:900px){
-    .vm-solutions-close{
-      display:block;position:fixed;top:8px;right:10px;z-index:1;
-      width:40px;height:40px;border:0;background:none;
-      font-size:30px;line-height:1;color:#241417;cursor:pointer;
-    }
-  }
-</style>
-<script>
-(function(){
-  // <details> has no concept of "dismiss" — without this the panel stays open
-  // until the summary is clicked again, which feels broken next to every other
-  // menu on the web.
-  document.addEventListener('click', function(e){
-    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
-      if(!d.contains(e.target)) d.removeAttribute('open');
-    });
-  });
-  document.addEventListener('click', function(e){
-    if(!e.target.closest('.vm-solutions-close')) return;
-    var d = e.target.closest('details.vm-solutions-dd');
-    if(d) d.removeAttribute('open');
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key !== 'Escape') return;
-    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
-      d.removeAttribute('open');
-    });
-  });
-})();
-</script>
-    <a href="/en/blog/">Blog</a>
-    <a href="https://api.virtual-marketer.de/documentation/">API</a>
-    <a href="/en/request-custom-model/">Request a model</a>
-    <a href="/en/contact/">Contact</a>
-    <a href="https://login.virtual-marketer.de/">Login</a>
-  </nav>
-</header>
-<main class="vm-fp">
-  <section class="hero" style="margin-top:44px;">
-    <div>
-      <span class="eyebrow">AI Social Publisher</span>
-      <h1>AI Social Publisher — Schedule & Autonomously Publish LinkedIn Posts</h1>
-      <p class="tagline">Your LinkedIn presence, on autopilot.</p>
-      <p class="intro">VM Social Publisher creates a consistent persona for your brand, then writes and illustrates LinkedIn posts on a fixed schedule or by autonomously scanning your topic niche &#8211; always with your reference image for visual consistency, and approval-gated by default.</p>
-      <div class="hero-cta">
-        <a class="btn btn-primary" href="/en/demo/">Book a demo</a>
-        <a class="btn btn-ghost" href="#produkt-demo">Try the live demo</a>
-      </div>
-    </div>
-    <div class="hero-image" style="aspect-ratio:16/9;align-self:center;"><img src="/product-pages/social-hero.webp" alt="AI Social Publisher — Schedule & Autonomously Publish LinkedIn Posts" loading="eager" width="1376" height="768"></div>
-  </section>
-
-  <section aria-labelledby="audience-h">
-    <p class="section-label">Who it’s for</p>
-    <h2 class="section-title" id="audience-h">Who this is built for</h2>
-    <div class="audience-grid">
-      <div class="audience-card"><b>Marketing teams without time to post daily</b><span>Regular, on-brand posts without writing them yourself every day.</span></div>
-      <div class="audience-card"><b>Founders &amp; personal brands</b><span>Stay visible on LinkedIn while the day-to-day business runs.</span></div>
-      <div class="audience-card"><b>Agencies</b><span>One persona per client, approval workflow included.</span></div>
-    </div>
-  </section>
-
-
-  <figure class="vm-scene-figure">
-    <picture>
-      <source srcset="/product-pages/social-publisher-scene.webp" type="image/webp">
-      <img src="/product-pages/social-publisher-scene.webp" alt="Your LinkedIn presence, on autopilot." loading="lazy" decoding="async" width="1600" height="900">
-    </picture>
-  </figure>
-
-  
-
-  
-
-  <section id="produkt-demo" aria-labelledby="pdemo-h">
-    <p class="section-label">Product demo</p>
-    <h2 class="section-title" id="pdemo-h">Inside the product</h2>
-    <div class="vmd-window">
-      <div class="vmd-titlebar"><span class="vmd-dot"></span><span class="vmd-dot"></span><span class="vmd-dot"></span><span class="vmd-titletext">Virtual Marketer — Social Publisher</span></div>
-      <div class="vmd-stage" id="vmdemo">
-          <p class="vmd-label">Weekly schedule</p>
-          <div class="vmd-cal"><div class="vmd-cal-day" id="sp-d0">Mo<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d1">Tu<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d2">We<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d3">Th<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d4">Fr<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d5">Sa<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d6">Su<div class="vmd-cal-slot"></div></div></div>
-          <div class="vmd vmd-card" id="sp-post" style="margin-top:14px;">
-            <div class="vmd-card-title"><span>💼 Generated post — persona “Lena”</span><span class="vmd-badge vmd-badge-blue" id="sp-state">awaiting approval</span></div>
-            <div class="vmd-text" id="sp-text"></div>
-          </div>
-          <div class="vmd" id="sp-approve" style="margin-top:10px;display:flex;gap:10px;align-items:center;">
-            <span class="vmd-btn" id="sp-btn">Approve & publish</span>
-          </div></div>
-    </div>
-    <p class="vmd-demonote">Simulated preview with example data &#8211; no real accounts or server calls.</p>
-  </section>
-
-  <section aria-labelledby="value-h">
-    <p class="section-label">Business value</p>
-    <h2 class="section-title" id="value-h">What you get</h2>
-    <div class="value-grid">
-      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Reusable personas: name, background info, reference image and choice of text model</span></div>
-      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Fixed weekly time slots, or autonomous hourly topic scanning with a relevance threshold</span></div>
-      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Optional active-window gating by weekday and hour</span></div>
-      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Auto-publish is off by default &#8211; posts wait for your approval</span></div>
-      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>One-click 'Generate now' and 'Publish now' for manual control anytime</span></div>
-      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Optional visible watermark on generated images</span></div>
-    </div>
-  </section>
-
-  <section aria-labelledby="how-h">
-    <p class="section-label">How it works</p>
-    <h2 class="section-title" id="how-h">How it works</h2>
-    <ol class="how-list">
-      <li>Connect LinkedIn once in Settings &rarr; Connectors &rarr; Access.</li>
-      <li>Create a persona &#8211; give it a name, background info and a reference image (or import from your LinkedIn profile).</li>
-      <li>Create a schedule: fixed times or autonomous scanning, plus an optional active window.</li>
-      <li>Review generated posts in the Posts tab or in Settings &rarr; Connectors &rarr; Approvals, then publish.</li>
-    </ol>
-  </section>
-
-  <section aria-labelledby="faq-h">
-    <p class="section-label">FAQ</p>
-    <h2 class="section-title" id="faq-h">Frequently asked questions</h2>
-    <div class="faq-list">
-      <div class="faq-item"><p class="q">Do posts publish automatically?</p><p class="a">Only if you turn on Auto-publish for a schedule. By default, every generated post waits for your approval.</p></div>
-      <div class="faq-item"><p class="q">Can I post manually too?</p><p class="a">Yes &#8211; use 'Generate now' with any persona and an optional topic, then 'Publish now' when you're ready.</p></div>
-      <div class="faq-item"><p class="q">Which platforms are supported?</p><p class="a">LinkedIn today; more platforms are planned.</p></div>
-    </div>
-  </section>
-</main>
-<footer style="max-width:1140px;margin:64px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
-  &copy; 2026 SGS Virtual Marketer GmbH &middot;
-  <a href="/en/privacy-policy/">Privacy Policy</a> &middot;
-  <a href="/en/legal-notice/">Legal Notice</a>
-</footer>
-<script>
-(function(){
-  // Ties the two picker steps to the result matrix. Every combination is
-  // already in the DOM as a static image, so this only toggles which one is
-  // visible — no fetch, no loading state, instant switching.
-  document.querySelectorAll('.vm-fp').forEach(function(root){
-    var stage = root.querySelector('.demo-result-stage');
-    if(!stage) return;
-
-    function show(){
-      var m = stage.getAttribute('data-active-model');
-      var s = stage.getAttribute('data-active-scene');
-      var match = stage.querySelector('.demo-result-frame[data-model-id="'+m+'"][data-scene-id="'+s+'"]');
-      stage.querySelectorAll('.demo-result-frame').forEach(function(f){
-        f.classList.toggle('is-active', f === match);
-      });
-    }
-
-    function bind(sel, attr, target){
-      root.querySelectorAll(sel).forEach(function(btn){
-        btn.addEventListener('click', function(){
-          root.querySelectorAll(sel).forEach(function(b){
-            b.classList.toggle('selected', b === btn);
-            if(b.hasAttribute('aria-pressed')) b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
-          });
-          var v = btn.getAttribute(attr);
-          if(v) stage.setAttribute(target, v);
-          show();
-        });
-      });
-    }
-
-    bind('.demo-model-gallery .demo-model', 'data-model-id', 'data-active-model');
-    bind('.demo-scene-gallery .demo-scene', 'data-scene-id', 'data-active-scene');
-    show();
-  });
-})();
-</script>
-
-
-<script>
-(function(){
-  var root = document.querySelector('.vm-fp') || document;
-  var steps = document.querySelectorAll('.demo-step-btn');
-  var panels = document.querySelectorAll('.demo-panel');
-  var prevBtn = document.getElementById('demo-prev');
-  var nextBtn = document.getElementById('demo-next');
-  if (!prevBtn || !nextBtn) return; // page has no step-through wizard
-  var current = 0;
-
-  function show(i){
-    current = Math.max(0, Math.min(steps.length - 1, i));
-    steps.forEach(function(b, idx){ b.classList.toggle('active', idx === current); });
-    panels.forEach(function(p){ p.classList.toggle('active', Number(p.dataset.panel) === current); });
-    prevBtn.disabled = current === 0;
-    nextBtn.textContent = current === steps.length - 1 ? "Start over" : "Next";
-  }
-  steps.forEach(function(b, idx){ b.addEventListener('click', function(){ stopAuto(); show(idx); }); });
-  prevBtn.addEventListener('click', function(){ stopAuto(); show(current - 1); });
-  nextBtn.addEventListener('click', function(){ stopAuto(); show(current === steps.length - 1 ? 0 : current + 1); });
-
-  // --- Auto-advance ------------------------------------------------------
-  // The wizard sat on step 1 until someone clicked, so most visitors never
-  // saw the payoff — the interesting part is the last panel. It now plays
-  // itself once it scrolls into view, which turns a static screenshot into a
-  // demonstration without demanding interaction first.
-  //
-  // Three deliberate limits: it only runs while actually visible (an
-  // IntersectionObserver, so it is not burning timers off-screen), it stops
-  // permanently at the first click or keypress because a visitor who has
-  // taken control should not have the panel yanked out from under them, and
-  // it respects prefers-reduced-motion by not starting at all.
-  var timer = null;
-  var stopped = false;
-  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function stopAuto(){
-    stopped = true;
-    if (timer) { clearInterval(timer); timer = null; }
-    root.classList.remove('is-autoplaying');
-  }
-  function startAuto(){
-    if (stopped || reduced || timer) return;
-    root.classList.add('is-autoplaying');
-    timer = setInterval(function(){
-      if (stopped) return;
-      show(current === steps.length - 1 ? 0 : current + 1);
-    }, 2600);
-  }
-
-  var demoSection = prevBtn.closest('section') || prevBtn.parentElement;
-
-  // Visibility is checked by geometry, not solely by IntersectionObserver.
-  // IO is the tidier API, but it silently never fires in environments that
-  // do not composite frames (embedded webviews, headless panes) — verified
-  // here: a plain interval ticked while an observer on the same element
-  // reported nothing at all. Relying on it alone would mean the demo quietly
-  // never plays for some real visitors, and would be untestable besides.
-  function inView(){
-    if (!demoSection) return false;
-    var r = demoSection.getBoundingClientRect();
-    var vh = window.innerHeight || document.documentElement.clientHeight;
-    var visible = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
-    return r.height > 0 && visible / Math.min(r.height, vh) > 0.35;
-  }
-  function sync(){
-    if (stopped) return;
-    if (inView()) startAuto();
-    else if (timer) { clearInterval(timer); timer = null; root.classList.remove('is-autoplaying'); }
-  }
-
-  window.addEventListener('scroll', sync, { passive: true });
-  window.addEventListener('resize', sync, { passive: true });
-  if (demoSection && 'IntersectionObserver' in window) {
-    new IntersectionObserver(sync, { threshold: 0.35 }).observe(demoSection);
-  }
-  sync();
-
-  ['pointerdown', 'keydown'].forEach(function(ev){
-    demoSection && demoSection.addEventListener(ev, stopAuto, { once: true });
-  });
-
-  document.querySelectorAll('.demo-model').forEach(function(el){
-    el.addEventListener('click', function(){
-      document.querySelectorAll('.demo-model').forEach(function(m){ m.classList.remove('selected'); });
-      el.classList.add('selected');
-    });
-  });
-  document.querySelectorAll('.demo-scene').forEach(function(el){
-    el.addEventListener('click', function(){
-      document.querySelectorAll('.demo-scene').forEach(function(s){ s.classList.remove('selected'); });
-      el.classList.add('selected');
-    });
-  });
-})();
-</script>
-<script>
-function vmDemo(rootId, steps, loopPause) {
-  var root = document.getElementById(rootId);
-  if (!root) return;
-  var initial = root.innerHTML;
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var timer = null;
-  function q(sel) { return root.querySelector(sel); }
-  function apply(step, instant, next) {
-    var el = step.s ? q(step.s) : null;
-    var done = function () { if (!instant) timer = setTimeout(next, 0); };
-    if (step.t === 'wait') { done(); return; }
-    if (!el) { done(); return; }
-    if (step.t === 'text') { el.textContent = step.x; done(); return; }
-    if (step.t === 'show') { el.classList.add('vmd-on'); done(); return; }
-    if (step.t === 'hide') { el.classList.remove('vmd-on'); done(); return; }
-    if (step.t === 'class') { el.classList.add(step.x); done(); return; }
-    if (step.t === 'style') { el.style[step.k] = step.x; done(); return; }
-    if (step.t === 'type') {
-      if (instant) { el.textContent = step.x; return; }
-      el.textContent = '';
-      el.classList.add('vmd-typing');
-      var i = 0;
-      var tick = function () {
-        el.textContent = step.x.slice(0, ++i);
-        if (i < step.x.length) timer = setTimeout(tick, 24);
-        else { el.classList.remove('vmd-typing'); timer = setTimeout(next, 0); }
-      };
-      tick();
-      return;
-    }
-    done();
-  }
-  function runFrom(i) {
-    if (i >= steps.length) {
-      timer = setTimeout(function () { root.innerHTML = initial; runFrom(0); }, loopPause || 3800);
-      return;
-    }
-    timer = setTimeout(function () { apply(steps[i], false, function () { runFrom(i + 1); }); }, steps[i].d == null ? 400 : steps[i].d);
-  }
-  if (reduced) {
-    root.querySelectorAll('.vmd').forEach(function (el) { el.classList.add('vmd-instant'); });
-    steps.forEach(function (s) { apply(s, true, function () {}); });
-    return;
-  }
-  if ('IntersectionObserver' in window) {
-    var started = false;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting && !started) { started = true; io.disconnect(); runFrom(0); }
-      });
-    }, { threshold: 0.25 });
-    io.observe(root);
-  } else {
-    runFrom(0);
-  }
-}
-vmDemo('vmdemo', [{"t":"class","s":"#sp-d1","x":"vmd-slot-on","d":500},{"t":"class","s":"#sp-d3","x":"vmd-slot-on","d":300},{"t":"show","s":"#sp-post","d":700},{"t":"type","s":"#sp-text","x":"Three things we learned from 1,000 product tests — number two surprises us every time …","d":400},{"t":"show","s":"#sp-approve","d":700},{"t":"class","s":"#sp-btn","x":"vmd-busy","d":900},{"t":"text","s":"#sp-state","x":"✓ published","d":1100},{"t":"class","s":"#sp-d1","x":"vmd-slot-done","d":200}], 3800);</script>
 <style id="vm-mobile-polish">
 /* ==========================================================================
    Mobile polish — see scripts/mobile-polish.js
@@ -1102,6 +697,511 @@ html { scroll-padding-top: 76px; }
   }
 }
 </style>
+<style id="vm-a11y-links">
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):not([aria-hidden="true"]){
+  text-decoration:underline;
+  text-underline-offset:2px;
+  text-decoration-thickness:1px;
+}
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):hover{
+  text-decoration-thickness:2px;
+}
+/* The share row and any icon-only link inside a list item: an underline under
+   a glyph is noise, and the link is not a text link. */
+:is(p,li) > a:has(> svg:only-child),
+:is(p,li) > a:has(> i:only-child){text-decoration:none}
+</style>
+</head>
+<body class="vm-static-blog">
+<header class="vm-header-simple">
+  <a href="/en/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.webp" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none" width="512" height="512"></a>
+  <nav>
+    <details class="vm-solutions-dd">
+    <summary>Solutions</summary>
+    <div class="vm-solutions-panel" data-title="Solutions">
+      <button type="button" class="vm-solutions-close" aria-label="Menü schließen">&times;</button>
+      <ul class="vm-solutions-grid">
+        <li><a href="/en/solutions/ai-agents/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></span><span class="vm-sol-tx">AI Agents for Marketing &amp; Ads</span></a></li>
+        <li><a href="/en/solutions/coding-api/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span><span class="vm-sol-tx">Coding API &amp; MCP Server</span></a></li>
+        <li><a href="/en/solutions/ai-product-photos/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="vm-sol-tx">Product Staging: AI Product Photos</span></a></li>
+        <li><a href="/en/solutions/feed-enhance/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16M4 12h16M4 19h9"/></svg></span><span class="vm-sol-tx">AI Feed Enhance</span></a></li>
+        <li><a href="/en/solutions/ai-text-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 6h14M5 12h14M5 18h8"/></svg></span><span class="vm-sol-tx">AI Text Generation</span></a></li>
+        <li><a href="/en/solutions/ai-image-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg></span><span class="vm-sol-tx">AI Image Generation</span></a></li>
+        <li><a href="/en/solutions/ai-video-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/></svg></span><span class="vm-sol-tx">AI Video Generation</span></a></li>
+        <li><a href="/en/solutions/ai-seo-content/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span class="vm-sol-tx">AI SEO Content</span></a></li>
+        <li><a href="/en/solutions/campaign-builder/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10v4h4l6 4V6l-6 4H4z"/><path d="M18 9a4 4 0 010 6"/></svg></span><span class="vm-sol-tx">AI Campaign Builder</span></a></li>
+        <li><a href="/en/solutions/internal-linking/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 006 0l3-3a4 4 0 10-6-6l-1 1"/><path d="M14 10a4 4 0 00-6 0l-3 3a4 4 0 106 6l1-1"/></svg></span><span class="vm-sol-tx">Internal Linking</span></a></li>
+        <li><a href="/en/solutions/ai-email-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg></span><span class="vm-sol-tx">AI Email Generator</span></a></li>
+        <li><a href="/en/solutions/social-publisher/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.5 11l6-4M8.5 13l6 4"/></svg></span><span class="vm-sol-tx">AI Social Publisher</span></a></li>
+        <li><a href="/en/solutions/bulk-text-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 13l8 4 8-4"/></svg></span><span class="vm-sol-tx">AI Bulk Generator</span></a></li>
+        <li><a href="/en/solutions/ai-files/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="vm-sol-tx">Files &amp; Reports</span></a></li>
+        <li><a href="/en/solutions/feed-optimizer/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8h10M18 8h2M4 16h4M12 16h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/></svg></span><span class="vm-sol-tx">Feed Optimizer</span></a></li>
+        <li><a href="/en/solutions/chat-insights/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12a7 7 0 01-7 7H8l-4 3v-5a7 7 0 017-9h2a7 7 0 017 4z"/></svg></span><span class="vm-sol-tx">Chat Insights</span></a></li>
+      </ul>
+      <ul class="vm-solutions-foot"><li><a href="/en/solutions/">All solutions at a glance &rarr;</a></li></ul>
+    </div>
+  </details><style>
+  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
+  /* Vertical alignment with the sibling nav links.
+     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
+     while a bare <summary> is only as tall as its text, so with both boxes
+     starting at the same y the label sat 11px above "Blog" and "API".
+     Stretching the wrapper to the flex row's height and centring inside it
+     matches whatever the theme happens to use, instead of hardcoding this
+     theme's padding and breaking again the next time it changes. */
+  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
+  .vm-solutions-dd{align-self:stretch;}
+  /* align-self:stretch above computes correctly but the theme's flex row still
+     leaves the item at its content height, so the summary is matched to the
+     sibling anchors' box directly: they are line-height 35px inside 10px
+     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
+     only when replacing the legacy theme nav — so it cannot leak into
+     .vm-header-simple, where the generated pages set their own metrics. */
+  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
+  .vm-solutions-dd > summary{
+    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
+    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
+  }
+  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
+  .vm-solutions-dd > summary::marker{content:'';}
+  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
+     the label's baseline the way a "▾" character does. */
+  .vm-solutions-dd > summary::after{
+    content:'';width:7px;height:7px;flex:0 0 auto;
+    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
+  }
+  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
+  .vm-solutions-dd > summary,
+  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
+
+  .vm-solutions-panel{
+    position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
+    width:min(820px,calc(100vw - 32px));
+    background:#fff;border:1px solid #ece4e5;border-radius:18px;
+    box-shadow:0 28px 68px rgba(36,20,23,.20);
+    padding:18px;margin:0;z-index:99999;
+  }
+  .vm-solutions-grid{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
+    margin:0;padding:0;list-style:none;
+  }
+  .vm-solutions-grid li{margin:0;padding:0;}
+  /* Two classes in the selector on purpose. The theme styles these links via
+     .main-navigation ul li li a (one class, four elements) and
+     .main-navigation ul > li > a, both of which outrank a bare
+     .vm-solutions-grid a. Class count is compared before element count, so
+     scoping to the panel wins cleanly without resorting to !important. */
+  .vm-solutions-panel .vm-solutions-grid a{
+    display:flex;align-items:center;gap:11px;
+    padding:10px 11px;border-radius:10px;
+    color:#241417;text-decoration:none;
+    /* The theme uppercases and nowraps its nav links. Inherited into a
+       three-column grid that produced the overlap this panel was reported
+       for: labels ran straight through their neighbours instead of wrapping.
+       Both are reset here rather than fought with !important elsewhere. */
+    text-transform:none;white-space:normal;
+    font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
+  }
+  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
+  .vm-sol-ic{
+    flex:0 0 auto;display:grid;place-items:center;
+    width:32px;height:32px;border-radius:9px;
+    background:#f6eff0;color:#94152b;
+  }
+  .vm-sol-ic svg{width:17px;height:17px;display:block;}
+  .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
+  .vm-sol-tx{min-width:0;}
+  .vm-solutions-foot{
+    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
+  }
+  .vm-solutions-panel .vm-solutions-foot a{
+    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
+    text-decoration:none;padding:4px 12px;text-transform:none;
+  }
+  .vm-solutions-foot a:hover{text-decoration:underline;}
+
+  /* --- Mobile: a real full-screen drawer -------------------------------
+     Below 900px the panel used to render inline, which pushed the whole
+     header open and buried the page under a 16-item list. It is now an
+     overlay pinned to the viewport with its own header and scroll area, so
+     it behaves like a drawer instead of an expanding accordion. */
+  @media (max-width:900px){
+    .vm-solutions-dd{position:static;}
+    .vm-solutions-panel{
+      position:fixed;inset:0;top:0;left:0;transform:none;
+      width:100vw;height:100dvh;max-height:100dvh;
+      border:0;border-radius:0;box-shadow:none;
+      padding:calc(env(safe-area-inset-top) + 64px) 16px calc(env(safe-area-inset-bottom) + 24px);
+      overflow-y:auto;-webkit-overflow-scrolling:touch;
+      animation:vmDrawerIn .18s ease-out;
+    }
+    .vm-solutions-panel::before{
+      content:attr(data-title);
+      position:fixed;top:0;left:0;right:0;height:56px;
+      display:flex;align-items:center;padding:0 16px;
+      background:#fff;border-bottom:1px solid #ece4e5;
+      font-weight:700;font-size:16px;color:#241417;
+    }
+    .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
+    .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
+    .vm-sol-ic{width:36px;height:36px;}
+    .vm-sol-ic svg{width:19px;height:19px;}
+    .vm-solutions-foot a{font-size:15px;}
+    /* Stop the page behind the drawer from scrolling with it. */
+    html:has(.vm-solutions-dd[open]) body{overflow:hidden;}
+  }
+  @keyframes vmDrawerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* The legacy theme already has a full-screen off-canvas menu, and it slides
+     in with a transform. A transformed ancestor becomes the containing block
+     for position:fixed, so the drawer above rendered *inside* it landed one
+     viewport off-screen (measured at left:375 on a 375px viewport). Inside
+     that wrapper the panel therefore renders inline and lets the theme's own
+     drawer be the drawer — nesting a second full-screen overlay inside the
+     first is the actual mistake. The fixed drawer still applies on the
+     generated pages, whose header has no off-canvas container. */
+  @media (max-width:900px){
+    .mmenu-wrapper .vm-solutions-panel{
+      position:static;width:auto;height:auto;max-height:none;
+      padding:4px 0 0;overflow:visible;animation:none;
+    }
+    .mmenu-wrapper .vm-solutions-panel::before{display:none;}
+    .mmenu-wrapper .vm-solutions-close{display:none;}
+    .mmenu-wrapper .vm-solutions-grid a{padding:11px 8px;font-size:14px;}
+  }
+  .vm-solutions-close{display:none;}
+  @media (max-width:900px){
+    .vm-solutions-close{
+      display:block;position:fixed;top:8px;right:10px;z-index:1;
+      width:40px;height:40px;border:0;background:none;
+      font-size:30px;line-height:1;color:#241417;cursor:pointer;
+    }
+  }
+</style>
+<script>
+(function(){
+  // <details> has no concept of "dismiss" — without this the panel stays open
+  // until the summary is clicked again, which feels broken next to every other
+  // menu on the web.
+  document.addEventListener('click', function(e){
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      if(!d.contains(e.target)) d.removeAttribute('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.vm-solutions-close')) return;
+    var d = e.target.closest('details.vm-solutions-dd');
+    if(d) d.removeAttribute('open');
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape') return;
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      d.removeAttribute('open');
+    });
+  });
+})();
+</script>
+    <a href="/en/blog/">Blog</a>
+    <a href="https://api.virtual-marketer.de/documentation/">API</a>
+    <a href="/en/request-custom-model/">Request a model</a>
+    <a href="/en/contact/">Contact</a>
+    <a href="https://login.virtual-marketer.de/">Login</a>
+  </nav>
+</header>
+<main class="vm-fp">
+  <section class="hero" style="margin-top:44px;">
+    <div>
+      <span class="eyebrow">AI Social Publisher</span>
+      <h1>AI Social Publisher — Schedule & Autonomously Publish LinkedIn Posts</h1>
+      <p class="tagline">A LinkedIn presence that survives a busy week.</p>
+      <p class="intro">Most company profiles go quiet after six weeks. Social Publisher sets a fixed persona for your brand, then writes and illustrates posts on a schedule or from your topic niche &#8211; visually consistent through your reference image, and approval-gated by default.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="/en/demo/">Book a demo</a>
+        <a class="btn btn-ghost" href="#produkt-demo">Try the live demo</a>
+      </div>
+    </div>
+    <div class="hero-image" style="aspect-ratio:16/9;align-self:center;"><img src="/product-pages/social-hero.webp" alt="AI Social Publisher — Schedule & Autonomously Publish LinkedIn Posts" loading="eager" width="1376" height="768"></div>
+  </section>
+
+  <section aria-labelledby="audience-h">
+    <p class="section-label">Who it’s for</p>
+    <h2 class="section-title" id="audience-h">Who this is built for</h2>
+    <div class="audience-grid">
+      <div class="audience-card"><b>Marketing teams without time to post daily</b><span>Regular, on-brand posts without writing them yourself every day.</span></div>
+      <div class="audience-card"><b>Founders &amp; personal brands</b><span>Stay visible on LinkedIn while the day-to-day business runs.</span></div>
+      <div class="audience-card"><b>Agencies</b><span>One persona per client, approval workflow included.</span></div>
+    </div>
+  </section>
+
+
+
+
+  <figure class="vm-scene-figure">
+    <picture>
+      <source srcset="/product-pages/social-publisher-scene.webp" type="image/webp">
+      <img src="/product-pages/social-publisher-scene.webp" alt="A LinkedIn presence that survives a busy week." loading="lazy" decoding="async" width="1600" height="900">
+    </picture>
+  </figure>
+
+  
+
+  
+
+  <section id="produkt-demo" aria-labelledby="pdemo-h">
+    <p class="section-label">Product demo</p>
+    <h2 class="section-title" id="pdemo-h">Inside the product</h2>
+    <div class="vmd-window">
+      <div class="vmd-titlebar"><span class="vmd-dot"></span><span class="vmd-dot"></span><span class="vmd-dot"></span><span class="vmd-titletext">Virtual Marketer — Social Publisher</span></div>
+      <div class="vmd-stage" id="vmdemo">
+          <p class="vmd-label">Weekly schedule</p>
+          <div class="vmd-cal"><div class="vmd-cal-day" id="sp-d0">Mo<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d1">Tu<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d2">We<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d3">Th<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d4">Fr<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d5">Sa<div class="vmd-cal-slot"></div></div><div class="vmd-cal-day" id="sp-d6">Su<div class="vmd-cal-slot"></div></div></div>
+          <div class="vmd vmd-card" id="sp-post" style="margin-top:14px;">
+            <div class="vmd-card-title"><span>💼 Generated post — persona “Lena”</span><span class="vmd-badge vmd-badge-blue" id="sp-state">awaiting approval</span></div>
+            <div class="vmd-text" id="sp-text"></div>
+          </div>
+          <div class="vmd" id="sp-approve" style="margin-top:10px;display:flex;gap:10px;align-items:center;">
+            <span class="vmd-btn" id="sp-btn">Approve & publish</span>
+          </div></div>
+    </div>
+    <p class="vmd-demonote">Simulated preview with example data &#8211; no real accounts or server calls.</p>
+  </section>
+
+  <section aria-labelledby="value-h">
+    <p class="section-label">Business value</p>
+    <h2 class="section-title" id="value-h">What you get</h2>
+    <div class="value-grid">
+      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Reusable personas: name, background info, reference image and choice of text model</span></div>
+      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Fixed weekly time slots, or autonomous hourly topic scanning with a relevance threshold</span></div>
+      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Optional active-window gating by weekday and hour</span></div>
+      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Auto-publish is off by default &#8211; posts wait for your approval</span></div>
+      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>One-click 'Generate now' and 'Publish now' for manual control anytime</span></div>
+      <div class="value-item"><svg viewBox="0 0 24 24" class="" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Optional visible watermark on generated images</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="how-h">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title" id="how-h">How it works</h2>
+    <ol class="how-list">
+      <li>Connect LinkedIn once in Settings &rarr; Connectors &rarr; Access.</li>
+      <li>Create a persona &#8211; give it a name, background info and a reference image (or import from your LinkedIn profile).</li>
+      <li>Create a schedule: fixed times or autonomous scanning, plus an optional active window.</li>
+      <li>Review generated posts in the Posts tab or in Settings &rarr; Connectors &rarr; Approvals, then publish.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="faq-h">
+    <p class="section-label">FAQ</p>
+    <h2 class="section-title" id="faq-h">Frequently asked questions</h2>
+    <div class="faq-list">
+      <div class="faq-item"><p class="q">Do posts publish automatically?</p><p class="a">Only if you turn on Auto-publish for a schedule. By default, every generated post waits for your approval.</p></div>
+      <div class="faq-item"><p class="q">Can I post manually too?</p><p class="a">Yes &#8211; use 'Generate now' with any persona and an optional topic, then 'Publish now' when you're ready.</p></div>
+      <div class="faq-item"><p class="q">Which platforms are supported?</p><p class="a">LinkedIn today; more platforms are planned.</p></div>
+    </div>
+  </section>
+</main>
+<footer style="max-width:1140px;margin:64px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
+  &copy; 2026 SGS Virtual Marketer GmbH &middot;
+  <a href="/en/privacy-policy/">Privacy Policy</a> &middot;
+  <a href="/en/legal-notice/">Legal Notice</a> &middot;
+  <a href="/en/accessibility/">Accessibility</a>
+</footer>
+<script>
+(function(){
+  // Ties the two picker steps to the result matrix. Every combination is
+  // already in the DOM as a static image, so this only toggles which one is
+  // visible — no fetch, no loading state, instant switching.
+  document.querySelectorAll('.vm-fp').forEach(function(root){
+    var stage = root.querySelector('.demo-result-stage');
+    if(!stage) return;
+
+    function show(){
+      var m = stage.getAttribute('data-active-model');
+      var s = stage.getAttribute('data-active-scene');
+      var match = stage.querySelector('.demo-result-frame[data-model-id="'+m+'"][data-scene-id="'+s+'"]');
+      stage.querySelectorAll('.demo-result-frame').forEach(function(f){
+        f.classList.toggle('is-active', f === match);
+      });
+    }
+
+    function bind(sel, attr, target){
+      root.querySelectorAll(sel).forEach(function(btn){
+        btn.addEventListener('click', function(){
+          root.querySelectorAll(sel).forEach(function(b){
+            b.classList.toggle('selected', b === btn);
+            if(b.hasAttribute('aria-pressed')) b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+          });
+          var v = btn.getAttribute(attr);
+          if(v) stage.setAttribute(target, v);
+          show();
+        });
+      });
+    }
+
+    bind('.demo-model-gallery .demo-model', 'data-model-id', 'data-active-model');
+    bind('.demo-scene-gallery .demo-scene', 'data-scene-id', 'data-active-scene');
+    show();
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  var root = document.querySelector('.vm-fp') || document;
+  var steps = document.querySelectorAll('.demo-step-btn');
+  var panels = document.querySelectorAll('.demo-panel');
+  var prevBtn = document.getElementById('demo-prev');
+  var nextBtn = document.getElementById('demo-next');
+  if (!prevBtn || !nextBtn) return; // page has no step-through wizard
+  var current = 0;
+
+  function show(i){
+    current = Math.max(0, Math.min(steps.length - 1, i));
+    steps.forEach(function(b, idx){ b.classList.toggle('active', idx === current); });
+    panels.forEach(function(p){ p.classList.toggle('active', Number(p.dataset.panel) === current); });
+    prevBtn.disabled = current === 0;
+    nextBtn.textContent = current === steps.length - 1 ? "Start over" : "Next";
+  }
+  steps.forEach(function(b, idx){ b.addEventListener('click', function(){ stopAuto(); show(idx); }); });
+  prevBtn.addEventListener('click', function(){ stopAuto(); show(current - 1); });
+  nextBtn.addEventListener('click', function(){ stopAuto(); show(current === steps.length - 1 ? 0 : current + 1); });
+
+  // --- Auto-advance ------------------------------------------------------
+  // The wizard sat on step 1 until someone clicked, so most visitors never
+  // saw the payoff — the interesting part is the last panel. It now plays
+  // itself once it scrolls into view, which turns a static screenshot into a
+  // demonstration without demanding interaction first.
+  //
+  // Three deliberate limits: it only runs while actually visible (an
+  // IntersectionObserver, so it is not burning timers off-screen), it stops
+  // permanently at the first click or keypress because a visitor who has
+  // taken control should not have the panel yanked out from under them, and
+  // it respects prefers-reduced-motion by not starting at all.
+  var timer = null;
+  var stopped = false;
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function stopAuto(){
+    stopped = true;
+    if (timer) { clearInterval(timer); timer = null; }
+    root.classList.remove('is-autoplaying');
+  }
+  function startAuto(){
+    if (stopped || reduced || timer) return;
+    root.classList.add('is-autoplaying');
+    timer = setInterval(function(){
+      if (stopped) return;
+      show(current === steps.length - 1 ? 0 : current + 1);
+    }, 2600);
+  }
+
+  var demoSection = prevBtn.closest('section') || prevBtn.parentElement;
+
+  // Visibility is checked by geometry, not solely by IntersectionObserver.
+  // IO is the tidier API, but it silently never fires in environments that
+  // do not composite frames (embedded webviews, headless panes) — verified
+  // here: a plain interval ticked while an observer on the same element
+  // reported nothing at all. Relying on it alone would mean the demo quietly
+  // never plays for some real visitors, and would be untestable besides.
+  function inView(){
+    if (!demoSection) return false;
+    var r = demoSection.getBoundingClientRect();
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    var visible = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+    return r.height > 0 && visible / Math.min(r.height, vh) > 0.35;
+  }
+  function sync(){
+    if (stopped) return;
+    if (inView()) startAuto();
+    else if (timer) { clearInterval(timer); timer = null; root.classList.remove('is-autoplaying'); }
+  }
+
+  window.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync, { passive: true });
+  if (demoSection && 'IntersectionObserver' in window) {
+    new IntersectionObserver(sync, { threshold: 0.35 }).observe(demoSection);
+  }
+  sync();
+
+  ['pointerdown', 'keydown'].forEach(function(ev){
+    demoSection && demoSection.addEventListener(ev, stopAuto, { once: true });
+  });
+
+  document.querySelectorAll('.demo-model').forEach(function(el){
+    el.addEventListener('click', function(){
+      document.querySelectorAll('.demo-model').forEach(function(m){ m.classList.remove('selected'); });
+      el.classList.add('selected');
+    });
+  });
+  document.querySelectorAll('.demo-scene').forEach(function(el){
+    el.addEventListener('click', function(){
+      document.querySelectorAll('.demo-scene').forEach(function(s){ s.classList.remove('selected'); });
+      el.classList.add('selected');
+    });
+  });
+})();
+</script>
+<script>
+function vmDemo(rootId, steps, loopPause) {
+  var root = document.getElementById(rootId);
+  if (!root) return;
+  var initial = root.innerHTML;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var timer = null;
+  function q(sel) { return root.querySelector(sel); }
+  function apply(step, instant, next) {
+    var el = step.s ? q(step.s) : null;
+    var done = function () { if (!instant) timer = setTimeout(next, 0); };
+    if (step.t === 'wait') { done(); return; }
+    if (!el) { done(); return; }
+    if (step.t === 'text') { el.textContent = step.x; done(); return; }
+    if (step.t === 'show') { el.classList.add('vmd-on'); done(); return; }
+    if (step.t === 'hide') { el.classList.remove('vmd-on'); done(); return; }
+    if (step.t === 'class') { el.classList.add(step.x); done(); return; }
+    if (step.t === 'style') { el.style[step.k] = step.x; done(); return; }
+    if (step.t === 'type') {
+      if (instant) { el.textContent = step.x; return; }
+      el.textContent = '';
+      el.classList.add('vmd-typing');
+      var i = 0;
+      var tick = function () {
+        el.textContent = step.x.slice(0, ++i);
+        if (i < step.x.length) timer = setTimeout(tick, 24);
+        else { el.classList.remove('vmd-typing'); timer = setTimeout(next, 0); }
+      };
+      tick();
+      return;
+    }
+    done();
+  }
+  function runFrom(i) {
+    if (i >= steps.length) {
+      timer = setTimeout(function () { root.innerHTML = initial; runFrom(0); }, loopPause || 3800);
+      return;
+    }
+    timer = setTimeout(function () { apply(steps[i], false, function () { runFrom(i + 1); }); }, steps[i].d == null ? 400 : steps[i].d);
+  }
+  if (reduced) {
+    root.querySelectorAll('.vmd').forEach(function (el) { el.classList.add('vmd-instant'); });
+    steps.forEach(function (s) { apply(s, true, function () {}); });
+    return;
+  }
+  if ('IntersectionObserver' in window) {
+    var started = false;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && !started) { started = true; io.disconnect(); runFrom(0); }
+      });
+    }, { threshold: 0.25 });
+    io.observe(root);
+  } else {
+    runFrom(0);
+  }
+}
+vmDemo('vmdemo', [{"t":"class","s":"#sp-d1","x":"vmd-slot-on","d":500},{"t":"class","s":"#sp-d3","x":"vmd-slot-on","d":300},{"t":"show","s":"#sp-post","d":700},{"t":"type","s":"#sp-text","x":"Three things we learned from 1,000 product tests — number two surprises us every time …","d":400},{"t":"show","s":"#sp-approve","d":700},{"t":"class","s":"#sp-btn","x":"vmd-busy","d":900},{"t":"text","s":"#sp-state","x":"✓ published","d":1100},{"t":"class","s":"#sp-d1","x":"vmd-slot-done","d":200}], 3800);</script>
+
 <script>
 /**
  * Desktop overlap effects, neutralised on phones.

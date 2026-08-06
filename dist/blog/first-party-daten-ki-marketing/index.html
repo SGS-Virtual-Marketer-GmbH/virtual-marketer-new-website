@@ -29,9 +29,9 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"First-Party-Daten als Grundlage für KI-Marketing","description":"First-Party-Daten sind die Grundlage für KI-Marketing. Warum Googles Cookie-Kehrtwende vom April 2025 daran nichts ändert und wie der Aufbau gelingt.","datePublished":"2025-04-29","dateModified":"2025-04-29","author":{"@type":"Organization","name":"Virtual Marketer"},"publisher":{"@type":"Organization","name":"Virtual Marketer","logo":{"@type":"ImageObject","url":"/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://virtual-marketer.de/blog/first-party-daten-ki-marketing/"},"inLanguage":"de"}</script>
 
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/bootstrap.css%3Fver=4.0.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/css/font-awesome.min.css%3Fver=7.0.1.css">
-<link rel="stylesheet" href="/wp-content/themes/engitech/style.css%3Fver=7.0.1.css">
+<link rel="stylesheet" href="/assets/css/vm-a80b91e97a.css" media="all">
+
+
 <style>
   
   .vm-post{
@@ -105,7 +105,9 @@
   }
   .vm-post .vm-cta a{
     display:inline-block;margin-top:12px;padding:13px 26px;
-    background:linear-gradient(90deg,#66a3ce,#94152b);
+    /* Deepened vm-blue, not vm-blue: white on #66a3ce is 2.7:1 and fails
+       WCAG 1.4.3. Same hue, 4.6:1. See scripts/fix-legacy-header.js. */
+    background:linear-gradient(90deg,#3d7ba8,#94152b);
     color:#fff;border-radius:8px;text-decoration:none;font-weight:700;
   }
   .vm-post .vm-cta a:hover{background:linear-gradient(90deg,#94152b,#700f2b);color:#fff}
@@ -153,21 +155,53 @@
   .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
   .vm-header-simple nav > details > summary:hover{color:#94152b}
 
-  /* position:sticky above is disabled by ANY ancestor with a clipping
-     overflow, and the scraped theme's stylesheet sets overflow:hidden on
-     <body> — which is why the header on /blog/ and the feature pages scrolled
-     away despite being declared sticky. The same trap is documented in
-     scripts/make-header-sticky.js for the legacy header, where the answer was
-     position:fixed; here the cleaner fix is available, because these pages do
-     not use the theme's layout and nothing on them needs body to clip.
-     overflow-x stays hidden so a wide element still cannot scroll the page
-     sideways; only the vertical axis is released, which is the axis sticky
-     needs. */
-  body.vm-static-blog{overflow-x:hidden;overflow-y:visible}
+  /* position:sticky is disabled by ANY ancestor that is a scroll container,
+     and the scraped theme sets overflow-x:hidden on BOTH the root element
+     and the body element.
+
+     NOTE FOR ANYONE EDITING THIS COMMENT: do not write element names in
+     angle brackets here. This text ends up inside a style block in the head
+     of every generated page, and scripts/fix-nested-documents.js scans the
+     raw HTML for a body tag followed by a root tag to find pasted-in
+     documents. Angle-bracketed names in this comment read as real tags: an
+     earlier revision wrote them out and the unwrapper treated everything
+     from this comment to the end of the file as a nested document, stripping
+     the real body tag's class="vm-static-blog" — which silently disabled
+     every rule in this stylesheet. The unwrapper now masks style and script
+     regions before scanning, but prose that looks like markup is a trap
+     worth not re-laying.
+
+     WHY THE OBVIOUS FIX DID NOT WORK
+
+     The previous attempt here was overflow-x:hidden with overflow-y:visible
+     on the body — keep clipping sideways, release the axis sticky needs. It
+     reads correctly and it does nothing, because of a rule in the overflow
+     spec: when one axis is "hidden" and the other is "visible", the visible
+     one is coerced to "auto". A computed "auto" is a scroll container. So
+     the declaration that was supposed to free the header is what pinned it.
+
+     Measured on /blog/artikel-50-ki-inhalte-kennzeichnen/: computed
+     overflow was "hidden auto" on both the root and the body, and at scrollY
+     1500 the header sat at top:-1484 — i.e. it had scrolled away entirely.
+
+     "clip" is the value that does what "hidden" was being asked to do here:
+     it clips without creating a scroll container, so it does NOT coerce the
+     other axis, and visible survives. Same measurement after the change:
+     header at top:0, page still scrolls to 1500, and
+     scrollWidth === clientWidth, so nothing escapes sideways either.
+
+     The root element needs it too. Fixing only the body leaves the root
+     computing "hidden auto", and the header's nearest scrollport is then
+     still a box that never scrolls. Scoped with :has() so this reaches only
+     the generated pages — the theme's own layout on the legacy pages
+     genuinely relies on root clipping, and make-header-sticky.js solves
+     those with position:fixed instead. */
+  html:has(body.vm-static-blog){overflow-x:clip;overflow-y:visible}
+  body.vm-static-blog{overflow-x:clip;overflow-y:visible}
   /* Login is the primary action in this bar — same gradient pill as the
      homepage header, so the two do not look like different sites. */
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]{
-    background:linear-gradient(90deg,#66a3ce,#94152b);
+    background:linear-gradient(90deg,#3d7ba8,#94152b);
     color:#fff;padding:11px 26px;border-radius:10px;font-weight:600;
   }
   .vm-header-simple nav a[href*="login.virtual-marketer.de"]:hover{
@@ -195,320 +229,6 @@
   .vm-footer-simple a{color:#6b7280}
 
 </style>
-</head>
-<body class="vm-static-blog">
-
-<header class="vm-header-simple">
-  <a href="/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.webp" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none" width="512" height="512"></a>
-  <nav>
-    <details class="vm-solutions-dd">
-    <summary>Lösungen</summary>
-    <div class="vm-solutions-panel" data-title="Lösungen">
-      <button type="button" class="vm-solutions-close" aria-label="Menü schließen">&times;</button>
-      <ul class="vm-solutions-grid">
-        <li><a href="/ki-loesungen/agenten/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></span><span class="vm-sol-tx">KI-Agenten für Marketing &amp; Ads</span></a></li>
-        <li><a href="/ki-loesungen/coding-api/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span><span class="vm-sol-tx">Coding-API &amp; MCP-Server</span></a></li>
-        <li><a href="/ki-loesungen/produktfotos-ki/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="vm-sol-tx">KI-Produktfotos &amp; Virtual Try-On</span></a></li>
-        <li><a href="/ki-loesungen/feed-veredelung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16M4 12h16M4 19h9"/></svg></span><span class="vm-sol-tx">KI Feed-Veredelung</span></a></li>
-        <li><a href="/ki-loesungen/texte-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 6h14M5 12h14M5 18h8"/></svg></span><span class="vm-sol-tx">KI-Textgenerierung</span></a></li>
-        <li><a href="/ki-loesungen/bilder-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg></span><span class="vm-sol-tx">KI-Bildgenerierung</span></a></li>
-        <li><a href="/ki-loesungen/videos-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/></svg></span><span class="vm-sol-tx">KI-Videogenerierung</span></a></li>
-        <li><a href="/ki-loesungen/seo-content/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span class="vm-sol-tx">KI-SEO-Content</span></a></li>
-        <li><a href="/ki-loesungen/kampagnen-builder/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10v4h4l6 4V6l-6 4H4z"/><path d="M18 9a4 4 0 010 6"/></svg></span><span class="vm-sol-tx">KI-Kampagnen-Builder</span></a></li>
-        <li><a href="/ki-loesungen/interne-verlinkung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 006 0l3-3a4 4 0 10-6-6l-1 1"/><path d="M14 10a4 4 0 00-6 0l-3 3a4 4 0 106 6l1-1"/></svg></span><span class="vm-sol-tx">Interne Verlinkung</span></a></li>
-        <li><a href="/ki-loesungen/mail-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg></span><span class="vm-sol-tx">KI-E-Mail-Generator</span></a></li>
-        <li><a href="/ki-loesungen/social-publisher/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.5 11l6-4M8.5 13l6 4"/></svg></span><span class="vm-sol-tx">KI Social Publisher</span></a></li>
-        <li><a href="/ki-loesungen/bulk-texte/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 13l8 4 8-4"/></svg></span><span class="vm-sol-tx">KI Bulk-Generator</span></a></li>
-        <li><a href="/ki-loesungen/ki-dateien/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="vm-sol-tx">Dateien &amp; Berichte</span></a></li>
-        <li><a href="/ki-loesungen/feed-optimierung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8h10M18 8h2M4 16h4M12 16h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/></svg></span><span class="vm-sol-tx">Feed-Optimizer</span></a></li>
-        <li><a href="/ki-loesungen/chat-insights/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12a7 7 0 01-7 7H8l-4 3v-5a7 7 0 017-9h2a7 7 0 017 4z"/></svg></span><span class="vm-sol-tx">Chat-Insights</span></a></li>
-      </ul>
-      <ul class="vm-solutions-foot"><li><a href="/ki-loesungen/">Alle Lösungen im Überblick &rarr;</a></li></ul>
-    </div>
-  </details><style>
-  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
-  /* Vertical alignment with the sibling nav links.
-     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
-     while a bare <summary> is only as tall as its text, so with both boxes
-     starting at the same y the label sat 11px above "Blog" and "API".
-     Stretching the wrapper to the flex row's height and centring inside it
-     matches whatever the theme happens to use, instead of hardcoding this
-     theme's padding and breaking again the next time it changes. */
-  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
-  .vm-solutions-dd{align-self:stretch;}
-  /* align-self:stretch above computes correctly but the theme's flex row still
-     leaves the item at its content height, so the summary is matched to the
-     sibling anchors' box directly: they are line-height 35px inside 10px
-     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
-     only when replacing the legacy theme nav — so it cannot leak into
-     .vm-header-simple, where the generated pages set their own metrics. */
-  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
-  .vm-solutions-dd > summary{
-    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
-    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
-  }
-  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
-  .vm-solutions-dd > summary::marker{content:'';}
-  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
-     the label's baseline the way a "▾" character does. */
-  .vm-solutions-dd > summary::after{
-    content:'';width:7px;height:7px;flex:0 0 auto;
-    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
-    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
-  }
-  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
-  .vm-solutions-dd > summary,
-  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
-
-  .vm-solutions-panel{
-    position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
-    width:min(820px,calc(100vw - 32px));
-    background:#fff;border:1px solid #ece4e5;border-radius:18px;
-    box-shadow:0 28px 68px rgba(36,20,23,.20);
-    padding:18px;margin:0;z-index:99999;
-  }
-  .vm-solutions-grid{
-    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
-    margin:0;padding:0;list-style:none;
-  }
-  .vm-solutions-grid li{margin:0;padding:0;}
-  /* Two classes in the selector on purpose. The theme styles these links via
-     .main-navigation ul li li a (one class, four elements) and
-     .main-navigation ul > li > a, both of which outrank a bare
-     .vm-solutions-grid a. Class count is compared before element count, so
-     scoping to the panel wins cleanly without resorting to !important. */
-  .vm-solutions-panel .vm-solutions-grid a{
-    display:flex;align-items:center;gap:11px;
-    padding:10px 11px;border-radius:10px;
-    color:#241417;text-decoration:none;
-    /* The theme uppercases and nowraps its nav links. Inherited into a
-       three-column grid that produced the overlap this panel was reported
-       for: labels ran straight through their neighbours instead of wrapping.
-       Both are reset here rather than fought with !important elsewhere. */
-    text-transform:none;white-space:normal;
-    font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
-  }
-  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
-  .vm-sol-ic{
-    flex:0 0 auto;display:grid;place-items:center;
-    width:32px;height:32px;border-radius:9px;
-    background:#f6eff0;color:#94152b;
-  }
-  .vm-sol-ic svg{width:17px;height:17px;display:block;}
-  .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
-  .vm-sol-tx{min-width:0;}
-  .vm-solutions-foot{
-    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
-  }
-  .vm-solutions-panel .vm-solutions-foot a{
-    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
-    text-decoration:none;padding:4px 12px;text-transform:none;
-  }
-  .vm-solutions-foot a:hover{text-decoration:underline;}
-
-  /* --- Mobile: a real full-screen drawer -------------------------------
-     Below 900px the panel used to render inline, which pushed the whole
-     header open and buried the page under a 16-item list. It is now an
-     overlay pinned to the viewport with its own header and scroll area, so
-     it behaves like a drawer instead of an expanding accordion. */
-  @media (max-width:900px){
-    .vm-solutions-dd{position:static;}
-    .vm-solutions-panel{
-      position:fixed;inset:0;top:0;left:0;transform:none;
-      width:100vw;height:100dvh;max-height:100dvh;
-      border:0;border-radius:0;box-shadow:none;
-      padding:calc(env(safe-area-inset-top) + 64px) 16px calc(env(safe-area-inset-bottom) + 24px);
-      overflow-y:auto;-webkit-overflow-scrolling:touch;
-      animation:vmDrawerIn .18s ease-out;
-    }
-    .vm-solutions-panel::before{
-      content:attr(data-title);
-      position:fixed;top:0;left:0;right:0;height:56px;
-      display:flex;align-items:center;padding:0 16px;
-      background:#fff;border-bottom:1px solid #ece4e5;
-      font-weight:700;font-size:16px;color:#241417;
-    }
-    .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
-    .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
-    .vm-sol-ic{width:36px;height:36px;}
-    .vm-sol-ic svg{width:19px;height:19px;}
-    .vm-solutions-foot a{font-size:15px;}
-    /* Stop the page behind the drawer from scrolling with it. */
-    html:has(.vm-solutions-dd[open]) body{overflow:hidden;}
-  }
-  @keyframes vmDrawerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-  /* The legacy theme already has a full-screen off-canvas menu, and it slides
-     in with a transform. A transformed ancestor becomes the containing block
-     for position:fixed, so the drawer above rendered *inside* it landed one
-     viewport off-screen (measured at left:375 on a 375px viewport). Inside
-     that wrapper the panel therefore renders inline and lets the theme's own
-     drawer be the drawer — nesting a second full-screen overlay inside the
-     first is the actual mistake. The fixed drawer still applies on the
-     generated pages, whose header has no off-canvas container. */
-  @media (max-width:900px){
-    .mmenu-wrapper .vm-solutions-panel{
-      position:static;width:auto;height:auto;max-height:none;
-      padding:4px 0 0;overflow:visible;animation:none;
-    }
-    .mmenu-wrapper .vm-solutions-panel::before{display:none;}
-    .mmenu-wrapper .vm-solutions-close{display:none;}
-    .mmenu-wrapper .vm-solutions-grid a{padding:11px 8px;font-size:14px;}
-  }
-  .vm-solutions-close{display:none;}
-  @media (max-width:900px){
-    .vm-solutions-close{
-      display:block;position:fixed;top:8px;right:10px;z-index:1;
-      width:40px;height:40px;border:0;background:none;
-      font-size:30px;line-height:1;color:#241417;cursor:pointer;
-    }
-  }
-</style>
-<script>
-(function(){
-  // <details> has no concept of "dismiss" — without this the panel stays open
-  // until the summary is clicked again, which feels broken next to every other
-  // menu on the web.
-  document.addEventListener('click', function(e){
-    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
-      if(!d.contains(e.target)) d.removeAttribute('open');
-    });
-  });
-  document.addEventListener('click', function(e){
-    if(!e.target.closest('.vm-solutions-close')) return;
-    var d = e.target.closest('details.vm-solutions-dd');
-    if(d) d.removeAttribute('open');
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key !== 'Escape') return;
-    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
-      d.removeAttribute('open');
-    });
-  });
-})();
-</script>
-    <a href="/blog/">Blog</a>
-    <a href="https://api.virtual-marketer.de/documentation/">API</a>
-    <a href="/modell-anfragen/">Modell anfragen</a>
-    <a href="/kontakt/">Kontakt</a>
-    <a href="https://login.virtual-marketer.de/">Login</a>
-  </nav>
-</header>
-
-<main class="vm-post">
-  <article>
-    <span class="vm-category">AI-Trends</span>
-    <h1>First-Party-Daten als Grundlage für KI-Marketing</h1>
-    <div class="vm-meta">
-      <span>29. April 2025</span> · <span>Virtual Marketer Team</span>
-    </div>
-
-    <p>First-Party-Daten sind Daten, die ein Unternehmen in eigenen Kanälen selbst erhebt – aus dem Shop, dem CRM, dem Newsletter, dem Kundenservice. Für KI-gestütztes Marketing sind sie die entscheidende Grundlage, weil ein Modell nur so gut personalisieren, prognostizieren und texten kann, wie die Daten es zulassen, mit denen es arbeitet. Die Entscheidung von Google vom 22. April 2025, Third-Party-Cookies in Chrome doch nicht abzuschaffen, ändert daran nichts – sie verschiebt lediglich den Zeitdruck.</p>
-
-<p>Konkret hat Google an diesem Tag im Privacy-Sandbox-Blog mitgeteilt, keine separate Auswahlabfrage („user choice prompt") für Third-Party-Cookies in Chrome einzuführen. Nutzerinnen und Nutzer verwalten ihre Einstellungen weiterhin über die bestehenden Datenschutz- und Sicherheitseinstellungen des Browsers. Die Privacy-Sandbox-APIs bleiben verfügbar, werden aber nicht mehr durch das Auslaufen der Cookies erzwungen.</p>
-
-<p>Wie relevant die Datengrundlage inzwischen ist, zeigt eine Zahl aus der amtlichen Statistik: Nach der Pressemitteilung des Statistischen Bundesamtes vom 25. November 2024 nutzten 20 Prozent der Unternehmen in Deutschland mit mindestens zehn Beschäftigten KI-Technologien – nach 12 Prozent im Jahr zuvor. Der mit Abstand häufigste Einsatzbereich war dabei Marketing und Vertrieb mit 33 Prozent der KI-nutzenden Unternehmen. Genau dort entscheidet die Qualität der eigenen Daten darüber, ob der Einsatz Ergebnisse liefert.</p>
-
-<h2>Warum das keine Entwarnung ist</h2>
-
-<p>Die naheliegende Reaktion vieler Marketingabteilungen lautete: „Dann können wir weitermachen wie bisher." Das greift aus vier Gründen zu kurz.</p>
-
-<p><strong>Erstens</strong> war Chrome nie der einzige Faktor. Safari blockiert Third-Party-Cookies seit Jahren standardmäßig, Firefox ebenfalls. Der Anteil an Nutzern, bei denen kanalübergreifendes Tracking über Fremdcookies zuverlässig funktioniert, ist unabhängig von Googles Entscheidung seit Jahren rückläufig.</p>
-
-<p><strong>Zweitens</strong> ist der begrenzende Faktor in Deutschland ohnehin das Einwilligungserfordernis. § 25 TDDDG verlangt für das Speichern von und den Zugriff auf Informationen in Endeinrichtungen eine Einwilligung – unabhängig davon, ob es sich um ein Erst- oder Drittanbieter-Cookie handelt und unabhängig davon, ob ein Browser sie technisch zulässt. Wer keine Einwilligung hat, darf nicht setzen; was der Browser erlaubt, ist nachrangig.</p>
-
-<p><strong>Drittens</strong> ändert die Entscheidung nichts an der Datenqualität. Third-Party-Daten waren nie besonders gut: veraltete Segmente, fragwürdige Herkunft, keine Kontrolle über Aktualität. Für KI-Anwendungen, die aus Verhaltensmustern lernen, ist ein sauberes eigenes Signal mehr wert als ein großes, unsicheres fremdes.</p>
-
-<p><strong>Viertens</strong> ist die strategische Richtung unverändert. Wer 2023 und 2024 in eigene Datenerhebung investiert hat, steht heute besser da – nicht schlechter. Die Investition zahlt sich in Personalisierung, Prognosequalität und Unabhängigkeit von Plattformentscheidungen aus, und keiner dieser Effekte ist an das Schicksal eines Cookie-Typs gebunden.</p>
-
-<h2>Was KI-Systeme aus First-Party-Daten machen können</h2>
-
-<p>Der Unterschied zwischen „wir haben Daten" und „unsere Daten sind für KI nutzbar" ist erheblich. Drei Anwendungsklassen zeigen, worauf es ankommt.</p>
-
-<h3>Segmentierung und Prognose</h3>
-<p>Kaufhistorie, Warenkorbabbrüche, Wiederkaufintervalle und Servicekontakte reichen aus, um Abwanderungsrisiko und Kaufwahrscheinlichkeit deutlich präziser zu schätzen als über demografische Fremdsegmente. Die notwendige Datenmenge ist geringer, als viele annehmen – entscheidend ist Konsistenz über die Zeit, nicht Volumen.</p>
-
-<h3>Personalisierte Inhalte in großer Menge</h3>
-<p>Produkttexte, Kategorietexte, E-Mail-Varianten und Anzeigentexte lassen sich auf Basis eigener Produkt- und Kundendaten in einer Menge erzeugen, die manuell nicht zu leisten wäre. Der Qualitätssprung entsteht dabei nicht durch das Modell allein, sondern durch die Qualität der zugeführten Attribute: Ein gepflegter Produktdatensatz mit Material, Passform, Anwendungsfall und Zielgruppe erzeugt brauchbare Texte, ein Datensatz mit Artikelnummer und Preis nicht.</p>
-
-<h3>Relevanzsteuerung statt Gießkanne</h3>
-<p>Empfehlungen, Versandzeitpunkte und Kanalwahl lassen sich aus eigenen Interaktionsdaten ableiten. Auch hier gilt: Die Signale, die am besten funktionieren, sind meist die banalsten – zuletzt angesehene Kategorie, Zeitpunkt der letzten Bestellung, Reaktion auf die letzten drei Mailings.</p>
-
-<h2>Datenschutz ist der Rahmen, nicht der Gegner</h2>
-
-<p>First-Party-Daten sind nicht automatisch unbedenklich. Für jede Verarbeitung braucht es eine Rechtsgrundlage, und die Zweckbindung gilt uneingeschränkt: Daten, die für die Vertragsabwicklung erhoben wurden, dürfen nicht ohne Weiteres für Profilbildung im Marketing genutzt werden.</p>
-
-<p>Praktisch bewährt hat sich eine klare Trennung: ein dokumentierter Zweck je Datenkategorie, ein Einwilligungsmanagement, das den tatsächlichen Verarbeitungen entspricht, und ein Löschkonzept, das auch dann greift, wenn Daten in ein KI-System eingeflossen sind. Der letzte Punkt wird am häufigsten übersehen – ein Löschkonzept, das nur die Primärdatenbank kennt, ist unvollständig.</p>
-
-<p>Hinzu kommt seit Februar 2025 die KI-Kompetenzpflicht nach Artikel 4 des EU AI Act: Wer KI-Systeme einsetzt, muss dafür sorgen, dass die damit befassten Mitarbeitenden über ausreichendes Verständnis verfügen. Für Datenteams heißt das insbesondere, die Grenzen der eingesetzten Modelle zu kennen.</p>
-
-<h2>Ein pragmatischer Aufbauplan</h2>
-
-<ol>
-<li><strong>Bestandsaufnahme.</strong> Welche eigenen Datenquellen existieren, wo liegen sie, wer pflegt sie? In vielen Unternehmen ist der Engpass nicht die Datenmenge, sondern die Verteilung über Systeme, die nicht miteinander sprechen.</li>
-<li><strong>Identitätsauflösung klären.</strong> Über welchen Schlüssel werden Shop, CRM und Newsletter zusammengeführt? Ohne diese Entscheidung bleibt jede Personalisierung Stückwerk.</li>
-<li><strong>Wertvolle Signale zuerst.</strong> Statt eines Großprojekts drei bis fünf Signale auswählen, die messbar auf Umsatz einzahlen, und diese sauber verfügbar machen.</li>
-<li><strong>Einwilligungen an die Realität anpassen.</strong> Prüfen, ob das, was tatsächlich passiert, von den eingeholten Einwilligungen gedeckt ist – nicht umgekehrt.</li>
-<li><strong>Datenqualität messen.</strong> Vollständigkeitsquote je Pflichtfeld, Aktualität, Dublettenquote. Ohne Messgröße verbessert sich Datenqualität erfahrungsgemäß nicht.</li>
-<li><strong>Erst dann automatisieren.</strong> KI auf schlechten Daten produziert schnell viel Mittelmaß – und macht bestehende Datenprobleme sichtbarer, nicht kleiner.</li>
-</ol>
-
-<h2>Server-seitige Messung als Zwischenschritt</h2>
-
-<p>Unabhängig von Cookies gewinnt server-seitiges Tracking an Bedeutung, weil es die Kontrolle über die erhobenen Daten zurück ins eigene Haus holt. Der Vorteil ist nicht, Einwilligungspflichten zu umgehen – das ist rechtlich nicht möglich und auch nicht das Ziel. Der Vorteil ist Robustheit gegenüber Browsereinschränkungen und Blockern sowie die Möglichkeit, Daten vor der Weitergabe zu filtern und zu minimieren.</p>
-
-<h2>Woran man erkennt, ob die eigenen Daten KI-tauglich sind</h2>
-
-<p>Zwischen „wir haben ein CRM" und „unsere Daten taugen als Grundlage für automatisierte Entscheidungen" liegt in vielen Unternehmen ein Jahr Arbeit. Vier Prüffragen trennen die beiden Zustände zuverlässig voneinander.</p>
-
-<ul>
-<li><strong>Ist ein Kunde über Systeme hinweg dieselbe Person?</strong> Wenn Shop, Newsletter und Service dieselbe Kundin als drei Datensätze führen, misst jede Auswertung das Falsche – und jede Personalisierung spricht ein Drittel der Historie an.</li>
-<li><strong>Sind Zeitpunkte sauber erfasst?</strong> Prognosen leben von Abständen: Wann war die letzte Bestellung, wie lange dauert ein Wiederkauf, wann kam die letzte Beschwerde? Ein Datensatz ohne verlässliche Zeitstempel taugt für Beschreibung, nicht für Vorhersage.</li>
-<li><strong>Sind Pflichtfelder tatsächlich gefüllt?</strong> Eine Vollständigkeitsquote je Attribut ist schnell ermittelt und meist ernüchternd. Sie ist zugleich die Kennzahl, die sich am schnellsten verbessern lässt.</li>
-<li><strong>Ist dokumentiert, worauf sich eine Einwilligung bezieht?</strong> Nicht die Existenz einer Einwilligung entscheidet, sondern ihr Umfang. Wer das nicht je Zweck festhält, kann später nicht belegen, dass eine Verarbeitung gedeckt war.</li>
-</ul>
-
-<p>Wer diese vier Punkte in Ordnung bringt, hat den größten Teil der Vorarbeit geleistet – unabhängig davon, welches Werkzeug später zum Einsatz kommt und unabhängig davon, was Browserhersteller in den nächsten Jahren entscheiden.</p>
-
-<h2>Häufige Fragen</h2>
-
-<h3>Bleiben Third-Party-Cookies in Chrome jetzt dauerhaft erhalten?</h3>
-<p>Google hat am 22. April 2025 mitgeteilt, keine separate Auswahlabfrage einzuführen; die Steuerung bleibt in den bestehenden Chrome-Einstellungen. Eine dauerhafte Bestandsgarantie ist damit nicht verbunden. Für die Planung sinnvoll ist, den Cookie-Status als veränderliche Rahmenbedingung zu behandeln und die eigene Datenstrategie nicht davon abhängig zu machen.</p>
-
-<h3>Wie viele Daten braucht man für sinnvolle KI-Personalisierung?</h3>
-<p>Weniger, als meist angenommen. Entscheidend sind Konsistenz und Aktualität der wenigen wirklich aussagekräftigen Merkmale, nicht die Gesamtzahl der Felder. Ein Shop mit einigen tausend Bestellungen pro Jahr und sauber gepflegten Produktattributen kommt in der Regel weiter als ein Unternehmen mit großen, aber lückenhaften Datenbeständen.</p>
-
-<h3>Dürfen Bestandskundendaten ohne Einwilligung für KI-Analysen genutzt werden?</h3>
-<p>Das hängt vom Zweck ab. Für jede Verarbeitung braucht es eine Rechtsgrundlage nach Art. 6 DSGVO, und die ursprüngliche Zweckbindung ist zu beachten. Eine Nutzung für Profilbildung im Marketing lässt sich nicht pauschal auf die Vertragsabwicklung stützen. Die Bewertung sollte je Anwendungsfall erfolgen und dokumentiert werden – idealerweise gemeinsam mit dem Datenschutzbeauftragten.</p>
-
-<h2>Fazit</h2>
-
-<p>Die Cookie-Kehrtwende vom April 2025 nimmt Druck vom Zeitplan, nicht von der Sache. Wer KI im Marketing ernsthaft nutzen will, braucht eigene, saubere, rechtlich abgesicherte Daten – weil jedes Modell an der Qualität seiner Eingangsdaten hängt. Der beste Zeitpunkt, damit anzufangen, war vor zwei Jahren. Der zweitbeste ist jetzt, ohne den Druck einer Deadline.</p>
-
-
-    <div class="vm-cta">
-      <strong>Bereit für KI-Marketinglösungen?</strong>
-      <p>Erfahren Sie in einer unverbindlichen Demo, wie Virtual Marketer Ihr Marketing automatisiert.</p>
-      <a href="/virtual-marketer-demo/">Demo buchen</a>
-    </div>
-
-    <div class="vm-related">
-      <h3>Weitere Artikel</h3>
-      <ul>
-        <li><a href="/blog/first-party-data-strategie-cookie-ende/">First-Party-Daten-Strategie für das Ende der Cookies</a></li>
-        <li><a href="/blog/gmail-yahoo-anforderungen-e-mail-marketing/">Gmail- und Yahoo-Regeln: E-Mail-Marketing anpassen</a></li>
-        <li><a href="/blog/consent-mode-v2-dma-pflicht/">Consent Mode v2: Pflicht seit 6. März 2024 erklärt</a></li>
-      </ul>
-    </div>
-  </article>
-</main>
-
-<footer class="vm-footer-simple">
-  &copy; 2026 SGS Virtual Marketer GmbH &middot;
-  <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> &middot;
-  <a href="/impressum/">Impressum</a>
-</footer>
-
 <style id="vm-mobile-polish">
 /* ==========================================================================
    Mobile polish — see scripts/mobile-polish.js
@@ -716,6 +436,336 @@ html { scroll-padding-top: 76px; }
   }
 }
 </style>
+<style id="vm-a11y-links">
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):not([aria-hidden="true"]){
+  text-decoration:underline;
+  text-underline-offset:2px;
+  text-decoration-thickness:1px;
+}
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):hover{
+  text-decoration-thickness:2px;
+}
+/* The share row and any icon-only link inside a list item: an underline under
+   a glyph is noise, and the link is not a text link. */
+:is(p,li) > a:has(> svg:only-child),
+:is(p,li) > a:has(> i:only-child){text-decoration:none}
+</style>
+<style id="vm-ilink-style">.vm-ilink{color:#94152b;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}.vm-ilink:hover{color:#700f2b;text-decoration-thickness:2px}</style>
+</head>
+<body class="vm-static-blog">
+
+<header class="vm-header-simple">
+  <a href="/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.webp" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none" width="512" height="512"></a>
+  <nav>
+    <details class="vm-solutions-dd">
+    <summary>Lösungen</summary>
+    <div class="vm-solutions-panel" data-title="Lösungen">
+      <button type="button" class="vm-solutions-close" aria-label="Menü schließen">&times;</button>
+      <ul class="vm-solutions-grid">
+        <li><a href="/ki-loesungen/agenten/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></span><span class="vm-sol-tx">KI-Agenten für Marketing &amp; Ads</span></a></li>
+        <li><a href="/ki-loesungen/coding-api/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span><span class="vm-sol-tx">Coding-API &amp; MCP-Server</span></a></li>
+        <li><a href="/ki-loesungen/produktfotos-ki/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="vm-sol-tx">Product Staging: KI-Produktfotos</span></a></li>
+        <li><a href="/ki-loesungen/feed-veredelung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16M4 12h16M4 19h9"/></svg></span><span class="vm-sol-tx">KI Feed-Veredelung</span></a></li>
+        <li><a href="/ki-loesungen/texte-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 6h14M5 12h14M5 18h8"/></svg></span><span class="vm-sol-tx">KI-Textgenerierung</span></a></li>
+        <li><a href="/ki-loesungen/bilder-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-6 6"/></svg></span><span class="vm-sol-tx">KI-Bildgenerierung</span></a></li>
+        <li><a href="/ki-loesungen/videos-generieren/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/></svg></span><span class="vm-sol-tx">KI-Videogenerierung</span></a></li>
+        <li><a href="/ki-loesungen/seo-content/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span class="vm-sol-tx">KI-SEO-Content</span></a></li>
+        <li><a href="/ki-loesungen/kampagnen-builder/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10v4h4l6 4V6l-6 4H4z"/><path d="M18 9a4 4 0 010 6"/></svg></span><span class="vm-sol-tx">KI-Kampagnen-Builder</span></a></li>
+        <li><a href="/ki-loesungen/interne-verlinkung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 006 0l3-3a4 4 0 10-6-6l-1 1"/><path d="M14 10a4 4 0 00-6 0l-3 3a4 4 0 106 6l1-1"/></svg></span><span class="vm-sol-tx">Interne Verlinkung</span></a></li>
+        <li><a href="/ki-loesungen/mail-generator/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 8l9 6 9-6"/></svg></span><span class="vm-sol-tx">KI-E-Mail-Generator</span></a></li>
+        <li><a href="/ki-loesungen/social-publisher/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.5 11l6-4M8.5 13l6 4"/></svg></span><span class="vm-sol-tx">KI Social Publisher</span></a></li>
+        <li><a href="/ki-loesungen/bulk-texte/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 13l8 4 8-4"/></svg></span><span class="vm-sol-tx">KI Bulk-Generator</span></a></li>
+        <li><a href="/ki-loesungen/ki-dateien/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="vm-sol-tx">Dateien &amp; Berichte</span></a></li>
+        <li><a href="/ki-loesungen/feed-optimierung/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8h10M18 8h2M4 16h4M12 16h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/></svg></span><span class="vm-sol-tx">Feed-Optimizer</span></a></li>
+        <li><a href="/ki-loesungen/chat-insights/"><span class="vm-sol-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12a7 7 0 01-7 7H8l-4 3v-5a7 7 0 017-9h2a7 7 0 017 4z"/></svg></span><span class="vm-sol-tx">Chat-Insights</span></a></li>
+      </ul>
+      <ul class="vm-solutions-foot"><li><a href="/ki-loesungen/">Alle Lösungen im Überblick &rarr;</a></li></ul>
+    </div>
+  </details><style>
+  .vm-solutions-dd{position:relative;display:inline-flex;align-items:center;font-family:inherit;}
+  /* Vertical alignment with the sibling nav links.
+     The theme's menu anchors are 55px tall (10px padding + 35px line-height)
+     while a bare <summary> is only as tall as its text, so with both boxes
+     starting at the same y the label sat 11px above "Blog" and "API".
+     Stretching the wrapper to the flex row's height and centring inside it
+     matches whatever the theme happens to use, instead of hardcoding this
+     theme's padding and breaking again the next time it changes. */
+  .vm-solutions-menu-item{align-self:stretch;display:flex;align-items:center;}
+  .vm-solutions-dd{align-self:stretch;}
+  /* align-self:stretch above computes correctly but the theme's flex row still
+     leaves the item at its content height, so the summary is matched to the
+     sibling anchors' box directly: they are line-height 35px inside 10px
+     vertical padding. Scoped to .vm-solutions-menu-item — the wrapper used
+     only when replacing the legacy theme nav — so it cannot leak into
+     .vm-header-simple, where the generated pages set their own metrics. */
+  .vm-solutions-menu-item > .vm-solutions-dd > summary{padding:10px 0;line-height:35px;}
+  .vm-solutions-dd > summary{
+    cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;
+    color:inherit;font:inherit;line-height:inherit;text-decoration:none;
+  }
+  .vm-solutions-dd > summary::-webkit-details-marker{display:none;}
+  .vm-solutions-dd > summary::marker{content:'';}
+  /* Chevron as a rotating box rather than a text glyph, so it cannot shift
+     the label's baseline the way a "▾" character does. */
+  .vm-solutions-dd > summary::after{
+    content:'';width:7px;height:7px;flex:0 0 auto;
+    border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+    transform:translateY(-2px) rotate(45deg);transition:transform .18s ease;
+  }
+  .vm-solutions-dd[open] > summary::after{transform:translateY(1px) rotate(-135deg);}
+  .vm-solutions-dd > summary,
+  .vm-solutions-dd > summary:hover{text-decoration:none;border-bottom:0;box-shadow:none;}
+
+  .vm-solutions-panel{
+    position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
+    width:min(820px,calc(100vw - 32px));
+    background:#fff;border:1px solid #ece4e5;border-radius:18px;
+    box-shadow:0 28px 68px rgba(36,20,23,.20);
+    padding:18px;margin:0;z-index:99999;
+  }
+  .vm-solutions-grid{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
+    margin:0;padding:0;list-style:none;
+  }
+  .vm-solutions-grid li{margin:0;padding:0;}
+  /* Two classes in the selector on purpose. The theme styles these links via
+     .main-navigation ul li li a (one class, four elements) and
+     .main-navigation ul > li > a, both of which outrank a bare
+     .vm-solutions-grid a. Class count is compared before element count, so
+     scoping to the panel wins cleanly without resorting to !important. */
+  .vm-solutions-panel .vm-solutions-grid a{
+    display:flex;align-items:center;gap:11px;
+    padding:10px 11px;border-radius:10px;
+    color:#241417;text-decoration:none;
+    /* The theme uppercases and nowraps its nav links. Inherited into a
+       three-column grid that produced the overlap this panel was reported
+       for: labels ran straight through their neighbours instead of wrapping.
+       Both are reset here rather than fought with !important elsewhere. */
+    text-transform:none;white-space:normal;
+    font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
+  }
+  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
+  .vm-sol-ic{
+    flex:0 0 auto;display:grid;place-items:center;
+    width:32px;height:32px;border-radius:9px;
+    background:#f6eff0;color:#94152b;
+  }
+  .vm-sol-ic svg{width:17px;height:17px;display:block;}
+  .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
+  .vm-sol-tx{min-width:0;}
+  .vm-solutions-foot{
+    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
+  }
+  .vm-solutions-panel .vm-solutions-foot a{
+    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
+    text-decoration:none;padding:4px 12px;text-transform:none;
+  }
+  .vm-solutions-foot a:hover{text-decoration:underline;}
+
+  /* --- Mobile: a real full-screen drawer -------------------------------
+     Below 900px the panel used to render inline, which pushed the whole
+     header open and buried the page under a 16-item list. It is now an
+     overlay pinned to the viewport with its own header and scroll area, so
+     it behaves like a drawer instead of an expanding accordion. */
+  @media (max-width:900px){
+    .vm-solutions-dd{position:static;}
+    .vm-solutions-panel{
+      position:fixed;inset:0;top:0;left:0;transform:none;
+      width:100vw;height:100dvh;max-height:100dvh;
+      border:0;border-radius:0;box-shadow:none;
+      padding:calc(env(safe-area-inset-top) + 64px) 16px calc(env(safe-area-inset-bottom) + 24px);
+      overflow-y:auto;-webkit-overflow-scrolling:touch;
+      animation:vmDrawerIn .18s ease-out;
+    }
+    .vm-solutions-panel::before{
+      content:attr(data-title);
+      position:fixed;top:0;left:0;right:0;height:56px;
+      display:flex;align-items:center;padding:0 16px;
+      background:#fff;border-bottom:1px solid #ece4e5;
+      font-weight:700;font-size:16px;color:#241417;
+    }
+    .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
+    .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
+    .vm-sol-ic{width:36px;height:36px;}
+    .vm-sol-ic svg{width:19px;height:19px;}
+    .vm-solutions-foot a{font-size:15px;}
+    /* Stop the page behind the drawer from scrolling with it. */
+    html:has(.vm-solutions-dd[open]) body{overflow:hidden;}
+  }
+  @keyframes vmDrawerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* The legacy theme already has a full-screen off-canvas menu, and it slides
+     in with a transform. A transformed ancestor becomes the containing block
+     for position:fixed, so the drawer above rendered *inside* it landed one
+     viewport off-screen (measured at left:375 on a 375px viewport). Inside
+     that wrapper the panel therefore renders inline and lets the theme's own
+     drawer be the drawer — nesting a second full-screen overlay inside the
+     first is the actual mistake. The fixed drawer still applies on the
+     generated pages, whose header has no off-canvas container. */
+  @media (max-width:900px){
+    .mmenu-wrapper .vm-solutions-panel{
+      position:static;width:auto;height:auto;max-height:none;
+      padding:4px 0 0;overflow:visible;animation:none;
+    }
+    .mmenu-wrapper .vm-solutions-panel::before{display:none;}
+    .mmenu-wrapper .vm-solutions-close{display:none;}
+    .mmenu-wrapper .vm-solutions-grid a{padding:11px 8px;font-size:14px;}
+  }
+  .vm-solutions-close{display:none;}
+  @media (max-width:900px){
+    .vm-solutions-close{
+      display:block;position:fixed;top:8px;right:10px;z-index:1;
+      width:40px;height:40px;border:0;background:none;
+      font-size:30px;line-height:1;color:#241417;cursor:pointer;
+    }
+  }
+</style>
+<script>
+(function(){
+  // <details> has no concept of "dismiss" — without this the panel stays open
+  // until the summary is clicked again, which feels broken next to every other
+  // menu on the web.
+  document.addEventListener('click', function(e){
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      if(!d.contains(e.target)) d.removeAttribute('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.vm-solutions-close')) return;
+    var d = e.target.closest('details.vm-solutions-dd');
+    if(d) d.removeAttribute('open');
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape') return;
+    document.querySelectorAll('details.vm-solutions-dd[open]').forEach(function(d){
+      d.removeAttribute('open');
+    });
+  });
+})();
+</script>
+    <a href="/blog/">Blog</a>
+    <a href="https://api.virtual-marketer.de/documentation/">API</a>
+    <a href="/modell-anfragen/">Modell anfragen</a>
+    <a href="/kontakt/">Kontakt</a>
+    <a href="https://login.virtual-marketer.de/">Login</a>
+  </nav>
+</header>
+
+<main class="vm-post">
+  <article>
+    <span class="vm-category">AI-Trends</span>
+    <h1>First-Party-Daten als Grundlage für KI-Marketing</h1>
+    <div class="vm-meta">
+      <span>29. April 2025</span> · <span>Virtual Marketer Team</span>
+    </div>
+
+    <p>First-Party-Daten sind Daten, die ein Unternehmen in eigenen Kanälen selbst erhebt – aus dem Shop, dem CRM, dem <a href="/ki-loesungen/mail-generator/" class="vm-ilink">Newsletter</a>, dem Kundenservice. Für KI-gestütztes Marketing sind sie die entscheidende Grundlage, weil ein Modell nur so gut personalisieren, prognostizieren und texten kann, wie die Daten es zulassen, mit denen es arbeitet. Die Entscheidung von Google vom 22. April 2025, Third-Party-Cookies in Chrome doch nicht abzuschaffen, ändert daran nichts – sie verschiebt lediglich den Zeitdruck.</p>
+
+<p>Konkret hat Google an diesem Tag im Privacy-Sandbox-Blog mitgeteilt, keine separate Auswahlabfrage („user choice prompt") für Third-Party-Cookies in Chrome einzuführen. Nutzerinnen und Nutzer verwalten ihre Einstellungen weiterhin über die bestehenden Datenschutz- und Sicherheitseinstellungen des Browsers. Die Privacy-Sandbox-APIs bleiben verfügbar, werden aber nicht mehr durch das Auslaufen der Cookies erzwungen.</p>
+
+<p>Wie relevant die Datengrundlage inzwischen ist, zeigt eine Zahl aus der amtlichen Statistik: Nach der Pressemitteilung des Statistischen Bundesamtes vom 25. November 2024 nutzten 20 Prozent der Unternehmen in Deutschland mit mindestens zehn Beschäftigten KI-Technologien – nach 12 Prozent im Jahr zuvor. Der mit Abstand häufigste Einsatzbereich war dabei Marketing und Vertrieb mit 33 Prozent der KI-nutzenden Unternehmen. Genau dort entscheidet die Qualität der eigenen Daten darüber, ob der Einsatz Ergebnisse liefert.</p>
+
+<h2>Warum das keine Entwarnung ist</h2>
+
+<p>Die naheliegende Reaktion vieler Marketingabteilungen lautete: „Dann können wir weitermachen wie bisher." Das greift aus vier Gründen zu kurz.</p>
+
+<p><strong>Erstens</strong> war Chrome nie der einzige Faktor. Safari blockiert Third-Party-Cookies seit Jahren standardmäßig, Firefox ebenfalls. Der Anteil an Nutzern, bei denen kanalübergreifendes Tracking über Fremdcookies zuverlässig funktioniert, ist unabhängig von Googles Entscheidung seit Jahren rückläufig.</p>
+
+<p><strong>Zweitens</strong> ist der begrenzende Faktor in Deutschland ohnehin das Einwilligungserfordernis. § 25 TDDDG verlangt für das Speichern von und den Zugriff auf Informationen in Endeinrichtungen eine Einwilligung – unabhängig davon, ob es sich um ein Erst- oder Drittanbieter-Cookie handelt und unabhängig davon, ob ein Browser sie technisch zulässt. Wer keine Einwilligung hat, darf nicht setzen; was der Browser erlaubt, ist nachrangig.</p>
+
+<p><strong>Drittens</strong> ändert die Entscheidung nichts an der Datenqualität. Third-Party-Daten waren nie besonders gut: veraltete Segmente, fragwürdige Herkunft, keine Kontrolle über Aktualität. Für KI-Anwendungen, die aus Verhaltensmustern lernen, ist ein sauberes eigenes Signal mehr wert als ein großes, unsicheres fremdes.</p>
+
+<p><strong>Viertens</strong> ist die strategische Richtung unverändert. Wer 2023 und 2024 in eigene Datenerhebung investiert hat, steht heute besser da – nicht schlechter. Die Investition zahlt sich in Personalisierung, Prognosequalität und Unabhängigkeit von Plattformentscheidungen aus, und keiner dieser Effekte ist an das Schicksal eines Cookie-Typs gebunden.</p>
+
+<h2>Was KI-Systeme aus First-Party-Daten machen können</h2>
+
+<p>Der Unterschied zwischen „wir haben Daten" und „unsere Daten sind für KI nutzbar" ist erheblich. Drei Anwendungsklassen zeigen, worauf es ankommt.</p>
+
+<h3>Segmentierung und Prognose</h3>
+<p>Kaufhistorie, Warenkorbabbrüche, Wiederkaufintervalle und Servicekontakte reichen aus, um Abwanderungsrisiko und Kaufwahrscheinlichkeit deutlich präziser zu schätzen als über demografische Fremdsegmente. Die notwendige Datenmenge ist geringer, als viele annehmen – entscheidend ist Konsistenz über die Zeit, nicht Volumen.</p>
+
+<h3>Personalisierte Inhalte in großer Menge</h3>
+<p><a href="/ki-loesungen/texte-generieren/" class="vm-ilink">Produkttexte</a>, Kategorietexte, E-Mail-Varianten und Anzeigentexte lassen sich auf Basis eigener Produkt- und Kundendaten in einer Menge erzeugen, die manuell nicht zu leisten wäre. Der Qualitätssprung entsteht dabei nicht durch das Modell allein, sondern durch die Qualität der zugeführten Attribute: Ein gepflegter Produktdatensatz mit Material, Passform, Anwendungsfall und Zielgruppe erzeugt brauchbare Texte, ein Datensatz mit Artikelnummer und Preis nicht.</p>
+
+<h3>Relevanzsteuerung statt Gießkanne</h3>
+<p>Empfehlungen, Versandzeitpunkte und Kanalwahl lassen sich aus eigenen Interaktionsdaten ableiten. Auch hier gilt: Die Signale, die am besten funktionieren, sind meist die banalsten – zuletzt angesehene Kategorie, Zeitpunkt der letzten Bestellung, Reaktion auf die letzten drei Mailings.</p>
+
+<h2>Datenschutz ist der Rahmen, nicht der Gegner</h2>
+
+<p>First-Party-Daten sind nicht automatisch unbedenklich. Für jede Verarbeitung braucht es eine Rechtsgrundlage, und die Zweckbindung gilt uneingeschränkt: Daten, die für die Vertragsabwicklung erhoben wurden, dürfen nicht ohne Weiteres für Profilbildung im Marketing genutzt werden.</p>
+
+<p>Praktisch bewährt hat sich eine klare Trennung: ein dokumentierter Zweck je Datenkategorie, ein Einwilligungsmanagement, das den tatsächlichen Verarbeitungen entspricht, und ein Löschkonzept, das auch dann greift, wenn Daten in ein KI-System eingeflossen sind. Der letzte Punkt wird am häufigsten übersehen – ein Löschkonzept, das nur die Primärdatenbank kennt, ist unvollständig.</p>
+
+<p>Hinzu kommt seit Februar 2025 die KI-Kompetenzpflicht nach Artikel 4 des EU AI Act: Wer KI-Systeme einsetzt, muss dafür sorgen, dass die damit befassten Mitarbeitenden über ausreichendes Verständnis verfügen. Für Datenteams heißt das insbesondere, die Grenzen der eingesetzten Modelle zu kennen.</p>
+
+<h2>Ein pragmatischer Aufbauplan</h2>
+
+<ol>
+<li><strong>Bestandsaufnahme.</strong> Welche eigenen Datenquellen existieren, wo liegen sie, wer pflegt sie? In vielen Unternehmen ist der Engpass nicht die Datenmenge, sondern die Verteilung über Systeme, die nicht miteinander sprechen.</li>
+<li><strong>Identitätsauflösung klären.</strong> Über welchen Schlüssel werden Shop, CRM und Newsletter zusammengeführt? Ohne diese Entscheidung bleibt jede Personalisierung Stückwerk.</li>
+<li><strong>Wertvolle Signale zuerst.</strong> Statt eines Großprojekts drei bis fünf Signale auswählen, die messbar auf Umsatz einzahlen, und diese sauber verfügbar machen.</li>
+<li><strong>Einwilligungen an die Realität anpassen.</strong> Prüfen, ob das, was tatsächlich passiert, von den eingeholten Einwilligungen gedeckt ist – nicht umgekehrt.</li>
+<li><strong>Datenqualität messen.</strong> Vollständigkeitsquote je Pflichtfeld, Aktualität, Dublettenquote. Ohne Messgröße verbessert sich Datenqualität erfahrungsgemäß nicht.</li>
+<li><strong>Erst dann automatisieren.</strong> KI auf schlechten Daten produziert schnell viel Mittelmaß – und macht bestehende Datenprobleme sichtbarer, nicht kleiner.</li>
+</ol>
+
+<h2>Server-seitige Messung als Zwischenschritt</h2>
+
+<p>Unabhängig von Cookies gewinnt server-seitiges Tracking an Bedeutung, weil es die Kontrolle über die erhobenen Daten zurück ins eigene Haus holt. Der Vorteil ist nicht, Einwilligungspflichten zu umgehen – das ist rechtlich nicht möglich und auch nicht das Ziel. Der Vorteil ist Robustheit gegenüber Browsereinschränkungen und Blockern sowie die Möglichkeit, Daten vor der Weitergabe zu filtern und zu minimieren.</p>
+
+<h2>Woran man erkennt, ob die eigenen Daten KI-tauglich sind</h2>
+
+<p>Zwischen „wir haben ein CRM" und „unsere Daten taugen als Grundlage für automatisierte Entscheidungen" liegt in vielen Unternehmen ein Jahr Arbeit. Vier Prüffragen trennen die beiden Zustände zuverlässig voneinander.</p>
+
+<ul>
+<li><strong>Ist ein Kunde über Systeme hinweg dieselbe Person?</strong> Wenn Shop, Newsletter und Service dieselbe Kundin als drei Datensätze führen, misst jede Auswertung das Falsche – und jede Personalisierung spricht ein Drittel der Historie an.</li>
+<li><strong>Sind Zeitpunkte sauber erfasst?</strong> Prognosen leben von Abständen: Wann war die letzte Bestellung, wie lange dauert ein Wiederkauf, wann kam die letzte Beschwerde? Ein Datensatz ohne verlässliche Zeitstempel taugt für Beschreibung, nicht für Vorhersage.</li>
+<li><strong>Sind Pflichtfelder tatsächlich gefüllt?</strong> Eine Vollständigkeitsquote je Attribut ist schnell ermittelt und meist ernüchternd. Sie ist zugleich die Kennzahl, die sich am schnellsten verbessern lässt.</li>
+<li><strong>Ist dokumentiert, worauf sich eine Einwilligung bezieht?</strong> Nicht die Existenz einer Einwilligung entscheidet, sondern ihr Umfang. Wer das nicht je Zweck festhält, kann später nicht belegen, dass eine Verarbeitung gedeckt war.</li>
+</ul>
+
+<p>Wer diese vier Punkte in Ordnung bringt, hat den größten Teil der Vorarbeit geleistet – unabhängig davon, welches Werkzeug später zum Einsatz kommt und unabhängig davon, was Browserhersteller in den nächsten Jahren entscheiden.</p>
+
+<h2>Häufige Fragen</h2>
+
+<h3>Bleiben Third-Party-Cookies in Chrome jetzt dauerhaft erhalten?</h3>
+<p>Google hat am 22. April 2025 mitgeteilt, keine separate Auswahlabfrage einzuführen; die Steuerung bleibt in den bestehenden Chrome-Einstellungen. Eine dauerhafte Bestandsgarantie ist damit nicht verbunden. Für die Planung sinnvoll ist, den Cookie-Status als veränderliche Rahmenbedingung zu behandeln und die eigene Datenstrategie nicht davon abhängig zu machen.</p>
+
+<h3>Wie viele Daten braucht man für sinnvolle KI-Personalisierung?</h3>
+<p>Weniger, als meist angenommen. Entscheidend sind Konsistenz und Aktualität der wenigen wirklich aussagekräftigen Merkmale, nicht die Gesamtzahl der Felder. Ein Shop mit einigen tausend Bestellungen pro Jahr und sauber gepflegten Produktattributen kommt in der Regel weiter als ein Unternehmen mit großen, aber lückenhaften Datenbeständen.</p>
+
+<h3>Dürfen Bestandskundendaten ohne Einwilligung für KI-Analysen genutzt werden?</h3>
+<p>Das hängt vom Zweck ab. Für jede Verarbeitung braucht es eine Rechtsgrundlage nach Art. 6 DSGVO, und die ursprüngliche Zweckbindung ist zu beachten. Eine Nutzung für Profilbildung im Marketing lässt sich nicht pauschal auf die Vertragsabwicklung stützen. Die Bewertung sollte je Anwendungsfall erfolgen und dokumentiert werden – idealerweise gemeinsam mit dem Datenschutzbeauftragten.</p>
+
+<h2>Fazit</h2>
+
+<p>Die Cookie-Kehrtwende vom April 2025 nimmt Druck vom Zeitplan, nicht von der Sache. Wer KI im Marketing ernsthaft nutzen will, braucht eigene, saubere, rechtlich abgesicherte Daten – weil jedes Modell an der Qualität seiner Eingangsdaten hängt. Der beste Zeitpunkt, damit anzufangen, war vor zwei Jahren. Der zweitbeste ist jetzt, ohne den Druck einer Deadline.</p>
+
+
+    <div class="vm-cta">
+      <strong>Bereit für KI-Marketinglösungen?</strong>
+      <p>Erfahren Sie in einer unverbindlichen Demo, wie Virtual Marketer Ihr Marketing automatisiert.</p>
+      <a href="/virtual-marketer-demo/">Demo buchen</a>
+    </div>
+
+    <div class="vm-related">
+      <h3>Weitere Artikel</h3>
+      <ul>
+        <li><a href="/blog/first-party-data-strategie-cookie-ende/">First-Party-Daten-Strategie für das Ende der Cookies</a></li>
+        <li><a href="/blog/gmail-yahoo-anforderungen-e-mail-marketing/">Gmail- und Yahoo-Regeln: E-Mail-Marketing anpassen</a></li>
+        <li><a href="/blog/consent-mode-v2-dma-pflicht/">Consent Mode v2: Pflicht seit 6. März 2024 erklärt</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer class="vm-footer-simple">
+  &copy; 2026 SGS Virtual Marketer GmbH &middot;
+  <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> &middot;
+  <a href="/impressum/">Impressum</a> <a href="/barrierefreiheit/">Barrierefreiheit</a>
+</footer>
+
+
 <script>
 /**
  * Desktop overlap effects, neutralised on phones.

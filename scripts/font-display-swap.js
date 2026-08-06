@@ -57,28 +57,67 @@ function findStylesheets(dir, results = []) {
  */
 const ICON_FAMILIES = /font-family\s*:\s*["']?\s*(fontawesome|font awesome|flaticon|icomoon|elementor-icons|eicons|themify|simple-line)/i;
 
-/** Rewrites @font-face blocks in a stylesheet body. */
+/** The only values a font-display may take. Anything else is not a value. */
+const VALID_DISPLAY = /font-display\s*:\s*(auto|block|swap|fallback|optional)\s*[;}]?/i;
+
+/**
+ * Rewrites @font-face blocks in a stylesheet body.
+ *
+ * TWO CASES THAT LOOK LIKE "ALREADY DONE" AND ARE NOT
+ *
+ * 1. `font-display:;` — an empty value. The OMGF plugin wrote this into
+ *    every face it localised (Outfit, DM Sans, the Elementor Font Awesome
+ *    copies) because its WordPress option was never set. It is invalid CSS,
+ *    so the browser discards the declaration and the face falls back to
+ *    `auto` — block for up to three seconds, then swap, then a reflow of
+ *    every line it touches. This is what an earlier version of this script
+ *    missed: it tested for the PRESENCE of the property, and an empty value
+ *    is present. Measured cost on the live homepage: CLS 0.121–0.295, with
+ *    Lighthouse naming "Web font loaded" as the cause, on the two fonts the
+ *    page actually renders its body copy in.
+ *
+ * 2. `font-display:swap` — a real value, and the wrong one here. See the
+ *    header comment: swap was measured on this site at CLS 0.593. The
+ *    theme's local Roboto copies declare it explicitly, so leaving
+ *    "already has a value" alone would preserve exactly the setting this
+ *    script exists to avoid.
+ *
+ * So the test is on the VALUE, not the property, and an existing swap on a
+ * text face is rewritten rather than respected.
+ */
 function addSwap(css, counters) {
   return css.replace(/@font-face\s*\{([^}]*)\}/gi, (block, body) => {
-    if (/font-display\s*:/i.test(body)) {
-      counters.already++;
-      return block;
+    const wanted = ICON_FAMILIES.test(body) ? 'block' : 'optional';
+    const current = body.match(VALID_DISPLAY);
+
+    if (current) {
+      const value = current[1].toLowerCase();
+      if (value === wanted || (value !== 'swap' && value !== 'auto')) {
+        counters.already++;
+        return block;
+      }
+      // A real but unwanted value (swap, or an auto someone wrote out) —
+      // replace in place rather than appending a second declaration.
+      counters[wanted]++;
+      counters.replaced++;
+      return `@font-face{${body.replace(VALID_DISPLAY, `font-display:${wanted};`)}}`;
     }
-    const value = ICON_FAMILIES.test(body) ? 'block' : 'optional';
-    counters[value]++;
+
+    // Either no font-display at all, or one with an empty/garbage value.
+    const cleaned = body.replace(/font-display\s*:[^;}]*;?/gi, '');
+    counters[wanted]++;
     counters.added++;
-    // Inserted at the end of the block, before the closing brace, keeping
-    // whatever indentation the declaration before it used.
-    const trimmed = body.replace(/\s*$/, '');
-    const sep = /;\s*$/.test(trimmed) ? '' : ';';
-    return `@font-face{${trimmed}${sep}font-display:${value};}`;
+    // Appended at the end of the block, before the closing brace.
+    const trimmed = cleaned.replace(/\s*$/, '');
+    const sep = /;\s*$/.test(trimmed) || trimmed === '' ? '' : ';';
+    return `@font-face{${trimmed}${sep}font-display:${wanted};}`;
   });
 }
 
 function main() {
   console.log('\n🔤 Setting font-display...\n');
 
-  const counters = { added: 0, already: 0, optional: 0, block: 0 };
+  const counters = { added: 0, replaced: 0, already: 0, optional: 0, block: 0 };
   let files = 0;
 
   for (const file of findStylesheets(DIST)) {
@@ -111,11 +150,18 @@ function main() {
   console.log(`   • ${counters.optional} text font(s) → optional (no swap, so no layout shift)`);
   console.log(`   • ${counters.block} icon font(s) → block (a fallback glyph would be a blank box)`);
   console.log(`   • ${files} stylesheet(s), ${inlineFiles} inline <style> block(s)`);
-  if (counters.already) console.log(`   • ${counters.already} already had a font-display`);
+  if (counters.replaced) console.log(`   • ${counters.replaced} rule(s) had swap/auto and were rewritten`);
+  if (counters.already) console.log(`   • ${counters.already} already had the right font-display`);
 
   const missing = findStylesheets(DIST).filter((f) => {
     const css = fs.readFileSync(f, 'utf-8');
-    return /@font-face/i.test(css) && /@font-face\s*\{(?:(?!font-display)[^}])*\}/i.test(css);
+    if (!/@font-face/i.test(css)) return false;
+    // A face counts as unset if it has no font-display OR an empty one —
+    // the exact case this script used to walk past.
+    for (const m of css.matchAll(/@font-face\s*\{([^}]*)\}/gi)) {
+      if (!VALID_DISPLAY.test(m[1])) return true;
+    }
+    return false;
   });
   if (missing.length) {
     console.log(`   ⚠ ${missing.length} stylesheet(s) still have a face without font-display:`);
