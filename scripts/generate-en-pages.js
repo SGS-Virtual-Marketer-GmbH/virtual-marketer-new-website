@@ -324,23 +324,25 @@ function main() {
 
 <h2>Service Provider</h2>
 <p class="fact">SGS Virtual Marketer GmbH<br>
-Frankfurter Landstr. 50<br>
-61352 Bad Homburg v. d. Höhe, Germany<br><br>
+Frankfurter Landstraße 50<br>
+61352 Bad Homburg vor der Höhe, Germany<br><br>
 Represented by managing directors Jens Göckus and Lisa Stamminger</p>
 
 <h2>Commercial Register</h2>
-<p class="fact">Register court: Bad Homburg v. d. Höhe Local Court (Amtsgericht)<br>
-Registration number: HRB 16253</p>
+<p class="fact">Register court: Bad Homburg vor der Höhe Local Court (Amtsgericht)<br>
+Registration number: HRB 16253<br>
+VAT identification number (Section 27a German VAT Act): DE361976358</p>
 
 <h2>Contact</h2>
-<p>Email: <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a><br>
+<p>Telephone: <a href="tel:+491784556659">+49 178 4556659</a><br>
+Email: <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a><br>
 Contact form: <a href="/en/contact/">virtual-marketer.de/en/contact</a></p>
 
 <h2>Responsible for Journalistic and Editorial Content</h2>
 <p class="fact">Responsible pursuant to Section 18 (2) MStV:<br>
 Jens Göckus<br>
-Frankfurter Landstr. 50<br>
-61352 Bad Homburg v. d. Höhe, Germany</p>
+Frankfurter Landstraße 50<br>
+61352 Bad Homburg vor der Höhe, Germany</p>
 
 <h2>Liability for Content</h2>
 <p>The content of this website has been prepared with care and to the best of our knowledge. It is provided for informational purposes only and does not constitute a legally binding commitment, except where legally mandated information is concerned (e.g. this legal notice, the privacy policy, terms of service, or mandatory consumer disclosures). We reserve the right to change or remove content in whole or in part, provided that any contractual obligations remain unaffected. All offers are subject to change and non-binding.</p>

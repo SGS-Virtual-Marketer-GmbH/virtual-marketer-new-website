@@ -35,16 +35,31 @@
  * No Stammkapital. Stating it is optional, but doing so triggers a further
  * duty to disclose any outstanding contributions — a trap with no upside.
  *
- * FACTS THAT ARE STILL OPEN
+ * TWO THINGS THE CLIENT SUPPLIED THAT ARE DELIBERATELY NOT PUBLISHED
  *
- * Anything not verified is omitted rather than guessed. In particular there
- * is no VAT identification number and no telephone number below, because
- * neither could be confirmed — a fabricated USt-IdNr. in an Impressum would
- * be considerably worse than an absent one. § 27a UStG requires the VAT ID
- * only if one exists, and the ECJ (C-298/07) settled that a telephone number
- * is not mandatory where a second fast contact channel exists, which the
- * contact form provides. Both are listed in OPEN_ITEMS below and reported at
- * build time so they cannot be quietly forgotten.
+ * The company data handed over for this page also included the Steuernummer
+ * and the company bank account. Neither belongs in an Impressum, and both are
+ * actively harmful there:
+ *
+ *  - STEUERNUMMER (00324332490). Not required by § 5 DDG — the provision asks
+ *    for the USt-IdNr. under § 27a UStG, which is a different number with a
+ *    different purpose. The USt-IdNr. is designed to be published; the
+ *    Steuernummer identifies the company to its tax office and is a standard
+ *    lever for tax-authority impersonation. Publishing it gains nothing and
+ *    is widely advised against.
+ *
+ *  - IBAN / BIC (DE62 1001 8000 0657 8085 07, FNOMDEB2XXX). Invoice data, not
+ *    Impressum data, and nothing in § 5 DDG asks for it. A publicly listed
+ *    company IBAN is the raw material for invoice-redirection fraud: an
+ *    attacker who has it can produce a convincing fake invoice showing the
+ *    real account being "changed" to theirs. It also exposes the account to
+ *    unauthorised SEPA direct debits, where the burden then falls on the
+ *    company to notice and reverse them.
+ *
+ * Both are recorded here so the decision is visible and nobody re-adds them
+ * thinking they were forgotten. If they are ever wanted publicly, that should
+ * be a deliberate call made with the lawyer, not a side effect of pasting a
+ * letterhead into a web page.
  *
  * The register data was verified against two independent public sources
  * (North Data, openregister.de) but NOT against handelsregister.de itself,
@@ -63,10 +78,32 @@ const DIST = path.join(__dirname, '../dist');
 const REGISTER_COURT = 'Amtsgericht Bad Homburg v. d. Höhe';
 const REGISTER_NUMBER = 'HRB 16253';
 
+/** Supplied by the client. Published because § 27a UStG asks for exactly this. */
+const VAT_ID = 'DE361976358';
+
+/**
+ * Supplied by the client. Once a number is listed and used for customer
+ * contact it is mandatory under § 5 Abs. 1 Nr. 2 DDG, so it must stay.
+ * Written in international form: the number given (01784556659) is a German
+ * mobile, and a national-format number is unusable to anyone abroad — on a
+ * site that publishes an English edition, that matters.
+ */
+const PHONE_DISPLAY = '+49 178 4556659';
+const PHONE_HREF = '+491784556659';
+
+/**
+ * Deliberately NOT published — see the header for the reasoning. Listed as
+ * constants so a future reader can see these were considered and rejected,
+ * not overlooked.
+ */
+const NOT_PUBLISHED = {
+  steuernummer: '00324332490',
+  iban: 'DE62 1001 8000 0657 8085 07',
+  bic: 'FNOMDEB2XXX',
+};
+
 /** Reported at the end of the run — facts the page needs and does not have. */
 const OPEN_ITEMS = [
-  'USt-IdNr. (§ 27a UStG) — omitted, not fabricated. Supply it from the BZSt letter, or confirm none exists. Never publish the Steuernummer.',
-  'Telefonnummer — omitted. Not mandatory (EuGH C-298/07) since the contact form exists, but list it if one is used for customer contact.',
   `${REGISTER_NUMBER} / ${REGISTER_COURT} — confirm against handelsregister.de; verified only via secondary sources.`,
   'BFSG: the offering is to be open to consumers, so an "Erklärung zur Barrierefreiheit" page is required separately (not in the Impressum).',
 ];
@@ -126,8 +163,8 @@ const BODY = `<div class="vm-legal">
 <h2>Diensteanbieter</h2>
 <div class="vm-legal-card">
 <p><strong>SGS Virtual Marketer GmbH</strong><br>
-Frankfurter Landstr. 50<br>
-61352 Bad Homburg v. d. Höhe<br>
+Frankfurter Landstraße 50<br>
+61352 Bad Homburg vor der Höhe<br>
 Deutschland</p>
 </div>
 <p>Vertreten durch die Geschäftsführer Jens Göckus und Lisa Stamminger.</p>
@@ -137,19 +174,26 @@ Deutschland</p>
 <dl>
 <dt>Registergericht</dt><dd>${REGISTER_COURT}</dd>
 <dt>Registernummer</dt><dd>${REGISTER_NUMBER}</dd>
+<dt>USt-IdNr.</dt><dd>${VAT_ID}</dd>
 </dl>
 </div>
+<p>Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz.</p>
 
 <h2>Kontakt</h2>
-<p>E-Mail: <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a><br>
-Kontaktformular: <a href="/kontakt/">virtual-marketer.de/kontakt</a></p>
+<div class="vm-legal-card">
+<dl>
+<dt>Telefon</dt><dd><a href="tel:${PHONE_HREF}">${PHONE_DISPLAY}</a></dd>
+<dt>E-Mail</dt><dd><a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a></dd>
+<dt>Kontaktformular</dt><dd><a href="/kontakt/">virtual-marketer.de/kontakt</a></dd>
+</dl>
+</div>
 
 <h2>Verantwortlich für journalistisch-redaktionelle Inhalte</h2>
 <div class="vm-legal-card">
 <p>Verantwortlich gemäß § 18 Abs. 2 MStV:<br>
 <strong>Jens Göckus</strong><br>
-Frankfurter Landstr. 50<br>
-61352 Bad Homburg v. d. Höhe<br>
+Frankfurter Landstraße 50<br>
+61352 Bad Homburg vor der Höhe<br>
 Deutschland</p>
 </div>
 
@@ -165,6 +209,15 @@ Deutschland</p>
 <h2>Verbraucherstreitbeilegung</h2>
 <p>Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen (§ 36 Verbraucherstreitbeilegungsgesetz).</p>
 </div>`;
+
+function findHtmlFiles(dir, results = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) findHtmlFiles(full, results);
+    else if (entry.name.endsWith('.html')) results.push(full);
+  }
+  return results;
+}
 
 /**
  * Replaces the content of the element opened at `start`, by counting nested
@@ -222,6 +275,8 @@ function main() {
 
   const required = [
     ['Registereintrag', REGISTER_NUMBER],
+    ['USt-IdNr. (§ 27a UStG)', VAT_ID],
+    ['Telefon (§ 5 Abs. 1 Nr. 2 DDG)', PHONE_DISPLAY],
     ['§ 18 MStV responsible person', 'Jens Göckus'],
     ['§ 36 VSBG statement', 'Verbraucherschlichtungsstelle'],
     ['DSA link liability', '2022/2065'],
@@ -252,6 +307,29 @@ function main() {
   if (missing.length) {
     console.log(`   ⚠ ${missing.length} required section(s) missing`);
     process.exitCode = 1;
+  }
+
+  // The Steuernummer and the bank details were handed over with the rest of
+  // the company data and are the two items on that letterhead that must never
+  // reach a public page. Checked across the WHOLE of dist, not just this
+  // page, because the risk is someone pasting the same block elsewhere.
+  const leaks = [];
+  for (const [label, value] of Object.entries(NOT_PUBLISHED)) {
+    const needle = value.replace(/\s+/g, '');
+    for (const f of findHtmlFiles(DIST)) {
+      const body = fs.readFileSync(f, 'utf-8').replace(/\s+/g, '');
+      if (body.includes(needle)) {
+        leaks.push(`${label} (${value}) in ${path.relative(DIST, f)}`);
+        break;
+      }
+    }
+  }
+  if (leaks.length) {
+    console.log('   ✗ data that must not be published is on a shipped page:');
+    leaks.forEach((l) => console.log(`       ${l}`));
+    process.exitCode = 1;
+  } else {
+    console.log('   ✓ Steuernummer and bank details appear on no shipped page');
   }
 
   console.log('\n   Still required from the client:');
