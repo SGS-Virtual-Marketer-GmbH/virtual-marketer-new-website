@@ -85,6 +85,30 @@ const LINK_STYLE = `<style id="${LINK_STYLE_ID}">
 :is(p,li) > a:has(> i:only-child){text-decoration:none}
 </style>`;
 
+/**
+ * 6 — empty headings.
+ *
+ * The footer's contact boxes each end with a bare `h6` that the WordPress
+ * theme left with nothing in it: the box renders an icon, the address as a
+ * paragraph, and then an empty heading where a caption used to be. 53 pages
+ * ship one.
+ *
+ * It fails twice over. An empty heading is announced as a heading with no
+ * name, so heading navigation lands on nothing; and because it is an h6 after
+ * an h2 or h3 it is also the heading-order break Lighthouse reports on
+ * /modell-anfragen/ — the page's own headings are fine, the footer is what
+ * jumps the level.
+ *
+ * Removed rather than filled. There is no missing caption to restore; the
+ * tag is residue.
+ *
+ * Deliberately conservative: only headings whose entire content is
+ * whitespace, non-breaking spaces or line breaks. A heading containing an
+ * icon, an image or a link is not empty even if it has no text of its own,
+ * and is left alone.
+ */
+const EMPTY_HEADING = /<(h[1-6])\b[^>]*>(?:\s|&nbsp;|&#160;|<br\s*\/?>)*<\/\1>/gi;
+
 /** Icon-only controls → the label a screen reader should announce. */
 const LABELS = [
   [/class=["'][^"']*\bmmenu-close\b[^"']*["']/i, 'Menü schließen', 'Close menu'],
@@ -106,7 +130,7 @@ function main() {
   console.log('\n♿ Accessibility repairs...\n');
 
   let pages = 0;
-  const fixed = { labels: 0, burger: 0, tablist: 0, main: 0, links: 0 };
+  const fixed = { labels: 0, burger: 0, tablist: 0, main: 0, links: 0, emptyHeadings: 0 };
 
   for (const file of findHtmlFiles(DIST)) {
     let html = fs.readFileSync(file, 'utf-8');
@@ -174,6 +198,12 @@ function main() {
       }
     }
 
+    // 6 — drop headings that have no accessible name.
+    html = html.replace(EMPTY_HEADING, () => {
+      fixed.emptyHeadings++;
+      return '';
+    });
+
     if (html !== original) {
       fs.writeFileSync(file, html);
       pages++;
@@ -186,6 +216,7 @@ function main() {
   console.log(`   • ${fixed.tablist} accordion container(s) given role="tablist"`);
   console.log(`   • ${fixed.main} page(s) given a main landmark`);
   console.log(`   • ${fixed.links} page(s) given the in-text link underline rule`);
+  console.log(`   • ${fixed.emptyHeadings} empty heading(s) removed`);
 
   const stillMissing = findHtmlFiles(DIST).filter((f) => {
     const h = fs.readFileSync(f, 'utf-8');

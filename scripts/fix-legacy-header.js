@@ -83,10 +83,17 @@ const CSS = `<style id="${MARKER}">
 
   /* 2 — the call to action, in the brand's own colours.
      Specificity: .octf-btn.octf-btn-primary is two classes, so prefixing with
-     the #site-header id wins without !important. */
+     the #site-header id wins without !important.
+
+     The blue stop is vm-blue deepened, not vm-blue itself. White on vm-blue
+     (#66a3ce) is 2.7:1 — it fails WCAG 1.4.3 outright, and this is the
+     primary CTA on every page, so it is the single worst contrast defect on
+     the site. Same hue (206 deg), lower lightness: white on #3d7ba8 is
+     4.6:1, and every pixel further along the gradient is darker still, so
+     the whole pill passes. */
   #site-header .octf-btn.octf-btn-primary,
   #site-header a.octf-btn-primary {
-    background: linear-gradient(90deg, #66a3ce, #94152b);
+    background: linear-gradient(90deg, #3d7ba8, #94152b);
     border-color: transparent;
     color: #fff;
   }

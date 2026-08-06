@@ -8,6 +8,15 @@
   --vm-blue: #66a3ce;
   --vm-ink: #241417;
   --vm-line: #e7dfe0;
+  /* The "not yet reached" step colour. Was #9b8f90, which is 3.1:1 on white
+     and fails WCAG 1.4.3 for 14px text — and the progress list is the one
+     part of this form that tells you how much is left, so it is not
+     decorative. Darkened to the point where it passes (5.0:1) while still
+     reading as clearly quieter than --vm-ink. */
+  --vm-muted: #7a6d6e;
+  /* Same, on the grey step bubble rather than on white: #f4f1f1 is a lighter
+     backdrop, so the text has to go one step darker again to clear 4.5:1. */
+  --vm-muted-on-grey: #6b5f60;
   max-width: 720px;
   margin: 0 auto;
   color: var(--vm-ink);
@@ -29,7 +38,7 @@
   flex: 1 1 0;
   font-size: 14px;
   font-weight: 600;
-  color: #9b8f90;
+  color: var(--vm-muted);
   padding-bottom: 10px;
   border-bottom: 2px solid var(--vm-line);
 }
@@ -38,7 +47,7 @@
   width: 26px; height: 26px;
   border-radius: 999px;
   display: inline-flex; align-items: center; justify-content: center;
-  background: #f4f1f1; color: #9b8f90;
+  background: #f4f1f1; color: var(--vm-muted-on-grey);
   font-size: 13px;
 }
 .vm-mr-progress li.is-current { color: var(--vm-ink); border-bottom-color: var(--vm-red); }

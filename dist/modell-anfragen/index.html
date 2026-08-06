@@ -66,7 +66,7 @@ img[data-dominant-color]:not(.has-transparency) { background-color: var(--domina
 .woocommerce form .form-row .required { visibility: visible; }
 /*# sourceURL=woocommerce-inline-inline-css */
 </style>
-<link rel="stylesheet" href="/assets/css/vm-929c41fe50.css" media="all">
+<link rel="stylesheet" href="/assets/css/vm-3ea790c1b4.css" media="all">
 
 
 
@@ -432,9 +432,74 @@ var simpleLikes = {"ajaxurl":"https://virtual-marketer.de/wp-admin/admin-ajax.ph
 <!-- vm-fix-preloader:end -->
 
 <style id="vm-model-request-section">
-  .vm-mr-section{max-width:760px;margin:0 auto;padding:8px 20px 64px;}
-  .vm-mr-section h2{font-size:26px;margin:0 0 10px;color:#241417;}
-  .vm-mr-lede{color:#4a4143;line-height:1.6;margin:0 0 28px;max-width:60ch;}
+  .vm-mr-page{
+    --vm-red:#94152b; --vm-red-dark:#700f2b; --vm-blue:#66a3ce;
+    --vm-ink:#241417; --vm-body:#4a4143; --vm-line:#e7dfe0; --vm-tint:#faf7f7;
+    padding:14px 20px 72px;
+    color:var(--vm-body);
+  }
+  .vm-mr-wrap{max-width:820px;margin:0 auto}
+
+  .vm-mr-page h2{
+    font-size:24px !important;line-height:1.3;font-weight:700;
+    color:var(--vm-ink);margin:52px 0 16px;
+  }
+  .vm-mr-page h3{font-size:18px;line-height:1.35;font-weight:700;color:var(--vm-ink);margin:0 0 8px}
+  .vm-mr-page p{line-height:1.68;margin:0 0 16px}
+
+  .vm-mr-intro{font-size:19px;line-height:1.6;color:var(--vm-ink);margin:0 0 30px;max-width:64ch}
+
+  /* Three facts, as a definition-ish strip rather than a bullet list: each is
+     a claim plus its qualification, and the qualification is what keeps the
+     claim honest, so the two must not be separable. */
+  .vm-mr-facts{
+    list-style:none;margin:0;padding:0;
+    display:grid;gap:14px;grid-template-columns:repeat(3,1fr);
+  }
+  .vm-mr-facts li{
+    background:var(--vm-tint);border:1px solid var(--vm-line);border-radius:12px;
+    padding:16px 18px;border-top:3px solid var(--vm-red);
+  }
+  .vm-mr-facts strong{display:block;color:var(--vm-ink);font-size:15px;margin-bottom:5px}
+  .vm-mr-facts span{display:block;font-size:14px;line-height:1.5}
+
+  .vm-mr-cards{display:grid;gap:18px;grid-template-columns:1fr 1fr}
+  .vm-mr-card{
+    position:relative;background:#fff;border:1px solid var(--vm-line);
+    border-radius:14px;padding:24px 24px 8px;
+  }
+  .vm-mr-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:30px;height:30px;border-radius:999px;margin-bottom:12px;
+    background:var(--vm-red);color:#fff;font-weight:700;font-size:15px;
+  }
+  .vm-mr-card p{font-size:15px}
+
+  .vm-mr-section{margin-top:56px}
+  .vm-mr-lede{color:var(--vm-body);margin:0 0 28px;max-width:60ch}
+
+  .vm-mr-cta{
+    margin-top:56px;padding:30px 30px 26px;border-radius:16px;
+    background:var(--vm-tint);border:1px solid var(--vm-line);
+  }
+  .vm-mr-cta h2{margin-top:0 !important}
+  .vm-mr-cta p{max-width:60ch}
+  .vm-mr-cta-btn{
+    display:inline-block;margin-top:6px;padding:14px 28px;border-radius:10px;
+    /* Deepened vm-blue: white on vm-blue itself is 2.7:1 and fails WCAG
+       1.4.3. See scripts/fix-legacy-header.js. */
+    background:linear-gradient(90deg,#3d7ba8,var(--vm-red));
+    color:#fff;font-weight:600;text-decoration:none;
+  }
+  .vm-mr-cta-btn:hover{background:linear-gradient(90deg,var(--vm-red),var(--vm-red-dark));color:#fff}
+  .vm-mr-cta-alt{margin:16px 0 0;font-size:14px}
+
+  @media (max-width:860px){
+    .vm-mr-facts{grid-template-columns:1fr}
+    .vm-mr-cards{grid-template-columns:1fr}
+    .vm-mr-page h2{font-size:21px !important;margin-top:40px}
+    .vm-mr-intro{font-size:17px}
+  }
 </style>
 <style id="vm-sticky-header">
   /* Fixed, not sticky — see scripts/make-header-sticky.js for why. */
@@ -502,10 +567,17 @@ var simpleLikes = {"ajaxurl":"https://virtual-marketer.de/wp-admin/admin-ajax.ph
 
   /* 2 — the call to action, in the brand's own colours.
      Specificity: .octf-btn.octf-btn-primary is two classes, so prefixing with
-     the #site-header id wins without !important. */
+     the #site-header id wins without !important.
+
+     The blue stop is vm-blue deepened, not vm-blue itself. White on vm-blue
+     (#66a3ce) is 2.7:1 — it fails WCAG 1.4.3 outright, and this is the
+     primary CTA on every page, so it is the single worst contrast defect on
+     the site. Same hue (206 deg), lower lightness: white on #3d7ba8 is
+     4.6:1, and every pixel further along the gradient is darker still, so
+     the whole pill passes. */
   #site-header .octf-btn.octf-btn-primary,
   #site-header a.octf-btn-primary {
-    background: linear-gradient(90deg, #66a3ce, #94152b);
+    background: linear-gradient(90deg, #3d7ba8, #94152b);
     border-color: transparent;
     color: #fff;
   }
@@ -1339,74 +1411,49 @@ html { scroll-padding-top: 76px; }
                             </div>
                 </div>
             </div>
-    		<div data-elementor-type="wp-page" data-elementor-id="57946" class="elementor elementor-57946">
-						<section class="elementor-section elementor-top-section elementor-element elementor-element-936fad4 ot-traditional elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-id="936fad4" data-element_type="section" data-e-type="section">
-						<div class="elementor-container elementor-column-gap-default">
-					<div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-15639d0 ot-flex-column-vertical" data-id="15639d0" data-element_type="column" data-e-type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-5b3aeae elementor-widget elementor-widget-spacer" data-id="5b3aeae" data-element_type="widget" data-e-type="widget" data-widget_type="spacer.default">
-				<div class="elementor-widget-container">
-							<div class="elementor-spacer">
-			<div class="elementor-spacer-inner"></div>
-		</div>
-						</div>
-				</div>
-					</div>
-		</div>
-					</div>
-		</section>
-				<section class="elementor-section elementor-top-section elementor-element elementor-element-b45649a ot-traditional elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-id="b45649a" data-element_type="section" data-e-type="section">
-						<div class="elementor-container elementor-column-gap-default">
-					<div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-0b43d4f ot-flex-column-vertical" data-id="0b43d4f" data-element_type="column" data-e-type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-d211697 elementor-widget elementor-widget-text-editor" data-id="d211697" data-element_type="widget" data-e-type="widget" data-widget_type="text-editor.default">
-				<div class="elementor-widget-container">
-									<p>Bitte füllen Sie das nachfolgende Formular aus, um ein neues KI Modell anzufragen oder ein bestehendes Modell modifizieren zu lassen. Falls Sie zusätzliche Unterstützung benötigen können Sie einen Termin <a href="/virtual-marketer-demo/">hier buchen</a> oder uns unter <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a> erreichen.</p>								</div>
-				</div>
-					</div>
-		</div>
-					</div>
-		</section>
-				<section class="elementor-section elementor-top-section elementor-element elementor-element-e0361d7 ot-traditional elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-id="e0361d7" data-element_type="section" data-e-type="section">
-						<div class="elementor-container elementor-column-gap-default">
-					<div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-67fd1a9 ot-flex-column-vertical" data-id="67fd1a9" data-element_type="column" data-e-type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-d98fd6b elementor-widget elementor-widget-html" data-id="d98fd6b" data-element_type="widget" data-e-type="widget" data-widget_type="html.default">
-				<div class="elementor-widget-container">
-					
-<section class="vm-mr-section">
-  <h2>Modell-Anfrage</h2>
-  <p class="vm-mr-lede">Beschreiben Sie, was Ihr Modell können soll. Je konkreter Ihre Beispiele, desto genauer der Vorschlag, den Sie von uns zurückbekommen.</p>
-  <div data-vm-model-request data-locale="de"></div>
-  <noscript>
-    <div class="vm-mr-nojs"><p>Für dieses Formular wird JavaScript benötigt. Schreiben Sie uns alternativ direkt an <a href="mailto:info@virtual-marketer.de?subject=Modell-Anfrage">info@virtual-marketer.de</a> — nennen Sie darin Ihre Domain, ob ein neues Modell entstehen oder ein bestehendes angepasst werden soll, und je ein Beispiel für idealen Input und Output.</p></div>
-  </noscript>
-</section>				</div>
-				</div>
-				<div class="elementor-element elementor-element-4c18267 elementor-widget elementor-widget-spacer" data-id="4c18267" data-element_type="widget" data-e-type="widget" data-widget_type="spacer.default">
-				<div class="elementor-widget-container">
-							<div class="elementor-spacer">
-			<div class="elementor-spacer-inner"></div>
-		</div>
-						</div>
-				</div>
-					</div>
-		</div>
-					</div>
-		</section>
-				<section class="elementor-section elementor-top-section elementor-element elementor-element-395b665 ot-traditional elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-id="395b665" data-element_type="section" data-e-type="section">
-						<div class="elementor-container elementor-column-gap-default">
-					<div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-1a6cb70 ot-flex-column-vertical" data-id="1a6cb70" data-element_type="column" data-e-type="column">
-			<div class="elementor-widget-wrap elementor-element-populated">
-						<div class="elementor-element elementor-element-7df41f1 elementor-widget elementor-widget-text-editor" data-id="7df41f1" data-element_type="widget" data-e-type="widget" data-widget_type="text-editor.default">
-				<div class="elementor-widget-container">
-									<h2>Revolutionäre KI-Modelle für Ihr Unternehmen: Virtual Marketer Data Science Team steht bereit!</h2><p>Sind Sie bereit, Ihr Unternehmen mit bahnbrechenden KI-Modellen voranzutreiben? Unser hochqualifiziertes Data Science Team steht Ihnen zur Seite, um maßgeschneiderte Lösungen zu entwickeln, die Ihre Geschäftsziele erreichen.</p><p>Unsere Experten bieten zwei Hauptdienstleistungen an:</p><h3>1. Neue KI-Modelle anfragen:</h3><p>Sie haben eine spezifische Anforderung oder ein Problem, das Sie mithilfe von künstlicher Intelligenz lösen möchten? Unser Team kann maßgeschneiderte KI-Modelle entwickeln, die perfekt auf Ihre Bedürfnisse zugeschnitten sind. Egal, ob es sich um Kundenverhalten, Produktvorhersagen oder Prozessoptimierung handelt – wir haben die Expertise, um Ihnen zu helfen.</p><h3>2. Anpassung bestehender Modelle:</h3><p>Bereits KI-Modelle im Einsatz, aber sie könnten optimiert oder an neue Anforderungen angepasst werden? Kein Problem! Unsere erfahrenen Data Scientists können vorhandene Modelle überprüfen, optimieren und erweitern, um sicherzustellen, dass sie weiterhin maximalen Nutzen für Ihr Unternehmen bieten.</p><p>Und das Beste daran? Wir bieten Ihnen ein kostenloses Strategie-Erstgespräch an! Nutzen Sie die Gelegenheit, mit unseren Experten Ihre Ziele zu besprechen und herauszufinden, wie KI-Modelle Ihr Unternehmen voranbringen können.</p><p>Fordern Sie noch heute Ihr kostenloses Strategie-Erstgespräch an unter. <a href="/virtual-marketer-demo/">Jetzt Virtual Marketer Demo buchen.</a></p><p>Nutzen Sie die Kraft der künstlichen Intelligenz, um Ihre Geschäftsziele zu erreichen. Kontaktieren Sie uns jetzt!</p>								</div>
-				</div>
-					</div>
-		</div>
-					</div>
-		</section>
-				</div>
+    		<div class="vm-mr-page">
+  <div class="vm-mr-wrap">
+
+    <p class="vm-mr-intro">Beschreiben Sie, was Ihr KI-Modell können soll. Wir melden uns mit einer Einschätzung zu Machbarkeit, Aufwand und Datenbedarf zurück — bevor Sie sich auf irgendetwas festlegen.</p>
+
+    <ul class="vm-mr-facts">
+      <li><strong>Kostenloses Erstgespräch</strong><span>Wir schätzen Machbarkeit und Aufwand ein, bevor Kosten entstehen.</span></li>
+      <li><strong>Neu oder bestehend</strong><span>Wir entwickeln ein Modell von Grund auf — oder passen ein vorhandenes an.</span></li>
+      <li><strong>Hosting nach Absprache</strong><span>Speicher- und Verarbeitungsort lassen sich vertraglich festlegen, auf Wunsch EU oder Deutschland.</span></li>
+    </ul>
+
+    <h2>Zwei Wege zu Ihrem Modell</h2>
+    <div class="vm-mr-cards">
+      <article class="vm-mr-card">
+        <span class="vm-mr-num" aria-hidden="true">1</span>
+        <h3>Neues KI-Modell entwickeln</h3>
+        <p>Sie haben eine konkrete Anforderung oder ein Problem, das Sie mit künstlicher Intelligenz lösen möchten? Unser Data-Science-Team entwickelt maßgeschneiderte Modelle, die auf Ihre Bedürfnisse zugeschnitten sind — ob Kundenverhalten, Produktvorhersagen oder Prozessoptimierung.</p>
+      </article>
+      <article class="vm-mr-card">
+        <span class="vm-mr-num" aria-hidden="true">2</span>
+        <h3>Bestehendes Modell anpassen</h3>
+        <p>Sie setzen bereits KI-Modelle ein, die optimiert oder an neue Anforderungen angepasst werden sollen? Unsere Data Scientists prüfen, optimieren und erweitern vorhandene Modelle, damit sie weiterhin den vollen Nutzen für Ihr Unternehmen bringen.</p>
+      </article>
+    </div>
+
+    <section class="vm-mr-section" id="anfrage">
+      <h2>Modell-Anfrage</h2>
+      <p class="vm-mr-lede">Je konkreter Ihre Beispiele, desto genauer der Vorschlag, den Sie zurückbekommen. Sie brauchen rund fünf Minuten.</p>
+      <div data-vm-model-request data-locale="de"></div>
+      <noscript>
+        <div class="vm-mr-nojs"><p>Für dieses Formular wird JavaScript benötigt. Schreiben Sie uns alternativ direkt an <a href="mailto:info@virtual-marketer.de?subject=Modell-Anfrage">info@virtual-marketer.de</a> — nennen Sie darin Ihre Domain, ob ein neues Modell entstehen oder ein bestehendes angepasst werden soll, und je ein Beispiel für idealen Input und Output.</p></div>
+      </noscript>
+    </section>
+
+    <aside class="vm-mr-cta">
+      <h2>Lieber erst sprechen?</h2>
+      <p>Wenn Sie noch nicht wissen, ob sich Ihr Vorhaben mit einem eigenen Modell lösen lässt, klären wir das im kostenlosen Strategie-Erstgespräch — ohne dass Sie vorher ein Formular ausfüllen.</p>
+      <a class="vm-mr-cta-btn" href="/virtual-marketer-demo/">Kostenloses Erstgespräch buchen</a>
+      <p class="vm-mr-cta-alt">Oder schreiben Sie uns an <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a></p>
+    </aside>
+
+  </div>
+</div>
 	</div><!-- #content -->
 	<footer id="site-footer" class="site-footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">		<div data-elementor-type="wp-post" data-elementor-id="1308" class="elementor elementor-1308">
 						<section class="elementor-section elementor-top-section elementor-element elementor-element-d0f9bfa ot-traditional elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-id="d0f9bfa" data-element_type="section" data-e-type="section" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
@@ -1431,7 +1478,7 @@ html { scroll-padding-top: 76px; }
 					<div class="box-icon">
 									    				        		<svg class="vm-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18a1 1 0 0 1 1 1v.55l-9.47 6.16a1 1 0 0 1-1.06 0L2 6.55V6a1 1 0 0 1 1-1Z"/><path d="M2 8.94l9.46 6.15a1 1 0 0 0 1.08 0L22 8.94V18a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1Z"/></svg>					</div>
 		        	<p>info@virtual-marketer.de</p>
-		        	<h6></h6>			        				        
+		        				        				        
 			    </div>
 		    	    				</div>
 				</div>
