@@ -48,6 +48,7 @@ Virtual Marketer ist eine KI-Marketingplattform der SGS Virtual Marketer GmbH. D
 
 - [Virtual Marketer — AI Marketing Solutions from Germany](https://virtual-marketer.de/en/): Custom AI models for product descriptions, product photos, AI agents, coding and more — reliable, automated, efficient. Made in Germany.
 - [About Us | Virtual Marketer](https://virtual-marketer.de/en/about/): Meet the team behind Virtual Marketer — the AI marketing solution from Germany.
+- [Accessibility Statement | Virtual Marketer](https://virtual-marketer.de/en/accessibility/): Accessibility statement under the German Accessibility Strengthening Act (BFSG) for virtual-marketer.de — conformance status, known limitations and how to…
 - [Contact | Virtual Marketer](https://virtual-marketer.de/en/contact/): Contact Virtual Marketer — send us a message via the contact form or reach us directly by email.
 - [Book a Demo | Virtual Marketer](https://virtual-marketer.de/en/demo/): Book a no-obligation demo and see Virtual Marketer live in action.
 - [Frequently Asked Questions | Virtual Marketer](https://virtual-marketer.de/en/faqs/): Answers to common questions about Virtual Marketer: fit for your business, onboarding time, and pricing.
@@ -240,6 +241,7 @@ Virtual Marketer ist eine KI-Marketingplattform der SGS Virtual Marketer GmbH. D
 
 ## Unternehmen & Rechtliches
 
+- [Erklärung zur Barrierefreiheit | Virtual Marketer](https://virtual-marketer.de/barrierefreiheit/): Erklärung zur Barrierefreiheit nach dem Barrierefreiheitsstärkungsgesetz (BFSG) für virtual-marketer.de — Konformitätsstatus, bekannte Einschränkungen und…
 - [Blog | Virtual Marketer - KI & Marketing Insights](https://virtual-marketer.de/blog/): Erfahren Sie alles über KI, Machine Learning und moderne Marketingstrategien. Artikel, Tipps und Best Practices.
 - [Datenschutzerklärung - Virtual Marketer](https://virtual-marketer.de/datenschutzerklaerung/): Datenschutzrichtlinien und Datenschutzerklärung von Virtual Marketer.
 - [Blog | Virtual Marketer - AI & Marketing Insights](https://virtual-marketer.de/en/blog/): Everything about AI, machine learning and modern marketing strategy. Articles, tips and best practices from Virtual Marketer.

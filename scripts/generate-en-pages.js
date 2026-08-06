@@ -44,6 +44,7 @@ const EN_TO_DE = {
   '/en/': '/',
   '/en/solutions/': '/ki-loesungen/',
   '/en/legal-notice/': '/impressum/',
+  '/en/accessibility/': '/barrierefreiheit/',
   '/en/privacy-policy/': '/datenschutzerklaerung/',
   '/en/terms-of-service/': '/nutzungsbedingungen/',
   '/en/faqs/': '/faqs/',

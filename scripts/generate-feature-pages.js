@@ -69,7 +69,7 @@ const UI = {
     valueLabel: 'Ihr Mehrwert', valueTitle: 'Was Sie davon haben',
     howLabel: 'Ablauf', howTitle: 'So funktioniert’s',
     faqLabel: 'FAQ', faqTitle: 'Häufige Fragen',
-    footerLinks: { privacy: 'Datenschutzerklärung', privacyHref: '/datenschutzerklaerung/', legal: 'Impressum', legalHref: '/impressum/' },
+    footerLinks: { privacy: 'Datenschutzerklärung', privacyHref: '/datenschutzerklaerung/', legal: 'Impressum', legalHref: '/impressum/', a11y: 'Barrierefreiheit', a11yHref: '/barrierefreiheit/' },
     allSolutions: 'Alle KI-Lösungen im Überblick',
     // Section label, not a product name — the feature is Product Staging and
     // this section shows the fashion side of it. Naming it after the product
@@ -114,7 +114,7 @@ const UI = {
     valueLabel: 'Business value', valueTitle: 'What you get',
     howLabel: 'How it works', howTitle: 'How it works',
     faqLabel: 'FAQ', faqTitle: 'Frequently asked questions',
-    footerLinks: { privacy: 'Privacy Policy', privacyHref: '/en/privacy-policy/', legal: 'Legal Notice', legalHref: '/en/legal-notice/' },
+    footerLinks: { privacy: 'Privacy Policy', privacyHref: '/en/privacy-policy/', legal: 'Legal Notice', legalHref: '/en/legal-notice/', a11y: 'Accessibility', a11yHref: '/en/accessibility/' },
     allSolutions: 'All AI solutions at a glance',
     tryonLabel: 'Product Staging for fashion', tryonTitle: 'One model, any number of outfits',
     tryonIntro: 'A single reference photo of your fit model is enough. Every further garment is applied to it &#8211; same person, any pose you like, same lighting. For a few cents per image instead of a photo shoot.',
@@ -174,7 +174,8 @@ function footer(lang) {
   return `<footer style="max-width:1140px;margin:64px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
   &copy; 2026 SGS Virtual Marketer GmbH &middot;
   <a href="${f.privacyHref}">${f.privacy}</a> &middot;
-  <a href="${f.legalHref}">${f.legal}</a>
+  <a href="${f.legalHref}">${f.legal}</a> &middot;
+  <a href="${f.a11yHref}">${f.a11y}</a>
 </footer>`;
 }
 
@@ -2807,4 +2808,10 @@ function main() {
   console.log(`\n✅ ${FEATURES.length * 2} feature page(s) generated (${FEATURES.length} DE + ${FEATURES.length} EN)\n`);
 }
 
-main();
+// Guarded so other generators can borrow the shared header and footer without
+// triggering a full feature-page build on require. scripts/generate-
+// accessibility-statement.js needs exactly the same chrome, and a second copy
+// of the nav would drift the moment a link changes.
+if (require.main === module) main();
+
+module.exports = { header, footer, UI, CHROME_CSS };
