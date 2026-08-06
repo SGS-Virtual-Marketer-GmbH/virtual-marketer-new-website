@@ -307,6 +307,163 @@ const TRYON_BASE = {
     'e-commerce fit-model reference photograph, vertical 3:4 framing.',
 };
 
+/**
+ * Alternative reference shots, for choosing between.
+ *
+ * The reference photo is the one image on the page with a technical job: it
+ * stands in for the fit-model shot a shop uploads, and the closer the garment
+ * sits to the body the more of the silhouette a later generation has to work
+ * from. The shipped version uses a fitted tank and shorts; these two go
+ * further, to the seamless compression garments that fit models are actually
+ * photographed in.
+ *
+ * Generated under their own names so the live reference is never overwritten
+ * by an experiment — whichever is chosen gets copied over tryon-base.jpg
+ * deliberately, and the looks regenerated from it.
+ */
+/**
+ * Skin realism, and the layering a fit model actually wears.
+ *
+ * Two things were wrong with the first pass. The skin was the giveaway
+ * airbrushed look — no pore texture, no tonal variation, an even plastic
+ * sheen that reads as generated the moment you look at a forearm. And the
+ * model wore nothing under the base layer, which no fit model does; a
+ * reference shot with no bra structure under a compression top is a picture
+ * of something that does not happen in a studio.
+ *
+ * The bra matters technically, not decoratively. A garment generated onto
+ * this reference inherits what the reference records, so if the reference has
+ * no undergarment lines the output has no idea they exist — and shoulder
+ * straps and a band under a fitted top are among the most visible things in
+ * real apparel photography. Getting them into the reference is what makes a
+ * later on-model shot look photographed rather than rendered.
+ *
+ * The base layer stays opaque. The silhouette is carried by fit and fabric
+ * tension — where the knit pulls, where it creases at the waist, where the
+ * band sits — which is what a fit reference is for, and is also how these
+ * garments photograph in reality.
+ */
+const TRYON_SKIN =
+  'Absolutely photorealistic skin: visible pore texture, fine surface detail, natural subtle ' +
+  'unevenness in tone, faint veins on the forearms and the backs of the hands, natural ' +
+  'collarbone and shoulder anatomy, realistic knees, ankles and hands with correctly formed ' +
+  'fingers. Unretouched editorial quality — no airbrushing, no skin smoothing, no glossy or ' +
+  'plastic sheen, no waxy CGI look. Fine natural film grain, realistic studio light falloff ' +
+  'and soft contact shadows where the body meets the floor.';
+
+/**
+ * What "anatomically correct" means in a fit reference, and what it does not.
+ *
+ * The useful signal is structure and fabric behaviour: collarbones and the
+ * sternal notch, the ribcage under the knit, deltoid and quadriceps
+ * definition, correctly built hands and knees and feet, and the places where
+ * a compression garment actually deforms — creasing at the waist, the band
+ * indenting the hip, seams tracking the body. That is what separates a
+ * photograph from a render, and it is what a garment generated onto this
+ * reference inherits.
+ *
+ * Body detail visible through the fabric is not part of that and is not
+ * generated here. It would make the picture about the model rather than
+ * about the fit, on a page selling catalogue automation to retailers, and
+ * the silhouette it would supposedly demonstrate is already carried by the
+ * fit itself. The knit stays opaque.
+ */
+const TRYON_ANATOMY =
+  'Anatomically correct and specific: clearly defined collarbones and sternal notch, the ' +
+  'ribcage subtly readable under the fabric, real deltoid and bicep definition in the ' +
+  'shoulders and arms, quadriceps and calf definition in the legs, correctly structured knees ' +
+  'and ankles, anatomically correct hands with five properly formed fingers, natural foot ' +
+  'structure with visible tendons. The garment behaves like real compression knit: it creases ' +
+  'slightly at the waist and at the hip crease, the waistband indents the skin very slightly, ' +
+  'the seams track the body, and the fabric is fully opaque matte jersey with no transparency.';
+
+const TRYON_BASE_VARIANTS = [
+  {
+    file: 'tryon-base-alt-a4.jpg',
+    prompt:
+      'Full-body studio photograph of a beautiful professional female fashion fit model in her ' +
+      'mid twenties, symmetrical features, defined cheekbones, long dark hair smoothly pulled ' +
+      'back into a low ponytail. Lean, strong, athletic physique with a clearly defined waist. ' +
+      'She wears a single layer of opaque seamless matte heather-grey compression base layer — ' +
+      'a sleeveless scoop-neck top and high-waisted mid-thigh compression shorts — in a ' +
+      'second-skin fit, worn on its own with nothing layered over it. ' +
+      `${TRYON_ANATOMY} ${TRYON_SKIN} ` +
+      'Standing square to the camera on a plain neutral grey seamless studio background, arms ' +
+      'relaxed slightly away from the body, feet hip-width apart, barefoot, neutral direct ' +
+      'expression. Even soft professional studio lighting from slightly above that models the ' +
+      'form and picks out the muscle structure, full body visible from head to feet, shot on a ' +
+      'full-frame camera with an 85mm lens, high-end e-commerce fit-model reference ' +
+      'photograph, vertical 3:4 framing.',
+  },
+  {
+    file: 'tryon-base-alt-a2.jpg',
+    prompt:
+      'Full-body studio photograph of a beautiful professional female fashion fit model in her ' +
+      'mid twenties, symmetrical features, defined cheekbones, long dark hair smoothly pulled ' +
+      'back. Lean, toned athletic physique with visible muscle definition in the shoulders, ' +
+      'arms and thighs, defined collarbones and a clearly defined waist. She wears a seamless ' +
+      'matte heather-grey compression base layer — a sleeveless scoop-neck top and high-waisted ' +
+      'mid-thigh compression shorts — in an opaque second-skin fit, with a grey seamless sports ' +
+      'bra worn underneath whose shoulder straps and underband are clearly visible as garment ' +
+      'lines through and beneath the top, exactly as a fit model is dressed in a real studio. ' +
+      'The knit shows realistic fabric tension: slight creasing at the waist, the shorts band ' +
+      'sitting on the hip, the fabric following the ribcage and hip line. ' +
+      `${TRYON_SKIN} ` +
+      'Standing square to the camera on a plain neutral grey seamless studio background, arms ' +
+      'relaxed slightly away from the body, feet hip-width apart, barefoot. Even soft ' +
+      'professional studio lighting that models the form, full body visible from head to feet, ' +
+      'sharp focus, high-end e-commerce fit-model reference photograph, vertical 3:4 framing.',
+  },
+  {
+    file: 'tryon-base-alt-a3.jpg',
+    prompt:
+      'Full-body studio photograph of a beautiful professional female fashion fit model in her ' +
+      'late twenties, natural features, dark hair in a smooth low bun, a few loose strands. ' +
+      'Athletic toned physique, defined collarbones, natural shoulder and arm musculature. She ' +
+      'wears an opaque seamless matte grey compression base layer — a racerback sleeveless top ' +
+      'and high-waisted mid-thigh compression shorts — over a grey seamless sports bra whose ' +
+      'straps and underband read clearly as garment lines beneath the top, the way a fit model ' +
+      'is actually dressed. Realistic fabric behaviour: the knit creases slightly at the waist ' +
+      'and hip, the waistband indents very slightly, the seams follow the body. ' +
+      `${TRYON_SKIN} ` +
+      'Standing square to the camera on a plain warm-grey seamless studio background, arms at ' +
+      'her sides, feet hip-width apart, barefoot, neutral direct expression. Soft large-source ' +
+      'studio lighting from slightly above, full body visible from head to feet, shot on a ' +
+      'full-frame camera with an 85mm lens, high-end e-commerce fit-model reference photograph, ' +
+      'vertical 3:4 framing.',
+  },
+  {
+    file: 'tryon-base-alt-a.jpg',
+    prompt:
+      'Full-body studio photograph of a strikingly beautiful professional female fashion fit ' +
+      'model in her mid twenties, symmetrical features, defined cheekbones, clear skin, long ' +
+      'dark hair smoothly pulled back. Lean, toned athletic physique with visible muscle ' +
+      'definition in the shoulders, arms and legs and a clearly defined waist. She wears a ' +
+      'seamless matte heather-grey compression base layer — a sleeveless scoop-neck top and ' +
+      'high-waisted mid-thigh compression shorts — in a second-skin fit that follows the body ' +
+      'closely, so the shoulder line, ribcage, waist, hip line and thigh contour all read ' +
+      'clearly through the fabric. Standing square to the camera on a plain neutral grey ' +
+      'seamless studio background, arms relaxed slightly away from the body, feet hip-width ' +
+      'apart, barefoot. Even soft professional studio lighting that models the form, full body ' +
+      'visible from head to feet, sharp focus, high-end e-commerce fit-model reference ' +
+      'photograph, vertical 3:4 framing.',
+  },
+  {
+    file: 'tryon-base-alt-b.jpg',
+    prompt:
+      'Full-body studio photograph of a strikingly beautiful professional female fashion fit ' +
+      'model in her mid twenties, symmetrical features, clear skin, dark hair in a smooth low ' +
+      'bun. Lean, toned athletic physique. She wears a one-piece seamless matte heather-grey ' +
+      'compression bodysuit with long sleeves and full-length leggings, a true second-skin fit ' +
+      'from wrist to ankle, so the complete body silhouette — shoulders, bust line, ribcage, ' +
+      'waist, hips, thighs and calves — is legible through the fabric with no loose material ' +
+      'anywhere. Standing square to the camera on a plain neutral grey seamless studio ' +
+      'background, arms relaxed at her sides, feet hip-width apart, barefoot. Even soft ' +
+      'professional studio lighting that models the form, full body visible from head to feet, ' +
+      'sharp focus, high-end e-commerce fit-model reference photograph, vertical 3:4 framing.',
+  },
+];
+
 const TRYON_LOOKS = [
   {
     file: 'tryon-look-1.jpg',
@@ -494,6 +651,22 @@ async function main() {
       } catch (e) {
         console.log(`FAILED — ${e.message}`);
       }
+    }
+  }
+
+  // Candidate reference shots. Text-only, and never written over the live
+  // tryon-base.jpg — adopting one is a deliberate copy, not a side effect.
+  for (const variant of TRYON_BASE_VARIANTS) {
+    if (!wanted(variant.file)) continue;
+    if (exists(variant.file) && !FORCE) { skipped++; continue; }
+    process.stdout.write(`   ${variant.file} ... `);
+    try {
+      const img = await request(key, [{ text: `${variant.prompt} ${STYLE}` }]);
+      const kb = await save(img, variant.file, 1000);
+      console.log(`${kb} KB`);
+      made++;
+    } catch (e) {
+      console.log(`FAILED — ${e.message}`);
     }
   }
 
