@@ -185,20 +185,74 @@ const DEMO_RESULT = {
     'full body visible, catalogue photography.',
 };
 
+/**
+ * The fit-model reference shot, and the looks derived from it.
+ *
+ * The reference photo is the one image on the Product Staging page that has a
+ * job beyond decoration: it stands in for the single photo a shop would
+ * actually upload, so it has to look like a real fit-model reference. That
+ * means a skin-tight seamless base layer — the industry's standard garment
+ * for the shot, because the whole point is that the silhouette is legible and
+ * a subsequent garment can be fitted to it. The earlier version put the model
+ * in loose sportswear, which hid exactly what the reference exists to record.
+ *
+ * POSES NOW VARY BETWEEN LOOKS
+ *
+ * They used to be pinned ("same pose" in every prompt) so that the set read
+ * as one photo with the clothes swapped. Varying the pose is the stronger
+ * demonstration — holding a face and a body across a *changed* pose is the
+ * hard part, and a catalogue needs more than one stance anyway. The page copy
+ * changed with it: it used to promise "gleiche Person, gleiche Pose", which
+ * would now be a claim the pictures visibly contradict.
+ *
+ * Identity is still pinned hard in every prompt, because that is the claim
+ * the demo does make, and it is conditioned on the base image rather than
+ * generated from text (see the header) for the same reason.
+ */
+const TRYON_IDENTITY =
+  'Keep the exact same woman: identical face, identical facial features and bone structure, ' +
+  'identical hair colour and hairstyle, identical skin tone, identical body proportions and ' +
+  'height. Same plain neutral grey seamless studio background, same soft even studio lighting. ' +
+  'Full body visible from head to feet, sharp focus, high-end e-commerce on-model product ' +
+  'photograph, vertical 3:4 framing.';
+
 const TRYON_BASE = {
   file: 'tryon-base.jpg',
   prompt:
-    'Full-body studio photograph of a female fashion fit model standing facing the camera ' +
-    'in a plain neutral grey seamless studio background, wearing a simple fitted plain grey ' +
-    'sleeveless base-layer top and plain fitted grey shorts, neutral relaxed pose with arms ' +
-    'at her sides, even soft studio lighting, full body visible from head to feet, ' +
-    'e-commerce fit-model reference photograph.',
+    'Full-body studio photograph of a strikingly beautiful professional female fashion fit ' +
+    'model in her mid twenties, symmetrical features, defined cheekbones, clear skin, long ' +
+    'dark hair smoothly pulled back off the face, toned athletic figure with a well-defined ' +
+    'waist. She wears a skin-tight seamless heather-grey sleeveless base-layer top and ' +
+    'matching skin-tight grey mid-thigh shorts, both following the body closely so the ' +
+    'anatomical silhouette, waistline and hip line are clearly readable — the standard ' +
+    'fit-model reference garment. Standing square to the camera on a plain neutral grey ' +
+    'seamless studio background, arms relaxed at her sides, feet hip-width apart, barefoot, ' +
+    'even soft studio lighting, full body visible from head to feet, sharp focus, high-end ' +
+    'e-commerce fit-model reference photograph, vertical 3:4 framing.',
 };
 
 const TRYON_LOOKS = [
-  { file: 'tryon-look-1.jpg', prompt: 'Keep the exact same woman, same face, same hair, same body, same pose, same neutral grey studio background and same lighting. Now she is wearing a tailored navy blazer over a white blouse with matching navy trousers and simple heels. Full body visible, professional e-commerce on-model product photograph.' },
-  { file: 'tryon-look-2.jpg', prompt: 'Keep the exact same woman, same face, same hair, same body, same pose, same neutral grey studio background and same lighting. Now she is wearing a casual outfit: an oversized beige knit sweater, blue straight-leg jeans and white sneakers. Full body visible, professional e-commerce on-model product photograph.' },
-  { file: 'tryon-look-3.jpg', prompt: 'Keep the exact same woman, same face, same hair, same body, same pose, same neutral grey studio background and same lighting. Now she is wearing an elegant deep red midi dress with a thin belt and dark heeled sandals. Full body visible, professional e-commerce on-model product photograph.' },
+  {
+    file: 'tryon-look-1.jpg',
+    prompt:
+      `${TRYON_IDENTITY} Now she wears a sharply tailored navy trouser suit over a white silk ` +
+      'blouse with pointed black heels. New pose: three-quarter turn to the camera, one hand ' +
+      'in her trouser pocket, weight on the back leg, chin level, confident editorial stance.',
+  },
+  {
+    file: 'tryon-look-2.jpg',
+    prompt:
+      `${TRYON_IDENTITY} Now she wears an oversized cream cable-knit sweater, blue straight-leg ` +
+      'jeans and white leather sneakers. New pose: mid-stride walking towards the camera, ' +
+      'one arm swinging, hair and fabric in slight motion, relaxed natural expression.',
+  },
+  {
+    file: 'tryon-look-3.jpg',
+    prompt:
+      `${TRYON_IDENTITY} Now she wears an elegant deep red satin midi dress with a thin belt ` +
+      'and dark strappy heeled sandals. New pose: standing tall with one hand on her hip, the ' +
+      'other arm relaxed, shoulders angled, chin slightly lifted, poised runway stance.',
+  },
 ];
 
 function apiKey() {

@@ -206,6 +206,17 @@
   .vmd-imgbox.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .vmd-avatar.vmd-hasimg { background: none; overflow: hidden; }
   .vmd-avatar.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Avatars cut from a full-body shot. object-fit:cover centres on the frame,
+     which on a head-to-toe photo is the waist — so the circle shows a torso
+     and no face. Pulling the crop to the top of the image puts the head in
+     the circle, which is the only part of a 44px avatar that reads. */
+  .vmd-avatars-face .vmd-avatar.vmd-hasimg img { object-position: 50% 4%; }
+  /* The result pane holds a head-to-toe fashion photo, and the point of it is
+     that you can see the garment on the model. A 130px-tall cover crop showed
+     a midriff with the head cut off. Taller, and contained rather than
+     cropped, so the whole figure is in frame. */
+  .vmd-imgbox.vmd-imgbox-full { height: 250px; background: var(--vm-gray-100); }
+  .vmd-imgbox.vmd-imgbox-full img { object-fit: contain; }
   .vmd-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.9); left: 4%; transition: left 2.6s linear; }
 
   .vmd-email { border: 1px solid var(--vm-gray-200); border-radius: 12px; overflow: hidden; background: #fff; }
@@ -887,13 +898,13 @@ html { scroll-padding-top: 76px; }
   <section class="vm-tryon" aria-labelledby="tryon-h">
     <p class="section-label">Product Staging für Fashion</p>
     <h2 class="section-title" id="tryon-h">Ein Modell, beliebig viele Outfits</h2>
-    <p class="impact-note">Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; gleiche Person, gleiche Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.</p>
+    <p class="impact-note">Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; dieselbe Person, frei wählbare Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.</p>
     <div class="vm-tryon-row">
       
         <figure class="vm-tryon-shot is-base">
           <picture>
             <source srcset="/product-pages/tryon-base.webp" type="image/webp">
-            <img src="/product-pages/tryon-base.webp" alt="Referenzfoto" loading="lazy" decoding="async" width="1000" height="545">
+            <img src="/product-pages/tryon-base.webp" alt="Referenzfoto" loading="lazy" decoding="async" width="896" height="1200">
           </picture>
           <figcaption>Referenzfoto</figcaption>
         </figure>
@@ -901,7 +912,7 @@ html { scroll-padding-top: 76px; }
         <figure class="vm-tryon-shot">
           <picture>
             <source srcset="/product-pages/tryon-look-1.webp" type="image/webp">
-            <img src="/product-pages/tryon-look-1.webp" alt="Look 1" loading="lazy" decoding="async" width="1000" height="545">
+            <img src="/product-pages/tryon-look-1.webp" alt="Look 1" loading="lazy" decoding="async" width="896" height="1200">
           </picture>
           <figcaption>Look 1</figcaption>
         </figure>
@@ -909,7 +920,7 @@ html { scroll-padding-top: 76px; }
         <figure class="vm-tryon-shot">
           <picture>
             <source srcset="/product-pages/tryon-look-2.webp" type="image/webp">
-            <img src="/product-pages/tryon-look-2.webp" alt="Look 2" loading="lazy" decoding="async" width="1000" height="545">
+            <img src="/product-pages/tryon-look-2.webp" alt="Look 2" loading="lazy" decoding="async" width="896" height="1200">
           </picture>
           <figcaption>Look 2</figcaption>
         </figure>
@@ -917,7 +928,7 @@ html { scroll-padding-top: 76px; }
         <figure class="vm-tryon-shot">
           <picture>
             <source srcset="/product-pages/tryon-look-3.webp" type="image/webp">
-            <img src="/product-pages/tryon-look-3.webp" alt="Look 3" loading="lazy" decoding="async" width="1000" height="545">
+            <img src="/product-pages/tryon-look-3.webp" alt="Look 3" loading="lazy" decoding="async" width="896" height="1200">
           </picture>
           <figcaption>Look 3</figcaption>
         </figure>
@@ -1077,12 +1088,12 @@ html { scroll-padding-top: 76px; }
             <span class="vmd-arrow">→</span>
             <div style="flex:1;min-width:130px;">
               <p class="vmd-label">Avatar wählen</p>
-              <div class="vmd-avatars"><span class="vmd-avatar vmd-hasimg" id="st-a1"><img src="/product-pages/demo-model-1.webp" alt="" loading="lazy" decoding="async" width="480" height="480"></span><span class="vmd-avatar vmd-hasimg" id="st-a2"><img src="/product-pages/demo-model-2.webp" alt="" loading="lazy" decoding="async" width="480" height="480"></span><span class="vmd-avatar vmd-hasimg" id="st-a3"><img src="/product-pages/demo-model-3.webp" alt="" loading="lazy" decoding="async" width="480" height="480"></span></div>
+              <div class="vmd-avatars vmd-avatars-face"><span class="vmd-avatar vmd-hasimg" id="st-a1"><img src="/product-pages/model-kai-studio.webp" alt="" loading="lazy" decoding="async" width="896" height="1200"></span><span class="vmd-avatar vmd-hasimg" id="st-a2"><img src="/product-pages/model-nadia-studio.webp" alt="" loading="lazy" decoding="async" width="896" height="1200"></span><span class="vmd-avatar vmd-hasimg" id="st-a3"><img src="/product-pages/model-ruby-studio.webp" alt="" loading="lazy" decoding="async" width="896" height="1200"></span></div>
             </div>
             <span class="vmd-arrow">→</span>
             <div style="flex:1.4;min-width:150px;">
               <p class="vmd-label">Ergebnis</p>
-              <div class="vmd-imgbox vmd-blur vmd-hasimg" id="st-result"><img src="/product-pages/model-nadia-studio.webp" alt="" loading="lazy" decoding="async" width="896" height="1200"></div>
+              <div class="vmd-imgbox vmd-blur vmd-hasimg vmd-imgbox-full" id="st-result"><img src="/product-pages/model-nadia-studio.webp" alt="" loading="lazy" decoding="async" width="896" height="1200"></div>
               <div class="vmd" id="st-done" style="margin-top:8px;"><span class="vmd-badge">✓ Model trägt Ihr Produkt — bereit für Shop & Ads</span></div>
             </div>
           </div>

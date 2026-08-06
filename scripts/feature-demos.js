@@ -102,6 +102,17 @@ const DEMO_STYLE = `
   .vmd-imgbox.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .vmd-avatar.vmd-hasimg { background: none; overflow: hidden; }
   .vmd-avatar.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Avatars cut from a full-body shot. object-fit:cover centres on the frame,
+     which on a head-to-toe photo is the waist — so the circle shows a torso
+     and no face. Pulling the crop to the top of the image puts the head in
+     the circle, which is the only part of a 44px avatar that reads. */
+  .vmd-avatars-face .vmd-avatar.vmd-hasimg img { object-position: 50% 4%; }
+  /* The result pane holds a head-to-toe fashion photo, and the point of it is
+     that you can see the garment on the model. A 130px-tall cover crop showed
+     a midriff with the head cut off. Taller, and contained rather than
+     cropped, so the whole figure is in frame. */
+  .vmd-imgbox.vmd-imgbox-full { height: 250px; background: var(--vm-gray-100); }
+  .vmd-imgbox.vmd-imgbox-full img { object-fit: contain; }
   .vmd-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.9); left: 4%; transition: left 2.6s linear; }
 
   .vmd-email { border: 1px solid var(--vm-gray-200); border-radius: 12px; overflow: hidden; background: #fff; }
@@ -224,24 +235,25 @@ function chat(idPrefix, userText, toolText, botText) {
  * Falls back to the gradient when the file is absent so a checkout without
  * generated images still builds (see scripts/generate-ai-images.js).
  */
-function vmdImage(id, src, extraStyle) {
+function vmdImage(id, src, extraStyle, extraClass) {
   const fs = require('fs');
   const path = require('path');
   const rel = `assets/product-pages/${src}`;
   const has = fs.existsSync(path.join(__dirname, '..', rel));
   const style = extraStyle ? ` style="${extraStyle}"` : '';
-  if (!has) return `<div class="vmd-imgbox vmd-blur" id="${id}"${style}></div>`;
-  return `<div class="vmd-imgbox vmd-blur vmd-hasimg" id="${id}"${style}>` +
+  const cls = extraClass ? ` ${extraClass}` : '';
+  if (!has) return `<div class="vmd-imgbox vmd-blur${cls}" id="${id}"${style}></div>`;
+  return `<div class="vmd-imgbox vmd-blur vmd-hasimg${cls}" id="${id}"${style}>` +
     `<img src="/product-pages/${src}" alt="" loading="lazy" decoding="async"></div>`;
 }
 
 /** Avatar row backed by the real model portraits. */
-function vmdAvatars(ids) {
+function vmdAvatars(ids, files) {
   const fs = require('fs');
   const path = require('path');
   return ids
     .map((id, i) => {
-      const file = `demo-model-${i + 1}.jpg`;
+      const file = (files && files[i]) || `demo-model-${i + 1}.jpg`;
       const has = fs.existsSync(path.join(__dirname, '..', `assets/product-pages/${file}`));
       return has
         ? `<span class="vmd-avatar vmd-hasimg" id="${id}"><img src="/product-pages/${file}" alt="" loading="lazy" decoding="async"></span>`
@@ -249,6 +261,32 @@ function vmdAvatars(ids) {
     })
     .join('');
 }
+
+/**
+ * The Product Staging line-up.
+ *
+ * One list, used for both the avatar row and the result pane, because the
+ * whole claim of that demo is "the model you picked is the model you get".
+ * It previously failed that on sight: the avatars were the head-and-shoulders
+ * demo-model-*.jpg portraits, the animation highlighted the second one — a
+ * man — and the result pane was a hardcoded image of a woman in a green
+ * jumpsuit. A visitor watching the demo saw it pick one person and produce a
+ * different one, in a demo whose entire subject is identity preservation.
+ *
+ * Deriving both from `picked` means the two can no longer disagree: change
+ * the index and the avatar highlight and the result move together.
+ *
+ * These models have full-body studio shots, which the demo-model-* portraits
+ * do not — and a head-and-shoulders crop cannot show a garment, which is what
+ * the result pane exists to do.
+ */
+const STAGING_MODELS = [
+  { avatar: 'model-kai-studio.jpg', result: 'model-kai-studio.jpg' },
+  { avatar: 'model-nadia-studio.jpg', result: 'model-nadia-studio.jpg' },
+  { avatar: 'model-ruby-studio.jpg', result: 'model-ruby-studio.jpg' },
+];
+/** Which of the three the animation settles on. */
+const STAGING_PICK = 1;
 
 function buildDemo(view, locale) {
   const de = locale === 'de';
@@ -403,18 +441,21 @@ function buildDemo(view, locale) {
             <span class="vmd-arrow">→</span>
             <div style="flex:1;min-width:130px;">
               <p class="vmd-label">${L('Avatar wählen', 'Pick an avatar')}</p>
-              <div class="vmd-avatars">${vmdAvatars(['st-a1', 'st-a2', 'st-a3'])}</div>
+              <div class="vmd-avatars vmd-avatars-face">${vmdAvatars(
+                ['st-a1', 'st-a2', 'st-a3'],
+                STAGING_MODELS.map((m) => m.avatar)
+              )}</div>
             </div>
             <span class="vmd-arrow">→</span>
             <div style="flex:1.4;min-width:150px;">
               <p class="vmd-label">${L('Ergebnis', 'Result')}</p>
-              ${vmdImage('st-result', 'model-nadia-studio.jpg')}
+              ${vmdImage('st-result', STAGING_MODELS[STAGING_PICK].result, '', 'vmd-imgbox-full')}
               <div class="vmd" id="st-done" style="margin-top:8px;"><span class="vmd-badge">✓ ${L('Model trägt Ihr Produkt — bereit für Shop & Ads', 'Model wearing your product — ready for shop & ads')}</span></div>
             </div>
           </div>
           <div class="vmd" id="st-video" style="margin-top:14px;"><span class="vmd-badge vmd-badge-blue">🎬 ${L('Optional: Foto zu kurzem Video animieren', 'Optional: animate the photo into a short clip')}</span></div>`,
         steps: [
-          { t: 'class', s: '#st-a2', x: 'vmd-picked', d: 900 },
+          { t: 'class', s: `#st-a${STAGING_PICK + 1}`, x: 'vmd-picked', d: 900 },
           { t: 'style', s: '#st-result', k: 'filter', x: 'none', d: 1300 },
           { t: 'show', s: '#st-done', d: 800 },
           { t: 'show', s: '#st-video', d: 600 },

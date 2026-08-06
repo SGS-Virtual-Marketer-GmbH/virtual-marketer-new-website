@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KI Social Publisher — LinkedIn-Beiträge planen &amp; autonom veröffentlichen</title>
+<title>LinkedIn-Beiträge planen &amp; autonom veröffentlichen</title>
 <meta name="description" content="Persona-gesteuerte LinkedIn-Beiträge nach festem Zeitplan oder durch autonomes Themen-Scanning — standardmäßig mit menschlicher Freigabe.">
 <meta name="keywords" content="LinkedIn Beiträge automatisch posten, Social Media KI Tool, LinkedIn Automatisierung, KI Social Media Planer, Social Posts KI generieren">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -15,7 +15,7 @@
 <meta property="og:type" content="product">
 <meta property="og:locale" content="de_DE">
 <meta property="og:site_name" content="Virtual Marketer">
-<meta property="og:title" content="KI Social Publisher — LinkedIn-Beiträge planen &amp; autonom veröffentlichen">
+<meta property="og:title" content="LinkedIn-Beiträge planen &amp; autonom veröffentlichen">
 <meta property="og:description" content="Persona-gesteuerte LinkedIn-Beiträge nach festem Zeitplan oder durch autonomes Themen-Scanning — standardmäßig mit menschlicher Freigabe.">
 <meta property="og:url" content="https://virtual-marketer.de/ki-loesungen/social-publisher/">
 <meta property="og:image" content="https://virtual-marketer.de/product-pages/social-hero.jpg">
@@ -206,6 +206,17 @@
   .vmd-imgbox.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .vmd-avatar.vmd-hasimg { background: none; overflow: hidden; }
   .vmd-avatar.vmd-hasimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Avatars cut from a full-body shot. object-fit:cover centres on the frame,
+     which on a head-to-toe photo is the waist — so the circle shows a torso
+     and no face. Pulling the crop to the top of the image puts the head in
+     the circle, which is the only part of a 44px avatar that reads. */
+  .vmd-avatars-face .vmd-avatar.vmd-hasimg img { object-position: 50% 4%; }
+  /* The result pane holds a head-to-toe fashion photo, and the point of it is
+     that you can see the garment on the model. A 130px-tall cover crop showed
+     a midriff with the head cut off. Taller, and contained rather than
+     cropped, so the whole figure is in frame. */
+  .vmd-imgbox.vmd-imgbox-full { height: 250px; background: var(--vm-gray-100); }
+  .vmd-imgbox.vmd-imgbox-full img { object-fit: contain; }
   .vmd-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.9); left: 4%; transition: left 2.6s linear; }
 
   .vmd-email { border: 1px solid var(--vm-gray-200); border-radius: 12px; overflow: hidden; background: #fff; }

@@ -75,7 +75,7 @@ const UI = {
     // this section shows the fashion side of it. Naming it after the product
     // would just repeat the page's own eyebrow two screens further down.
     tryonLabel: 'Product Staging für Fashion', tryonTitle: 'Ein Modell, beliebig viele Outfits',
-    tryonIntro: 'Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; gleiche Person, gleiche Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.',
+    tryonIntro: 'Ein einziges Referenzfoto Ihres Fit-Modells genügt. Jedes weitere Kleidungsstück wird darauf angewandt &#8211; dieselbe Person, frei wählbare Pose, gleiches Licht. Für wenige Cent pro Bild statt eines Shootings.',
     tryonBase: 'Referenzfoto', tryonNote: 'Illustratives Beispiel &#8211; alle Aufnahmen sind KI-generiert.',
   },
   en: {
@@ -93,7 +93,7 @@ const UI = {
     footerLinks: { privacy: 'Privacy Policy', privacyHref: '/en/privacy-policy/', legal: 'Legal Notice', legalHref: '/en/legal-notice/' },
     allSolutions: 'All AI solutions at a glance',
     tryonLabel: 'Product Staging for fashion', tryonTitle: 'One model, any number of outfits',
-    tryonIntro: 'A single reference photo of your fit model is enough. Every further garment is applied to it &#8211; same person, same pose, same lighting. For a few cents per image instead of a photo shoot.',
+    tryonIntro: 'A single reference photo of your fit model is enough. Every further garment is applied to it &#8211; same person, any pose you like, same lighting. For a few cents per image instead of a photo shoot.',
     tryonBase: 'Reference photo', tryonNote: 'Illustrative example &#8211; every shot here is AI-generated.',
   },
 };
