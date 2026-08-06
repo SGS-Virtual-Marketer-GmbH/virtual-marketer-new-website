@@ -298,7 +298,7 @@ function main() {
     bodyHtml: `
 <span class="eyebrow">AI Solutions</span>
 <h1>Custom AI Solutions</h1>
-<p class="lede">Every Virtual Marketer product below is real and shipped today. Pick a solution to see who it's for, what it costs to solve the problem manually, and a live interactive demo.</p>
+<p class="lede">The same work slips in every marketing team: product images, copy for a thousand items, keeping feeds clean, writing the reports. That is what these tools are built for &#8211; and every one of them is running at customers today. Open one and watch the demo work before you talk to anybody.</p>
 <h2 id="vmaf-heading-en">All Solutions</h2>`,
   }));
 
