@@ -43,13 +43,28 @@
  * worse than saying nothing. No accessibility certificate or audit-firm name
  * either — the assessment was a self-assessment and says so.
  *
- * OPEN ITEM FOR THE CLIENT
+ * THE MICROENTERPRISE EXEMPTION APPLIES, AND THE PAGE STAYS ANYWAY
  *
- * The BFSG exempts microenterprises (fewer than 10 people and at most €2m
- * annual turnover) from the *service* obligations. Whether that applies here
- * is a fact this build does not have. Publishing the statement is harmless
- * and useful either way; the exemption question only changes whether it is
- * mandatory. Reported at the end of the run.
+ * The BFSG exempts microenterprises — fewer than ten people and at most €2m
+ * annual turnover — from the service obligations, and the client has
+ * confirmed the exemption applies to SGS Virtual Marketer GmbH. So this page
+ * is voluntary, not mandatory.
+ *
+ * It is published regardless, for two reasons. It is true: the conformance
+ * work behind it was done, and a visitor who needs to know whether they can
+ * use the site deserves the answer whether or not a statute compels it. And
+ * the exemption is a moving target — it is tested against headcount and
+ * turnover on an ongoing basis, so a company that grows past either
+ * threshold acquires the obligation with no warning. Having the statement
+ * already there is strictly better than discovering it is overdue.
+ *
+ * NOTHING ON THE PAGE DISCLOSES THE EXEMPTION OR THE COMPANY'S SIZE, AND
+ * THAT IS DELIBERATE — it is the client's explicit instruction, and it is
+ * also the right call commercially: headcount and turnover are not a
+ * prospect's business, and a statement that opened by explaining why it did
+ * not have to exist would undercut its own point. Do not add a sentence
+ * along the lines of "as a microenterprise we are exempt, but…". The page
+ * simply states what is true about the website.
  */
 
 const fs = require('fs');
@@ -75,7 +90,6 @@ const ENFORCEMENT_EN =
   'Market Surveillance Authority of the German Federal States for the Accessibility of Products and Services (MLBF)';
 
 const OPEN_ITEMS = [
-  'BFSG microenterprise exemption (fewer than 10 employees AND max €2m turnover) — confirm whether it applies to SGS Virtual Marketer GmbH. The statement is published either way; the exemption only decides whether it is mandatory.',
   'MLBF postal address and case-intake contact — deliberately not printed, because they could not be verified at build time. Add them once confirmed.',
 ];
 

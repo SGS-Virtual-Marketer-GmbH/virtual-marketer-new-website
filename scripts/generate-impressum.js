@@ -104,8 +104,14 @@ const NOT_PUBLISHED = {
 
 /** Reported at the end of the run — facts the page needs and does not have. */
 const OPEN_ITEMS = [
-  `${REGISTER_NUMBER} / ${REGISTER_COURT} — confirm against handelsregister.de; verified only via secondary sources.`,
-  'BFSG: the offering is to be open to consumers, so an "Erklärung zur Barrierefreiheit" page is required separately (not in the Impressum).',
+  // Both previous entries are closed:
+  //
+  //  - HRB 16253 / Amtsgericht Bad Homburg v. d. Höhe went in from secondary
+  //    sources and was flagged for checking. The client has since confirmed
+  //    it is correct, so it is no longer an open item.
+  //
+  //  - The separate "Erklärung zur Barrierefreiheit" now exists, in both
+  //    languages — see scripts/generate-accessibility-statement.js.
 ];
 
 const CSS_ID = 'vm-impressum-style';
