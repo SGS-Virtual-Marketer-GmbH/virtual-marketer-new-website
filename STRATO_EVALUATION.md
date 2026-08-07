@@ -3,16 +3,57 @@
 **Status:** assessment only. Nothing has been migrated.
 **Date:** 2026-08-07
 
-## The short version
+## The short version — measured, and the answer is no
 
-The static site moves easily. The booking/contact backend is the whole
-problem, and the saving is probably smaller than it looks — possibly zero.
+**Do not move. It would cost roughly 30–100× more, not less.**
 
-Check the actual Cloud Run bill before doing any of this. Cloud Run scales to
-zero, and this is a marketing site with modest traffic; if the bill is €3/month
-then a €10/month Strato V-Server is *more* expensive and also hands you an
-operating system to look after. The premise "Strato may be cheaper" is worth
-verifying before it costs a week.
+The Cloud Billing API is disabled on the project, so the invoice could not be
+read directly. Usage was measured instead, from Cloud Monitoring, for the
+`virtual-marketer-website` service over the 30 days to 7 August 2026:
+
+| Metric | 30-day usage | Cloud Run free tier / month | Used |
+|---|---|---|---|
+| Requests | 31,758 | 2,000,000 | 1.6% |
+| CPU allocation | 5,225 vCPU-s | 180,000 vCPU-s | 2.9% |
+| Memory allocation | 2,603 GiB-s | 360,000 GiB-s | 0.7% |
+| Egress | 0.26 GiB | — | — |
+
+Everything sits inside the free tier. And ignoring the free tier completely —
+paying full europe-west1 list price on every unit — the site costs:
+
+```
+CPU       5,225.3 vCPU-s  × $0.000024   = $0.125
+Memory    2,602.7 GiB-s   × $0.0000025  = $0.007
+Requests  0.0318 M        × $0.40       = $0.013
+Egress    0.26 GiB        × ~$0.12      = $0.031
+                                        ---------
+                                          ≈ $0.18 / month
+```
+
+Plus a few cents of Artifact Registry for the images. Call it **under €0.25 a
+month, worst case.** A Strato V-Server is €5–20 a month, so the move increases
+hosting cost by a factor of 30 to 100 — before counting the 3–4 days of work
+and the ongoing operations burden it transfers onto you.
+
+### If the GCP bill looks large, this site is not why
+
+`virtual-marketer-chat-bot` runs at least twelve Cloud Run services —
+`denta-tec-chat`, `denta-tec-voice-agent`, `genic-ch`, `self-reliance-app`,
+`australian-labradoodle-kaufen`, `virtual-marketer-ai-text-generator-2-0`,
+`virtual-marketer-authenticator-service` and others — plus the AI API usage
+behind the product. Those share one invoice with the marketing site.
+
+Whatever that invoice says, the marketing website is a rounding error in it.
+Moving the site to Strato would not measurably change it. If cost reduction is
+the goal, the place to look is the AI API spend and the idle services, not
+where 52 MB of static HTML is served from.
+
+## Everything below was written before the usage was measured
+
+It is kept because it is still the correct plan *if* the site ever has to move
+for a reason other than cost — a customer contract requiring German hosting,
+for example, which is a real possibility given the data-residency clause the
+privacy policy already offers.
 
 ## What is actually running today
 
