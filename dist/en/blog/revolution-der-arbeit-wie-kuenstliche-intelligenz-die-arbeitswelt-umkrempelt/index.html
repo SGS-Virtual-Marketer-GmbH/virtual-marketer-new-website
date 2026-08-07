@@ -231,6 +231,40 @@
 
 /* --- Applies at every width: things that were simply wrong ---------------- */
 
+/* The theme ships "body{overflow:hidden}" (engitech/style.css) alongside
+   "html{overflow-x:hidden}". That combination is a scroll hazard, and it is
+   the shape of bug that shows up on a phone and not on a desktop.
+
+   Two separate problems in it. Setting overflow:hidden on the body makes the
+   body a scroll container that can never scroll, because its height is auto
+   and so it always exactly fits its own content. And a hidden value on one
+   axis forces a visible value on the other axis to compute to auto, so the
+   root ends up as "hidden auto" whether or not anyone asked for that.
+
+   On a desktop the wheel still scrolls the viewport, which is why this
+   survived. Touch scrolling is less forgiving, and Safari in particular has
+   never handled a body scroll container the way the spec describes.
+
+   The fix is clip rather than visible. The theme genuinely does need the
+   horizontal clipping — the off-canvas side panel is a fixed 400px box
+   parked past the right edge, and without clipping it would add a horizontal
+   scrollbar on every page. But clip clips *without* creating a scroll
+   container, so unlike hidden it does not drag the other axis to auto. The
+   horizontal overflow stays hidden; vertical scrolling goes back to the
+   viewport where it belongs.
+
+   Browsers without overflow:clip (Safari below 16) ignore these declarations
+   and keep the theme's current behaviour, so this cannot make anything worse
+   than it already is. */
+   !important because this block is injected into the head *before* the
+   theme's bundled stylesheet, so on equal specificity the theme's own
+   "body{overflow:hidden}" wins on document order. Raising specificity
+   instead would mean inventing a selector for html and body, which have no
+   classes worth matching; this file already answers the theme's !important
+   heading clamp the same way. */
+html{overflow-x:clip !important;overflow-y:visible !important;}
+body{overflow-x:clip !important;overflow-y:visible !important;}
+
 /* A 565px-wide <img> inside a 375px column was forcing horizontal overflow.
    body{overflow-x:hidden} was hiding the symptom; this fixes the cause, so
    the image scales instead of being silently cropped. */
