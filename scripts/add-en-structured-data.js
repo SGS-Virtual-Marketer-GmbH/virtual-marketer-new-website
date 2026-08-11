@@ -37,12 +37,19 @@ const BASE_URL = 'https://virtual-marketer.de';
 const LOGO = `${BASE_URL}/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png`;
 
 // Page type + breadcrumb label per English path. CollectionPage for the
-// solutions hub (it lists other pages), ProfilePage for the team page, to
-// mirror what the German /ki-loesungen/ and /management/ already declare.
+// solutions hub (it lists other pages), AboutPage for the team page, to
+// mirror what the German /ki-loesungen/ and /management/ declare.
+//
+// /en/about/ was ProfilePage and is not one. Search Console flagged the
+// German twin as a profile page missing the mandatory mainEntity field —
+// mandatory because ProfilePage means a page about ONE person or
+// organization and the markup has to say which. The team page names three
+// people plus an extended team, so there is no single entity to point at.
+// AboutPage is what it is, and needs no mainEntity.
 const PAGES = {
   '/en/': { type: 'WebPage', crumb: 'Home' },
   '/en/solutions/': { type: 'CollectionPage', crumb: 'Solutions' },
-  '/en/about/': { type: 'ProfilePage', crumb: 'About' },
+  '/en/about/': { type: 'AboutPage', crumb: 'About' },
   '/en/demo/': { type: 'WebPage', crumb: 'Book a demo' },
   '/en/faqs/': { type: 'WebPage', crumb: 'FAQs' },
   '/en/contact/': { type: 'ContactPage', crumb: 'Contact' },
@@ -156,7 +163,52 @@ function main() {
     added++;
   }
 
-  console.log(`\n✅ ${added} English page(s) given a JSON-LD graph (${skipped} already had one)\n`);
+  console.log(`\n✅ ${added} English page(s) given a JSON-LD graph (${skipped} already had one)`);
+
+  /*
+   * Site-wide guard: a ProfilePage without mainEntity is a critical error.
+   *
+   * Google requires mainEntity on ProfilePage — it is the field that says
+   * whose profile the page is — and without it the page is dropped from the
+   * enhancement entirely. That is what Search Console reported here.
+   *
+   * The failure mode is what makes this worth a build check rather than a
+   * one-off fix: nothing breaks visibly, the page renders fine, and the only
+   * signal is an email from Search Console weeks later. Anyone reintroducing
+   * ProfilePage should find out in the build instead.
+   */
+  const offenders = [];
+  (function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) { walk(full); continue; }
+      if (!entry.name.endsWith('.html')) continue;
+      const html = fs.readFileSync(full, 'utf-8');
+      if (!html.includes('ProfilePage')) continue;
+
+      for (const m of html.matchAll(/<script[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
+        let data;
+        try { data = JSON.parse(m[1]); } catch { continue; }
+        const nodes = data['@graph'] || [data];
+        for (const node of nodes) {
+          if (node && node['@type'] === 'ProfilePage' && !node.mainEntity) {
+            offenders.push('/' + path.relative(DIST, full).split(path.sep).join('/').replace(/index\.html$/, ''));
+          }
+        }
+      }
+    }
+  })(DIST);
+
+  if (offenders.length) {
+    console.log(`   ⚠ ${offenders.length} page(s) declare ProfilePage without the required mainEntity:`);
+    [...new Set(offenders)].slice(0, 5).forEach((p) => console.log(`       ${p}`));
+    console.log('     Either give it a mainEntity, or use the type the page actually is');
+    console.log('     (AboutPage for a team page, WebPage otherwise).');
+    process.exitCode = 1;
+  } else {
+    console.log('   ✓ no ProfilePage ships without a mainEntity');
+  }
+  console.log('');
 }
 
 main();

@@ -131,7 +131,22 @@ const pageMetadata = {
     title: 'Über uns | Virtual Marketer Management & Team',
     description: 'Lernen Sie das Team von Virtual Marketer kennen. Innovative Köpfe hinter der KI-Marketinglösung.',
     keywords: 'Virtual Marketer Team, Management, Gründer',
-    type: 'profile',
+    // AboutPage, not ProfilePage. Search Console reported this page as a
+    // "Profilseite für strukturierte Daten" missing the required mainEntity
+    // field, which is a critical error — it suppresses the enhancement.
+    //
+    // The right fix is the type, not the missing field. ProfilePage means a
+    // page about ONE person or organization, which is why mainEntity is
+    // mandatory: the markup has to say whose profile it is. Google's guidance
+    // aims it at social profiles and author pages, for attributing content to
+    // a creator. /management/ is "Unser Management Team" — three named people
+    // plus an extended team — so there is no single main entity to name, and
+    // inventing one to satisfy the validator would be marking the page up as
+    // something it is not.
+    //
+    // AboutPage is what this page actually is, and it has no mainEntity
+    // requirement, so the error goes away without fabricating anything.
+    type: 'about',
     geo: { country: 'DE' }
   },
   '/datenschutzerklaerung/': {
@@ -268,10 +283,10 @@ function generateStructuredData(path, meta) {
       'description': meta.description,
       'url': url
     };
-  } else if (meta.type === 'profile') {
+  } else if (meta.type === 'about') {
     pageSchema = {
       ...pageSchema,
-      '@type': 'ProfilePage',
+      '@type': 'AboutPage',
       'name': meta.title,
       'description': meta.description,
       'url': url
