@@ -54,6 +54,7 @@ const DIST = path.join(__dirname, '../dist');
  * means a seventeenth feature is handled the day it is added.
  */
 const { FEATURES } = require('./generate-feature-pages');
+const { SOLUTIONS, SOLUTIONS_EN } = require('./fix-navigation');
 
 const LINKS = {
   ...Object.fromEntries(
@@ -183,7 +184,39 @@ const COPY = {
   'Dateien &amp; Berichte': 'Files &amp; reports',
   'Feed-Optimizer': 'Feed Optimizer',
   'Chat-Insights': 'Chat Insights',
+
+  // scripts/enhance-homepage.js — the solutions showcase and its two CTAs.
+  // The count is baked into the heading at build time (FEATURES.length), so
+  // this key has to match that exact number rather than being a template.
+  [`Diese ${FEATURES.length} Werkzeuge sind heute bei unseren Kunden im Einsatz`]:
+    `These ${FEATURES.length} tools are running at customers today`,
+  'Unsere L&ouml;sungen': 'Our Solutions',
+  'Von Produktfotos bis Kampagnen &#8211; jedes Werkzeug l&auml;sst sich einzeln oder zusammen einsetzen, mit Ihren eigenen KI-Modellen.':
+    'From product photos to campaigns &#8211; every tool works on its own or together, with your own AI models.',
+  'Alle L&ouml;sungen im &Uuml;berblick &rarr;': 'All solutions at a glance &rarr;',
+  'Sehen Sie, welches Werkzeug zu Ihnen passt': 'See which tool fits your business',
+  'Ein kostenloses, unverbindliches Erstgespr&auml;ch &#8211; 15 Minuten, direkt mit unserem Team.':
+    'A free, no-obligation first call &#8211; 15 minutes, directly with our team.',
+  'Bereit f&uuml;r den ersten Schritt?': 'Ready for the first step?',
+  'Buchen Sie ein unverbindliches Erstgespr&auml;ch &#8211; 15 Minuten, keine Verpflichtung.':
+    'Book a no-obligation first call &#8211; 15 minutes, no commitment.',
+  'Oder schreiben Sie uns direkt:': 'Or write to us directly:',
 };
+
+// The showcase's 16 cards reuse the mega-menu's own labels (SOLUTIONS) and
+// the product pages' own taglines (FEATURES) rather than a third hand-kept
+// copy of either — this is the exact drift inject-language-switcher.js's
+// stale slug list already showed the cost of. SOLUTIONS_EN and each
+// feature's .en.tagline are the approved English wording; reusing them here
+// means the showcase cannot say something different in English than the
+// pages it links to already say.
+SOLUTIONS.forEach((s, i) => {
+  const en = SOLUTIONS_EN[i];
+  if (en && !(s.label in COPY)) COPY[s.label] = en.label;
+});
+FEATURES.forEach((f) => {
+  if (!(f.de.tagline in COPY)) COPY[f.de.tagline] = f.en.tagline;
+});
 
 const TITLE = 'AI Marketing Solutions from Germany';
 const DESCRIPTION =

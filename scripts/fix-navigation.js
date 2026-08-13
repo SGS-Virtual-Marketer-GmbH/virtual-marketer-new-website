@@ -368,4 +368,9 @@ function main() {
   console.log(`  ✓ Added missing EN dropdown to ${simpleFixedEn} page(s)\n`);
 }
 
-main();
+if (require.main === module) main();
+
+// Reused by scripts/enhance-homepage.js so the homepage's solutions showcase
+// uses the exact same icon set, labels and hrefs as the mega-menu — one
+// source of truth instead of a second list to keep in sync.
+module.exports = { SOLUTIONS, SOLUTIONS_EN, svgIcon };
