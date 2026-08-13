@@ -603,10 +603,25 @@ html { scroll-padding-top: 76px; }
   /* --- 2. Logo -----------------------------------------------------------
      The image was 30px tall inside a 22px box and clipped. Sizing the image
      and letting the box follow is the fix; display:block removes the inline
-     baseline gap that caused the 8px mismatch in the first place. */
+     baseline gap that caused the 8px mismatch in the first place.
+
+     aspect-ratio is not decorative here — it closes a real, measured layout
+     shift. The source file is a 512x512 square and its width/height HTML
+     attributes agree, so a browser that infers aspect-ratio from those
+     attributes never needs the image bytes to know the box is square. But
+     that inference is undone the moment CSS sets height alone with
+     width:auto and no aspect-ratio of its own, which is exactly this rule:
+     the box's width is then genuinely unknown until the image decodes.
+     Lighthouse's own layout-shift trace named this element directly
+     ("Media element lacking an explicit size"), and it was the same
+     mechanism behind the site's largest reported shift — the header sits
+     sticky above the rest of the page, so a header that briefly renders at
+     the wrong width pushes every section below it. Stating the ratio
+     explicitly removes the ambiguity instead of relying on inference. */
   #site-header .header-mobile img {
     height: 34px;
     width: auto;
+    aspect-ratio: 1 / 1;
     display: block;
   }
   #site-header .header-mobile > .elementor a { display: inline-flex; align-items: center; }

@@ -696,5 +696,22 @@ Verified by idling the service to zero and hitting `/api/` first: 200, not
 - **Cost ceiling.** `maxScale: 4` is the real protection against a traffic
   spike or a determined scraper turning into a bill. The nginx rate limit is a
   backstop, not the budget control.
+- **`minScale: 1`, not `0`.** Scaling to zero was correct at the time it was
+  chosen — this project's own billing analysis (see the "Strato move" work)
+  measured the site's whole Cloud Run cost at roughly $0.18/month, deep
+  inside the free tier, and scale-to-zero is what makes that true. But a cold
+  start is a real cost paid by whichever visitor happens to arrive after an
+  idle gap, not by the invoice: a mobile Lighthouse run against a cold
+  instance measured Total Blocking Time at 990 ms and a performance score of
+  70; the identical page, warm, scored 85–93. That gap is invisible in the
+  monthly bill and very visible to that one visitor and to anyone auditing
+  the site with Lighthouse or PageSpeed Insights, which is what surfaced it.
+
+  `minScale: 1` keeps one instance warm continuously. With
+  `run.googleapis.com/cpu-throttling: true` already set, the idle instance is
+  billed for its 512 MiB of reserved memory around the clock but not for CPU
+  while there is no request to serve — roughly $3–5/month at current
+  pricing, not the cost of a fully-idle-but-CPU-billed instance. Reversible
+  in one line (`minScale: 0`) if that trade is ever wrong.
 - **Logs.** `gcloud run services logs read virtual-marketer-website
   --region=europe-west1 --project=virtual-marketer-chat-bot`
