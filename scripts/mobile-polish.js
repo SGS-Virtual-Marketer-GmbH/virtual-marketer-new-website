@@ -289,6 +289,32 @@ html { scroll-padding-top: 76px; }
   /* Bottom safe area, so the footer and any fixed CTA clear the home
      indicator on a gesture-navigation phone. */
   .vm-footer-simple, footer { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+
+  /* --- 6. Two homepage headings sit flush against both screen edges ------
+     Measured at 375px: the "Use Cases" heading (element 33444aaf) and the
+     "FAQ" heading (element 227feddb) render with 0px on both sides, text
+     touching the edge of the phone. Every sibling section heading on the
+     same page has 15px, because its column carries Elementor's per-
+     breakpoint responsive padding — these two columns simply never had that
+     setting configured in the original page build, so no rule exists to
+     override; this is an authoring gap in the source Elementor page, not
+     something a later pass broke.
+
+     Fixed at the two known element ids rather than a general selector,
+     matching how the rest of this file answers other per-element Elementor
+     gaps (the codebase has no reusable "content gutter" class to hook into
+     instead). 15px matches what the working sibling headings already
+     compute to, so this makes the page consistent rather than introducing a
+     new value.
+
+     Scoped to the widget wrapper, not the section or column, so it cannot
+     touch the marquee ticker in the same section — that one is deliberately
+     full-bleed — or the FAQ accordion, which already has its own padding. */
+  .elementor-element-33444aaf > .elementor-widget-container,
+  .elementor-element-227feddb > .elementor-widget-container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
 /* Users who ask for less motion get less motion — required for the animated
