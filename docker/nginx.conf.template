@@ -80,6 +80,17 @@ http {
     1 "";
   }
 
+  # ---- AVIF content negotiation ------------------------------------------
+  # scripts/generate-avif.js writes `<file>.avif` siblings next to the
+  # served images; a browser announcing AVIF support in its Accept header
+  # gets the sibling via `try_files $uri$vm_avif $uri` in the images
+  # location below, everyone else gets the original URL untouched. The
+  # markup never changes and unsupporting browsers lose nothing.
+  map $http_accept $vm_avif {
+    default   "";
+    "~image/avif" ".avif";
+  }
+
   log_format main '$vm_client_ip - $remote_user [$time_local] "$request" '
                    '$status $body_bytes_sent "$http_referer" '
                    '"$http_user_agent"';
@@ -229,7 +240,19 @@ http {
     }
 
     # ---- Caching ----
-    location ~* \.(?:css|js|woff2?|ttf|eot|png|jpe?g|gif|webp|svg|avif|ico)$ {
+    # Images get their own location so they can content-negotiate AVIF (see
+    # the $vm_avif map above). Vary: Accept keeps any cache in front from
+    # serving an AVIF body to a browser that never asked for one.
+    location ~* \.(?:png|jpe?g|gif|webp)$ {
+      include /etc/nginx/security-headers.conf;
+      expires 1y;
+      add_header Cache-Control "public, max-age=31536000, immutable";
+      add_header Vary "Accept";
+      try_files $uri$vm_avif $uri =404;
+      access_log off;
+    }
+
+    location ~* \.(?:css|js|woff2?|ttf|eot|svg|avif|ico)$ {
       include /etc/nginx/security-headers.conf;
       expires 1y;
       add_header Cache-Control "public, max-age=31536000, immutable";
