@@ -35,14 +35,14 @@
     /* 68ch at the body size, with a floor so the column does not collapse
        on a narrow phone before the padding does its job. */
     max-width:720px;margin:0 auto;padding:56px 22px 96px;
-    color:#241417;
+    color:#241417;color:light-dark(#241417,#ebdbde);
     font-size:18px;line-height:1.72;
     text-rendering:optimizeLegibility;
     -webkit-font-smoothing:antialiased;
   }
-  .vm-post .vm-meta{color:#6b5f60;font-size:14px;margin-bottom:10px}
+  .vm-post .vm-meta{color:#6b5f60;color:light-dark(#6b5f60,#cfc9ca);font-size:14px;margin-bottom:10px}
   .vm-post .vm-category{
-    display:inline-block;background:#fbecee;color:#94152b;
+    display:inline-block;background:#fbecee;background:light-dark(#fbecee,#1f1113);color:#94152b;color:light-dark(#94152b,#ea6b81);
     font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
     padding:5px 12px;border-radius:999px;margin-bottom:18px;
   }
@@ -55,11 +55,11 @@
   .vm-post p{margin:0 0 1.15em;font-size:18px;line-height:1.72}
   .vm-post ul,.vm-post ol{margin:0 0 1.3em;padding-left:1.35em}
   .vm-post li{margin-bottom:.5em;font-size:18px;line-height:1.72}
-  .vm-post li::marker{color:#94152b}
+  .vm-post li::marker{color:#94152b;color:light-dark(#94152b,#ea6b81)}
 
-  .vm-post a{color:#94152b;text-underline-offset:2px;text-decoration-thickness:1px}
-  .vm-post a:hover{color:#700f2b}
-  .vm-post strong{font-weight:700;color:#1a0f11}
+  .vm-post a{color:#94152b;color:light-dark(#94152b,#ea6b81);text-underline-offset:2px;text-decoration-thickness:1px}
+  .vm-post a:hover{color:#700f2b;color:light-dark(#700f2b,#f08fab)}
+  .vm-post strong{font-weight:700;color:#1a0f11;color:light-dark(#1a0f11,#f0e5e7)}
 
   /* Tables. The articles use them for side-by-side comparisons and they had
      no styling at all — no rules, no header weight, no padding. */
@@ -68,21 +68,21 @@
     font-size:16px;line-height:1.55;
   }
   .vm-post thead th{
-    text-align:left;font-weight:700;color:#241417;
-    background:#f7f4f4;border-bottom:2px solid #e7dfe0;
+    text-align:left;font-weight:700;color:#241417;color:light-dark(#241417,#ebdbde);
+    background:#f7f4f4;background:light-dark(#f7f4f4,#1c1414);border-bottom:2px solid #e7dfe0;border-bottom:2px solid light-dark(#e7dfe0,#322527);
     padding:11px 14px;
   }
-  .vm-post td,.vm-post th{padding:12px 14px;border-bottom:1px solid #ece7e7;vertical-align:top;font-size:16px;line-height:1.55}
+  .vm-post td,.vm-post th{padding:12px 14px;border-bottom:1px solid #ece7e7;border-bottom:1px solid light-dark(#ece7e7,#302626);vertical-align:top;font-size:16px;line-height:1.55}
   .vm-post tbody tr:last-child td{border-bottom:none}
 
   .vm-post blockquote{
     margin:1.6em 0;padding:2px 0 2px 20px;
-    border-left:3px solid #94152b;color:#4a4143;font-style:normal;
+    border-left:3px solid #94152b;color:#4a4143;color:light-dark(#4a4143,#d4cecf);font-style:normal;
   }
   .vm-post blockquote p:last-child{margin-bottom:0}
 
   .vm-post code{
-    background:#f4f1f1;border-radius:5px;padding:.14em .4em;
+    background:#f4f1f1;background:light-dark(#f4f1f1,#1b1515);border-radius:5px;padding:.14em .4em;
     font-size:.9em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   .vm-post pre{
@@ -93,12 +93,12 @@
 
   .vm-post img{max-width:100%;height:auto;border-radius:12px;margin:1.6em 0}
   .vm-post figure{margin:1.6em 0}
-  .vm-post figcaption{font-size:14px;color:#6b5f60;margin-top:.5em}
-  .vm-post hr{border:none;border-top:1px solid #e7dfe0;margin:2.4em 0}
+  .vm-post figcaption{font-size:14px;color:#6b5f60;color:light-dark(#6b5f60,#cfc9ca);margin-top:.5em}
+  .vm-post hr{border:none;border-top:1px solid #e7dfe0;border-top:1px solid light-dark(#e7dfe0,#322527);margin:2.4em 0}
 
   .vm-post .vm-cta{
-    margin-top:3.5em;padding:30px;background:#f8f9fc;
-    border:1px solid #e7dfe0;border-radius:14px;text-align:center;
+    margin-top:3.5em;padding:30px;background:#f8f9fc;background:light-dark(#f8f9fc,#10141e);
+    border:1px solid #e7dfe0;border:1px solid light-dark(#e7dfe0,#322527);border-radius:14px;text-align:center;
   }
   .vm-post .vm-cta a{
     display:inline-block;margin-top:12px;padding:13px 26px;
@@ -109,7 +109,7 @@
   }
   .vm-post .vm-cta a:hover{background:linear-gradient(90deg,#94152b,#700f2b);color:#fff}
 
-  .vm-post .vm-related{margin-top:3em;padding-top:1.6em;border-top:1px solid #e7dfe0}
+  .vm-post .vm-related{margin-top:3em;padding-top:1.6em;border-top:1px solid #e7dfe0;border-top:1px solid light-dark(#e7dfe0,#322527)}
   .vm-post .vm-related h3{margin-top:0}
   .vm-post .vm-related ul{list-style:none;padding:0}
   .vm-post .vm-related li{margin-bottom:.6em}
@@ -132,13 +132,13 @@
     position:sticky;top:0;z-index:9990;
     max-width:1140px;margin:16px auto 0;padding:14px 24px;
     display:flex;align-items:center;justify-content:space-between;gap:24px;
-    background:#fff;border-radius:14px;
+    background:#fff;background:light-dark(#fff,#171717);border-radius:14px;
     box-shadow:0 6px 24px rgba(36,20,23,.10);
   }
   .vm-header-simple > a{display:flex;align-items:center;flex:0 0 auto}
   .vm-header-simple nav{display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:flex-end}
-  .vm-header-simple nav a{color:#241417;text-decoration:none;font-weight:500;font-size:15px;white-space:nowrap}
-  .vm-header-simple nav a:hover{color:#94152b}
+  .vm-header-simple nav a{color:#241417;color:light-dark(#241417,#ebdbde);text-decoration:none;font-weight:500;font-size:15px;white-space:nowrap}
+  .vm-header-simple nav a:hover{color:#94152b;color:light-dark(#94152b,#ea6b81)}
 
   /* The solutions dropdown is a <details>/<summary>, not an <a>, so none of
      the rules above reach it. Left alone it falls back to the browser default
@@ -146,11 +146,11 @@
      item that looks like it belongs to a different site. Values copied from
      the anchor rule above so the two cannot drift apart. */
   .vm-header-simple nav > details > summary{
-    color:#241417;font-weight:500;font-size:15px;white-space:nowrap;
+    color:#241417;color:light-dark(#241417,#ebdbde);font-weight:500;font-size:15px;white-space:nowrap;
     cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:4px;
   }
   .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
-  .vm-header-simple nav > details > summary:hover{color:#94152b}
+  .vm-header-simple nav > details > summary:hover{color:#94152b;color:light-dark(#94152b,#ea6b81)}
 
   /* position:sticky is disabled by ANY ancestor that is a scroll container,
      and the scraped theme sets overflow-x:hidden on BOTH the root element
@@ -222,8 +222,8 @@
     .vm-header-simple nav a[href*="login.virtual-marketer.de"]{padding:9px 20px}
   }
 
-  .vm-footer-simple{max-width:1140px;margin:40px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px}
-  .vm-footer-simple a{color:#6b7280}
+  .vm-footer-simple{max-width:1140px;margin:40px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;border-top:1px solid light-dark(#e5e7eb,#252931);color:#6b7280;color:light-dark(#6b7280,#c5c8ce);font-size:14px}
+  .vm-footer-simple a{color:#6b7280;color:light-dark(#6b7280,#c5c8ce)}
 
 </style>
 <style id="vm-mobile-polish">
@@ -294,7 +294,7 @@ html { scroll-padding-top: 76px; }
   #site-header.site-header,
   #site-header .header-mobile > .elementor > .elementor-section,
   #site-header .header-mobile .elementor-top-section {
-    background-color: rgba(255, 255, 255, 0.94);
+    background-color: rgba(255, 255, 255, 0.94);background-color:light-dark(rgba(255,255,255,0.94),rgba(19,21,24,0.94));
     -webkit-backdrop-filter: saturate(1.7) blur(16px);
     backdrop-filter: saturate(1.7) blur(16px);
   }
@@ -522,7 +522,9 @@ html { scroll-padding-top: 76px; }
 :is(p,li) > a:has(> svg:only-child),
 :is(p,li) > a:has(> i:only-child){text-decoration:none}
 </style>
+<link rel="stylesheet" href="/assets/enhance/fonts.css" id="vm-fonts">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","@id":"https://virtual-marketer.de/en/blog/rag-fuer-ecommerce-produktbeschreibungen/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://virtual-marketer.de/en/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://virtual-marketer.de/en/blog/"},{"@type":"ListItem","position":3,"name":"RAG for E-Commerce Product Descriptions","item":"https://virtual-marketer.de/en/blog/rag-fuer-ecommerce-produktbeschreibungen/"}]}</script>
+<link rel="stylesheet" href="/assets/enhance/enhance.css" id="vm-enhance">
 <script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"href_matches":"/wp-admin/*"}}]},"eagerness":"moderate"}]}</script>
 </head>
 <body class="vm-static-blog">
@@ -592,7 +594,7 @@ html { scroll-padding-top: 76px; }
   .vm-solutions-panel{
     position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
     width:min(820px,calc(100vw - 32px));
-    background:#fff;border:1px solid #ece4e5;border-radius:18px;
+    background:#fff;background:light-dark(#fff,#171717);border:1px solid #ece4e5;border:1px solid light-dark(#ece4e5,#332425);border-radius:18px;
     box-shadow:0 28px 68px rgba(36,20,23,.20);
     padding:18px;margin:0;z-index:99999;
   }
@@ -609,7 +611,7 @@ html { scroll-padding-top: 76px; }
   .vm-solutions-panel .vm-solutions-grid a{
     display:flex;align-items:center;gap:11px;
     padding:10px 11px;border-radius:10px;
-    color:#241417;text-decoration:none;
+    color:#241417;color:light-dark(#241417,#ebdbde);text-decoration:none;
     /* The theme uppercases and nowraps its nav links. Inherited into a
        three-column grid that produced the overlap this panel was reported
        for: labels ran straight through their neighbours instead of wrapping.
@@ -617,20 +619,20 @@ html { scroll-padding-top: 76px; }
     text-transform:none;white-space:normal;
     font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
   }
-  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
+  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;background:light-dark(#fbecee,#1f1113);color:#94152b;color:light-dark(#94152b,#ea6b81);}
   .vm-sol-ic{
     flex:0 0 auto;display:grid;place-items:center;
     width:32px;height:32px;border-radius:9px;
-    background:#f6eff0;color:#94152b;
+    background:#f6eff0;background:light-dark(#f6eff0,#1f1113);color:#94152b;color:light-dark(#94152b,#ea6b81);
   }
   .vm-sol-ic svg{width:17px;height:17px;display:block;}
   .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
   .vm-sol-tx{min-width:0;}
   .vm-solutions-foot{
-    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
+    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;border-top:1px solid light-dark(#ece4e5,#332425);list-style:none;
   }
   .vm-solutions-panel .vm-solutions-foot a{
-    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
+    display:inline-block;color:#94152b;color:light-dark(#94152b,#ea6b81);font-weight:600;font-size:14px;
     text-decoration:none;padding:4px 12px;text-transform:none;
   }
   .vm-solutions-foot a:hover{text-decoration:underline;}
@@ -654,8 +656,8 @@ html { scroll-padding-top: 76px; }
       content:attr(data-title);
       position:fixed;top:0;left:0;right:0;height:56px;
       display:flex;align-items:center;padding:0 16px;
-      background:#fff;border-bottom:1px solid #ece4e5;
-      font-weight:700;font-size:16px;color:#241417;
+      background:#fff;background:light-dark(#fff,#171717);border-bottom:1px solid #ece4e5;border-bottom:1px solid light-dark(#ece4e5,#332425);
+      font-weight:700;font-size:16px;color:#241417;color:light-dark(#241417,#ebdbde);
     }
     .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
     .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
@@ -689,7 +691,7 @@ html { scroll-padding-top: 76px; }
     .vm-solutions-close{
       display:block;position:fixed;top:8px;right:10px;z-index:1;
       width:40px;height:40px;border:0;background:none;
-      font-size:30px;line-height:1;color:#241417;cursor:pointer;
+      font-size:30px;line-height:1;color:#241417;color:light-dark(#241417,#ebdbde);cursor:pointer;
     }
   }
 </style>
@@ -810,8 +812,8 @@ html { scroll-padding-top: 76px; }
 
 <!-- vm-lang-switch:start -->
 <style>
-  #vm-lang-switch{position:fixed;top:16px;right:16px;z-index:99998;display:flex;align-items:center;gap:6px;background:#ffffffee;backdrop-filter:blur(6px);border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-  #vm-lang-switch a{color:#6b7280;text-decoration:none;padding:2px 6px;border-radius:999px}
+  #vm-lang-switch{position:fixed;top:16px;right:16px;z-index:99998;display:flex;align-items:center;gap:6px;background:#ffffffee;backdrop-filter:blur(6px);border:1px solid #e5e7eb;border:1px solid light-dark(#e5e7eb,#252931);border-radius:999px;padding:6px 10px;font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  #vm-lang-switch a{color:#6b7280;color:light-dark(#6b7280,#c5c8ce);text-decoration:none;padding:2px 6px;border-radius:999px}
   #vm-lang-switch a.active{color:#fff;background:#1a202c}
   /* Bottom-LEFT on mobile, not bottom-right: the legacy theme's own
      "back to top" button (#back-to-top) is fixed bottom-right at this same

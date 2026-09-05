@@ -688,6 +688,24 @@ Fixed with two settings that only work together:
 Verified by idling the service to zero and hitting `/api/` first: 200, not
 502.
 
+## Rolling back Track B (fonts / motion / dark mode)
+
+The Track B redesign layer (Outfit-only typography, scroll/hover motion,
+view transitions, automatic dark mode) shipped as v40. The pre-Track-B
+state is flagged for instant restore:
+
+```bash
+# Code: main immediately before Track B is tagged
+git checkout pre-track-b        # inspect, or: git revert -m 1 <merge-commit>
+
+# Production: redeploy the last pre-Track-B image (no rebuild needed)
+sed -i 's/virtual-marketer-website:v40/virtual-marketer-website:v39/' deploy-service.yaml
+gcloud run services replace deploy-service.yaml --region=europe-west1 --project=virtual-marketer-chat-bot
+```
+
+The v39 image stays in Artifact Registry, so the production rollback is one
+`services replace` away and independent of the git state.
+
 ## Operational notes
 
 - **AVIF content negotiation.** nginx serves `<file>.avif` siblings to
