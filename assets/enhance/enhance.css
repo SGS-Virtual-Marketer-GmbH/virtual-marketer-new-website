@@ -1,0 +1,174 @@
+/* Virtual Marketer — site-wide enhancement layer (Track B).
+ *
+ * Injected on every page by scripts/inject-enhance.js. Everything here is
+ * progressive enhancement on top of the EXISTING design language: no color,
+ * font or layout redefinitions — those live in their own steps — only
+ * tokens, motion and navigation polish. Browsers without a given feature
+ * (scroll-driven animations, view transitions, backdrop-filter) simply keep
+ * the current behavior, and prefers-reduced-motion turns all of it off.
+ */
+
+/* ---- 1. Design tokens --------------------------------------------------
+ * The product CI colors (vm-customer-web-ui/tailwind.config.js) as custom
+ * properties, with hover/tint ramps derived via color-mix so no new hex
+ * values enter the codebase. Consumed by the motion layer below and by the
+ * dark theme; also available to any future page work.
+ */
+:root {
+  --vm-red: #94152b;
+  --vm-red-dark: #700f2b;
+  --vm-blue: #66a3ce;
+  --vm-blue-light: #a3cce9;
+  --vm-ink: #23282d;
+  --vm-surface: #ffffff;
+  --vm-muted: #6b7280;
+
+  --vm-red-hover: color-mix(in oklab, var(--vm-red), black 12%);
+  --vm-red-tint: color-mix(in oklab, var(--vm-red), white 92%);
+  --vm-blue-tint: color-mix(in oklab, var(--vm-blue), white 85%);
+
+  --vm-shadow-card: 0 10px 30px -12px color-mix(in oklab, var(--vm-ink), transparent 72%);
+  --vm-shadow-cta: 0 10px 24px -10px color-mix(in oklab, var(--vm-red), transparent 55%);
+
+  --vm-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---- 2. Cross-document view transitions --------------------------------
+ * With the speculation-rules prerender already shipping (Track A), a soft
+ * cross-fade makes same-origin navigation feel like one continuous app.
+ * Kept fast (180ms) — a transition longer than the prerendered load feels
+ * slower, not smoother.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+  ::view-transition-old(root) {
+    animation-duration: 0.18s;
+    animation-timing-function: ease-out;
+  }
+  ::view-transition-new(root) {
+    animation-duration: 0.18s;
+    animation-timing-function: ease-in;
+  }
+}
+
+/* ---- 3. Scroll-driven section reveals ----------------------------------
+ * Card-level, never section-level: animating Elementor sections breaks
+ * their own positioning contexts. `translate`/`opacity` only, so these
+ * compose cleanly with the hover effects below (which use `scale`) and
+ * with any legacy `transform` rules. CSS-only: browsers without
+ * animation-timeline render everything exactly as today.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .vm-home-sol-card,
+    .vm-post,
+    .value-item,
+    .faq-item,
+    .vm-model-card,
+    .audience-card,
+    .impact-card {
+      animation: vm-reveal both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 45%;
+    }
+  }
+}
+
+@keyframes vm-reveal {
+  from {
+    opacity: 0;
+    translate: 0 22px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* ---- 4. Micro-interactions ---------------------------------------------
+ * Hovers use `scale` + shadow (never `translate`/`transform`, which the
+ * reveal above and legacy Elementor rules already own). Focus gets the
+ * same affordance as hover plus a visible ring, per the site's BFSG
+ * accessibility commitment.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .vm-home-sol-card,
+  .vm-post,
+  .vm-model-card,
+  .audience-card,
+  .impact-card {
+    transition: scale 0.28s var(--vm-ease), box-shadow 0.28s var(--vm-ease);
+  }
+  .vm-home-sol-card:hover,
+  .vm-post:hover,
+  .vm-model-card:hover,
+  .audience-card:hover,
+  .impact-card:hover {
+    scale: 1.02;
+    box-shadow: var(--vm-shadow-card);
+  }
+
+  .elementor-button,
+  .hero-cta,
+  .demo-step-btn,
+  .vm-more {
+    transition: scale 0.22s var(--vm-ease), box-shadow 0.22s var(--vm-ease);
+  }
+  .elementor-button:hover,
+  .hero-cta:hover {
+    scale: 1.03;
+    box-shadow: var(--vm-shadow-cta);
+  }
+  .elementor-button:active,
+  .hero-cta:active {
+    scale: 0.98;
+  }
+}
+
+:where(a, button, .elementor-button, .hero-cta, .demo-step-btn):focus-visible {
+  outline: 2px solid var(--vm-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---- 5. Header glass ---------------------------------------------------
+ * Strengthens the existing scrolled-header treatment (make-header-sticky.js
+ * sets a 2px blur) into a proper translucent glass bar. Guarded by
+ * @supports; without backdrop-filter the header keeps its current look.
+ */
+@supports (backdrop-filter: blur(12px)) {
+  #site-header.site-header.vm-scrolled {
+    background-color: color-mix(in srgb, var(--vm-surface), transparent 18%);
+    backdrop-filter: saturate(1.4) blur(12px);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  }
+}
+
+/* ---- 6. Dark theme ------------------------------------------------------
+ * The heavy lifting is done at build time: scripts/enable-dark-mode.js
+ * duplicates every light-palette color declaration with a light-dark()
+ * twin, so the whole site re-themes from the visitor's OS preference.
+ * color-scheme is what arms those functions — plus it flips the browser's
+ * own UI (form controls, scrollbars). The tokens below keep the motion
+ * layer's shadows/glass consistent on dark surfaces.
+ */
+:root {
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --vm-surface: #12161c;
+    --vm-ink: #e6e9ee;
+    --vm-muted: #9aa3b0;
+    --vm-shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.55);
+    --vm-shadow-cta: 0 10px 24px -10px color-mix(in oklab, var(--vm-red), transparent 30%);
+  }
+  /* The header logo is a dark glyph on transparency — keep it legible on
+   * the dark glass bar without inverting brand artwork. */
+  #site-header img {
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.45));
+  }
+}
