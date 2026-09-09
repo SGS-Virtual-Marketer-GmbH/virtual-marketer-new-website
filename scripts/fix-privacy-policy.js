@@ -88,7 +88,7 @@ const path = require('path');
 const DIST = path.join(__dirname, '../dist');
 
 /** Revision date printed as "Stand: …" on the German policy. */
-const STAND = '4. August 2026';
+const STAND = '9. September 2026';
 
 /**
  * The sub-processors, disclosed per Art. 13(1)(e) / Art. 28 GDPR. Single
@@ -241,6 +241,95 @@ const SECTIONS = [
 </ul>
 <p><strong>Einordnung und Reichweite dieser Angaben:</strong> Nach eigener Einschätzung setzen wir weder nach Art. 5 KI-VO verbotene Praktiken noch Hochrisiko-KI-Systeme im Sinne des Kapitels III der KI-Verordnung ein; die Anwendungszeitpunkte der dortigen Pflichten wurden durch die Verordnung (EU) 2026/1744 zudem verschoben. Dieser Abschnitt beschreibt den Stand unserer Umsetzung zum oben genannten Datum. Er stellt weder eine Zertifizierung noch eine Konformitätsbewertung durch eine Behörde oder eine benannte Stelle dar.</p>`,
   },
+  {
+    // Order matters: this append must come BEFORE the app section below, which
+    // also carries the deletion URL. The guard is therefore this paragraph's
+    // own opening clause and not the URL — a URL guard would make whichever
+    // append ran second a silent no-op.
+    //
+    // "Löschung von Daten" is where a reader looks for this, and until
+    // 2026-09-09 the section said only that data is deleted "nach Maßgabe der
+    // gesetzlichen Vorgaben" — true, and useless to someone who wants to press
+    // a button. Google Play additionally requires a deletion URL reachable
+    // without installing the app; that requirement and this paragraph are the
+    // same sentence.
+    match: /^Löschung von Daten$/i,
+    lang: 'de',
+    append: true,
+    guard: /Konto- und Mandantendaten der Plattform können Sie selbst löschen/,
+    body: `
+<p class="wp-block-paragraph"><strong>Konto- und Mandantendaten der Plattform können Sie selbst löschen.</strong> Der Löschvorgang ist ohne Installation einer App unter <a href="https://login.virtual-marketer.de/konto-loeschen">https://login.virtual-marketer.de/konto-loeschen</a> erreichbar. Was dabei jeweils entfernt wird – und warum die Konversationsprotokolle nur zusammen mit dem Unternehmenskonto gelöscht werden können – ist im Abschnitt „Virtual Marketer App für Android (Mikrofon, Kamera, Sprachmodus)“ beschrieben.</p>`,
+  },
+  {
+    // WHY THIS SECTION EXISTS
+    //
+    // The Android app declares RECORD_AUDIO. A privacy policy that never
+    // mentions voice, linked from a Play data-safety form that declares
+    // "Audio → Voice or sound recordings", is a mismatch reviewers check for
+    // and one of the more common reasons a first submission is rejected. It is
+    // also simply a gap: Art. 13 DSGVO does not have an exception for the
+    // features that are inconvenient to describe.
+    //
+    // Every factual claim below was established by reading the code on
+    // 2026-09-07 (audit in vm-mobile/docs/play-store/data-safety.md §1.2-1.4).
+    // In particular the two asymmetries are stated rather than smoothed over,
+    // because both are real and neither is visible to the user:
+    //   - audio is NOT retained by us, but the WORDS are, indefinitely;
+    //   - the turn-by-turn mode writes a conversation record and the
+    //     continuously-connected one writes none at all.
+    //
+    // It is appended as a NEW <h2> after the AI section, which is the last
+    // heading on the page — appendToSection's endOfBlockRun boundary is what
+    // makes that land before the footer rather than inside it.
+    //
+    // The modes are described by what they do ("Wechselsprechverfahren",
+    // "durchgehend verbundenes Verfahren") and the model providers are
+    // referenced through the list in the AI section rather than picked out
+    // individually. That is not the branding rule leaking into a legal page —
+    // the sub-processors ARE named, one section up, which is what Art. 13(1)(e)
+    // requires. It is that naming one of them here would assert a routing
+    // detail this text cannot keep true across a provider change.
+    match: /Einsatz Künstlicher Intelligenz/i,
+    lang: 'de',
+    append: true,
+    guard: /Sprachmodus: Verarbeitung von Mikrofonaufnahmen/,
+    body: `
+<h2 class="wp-block-heading">Virtual Marketer App für Android (Mikrofon, Kamera, Sprachmodus)</h2>
+<p class="wp-block-paragraph">Neben der Weboberfläche bieten wir eine App für Android an. Sie ist ein Zugang zu derselben Plattform und zu denselben Konten; eine Registrierung findet in der App nicht statt, Konten werden von uns eingerichtet. Für die Verarbeitung in der App gelten die vorstehenden Abschnitte, insbesondere „Einsatz Künstlicher Intelligenz, Auftragsverarbeiter und Transparenz nach der KI-Verordnung“. Ergänzend gilt Folgendes.</p>
+
+<h3 class="wp-block-heading">Berechtigungen und Daten auf dem Gerät</h3>
+<p class="wp-block-paragraph">Die App fordert zwei Geräteberechtigungen an, und zwar erst dann, wenn Sie die zugehörige Funktion tatsächlich benutzen:</p>
+<ul>
+<li><strong>Mikrofon</strong> – ausschließlich für den Sprachmodus. Außerhalb des Sprachmodus wird das Mikrofon nicht aktiviert.</li>
+<li><strong>Kamera bzw. Auswahl einzelner Dateien</strong> – ausschließlich, um einer Nachricht an einen Agenten ein Foto, ein Bild aus der Galerie, ein PDF oder eine Textdatei beizufügen. Die App durchsucht weder Ihre Galerie noch Ihren Gerätespeicher; übertragen wird nur, was Sie im Auswahldialog des Betriebssystems selbst auswählen.</li>
+</ul>
+<p class="wp-block-paragraph">Nicht verarbeitet werden Standortdaten, Kontakte, Kalender, SMS- und Anrufdaten sowie Geräte- und Werbekennungen. Die App bindet <strong>keine Analyse-, Absturzberichts- oder Werbe-Bibliotheken</strong> ein; es findet weder Reichweitenmessung noch Tracking statt.</p>
+<p class="wp-block-paragraph">Ihre Zugangsdaten – das Sitzungstoken und der Schlüssel Ihres Mandanten – werden verschlüsselt im Schlüsselspeicher des Betriebssystems abgelegt und beim Abmelden gelöscht. Die Übertragung zu unseren Servern erfolgt ausschließlich transportverschlüsselt.</p>
+
+<h3 class="wp-block-heading">Sprachmodus: Verarbeitung von Mikrofonaufnahmen</h3>
+<p class="wp-block-paragraph">Im Sprachmodus sprechen Sie mit einem Agenten und erhalten eine gesprochene Antwort. Solange der Sprachmodus läuft, wird das Mikrofon aufgezeichnet. Welches von zwei technischen Verfahren dabei zum Einsatz kommt, hängt von der für Ihr Konto freigeschalteten Ausbaustufe ab: ein <strong>Wechselsprechverfahren</strong>, das jeden Redebeitrag einzeln aufnimmt, und ein <strong>durchgehend verbundenes Verfahren</strong>, bei dem in beide Richtungen gleichzeitig übertragen wird.</p>
+<p class="wp-block-paragraph"><strong>Übermittlung an einen Unterauftragsverarbeiter.</strong> In beiden Verfahren werden die Audiodaten an unsere Server übertragen und von dort unverändert an einen der im Abschnitt „Einsatz Künstlicher Intelligenz …“ genannten Anbieter von KI-Modellen weitergeleitet, der Spracherkennung und Sprachausgabe übernimmt. Es gelten die dort beschriebenen Verträge zur Auftragsverarbeitung, die dort genannten Garantien für Drittlandübermittlungen sowie der dort beschriebene vertragliche Ausschluss einer Verwendung zu Trainingszwecken.</p>
+<p class="wp-block-paragraph"><strong>Die Audiodaten werden bei uns nicht gespeichert.</strong> Sie durchlaufen unsere Server ausschließlich im Arbeitsspeicher; eine Speicherung in Dateien, Objektspeichern oder Datenbanken findet nicht statt, und Audioinhalte werden nicht protokolliert. Auch die gesprochene Antwort des Agenten wird auf Ihrem Gerät nur abgespielt und nicht gespeichert.</p>
+<p class="wp-block-paragraph"><strong>Auf dem Gerät</strong> legt das Wechselsprechverfahren jeden Redebeitrag kurzzeitig als Datei im app-privaten Zwischenspeicher ab, weil das Betriebssystem nur auf diesem Weg aufzeichnet. Die App löscht diese Datei unmittelbar nach dem Auslesen; für andere Apps ist sie zu keinem Zeitpunkt lesbar. Im durchgehend verbundenen Verfahren entsteht überhaupt keine Datei – die Audiodaten gehen unmittelbar aus dem Mikrofon auf die Verbindung.</p>
+<p class="wp-block-paragraph"><strong>Nicht die Aufnahme, aber das gesprochene Wort wird gespeichert.</strong> Im Wechselsprechverfahren wird Ihr Redebeitrag in Text umgewandelt, und dieser Text ist die Nachricht, die der Agent erhält. Er wird deshalb – wie jede getippte Nachricht – Teil des Konversationsprotokolls und dort gespeichert. Im durchgehend verbundenen Verfahren wird dagegen <strong>kein Konversationsprotokoll angelegt</strong>; das Transkript verbleibt dort nur für die Dauer des jeweiligen Gesprächsabschnitts im Arbeitsspeicher. Dieser Unterschied ist am Bildschirm nicht erkennbar; welches Verfahren für Ihr Konto freigeschaltet ist, teilen wir Ihnen auf Anfrage unter <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a> mit.</p>
+
+<h3 class="wp-block-heading">Kamera und Anhänge</h3>
+<p class="wp-block-paragraph">Fügen Sie einer Nachricht ein Foto, ein Bild, ein PDF oder eine Textdatei bei, wird der Inhalt der Datei an den Agenten und damit an den KI-Anbieter übermittelt. <strong>Den Inhalt speichern wir nicht</strong>; er wird im Arbeitsspeicher verarbeitet und ist nach der Antwort nicht mehr vorhanden. <strong>Gespeichert werden jedoch Dateiname, Dateityp und Dateigröße</strong> als Teil des Konversationsprotokolls, damit dieses nicht verschweigt, dass eine Datei im Spiel war. Bitte beachten Sie, dass bereits ein Dateiname personenbezogene Daten enthalten kann.</p>
+
+<h3 class="wp-block-heading">Konversationsprotokolle und Speicherdauer</h3>
+<p class="wp-block-paragraph">Zu jedem Auftrag an einen Agenten – aus dem Chat, über einen Webhook oder aus einer Zeitplanung – speichern wir ein Protokoll. Es enthält Ihre Nachricht im Volltext (bis zu 8.000 Zeichen), die vollständige Antwort des Agenten, die Kennungen des Mandanten und der Agenteninstanz, Auslöser, Status und Zeitstempel, die Metadaten beigefügter Dateien sowie zu jedem Werkzeugaufruf des Agenten dessen Namen und einen <strong>auf 200 Zeichen gekürzten Auszug der übergebenen Parameter</strong>. Dieser Auszug kann Inhalte enthalten, die der Agent an ein angebundenes System – etwa ein CRM- oder Warenwirtschaftssystem – übergeben hat.</p>
+<p class="wp-block-paragraph">Rechtsgrundlage ist die Erfüllung des Vertrags (Art. 6 Abs. 1 S. 1 lit. b DSGVO) sowie unser berechtigtes Interesse an der Nachvollziehbarkeit automatisierter Abläufe und an der Fehlersuche (Art. 6 Abs. 1 S. 1 lit. f DSGVO).</p>
+<p class="wp-block-paragraph"><strong>Für diese Protokolle besteht derzeit keine automatische Löschfrist.</strong> Sie werden auf unbestimmte Zeit gespeichert, bis sie auf Anforderung oder mit der Löschung des Unternehmenskontos entfernt werden. Wir benennen das hier ausdrücklich, statt eine Frist zu behaupten, die es nicht gibt. Die Protokolle sind dem Mandanten – dem Unternehmenskonto – zugeordnet und nicht der einzelnen Person; innerhalb eines Teams sind sie deshalb für alle Mitglieder dieses Mandanten einsehbar und lassen sich nicht nach einzelnen Teammitgliedern getrennt löschen.</p>
+
+<h3 class="wp-block-heading">Löschung Ihres Kontos</h3>
+<p class="wp-block-paragraph">Sie können Ihr Konto selbst löschen, ohne dafür eine App zu installieren, unter <a href="https://login.virtual-marketer.de/konto-loeschen">https://login.virtual-marketer.de/konto-loeschen</a>. Dabei ist zu unterscheiden:</p>
+<ul>
+<li><strong>Löschung des Benutzerkontos.</strong> Entfernt Ihr persönliches Konto mit Vor- und Nachname, E-Mail-Adresse, Passwort-Hash, Zwei-Faktor-Geheimnis, Profilbild, Nutzungsstatistik und den in Ihrem Konto hinterlegten Zugangsdaten für den Postfachversand. Gehören weitere Personen zu demselben Unternehmenskonto, bleiben dessen gemeinsame Daten – darunter die Konversationsprotokolle – bestehen: sie gehören nicht Ihnen allein, und eine einzelne Person soll die Daten ihrer Kolleginnen und Kollegen nicht mit löschen können.</li>
+<li><strong>Löschung des gesamten Unternehmenskontos.</strong> Entfernt zusätzlich sämtliche mandantenbezogenen Daten, insbesondere alle Konversationsprotokolle, die Agenteninstanzen samt der dort hinterlegten Zugangsdaten zu Drittsystemen und die gespeicherten Stimmprofile. Diese Löschung steht Administratorinnen und Administratoren des Unternehmenskontos offen sowie jeder Person, die als letztes verbliebenes Mitglied ihres Mandanten ihr Konto löscht. Sie ist die einzige Löschung, die die Konversationsprotokolle erreicht.</li>
+</ul>
+<p class="wp-block-paragraph">Beide Löschungen sind endgültig und werden erst nach einer ausdrücklichen Bestätigung ausgeführt: Sie müssen angemeldet sein, einen aktuellen Code Ihrer Zwei-Faktor-App eingeben und die Löschung durch Eingabe einer Bestätigungsformel freigeben. Das ist bewusst strenger als eine Anmeldung – eine Löschfunktion, die schwächer gesichert wäre als der Zugang selbst, wäre ein Weg zur Übernahme fremder Konten. <strong>Haben Sie keinen Zugriff mehr auf Ihre Zwei-Faktor-App</strong>, wenden Sie sich an <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>: wir prüfen Ihre Identität dann auf anderem Weg und führen die Löschung für Sie aus.</p>
+<p class="wp-block-paragraph">Unabhängig davon können Sie sämtliche Betroffenenrechte nach Art. 15 bis 21 DSGVO jederzeit formlos unter <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a> geltend machen. Gesetzliche Aufbewahrungspflichten, etwa aus dem Handels- und Steuerrecht, bleiben von einer Löschung unberührt; in diesem Fall werden die betroffenen Daten gesperrt statt gelöscht (siehe „Löschung von Daten“).</p>`,
+  },
 ];
 
 function findHtmlFiles(dir, results = []) {
@@ -359,12 +448,17 @@ const OVERVIEW_ADD = [
     after: 'Inhaltsdaten (z.B. Eingaben in Onlineformularen).',
     items: [
       'Eingabe- und Ausgabedaten unserer KI-Dienste (z.B. Eingabeaufforderungen/„Prompts“, hochgeladene Dateien, Produkt- und Katalogdaten sowie die daraus erzeugten Inhalte).',
+      // The summary listed uploaded files but not the microphone. Declaring a
+      // voice permission in an app store against a policy whose own overview
+      // does not mention voice is the mismatch a reviewer notices first.
+      'Sprachaufnahmen im Sprachmodus unserer App sowie die daraus erzeugten Transkripte.',
     ],
   },
   {
     after: 'Erbringung vertragliche Leistungen und Kundenservice.',
     items: [
       'Erbringung KI-gestützter Leistungen (Erzeugung und Bearbeitung von Texten, Bildern, Videos und Produktdaten).',
+      'Spracherkennung und Sprachausgabe im Sprachmodus unserer App.',
     ],
   },
 ];
@@ -422,6 +516,19 @@ const EN_REQUIRED = [
   ['Art. 4 AI literacy', /AI literacy/i],
   ['EU hosting', /within the European Union/i],
   ['server logs not denied', /server log/i],
+  // Added 2026-09-09 with the Android app section. The app declares
+  // RECORD_AUDIO; a policy that is silent on voice is both a GDPR gap and the
+  // mismatch a Play reviewer checks for. The German page is where the wording
+  // was worked out, and these entries are what stops the English page from
+  // quietly staying at the old, shorter version.
+  ['Android app named', /Android/],
+  ['microphone permission', /microphone/i],
+  ['voice audio not stored on our servers', /not stored on our servers/i],
+  ['voice transcript becomes a stored message', /transcript/i],
+  ['attachment file names retained', /file name/i],
+  ['conversation records kept indefinitely', /indefinitely/i],
+  ['self-service deletion URL', /konto-loeschen/],
+  ['deletion needs the second factor', /two-factor/i],
 ];
 
 /** Marketing trees that must never carry an AI vendor name. */
