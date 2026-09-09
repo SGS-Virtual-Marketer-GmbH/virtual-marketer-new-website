@@ -432,6 +432,40 @@ Frankfurter Landstraße 50<br>
 <h3>Transfers to third countries</h3>
 <p>Some of the providers named above are established, or operate individual processing locations, outside the European Union and the European Economic Area &#8211; in particular in the United States. STRATO AG is a German company and operates its data centres in Germany; where the service allows it, we use Microsoft Azure and Google Cloud in European regions. Where a transfer to a third country takes place, we base it either on the European Commission's adequacy decision of 10 July 2023 on the EU-US Data Privacy Framework (Implementing Decision (EU) 2023/1795), where the recipient concerned is certified under it, or on the European Commission's Standard Contractual Clauses pursuant to <strong>Art. 46(2)(c) GDPR</strong>. We apply supplementary measures in addition, in particular encryption in transit and at rest, data minimisation and strict access controls. Where a service allows it, we give preference to processing regions inside the EU/EEA. If an adequacy decision ceases to apply, we rely on Art. 46 GDPR. A copy of the relevant safeguards is available on request.</p>
 
+<h2>Virtual Marketer Android app (microphone, camera, voice mode)</h2>
+<p>Alongside the web interface we offer an <strong>Android</strong> app. It is a way into the same platform and the same accounts; no account is created in the app &#8211; accounts are provisioned by us. Everything above applies to the app as well; the following is in addition.</p>
+
+<h3>Device permissions</h3>
+<p>The app requests two device permissions, and only at the moment you actually use the feature concerned:</p>
+<ul>
+  <li><strong>Microphone</strong> &#8211; for voice mode only. Outside voice mode the microphone is not activated.</li>
+  <li><strong>Camera and selection of individual files</strong> &#8211; only to attach a photo, a picture from the gallery, a PDF or a text file to a message to an agent. The app does not scan your gallery or your device storage; only what you pick yourself in the operating system's own chooser is transmitted.</li>
+</ul>
+<p>No location data, contacts, calendar, SMS or call data, and no device or advertising identifiers are processed. The app contains <strong>no analytics, crash-reporting or advertising libraries</strong>; there is no reach measurement and no tracking. Your credentials &#8211; the session token and your tenant's key &#8211; are held encrypted in the operating system's key store and deleted when you sign out.</p>
+
+<h3>Voice mode: how microphone audio is processed</h3>
+<p>In voice mode you speak to an agent and receive a spoken answer, so the microphone is recorded while voice mode is running. One of two technical modes is used, depending on what is enabled for your account: a <strong>turn-by-turn mode</strong> that records one utterance at a time, and a <strong>continuously connected mode</strong> that transmits in both directions at once.</p>
+<p><strong>Transfer to a sub-processor.</strong> In both modes the audio is transmitted to our servers and forwarded unchanged to one of the AI model providers named above, which performs speech recognition and speech synthesis. The Art. 28 processing agreements, third-country safeguards and the contractual exclusion of training use described above apply.</p>
+<p><strong>The audio is not stored on our servers.</strong> It passes through them in memory only; it is not written to any file, object store or database, and no audio content is logged. The agent's spoken answer is played on your device and is not stored either.</p>
+<p><strong>On the device</strong>, the turn-by-turn mode briefly writes each utterance to a file in app-private cache, because that is the only way the operating system records. The app deletes that file immediately after reading it, and it is never readable by other apps. The continuously connected mode creates no file at all.</p>
+<p><strong>The recording is not kept; the words are.</strong> In turn-by-turn mode your utterance is converted to text, and that text is the message the agent receives. Like any typed message it therefore becomes part of the stored conversation record. In the continuously connected mode <strong>no conversation record is written at all</strong>; there the transcript stays in memory for the duration of the exchange only. That difference is not visible on screen; we will tell you which mode your account uses on request.</p>
+
+<h3>Camera and attachments</h3>
+<p>If you attach a photo, an image, a PDF or a text file to a message, the file's content is passed to the agent and therefore to the AI provider. <strong>We do not store the content</strong> &#8211; it is processed in memory and is gone once the answer is produced. <strong>The file name, file type and file size are stored</strong> as part of the conversation record, so that the record does not conceal that a file was involved. Note that a file name can itself contain personal data.</p>
+
+<h3>Conversation records and retention</h3>
+<p>For every task given to an agent &#8211; from the chat, through a webhook or from a schedule &#8211; we store a record. It contains your message in full (up to 8,000 characters), the agent's complete answer, the tenant and agent-instance identifiers, trigger, status and timestamps, the metadata of any attached files, and for every tool the agent called its name plus a <strong>200-character extract of the parameters passed</strong>. That extract can contain content the agent passed on to a connected system such as a CRM or ERP.</p>
+<p>The legal bases are performance of the contract (Art. 6(1)(b) GDPR) and our legitimate interest in being able to trace automated processes and investigate faults (Art. 6(1)(f) GDPR).</p>
+<p><strong>There is currently no automatic retention limit for these records.</strong> They are stored indefinitely until they are deleted on request or together with the company account. We state this rather than assert a retention period that does not exist. The records belong to the tenant &#8211; the company account &#8211; and not to an individual: within a team they are visible to every member of that tenant and cannot be deleted for one team member separately.</p>
+
+<h3>Deleting your account</h3>
+<p>You can delete your account yourself, without installing an app, at <a href="https://login.virtual-marketer.de/konto-loeschen">https://login.virtual-marketer.de/konto-loeschen</a>. Two things are distinguished there:</p>
+<ul>
+  <li><strong>Deleting your user account</strong> removes your personal account: first and last name, email address, password hash, two-factor secret, profile picture, usage statistics and the mailbox credentials stored on it. If other people belong to the same company account, its shared data &#8211; including the conversation records &#8211; remains: it is not yours alone, and one person should not be able to delete their colleagues' data along with their own.</li>
+  <li><strong>Deleting the entire company account</strong> additionally removes all tenant data: every conversation record, the agents together with their credentials for third-party systems, product catalogues, generated media and campaigns, and the user accounts of all members. This is open to administrators of the company account and to anyone deleting their account as the last remaining member of their tenant. It is the only deletion that reaches the conversation records.</li>
+</ul>
+<p>Both deletions are final and are carried out only after an explicit confirmation: you must be signed in, enter a current code from your two-factor app, and type a confirmation phrase. That is deliberately stricter than signing in &#8211; a deletion route secured more weakly than the login itself would be a route to taking over other people's accounts. <strong>If you no longer have access to your two-factor app</strong>, write to <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>: we will verify your identity by other means and carry out the deletion for you.</p>
+
 <h2>Your rights under the GDPR</h2>
 <ul>
   <li>Right of access to your personal data (Art. 15 GDPR)</li>
@@ -448,7 +482,7 @@ Frankfurter Landstraße 50<br>
 <h2>Contact</h2>
 <p>For any privacy-related request, contact us at <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>.</p>
 
-<p>Last updated: 4 August 2026.</p>
+<p>Last updated: 9 September 2026.</p>
 
 <p><em>This page is a translation of the German-language privacy policy at <a href="/datenschutzerklaerung/">/datenschutzerklaerung/</a>, which remains the authoritative version for legal purposes.</em></p>`,
   }));
