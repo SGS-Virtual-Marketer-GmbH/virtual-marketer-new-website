@@ -43,8 +43,20 @@ async function firestoreAvailable() {
     return true;
   } catch (err) {
     console.error(`\n[test] Firestore unreachable (${err.code || err.message}).`);
-    console.error('[test] Firestore-backed tests will SKIP. Run `gcloud auth application-default login`,');
-    console.error('[test] or set FIRESTORE_EMULATOR_HOST, to exercise them.\n');
+    console.error(`[test] Firestore-backed tests will SKIP. Project: ${process.env.FIRESTORE_PROJECT_ID}`);
+    if (!process.env.FIRESTORE_EMULATOR_HOST && process.env.FIRESTORE_PROJECT_ID === 'virtual-marketer-test') {
+      // Naming the project matters: this default is a placeholder that does
+      // not exist, so valid credentials still produce PERMISSION_DENIED and
+      // the old message ("run gcloud auth application-default login") sent
+      // people to re-authenticate a login that was already fine.
+      console.error('[test] That is the PLACEHOLDER project and is expected to fail — credentials alone will not help.');
+      console.error('[test] Use one of:');
+      console.error('[test]   FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 npm test');
+      console.error('[test]   FIRESTORE_PROJECT_ID=virtual-marketer-chat-bot npm test   (needs gcloud auth application-default login)');
+    } else {
+      console.error('[test] Run `gcloud auth application-default login`, or set FIRESTORE_EMULATOR_HOST, to exercise them.');
+    }
+    console.error('');
     return false;
   }
 }
