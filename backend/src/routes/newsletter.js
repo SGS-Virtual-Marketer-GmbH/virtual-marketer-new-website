@@ -58,18 +58,31 @@ router.post('/', submitLimiter, express.json({ limit: '10kb' }), async (req, res
     const existing = await newsletter.findByEmail(email);
     const alreadyConfirmed = existing.find((r) => r.status === 'confirmed');
 
-    if (!alreadyConfirmed) {
-      // Per-address flood cap. Counted from the mails this address actually
-      // caused, NOT from how many documents exist for it: a repeat signup
-      // on a pending record reuses that record (reissueToken), so a
-      // document count never rises and the cap never fired. Checked here,
-      // after the already-confirmed branch, because that branch sends
-      // nothing at all and so cannot be used to flood anyone.
-      const dayAgo = new Date(Date.now() - 24 * 3600000).toISOString();
-      if (newsletter.countRecentConfirmSends(existing, dayAgo) >= MAX_CONFIRM_SENDS_PER_DAY) {
-        return res.status(429).json({ error: 'too_many_requests', message: 'Too many newsletter signups for this email address in the last 24 hours.' });
-      }
+    // Per-address flood cap. Counted from the mails this address actually
+    // caused, NOT from how many documents exist for it: a repeat signup on
+    // a pending record reuses that record (reissueToken), so a document
+    // count never rises and the cap never fired.
+    //
+    // OVER THE CAP WE STOP SENDING BUT STILL ANSWER 202.
+    //
+    // An earlier version answered 429 here, which quietly broke the
+    // anti-enumeration property this whole handler is built around. A
+    // confirmed subscriber's branch sends nothing, so their counter never
+    // moves and they answer 202 forever; everyone else hits 429 on the
+    // sixth try. Six submissions were then enough to ask "is this address
+    // subscribed?" and get a reliable answer about somebody else's
+    // mailbox — the exact question the identical-response design exists to
+    // refuse.
+    //
+    // So the cap now changes only what we DO, never what we SAY: past the
+    // limit no mail is sent, no token is rotated, and the response is the
+    // same "check your inbox" every other case gets. Five confirmation
+    // mails in 24 hours is already far past any real "I didn't get it"
+    // retry.
+    const dayAgo = new Date(Date.now() - 24 * 3600000).toISOString();
+    const overCap = newsletter.countRecentConfirmSends(existing, dayAgo) >= MAX_CONFIRM_SENDS_PER_DAY;
 
+    if (!alreadyConfirmed && !overCap) {
       const pending = existing.find((r) => r.status === 'pending');
       const { raw, hash, expiresAt } = tokens.generateToken();
       const nowIso = new Date().toISOString();
@@ -109,8 +122,8 @@ router.post('/', submitLimiter, express.json({ limit: '10kb' }), async (req, res
         }),
       ]);
     }
-    // If already confirmed: do nothing at all (no mail, no write) — the
-    // response below is identical either way.
+    // If already confirmed, or over the per-address cap: do nothing at all
+    // (no mail, no write) — the response below is identical either way.
 
     res.status(202).json({ status: 'pending' });
   } catch (err) {

@@ -317,18 +317,128 @@ test('newsletter: the per-address flood cap actually stops repeat signups for a 
     'one confirmation mail per accepted signup'
   );
 
+  // Past the cap the handler stops SENDING but does not change what it
+  // SAYS. Answering 429 here would have made the endpoint a subscriber
+  // oracle: a confirmed subscriber never increments the counter (their
+  // branch sends nothing), so they would answer 202 forever while everyone
+  // else flipped to 429 on the sixth try — six requests to learn whether a
+  // stranger's address is on the list.
   const blocked = await request(server, 'POST', '/newsletter', { email, locale: 'de', consent: true });
-  assert.equal(blocked.status, 429, 'the signup past the cap must be refused');
-  assert.equal(blocked.body.error, 'too_many_requests');
+  assert.equal(blocked.status, 202, 'the response past the cap must be indistinguishable');
+  assert.deepEqual(blocked.body, { status: 'pending' });
   assert.equal(
     sentMails.filter((m) => m.to === email).length,
     MAX_CONFIRM_SENDS_PER_DAY,
-    'and must not have sent another mail'
+    'but no further mail may be sent'
   );
+
+  // The property that matters, stated directly: an address held back by
+  // the cap and an address that is already a confirmed subscriber must be
+  // indistinguishable from outside.
+  const subscriber = `oracle-${Date.now()}@example.com`;
+  await request(server, 'POST', '/newsletter', { email: subscriber, locale: 'de', consent: true });
+  const subMail = sentMails.find((m) => m.to === subscriber);
+  await request(server, 'GET', pathFromMailUrl(urlFrom(subMail.text, '/api/newsletter/confirm')));
+
+  const askConfirmed = await request(server, 'POST', '/newsletter', { email: subscriber, locale: 'de', consent: true });
+  assert.equal(askConfirmed.status, blocked.status, 'a subscriber and a capped address must answer alike');
+  assert.deepEqual(askConfirmed.body, blocked.body);
 
   // Still exactly one document — the reuse that broke the old cap is the
   // intended behaviour and must not have been "fixed" by piling up rows.
   const records = await newsletter.findByEmail(email);
   assert.equal(records.length, 1);
   assert.equal(records[0].confirm_sends.length, MAX_CONFIRM_SENDS_PER_DAY);
+});
+
+test('newsletter: adopting a pending record records the NEW consent, not the stranger who created it', async (t) => {
+  if (!(await ready(t))) return;
+  const server = await listen();
+  t.after(() => server.close());
+  sentMails.length = 0;
+
+  // A pending record proves nothing about who made it — anyone can type
+  // any address into the signup form. upsertConfirmed adopts such a record
+  // rather than creating a duplicate, and used to keep its fields, so the
+  // drive-by submission became the stored proof of consent for a
+  // subscription the mailbox owner granted later and elsewhere.
+  const email = `adopted-${Date.now()}@example.com`;
+  await request(server, 'POST', '/newsletter', { email, locale: 'de', consent: true });
+
+  const before = (await newsletter.findByEmail(email))[0];
+  assert.equal(before.status, 'pending');
+  assert.equal(before.source, 'newsletter');
+
+  // Now the real owner proves the address by a different route and grants
+  // consent under different wording, at a different moment.
+  const ownConsentAt = new Date().toISOString();
+  const id = await newsletter.upsertConfirmed({
+    email,
+    locale: 'en',
+    ip: '203.0.113.9',
+    userAgent: 'the-real-owner',
+    consentVersion: 'whitepaper-box-v1',
+    consentTimestamp: ownConsentAt,
+    source: 'whitepaper',
+  });
+
+  assert.equal(id, before.id, 'must adopt the existing record, not create a duplicate');
+  const after = await newsletter.getById(id);
+  assert.equal(after.status, 'confirmed');
+  assert.equal(after.consent_version, 'whitepaper-box-v1', 'the consent on file must be the one just witnessed');
+  assert.equal(after.consent_timestamp, ownConsentAt);
+  assert.equal(after.user_agent, 'the-real-owner');
+  assert.equal(after.ip, '203.0.113.9');
+  assert.equal(after.source, 'whitepaper');
+  assert.equal(after.locale, 'en');
+  assert.equal(after.confirm_token_hash, null, 'the adopted pending token must be spent');
+
+  assert.equal((await newsletter.findByEmail(email)).length, 1);
+});
+
+test('newsletter: re-subscribing after an unsubscribe reuses the record so old opt-out links still work', async (t) => {
+  if (!(await ready(t))) return;
+  const server = await listen();
+  t.after(() => server.close());
+  sentMails.length = 0;
+
+  // Creating a second document here left one row 'unsubscribed' and one
+  // 'confirmed'. Unsubscribe links address a document id, so an old link
+  // would mark the stale row unsubscribed again while the live row kept
+  // sending — a subscriber opting out, seeing success, and still getting
+  // mail.
+  const email = `resub-${Date.now()}@example.com`;
+  await request(server, 'POST', '/newsletter', { email, locale: 'de', consent: true });
+  const mail = sentMails.find((m) => m.to === email);
+  await request(server, 'GET', pathFromMailUrl(urlFrom(mail.text, '/api/newsletter/confirm')));
+
+  const id = (await newsletter.findByEmail(email))[0].id;
+  const tokens = require('../src/tokens');
+  const unsubUrl = `/newsletter/unsubscribe?id=${id}&token=${tokens.unsubscribeToken(id)}`;
+  await request(server, 'POST', unsubUrl);
+  assert.equal((await newsletter.getById(id)).status, 'unsubscribed');
+
+  const reId = await newsletter.upsertConfirmed({
+    email,
+    locale: 'de',
+    ip: '203.0.113.10',
+    userAgent: 'returning',
+    consentVersion: 'whitepaper-box-v1',
+    consentTimestamp: new Date().toISOString(),
+    source: 'whitepaper',
+  });
+
+  assert.equal(reId, id, 'the same record must be reused, not a second one created');
+  assert.equal((await newsletter.findByEmail(email)).length, 1);
+
+  const rec = await newsletter.getById(id);
+  assert.equal(rec.status, 'confirmed');
+  assert.equal(rec.unsubscribed_at, null);
+  // The earlier opt-out stays provable even though it was superseded.
+  assert.ok(Array.isArray(rec.lifecycle) && rec.lifecycle.length === 1, 'prior unsubscribe must be recorded');
+  assert.equal(rec.lifecycle[0].event, 'unsubscribed');
+
+  // And the link they already have still stops the mail.
+  await request(server, 'POST', unsubUrl);
+  assert.equal((await newsletter.getById(id)).status, 'unsubscribed');
 });

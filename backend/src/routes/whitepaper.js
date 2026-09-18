@@ -50,6 +50,7 @@
  * separate fields, recorded separately, from the very first request.
  */
 
+const crypto = require('node:crypto');
 const express = require('express');
 const { whitepaper, newsletter } = require('../db');
 const config = require('../config');
@@ -61,6 +62,16 @@ const { submitLimiter, confirmLimiter } = require('../rateLimit');
 const { WHITEPAPER_CONSENT_VERSION, NEWSLETTER_CONSENT_VERSION } = require('../consent');
 
 const router = express.Router();
+
+/** A Firestore-auto-id-shaped string (20 chars of [A-Za-z0-9]) that refers
+ *  to nothing. Only used to shape the honeypot response like a real one. */
+const ID_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+function decoyId() {
+  const bytes = crypto.randomBytes(20);
+  let out = '';
+  for (let i = 0; i < 20; i++) out += ID_ALPHABET[bytes[i] % ID_ALPHABET.length];
+  return out;
+}
 
 /**
  * Closed vocabulary of known whitepaper slugs — see the "Primary
@@ -114,8 +125,17 @@ router.post('/', submitLimiter, express.json({ limit: '10kb' }), async (req, res
   try {
     const body = req.body || {};
 
+    // Indistinguishable from the real success below: same 201, same body
+    // shape, right down to a document-id-shaped string.
+    //
+    // A honeypot only works if tripping it looks like succeeding. This
+    // used to answer 202 with no id, while success is 201 with one — and
+    // the widget treats only 201 as success, so a caught bot rendered a
+    // visible error. The trap announced itself twice over: once in the
+    // status code, once in the missing field. The id here is random and
+    // addresses nothing; no record was created and none will be.
     if (honeypotTriggered(body.website)) {
-      return res.status(202).json({ status: 'pending' });
+      return res.status(201).json({ id: decoyId(), status: 'pending' });
     }
 
     const email = isValidEmail(body.email) ? normalizeEmail(body.email) : null;

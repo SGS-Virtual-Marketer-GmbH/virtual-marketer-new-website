@@ -157,7 +157,34 @@ function isSafelisted(token) {
 
 const HYPHENATED_TOKEN = /['"]([a-zA-Z][\w-]*(?:-[\w]+)+)['"]/g;
 
-/** Every class name that could ever be added by JS, site-wide — over-inclusive by design. */
+/**
+ * A quoted string holding SEVERAL space-separated names, e.g.
+ * `className = 'vm-card vm-card--wide'` or `addClass('a b')`.
+ * HYPHENATED_TOKEN cannot see these — it anchors on the quotes, so a value
+ * containing a space matches nothing at all and every name in it looked
+ * unused. Split and harvest each one instead.
+ */
+const QUOTED_STRING = /['"]([^'"\n]{2,120})['"]/g;
+
+/** Adds each space-separated hyphenated name inside a quoted string. */
+function addTokensFromQuoted(text, into) {
+  for (const m of text.matchAll(QUOTED_STRING)) {
+    if (!m[1].includes(' ')) continue; // the single-token case is already covered
+    for (const part of m[1].trim().split(/\s+/)) {
+      if (/^[a-zA-Z][\w-]*-[\w-]+$/.test(part)) into.add(part);
+    }
+  }
+}
+
+/**
+ * Every class name that could ever be added by JS, site-wide —
+ * over-inclusive by design.
+ *
+ * Over-inclusive is the whole point: a name kept by mistake costs a few
+ * bytes, a name dropped by mistake is a visibly broken page that nobody
+ * notices until a user hits the one state that needed it. The scans below
+ * therefore always err towards keeping.
+ */
 function collectGlobalJsClasses() {
   const classes = new Set();
 
@@ -165,8 +192,10 @@ function collectGlobalJsClasses() {
     const js = fs.readFileSync(file, 'utf-8');
     for (const m of js.matchAll(HYPHENATED_TOKEN)) classes.add(m[1]);
     for (const m of js.matchAll(/\bclassList\.(?:add|remove|toggle|contains)\(\s*['"]([^'"]+)['"]/g)) {
-      classes.add(m[1]);
+      // A classList call may itself carry several names.
+      for (const part of m[1].trim().split(/\s+/)) if (part) classes.add(part);
     }
+    addTokensFromQuoted(js, classes);
   }
 
   // Inline <script> blocks in HTML can do the same (jQuery .addClass, etc.)
@@ -175,10 +204,43 @@ function collectGlobalJsClasses() {
     const html = fs.readFileSync(file, 'utf-8');
     for (const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
       for (const t of m[1].matchAll(HYPHENATED_TOKEN)) classes.add(t[1]);
+      addTokensFromQuoted(m[1], classes);
     }
   }
 
   return classes;
+}
+
+/**
+ * Every element id that could ever exist at runtime, site-wide.
+ *
+ * Ids used to get none of this. Classes were checked against this global
+ * scan AND a safelist, while an id selector was judged purely on whether
+ * the id appeared in that one page's static markup — so a rule for an
+ * element JS creates or renames at runtime (a dialog, a toast, an
+ * injected widget) was "provably dead" on every page and deleted
+ * everywhere. Nothing in the current output depends on that gap, but it
+ * is luck, not design: the asymmetry had no reason behind it.
+ */
+function collectGlobalJsIds() {
+  const ids = new Set();
+  const ID_CALL = /\b(?:getElementById|querySelector|querySelectorAll|closest|matches)\(\s*['"]#?([A-Za-z][\w-]*)['"]/g;
+  const ID_ASSIGN = /\b(?:\.id\s*=\s*|id:\s*|setAttribute\(\s*['"]id['"]\s*,\s*)['"]([A-Za-z][\w-]*)['"]/g;
+
+  const harvest = (text) => {
+    for (const m of text.matchAll(ID_CALL)) ids.add(m[1]);
+    for (const m of text.matchAll(ID_ASSIGN)) ids.add(m[1]);
+  };
+
+  for (const file of walk(DIST).filter((f) => f.endsWith('.js'))) {
+    harvest(fs.readFileSync(file, 'utf-8'));
+  }
+  for (const file of walk(DIST).filter((f) => f.endsWith('.html'))) {
+    const html = fs.readFileSync(file, 'utf-8');
+    for (const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) harvest(m[1]);
+  }
+
+  return ids;
 }
 
 /** This one page's own class=/id= attribute tokens — NOT site-wide. */
@@ -333,7 +395,9 @@ function main() {
 
   const htmlFiles = walk(DIST).filter((f) => f.endsWith('.html'));
   const globalJsClasses = collectGlobalJsClasses();
+  const globalJsIds = collectGlobalJsIds();
   console.log(`   • ${globalJsClasses.size} class name(s) seen in JS/inline <script> site-wide (always kept)`);
+  console.log(`   • ${globalJsIds.size} element id(s) seen in JS/inline <script> site-wide (always kept)`);
 
   const bundleCache = new Map(); // original href -> original CSS text
   function readBundle(href) {
@@ -362,7 +426,10 @@ function main() {
     if (!hrefs.length) continue;
 
     const { classes: pageClasses, ids: pageIds } = collectPageTokens(html);
-    const used = { classes: new Set([...pageClasses, ...globalJsClasses]), ids: pageIds };
+    const used = {
+      classes: new Set([...pageClasses, ...globalJsClasses]),
+      ids: new Set([...pageIds, ...globalJsIds]),
+    };
 
     let out = html;
     let pageTouched = false;
