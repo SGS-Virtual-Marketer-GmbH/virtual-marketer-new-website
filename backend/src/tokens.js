@@ -28,4 +28,28 @@ function isExpired(expiresAtIso) {
   return new Date(expiresAtIso).getTime() <= Date.now();
 }
 
-module.exports = { generateToken, verifyToken, isExpired };
+// One-click unsubscribe (TMG §7 / UWG) needs a link that keeps working for
+// as long as the subscription exists — potentially years, across every
+// weekly issue — not just for one confirmation window. Storing yet another
+// random token's hash would mean every mail that wants to embed a working
+// link has to either keep re-reading and re-hashing a raw value it no
+// longer has (it was only ever in the one email it was minted for), or
+// rotate it, which breaks every older mail's link the moment a newer one is
+// sent. An HMAC keyed to a server-side secret sidesteps both problems: the
+// same input (the record's id) always reproduces the same token, so it
+// never has to be stored at all and stays valid in every mail ever sent for
+// that record — until the secret itself is rotated, which is an explicit,
+// rare operational action, not a side effect of sending another email.
+function unsubscribeToken(id) {
+  return crypto.createHmac('sha256', config.unsubscribeTokenSecret).update(String(id)).digest('base64url');
+}
+
+function verifyUnsubscribeToken(id, token) {
+  if (!id || !token) return false;
+  const expected = Buffer.from(unsubscribeToken(id));
+  const given = Buffer.from(String(token));
+  if (expected.length !== given.length) return false;
+  return crypto.timingSafeEqual(expected, given);
+}
+
+module.exports = { generateToken, verifyToken, isExpired, unsubscribeToken, verifyUnsubscribeToken };

@@ -27,14 +27,13 @@
  *     being renamed to <main>, because the wrapper's id and classes are load-
  *     bearing for layout.
  *
- * NOT FIXED HERE, AND DELIBERATELY
- *
- * heading-order: the pages use <h6 class="title-box"> for eyebrow labels
- * above section headings, so an h2 is followed by an h6 and the level jumps.
- * The honest fix is that an eyebrow is not a heading and should be a <p>, but
- * the theme styles it through the h6 selector, so changing the tag changes
- * the design. That is a content decision, not an attribute patch, and it is
- * left visible in the audit rather than papered over.
+ * heading-order (h6 eyebrow labels, sidebar widget titles, accordion items
+ * all skipping levels) used to be listed here as deliberately unfixed — the
+ * honest fix looked like it required retagging elements whose look is tied
+ * to their current tag, which is a content decision, not an attribute patch.
+ * It turned out not to require either: scripts/fix-heading-structure.js now
+ * exposes a corrected level via aria-level, leaving every tag (and the CSS
+ * that targets it) untouched. See that file's header comment for why.
  */
 
 const fs = require('fs');
@@ -115,6 +114,13 @@ const LABELS = [
   [/class=["'][^"']*\bside-panel-close\b[^"']*["']/i, 'Seitenleiste schließen', 'Close sidebar'],
   [/id=["']back-to-top["']/i, 'Nach oben springen', 'Back to top'],
   [/class=["'][^"']*\bmmenu-toggle\b[^"']*["']/i, 'Menü öffnen', 'Open menu'],
+  // The WordPress search form's submit button: an icon-only <button> whose
+  // <svg> is (correctly) aria-hidden, which leaves the button with no
+  // accessible name at all. It comes from the export's markup, not from any
+  // generator here, so it is named at this stage like the others. This was
+  // the sole `button-name` failure keeping every blog post at Accessibility
+  // 95 instead of 100.
+  [/class=["'][^"']*\bsearch-submit\b[^"']*["']/i, 'Suchen', 'Search'],
 ];
 
 function findHtmlFiles(dir, results = []) {
@@ -130,7 +136,7 @@ function main() {
   console.log('\n♿ Accessibility repairs...\n');
 
   let pages = 0;
-  const fixed = { labels: 0, burger: 0, tablist: 0, main: 0, links: 0, emptyHeadings: 0 };
+  const fixed = { labels: 0, burger: 0, tablist: 0, main: 0, links: 0, emptyHeadings: 0, deadLinks: 0 };
 
   for (const file of findHtmlFiles(DIST)) {
     let html = fs.readFileSync(file, 'utf-8');
@@ -153,6 +159,27 @@ function main() {
       (whole, prefix) => {
         fixed.burger++;
         return `${prefix}<button aria-label="${isEnglish ? 'Open menu' : 'Menü öffnen'}" aria-expanded="false">`;
+      }
+    );
+
+    // 2b — the "like" control inherited from the theme's simple-likes
+    // plugin ships as <a href="javascript:void(0)" aria-disabled="true">.
+    // Two problems, one fix: a javascript: href is not a crawlable link
+    // (Lighthouse SEO flags it, and it was the only such failure on the
+    // blog), and the plugin posts to admin-ajax.php, which does not exist
+    // on a static export — so the control cannot work regardless. It is
+    // already marked aria-disabled, i.e. nobody expected it to.
+    //
+    // The href is dropped rather than the element retagged to <button> or
+    // <span>: its closing tag is separated from the opening one by nested
+    // <span>/<svg> markup that a regex cannot match reliably, and an <a>
+    // with no href is inert and unfocusable — which is exactly what an
+    // aria-disabled control should be. The like count stays visible.
+    html = html.replace(
+      /(<a\b[^>]*?)\s+href=["']javascript:void\(0\)["']([^>]*\bclass=["'][^"']*\bsl-button\b)/gi,
+      (whole, before, after) => {
+        fixed.deadLinks++;
+        return `${before}${after}`;
       }
     );
 
@@ -212,6 +239,7 @@ function main() {
 
   console.log(`✅ ${pages} page(s) updated`);
   console.log(`   • ${fixed.labels} icon-only control(s) given an aria-label`);
+  console.log(`   • ${fixed.deadLinks} javascript:void(0) href(s) removed from disabled like control(s)`);
   console.log(`   • ${fixed.burger} burger button(s) named`);
   console.log(`   • ${fixed.tablist} accordion container(s) given role="tablist"`);
   console.log(`   • ${fixed.main} page(s) given a main landmark`);

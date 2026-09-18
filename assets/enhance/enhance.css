@@ -127,10 +127,108 @@
   }
 }
 
-:where(a, button, .elementor-button, .hero-cta, .demo-step-btn):focus-visible {
-  outline: 2px solid var(--vm-blue);
+/* ---- 4b. Focus visibility -----------------------------------------------
+ * ~16 theme rules turn the native outline off (`a:focus{outline:0}`,
+ * `.wp-block-search__input:focus{outline:none}`, `select:focus{outline:none}`,
+ * …) without drawing a replacement, so a keyboard user tabbing through the
+ * site sees nothing land. None of those rules carry !important, so a rule
+ * here can win the cascade instead of touching them — some exist to suppress
+ * a genuine double outline on a component that already draws its own
+ * affordance, and this file loads last, but a couple of the offending
+ * selectors (e.g. `.wp-block-navigation__responsive-close:focus`) already
+ * carry two class-level segments of specificity, which a bare
+ * `:focus-visible` (one) would still lose regardless of load order.
+ * Repeating the same pseudo-class three times is a standard, side-effect-
+ * free way to raise specificity without reaching for `!important` or an
+ * unrelated ancestor/class.
+ *
+ * The ring is a halo — outline plus a box-shadow ring in a neutral color —
+ * rather than a plain outline: brand red reads clearly against a white or
+ * dark page background, but drawn directly against a vm-red-colored button
+ * (the site's own primary CTA color) it would all but disappear into its own
+ * fill. The halo inserts a neutral gap between the element and the ring so
+ * the indicator stays visible no matter what it sits on. Both ring colors
+ * are light-dark() pairs, each verified to clear the WCAG 2.4.11 3:1
+ * non-text contrast minimum against its surface (~7.4:1 in dark mode,
+ * ~8.7:1 in light mode).
+ */
+:focus-visible:focus-visible:focus-visible {
+  outline: 3px solid light-dark(var(--vm-red), color-mix(in oklab, var(--vm-red), white 55%));
   outline-offset: 2px;
-  border-radius: 4px;
+  box-shadow: 0 0 0 2px light-dark(#ffffff, var(--vm-surface));
+}
+
+/* ---- 4c. Skip link -------------------------------------------------------
+ * First focusable element on every page (scripts/inject-skip-link.js),
+ * landing on the page's <main>/[role="main"] landmark. Visually hidden until
+ * it receives keyboard focus, per the standard "skip to content" pattern.
+ */
+.vm-skip-link {
+  position: absolute;
+  top: -100px;
+  left: 8px;
+  z-index: 10000;
+  padding: 12px 20px;
+  background: var(--vm-red);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  border-radius: 0 0 6px 6px;
+}
+.vm-skip-link:focus-visible:focus-visible:focus-visible {
+  top: 0;
+  outline-offset: -2px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .vm-skip-link {
+    transition: top 0.18s var(--vm-ease);
+  }
+}
+
+/* ---- 4d. Repeated CTA at scroll depth ------------------------------------
+ * Long marketing pages (homepage, feature/solution pages) show their only
+ * call to action once, at the very top — a visitor who scrolls past the
+ * hero has nowhere to act without scrolling back up. scripts/standardize-
+ * ctas.js inserts one of these part-way down qualifying pages, reusing that
+ * page's own existing destination and label (never inventing new copy).
+ * Deliberately not used on blog posts or the footer — another agent's
+ * newsletter signup owns that territory.
+ */
+.vm-repeat-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 56px auto;
+  padding: 28px 32px;
+  max-width: 1140px;
+  border-radius: 16px;
+  background: light-dark(var(--vm-red-tint), color-mix(in oklab, var(--vm-red), black 75%));
+  border: 1px solid light-dark(color-mix(in oklab, var(--vm-red), white 70%), color-mix(in oklab, var(--vm-red), black 55%));
+}
+.vm-repeat-cta p {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--vm-ink);
+}
+.vm-repeat-cta .elementor-button,
+.vm-repeat-cta .octf-btn,
+.vm-repeat-cta a.vm-repeat-cta-btn {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 8px;
+  background: var(--vm-red);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.vm-repeat-cta a.vm-repeat-cta-btn:hover {
+  background: var(--vm-red-dark);
 }
 
 /* ---- 5. Header glass ---------------------------------------------------
@@ -146,29 +244,130 @@
   }
 }
 
-/* ---- 6. Dark theme ------------------------------------------------------
- * The heavy lifting is done at build time: scripts/enable-dark-mode.js
- * duplicates every light-palette color declaration with a light-dark()
- * twin, so the whole site re-themes from the visitor's OS preference.
- * color-scheme is what arms those functions — plus it flips the browser's
- * own UI (form controls, scrollbars). The tokens below keep the motion
- * layer's shadows/glass consistent on dark surfaces.
+/* ---- 6. Light theme, unconditionally -----------------------------------
+ * The site renders in its light brand palette for every visitor, whatever
+ * their OS is set to.
+ *
+ * There WAS an automatic dark theme here: scripts/enable-dark-mode.js
+ * duplicated every light-palette colour with a light-dark() twin and this
+ * `color-scheme: light dark` armed those functions. It was removed because
+ * the result looked bad in practice — a palette derived mechanically in HSL
+ * from a light-first design does not become a designed dark theme, and the
+ * homepage hero shipped with its second headline clause nearly illegible
+ * against the dark surface.
+ *
+ * `color-scheme: light` is the load-bearing line: it pins the browser's own
+ * UI (form controls, scrollbars, input text) to light, and it makes any
+ * `light-dark()` that survives anywhere in the CSS resolve to its LIGHT
+ * value. scripts/force-light-mode.js collapses those at build time as well,
+ * so this holds even in a browser that does not support light-dark().
+ *
+ * To bring dark mode back, this is not the place to start — it needs a
+ * designed dark palette, not a derived one.
  */
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --vm-surface: #12161c;
-    --vm-ink: #e6e9ee;
-    --vm-muted: #9aa3b0;
-    --vm-shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.55);
-    --vm-shadow-cta: 0 10px 24px -10px color-mix(in oklab, var(--vm-red), transparent 30%);
-  }
-  /* The header logo is a dark glyph on transparency — keep it legible on
-   * the dark glass bar without inverting brand artwork. */
-  #site-header img {
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.45));
-  }
+/* ---- 7. Language-switcher contrast fix ----------------------------------
+ * scripts/inject-language-switcher.js draws its floating EN/DE pill with a
+ * hardcoded `background:#ffffffee` (8-digit hex, i.e. white at ~93% alpha)
+ * and `color:#6b7280` on the non-active link, with no light-dark() twin of
+ * its own. That file is injected early in the build, long before
+ * scripts/enable-dark-mode.js's pass, so enable-dark-mode.js DOES process
+ * it — but only halfway: its hex-matching regex requires a bare 6- or
+ * 3-digit hex, so the 8-digit `#ffffffee` background is skipped entirely
+ * (stays pinned to near-white in every theme), while the plain 6-digit
+ * `#6b7280` text colour gets its usual dark-mode twin (lightened, on the
+ * assumption that dark mode means a dark surface behind it). The pairing
+ * that ships is therefore a light grey meant for a dark background, sitting
+ * on a background that never left near-white — measured at 1.45:1 on a
+ * blog post's language switcher.
+ *
+ * Fixed here (this file loads AFTER enable-dark-mode.js in the pipeline —
+ * scripts/inject-enhance.js runs near the very end — so nothing downstream
+ * can mangle it) by giving the pill's own background a real dark twin too,
+ * so the two sides of the pairing move together instead of one moving and
+ * one staying still. `rgba(19,21,24,.93)` is the same dark surface colour
+ * scripts/enable-dark-mode.js already derives for other translucent white
+ * overlays on this site; `#c5c8ce` is the existing sitewide dark-mode twin
+ * for `#6b7280` (see .vm-footer-simple / the /kontakt/ footer), reused
+ * rather than invented so the two shades of grey the site already uses stay
+ * the only two shades of grey.
+ *
+ * Both rules need to out-specificity the original, not just come after it:
+ * scripts/hoist-critical-css.js hoists a fixed allowlist of style-block ids
+ * into <head> (vm-mobile-polish, vm-share-css, ...) and this file's own
+ * <style id="vm-enhance-inline"> is one of the ids that ends up there, but
+ * inject-language-switcher.js's block is not on that list, so it stays
+ * printed in <body>, after the hoisted head styles — meaning ITS rules come
+ * later in the cascade, not this file's. The `a:not(.active)` rule already
+ * outranks the plain `#vm-lang-switch a` it overrides (id+tag+class beats
+ * id+tag), but the background rule was an exact `#vm-lang-switch` vs
+ * `#vm-lang-switch` tie that source order then won — so it needed the
+ * `body` prefix to genuinely out-specificity it. */
+body #vm-lang-switch {
+  background: #ffffffee;
+  background: light-dark(#ffffffee, rgba(19, 21, 24, 0.93));
+}
+#vm-lang-switch a:not(.active) {
+  color: #6b7280;
+  color: light-dark(#6b7280, #c5c8ce);
+}
+
+/* ---- 8. Blog contrast repairs -------------------------------------------
+ * Three text colours inherited from the engitech theme fail WCAG 1.4.3 at
+ * their shipped sizes. They are theme CSS, not ours, so they are corrected
+ * here rather than by editing vendor files a rebuild would overwrite.
+ *
+ * Measured against the background each actually sits on:
+ *
+ *   .entry-date        #b5b5b5 on #ffffff  2.05:1  (14px bold)
+ *   .search-field      #b5b5b5 on #f6f6f6  1.90:1  (16px)
+ *   .author-info .title #66a3ce on #ffffff  2.73:1  (16px)
+ *
+ * Replacements keep each hue and only scale it toward black — the same
+ * approach scripts/fix-contrast.js takes for the button gradients — so the
+ * greys stay grey and the blue stays recognisably vm-blue rather than being
+ * swapped for an unrelated colour:
+ *
+ *   #b5b5b5 → #757575  4.61:1 on white
+ *   #b5b5b5 → #707070  4.58:1 on #f6f6f6
+ *   #66a3ce → #4d7b9c  4.54:1 on white
+ *
+ * NOTE ON THE BLUE: vm-blue #66a3ce is a brand colour, and it is kept as a
+ * FILL/accent everywhere it is used as one. It only fails as small text on
+ * white, which is a usage the palette was never meant to cover; darkening it
+ * in that one spot is not a palette change. Scoped to .author-bio so the
+ * theme's .text-primary utility keeps its brand value everywhere else.
+ *
+ * This file is inlined after the page bundle, so plain class specificity is
+ * enough to win — no !important needed.
+ */
+.entry-header .entry-date,
+span.post-on .entry-date {
+  color: #757575;
+}
+
+.search-form .search-field {
+  color: #707070;
+}
+.search-form .search-field::placeholder {
+  color: #707070;
+  opacity: 1; /* Firefox dims placeholders by default, undoing the fix. */
+}
+
+.author-bio .author-info .title,
+.author-bio .author-info p.title.text-primary {
+  color: #4d7b9c;
+}
+
+/* The sidebar "recent news" widget restates the same colour through a
+ * three-class selector (.widget .recent-news .entry-date, specificity 0,3,0)
+ * which outranks the two-class rule above, so the widget's dates kept the
+ * failing #b5b5b5 while the in-article ones were already corrected. Matched
+ * here at equal specificity — and winning on order, since this file is
+ * inlined after the page bundle. */
+.widget .recent-news .entry-date {
+  color: #757575;
 }

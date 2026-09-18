@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agentic Marketing 2026</title>
+<link rel="stylesheet" href="print.css">
+</head>
+<body>
+
+<!-- WP:COVER:START -->
+<section class="cover">
+  <div class="wordmark">Virtual Marketer<span class="dot">.</span></div>
+  <div>
+    <h1 class="cover-title">Agentic Marketing 2026</h1>
+    <p class="cover-sub">A practical guide to AI agents in everyday marketing work &mdash; what they actually do today, where approval sits, and what a realistic rollout looks like.</p>
+  </div>
+  <div class="cover-meta">SGS Virtual Marketer GmbH &middot; September 2026</div>
+</section>
+<!-- WP:COVER:END -->
+
+<!-- WP:TOC:START -->
+<section class="toc">
+  <span class="eyebrow">Contents</span>
+  <h1>At a glance</h1>
+  <ol>
+    <li>Introduction &mdash; why agents matter now</li>
+    <li>What an agent actually is (and isn't)</li>
+    <li>Four agents marketing teams use today</li>
+    <li>Connectors and the approval net</li>
+    <li>A realistic start: the first 90 days</li>
+    <li>When agents are not the right choice</li>
+    <li>Data, control and compliance</li>
+    <li>Next steps</li>
+  </ol>
+</section>
+<!-- WP:TOC:END -->
+
+<!-- WP:CHAPTERS:START -->
+<section class="chapter">
+  <span class="eyebrow">1</span>
+  <h1>Introduction &mdash; why agents matter now</h1>
+  <p>Marketing teams do the same categories of work every week: brief campaigns, personalize outreach, triage support tickets, keep product data current. Generative AI made <em>drafting</em> text cheap &mdash; the genuinely hard and valuable step is something else: connecting that draft safely to your own tools and data, without losing control over what actually goes out the door.</p>
+  <p>That is what &ldquo;agentic&rdquo; means in this guide: not a chatbot that answers questions, but a system that can read data from connected tools, propose an action, and &mdash; only with explicit approval &mdash; carry it out. The difference is not a nuance: a chatbot stops at text. An agent can go all the way to action, if a human allows it.</p>
+  <p>This guide deliberately covers only what exists today &mdash; no forecast, no roadmap slide. Every agent, workflow and safeguard described here is a real, usable Virtual Marketer capability, not an announcement. It also deliberately contains no invented statistics and no case studies with numbers that cannot be verified. The promise is qualitative and honest: less manual routine work, without giving up control over a single outgoing message. The 90-day roadmap in Chapter 5 is a starting point to adapt, not a guarantee of results.</p>
+  <p>Chapters 2 through 4 explain what an agent technically is and how approval works. Chapter 3 introduces the four agents that, in practice, teams set up first most often. Chapters 5 and 6 are the honest part: a realistic starting point &mdash; and an equally honest list of when an agent is <em>not</em> the right choice.</p>
+</section>
+
+<section class="chapter">
+  <span class="eyebrow">2</span>
+  <h1>What an agent actually is (and isn't)</h1>
+  <p>A Virtual Marketer agent is a specialized, tool-using virtual worker: it connects to one or more of your systems (analytics, ad accounts, helpdesk, CRM, ERP, email), reads data there, performs analysis or drafts something &mdash; and, if you allow it, can also take write actions. A chatbot answers questions out of a language model. Classic marketing automation runs predefined flows someone drew beforehand. An agent sits in between: it makes its own decisions within whatever you allow it &mdash; but every consequential action stays tied to an approval setting you configure (more on that in Chapter 4).</p>
+
+  <h2>Three ways to start an agent</h2>
+  <p>An agent isn't only addressed in chat. There are three equally valid trigger types, and most teams use all three in parallel for different purposes.</p>
+
+  <div class="diagram">
+    <div class="trigger-row">
+      <div class="trigger-card">
+        <h4>Chat</h4>
+        <p>Type a question or instruction, the agent responds and &mdash; once approved &mdash; executes. For ad-hoc work and follow-up questions.</p>
+      </div>
+      <div class="trigger-card">
+        <h4>Webhook</h4>
+        <p>Every agent has a private task webhook. Another system (n8n, Zapier, your own software) sends a short instruction, the agent does the work and hands the result back.</p>
+      </div>
+      <div class="trigger-card">
+        <h4>Schedule</h4>
+        <p>Recurring work &mdash; a morning performance summary, a nightly account audit, inbox triage &mdash; runs automatically, without anyone kicking it off.</p>
+      </div>
+    </div>
+    <p class="diagram-caption">Three trigger types, one agent &mdash; all three use the same connections and the same approval rules.</p>
+  </div>
+
+  <h2>What an agent does not do</h2>
+  <ul>
+    <li>It never sends anything to a person without that person having first seen the full text (see &ldquo;read-back&rdquo; in Chapter 4) &mdash; that also applies to scheduled runs and webhook calls: they write a prepared result into their response, but do not send it to a third party themselves.</li>
+    <li>It does not invent contact details, names or figures. Whatever an agent cannot find publicly is marked &ldquo;unknown&rdquo;, not filled in.</li>
+    <li>It never exceeds the rights the connected account itself has &mdash; a CRM agent, for instance, works with exactly the CRM permissions of the person using it.</li>
+  </ul>
+</section>
+
+<section class="chapter">
+  <span class="eyebrow">3</span>
+  <h1>Four agents marketing teams use today</h1>
+  <p>The agent catalog is larger than four entries, but these four cover most of the marketing work that today still runs manually: sales research, customer service, campaign production, and 1:1 lifecycle email.</p>
+
+  <div class="diagram">
+    <div class="agent-grid">
+      <div class="agent-card">
+        <h4>Sales Agent</h4>
+        <p>Finds matching companies for a described target audience, researches each company's own website for concrete talking points, and drafts a personalized pitch &mdash; as text, for a human to review.</p>
+      </div>
+      <div class="agent-card">
+        <h4>Customer Care Agent</h4>
+        <p>Reads support tickets in a connected helpdesk (Zammad), drafts replies, and can &mdash; separately approvable &mdash; add notes or change ticket status.</p>
+      </div>
+      <div class="agent-card">
+        <h4>Campaign Builder</h4>
+        <p>Turns a brief into concepts, scripts, images, video, banners and PDFs &mdash; optionally in parallel an email campaign, Google Ads copy, Meta ad copy and an organic social post.</p>
+      </div>
+      <div class="agent-card">
+        <h4>Lifecycle Agent</h4>
+        <p>Evaluates nine occasions (reorder, cart, birthday and others) daily per customer, and writes at most two emails per customer per week &mdash; never without documented consent.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Sales Agent: research that names its source</h2>
+  <p>The Sales Agent works in a fixed sequence: first it finds real companies, with website and social profile, matching a target audience described in plain language. Then it reads each company's own website and extracts concrete, verifiable talking points &mdash; a product, a claim, a location. Only then does it draft the pitch as text. A spoken version is only generated when explicitly requested &mdash; deliberately its own, later step, because a voice message is the hardest thing to check after the fact.</p>
+  <p>Since September 11, 2026, the same agent can also deliver complete leads: contact email, phone number, mailing address, a linked Instagram profile &mdash; each one attributed to the page it was found on. Whatever a company doesn't publish shows up as <em>unknown</em>, instead of being guessed. The agent can also run on a schedule (for example, finding eight new leads every six hours); it never sends anything itself &mdash; sending stays with a human, in every case, including scheduled runs.</p>
+
+  <h2>Customer Care Agent: three separate approvals, not one</h2>
+  <p>Through a Zammad connector (helpdesk URL plus API token, no OAuth), the Customer Care Agent reads tickets, full conversation histories including internal notes, and user and organization data. On the write side it can create a ticket, reply, add an internal note, or change status/priority/assignment. These three write permissions are deliberately separate: a reply reaches your customer's own customer, an internal note does not, and a status change notifies no one. A team that automates triage has not thereby agreed that an agent may also write to customers. All three default to &ldquo;ask first&rdquo;.</p>
+
+  <h2>Campaign Builder: one brief, every channel</h2>
+  <p>Campaign Builder goes from a brief to finished assets &mdash; concepts to choose from, scripts to refine, scene images, video, banners and PDF documents, consistent with your own brand identity. If additional target channels are selected up front, the same brief produces, in parallel, an email campaign, Google Ads copy, Meta paid ad copy, and an organic social post. Anyone who doesn't select extra channels gets exactly the classic single-platform flow that existed before &mdash; nothing gets more complicated for them just because the option exists.</p>
+
+  <h2>Lifecycle Agent: a message to a person, not a segment</h2>
+  <p>The Lifecycle Agent is the counterpart to Campaign Builder: not a campaign to an audience, but an email to one individual customer, triggered by what that customer actually did. Nine occasions &mdash; from reorder to cart reminder to birthday &mdash; are evaluated daily, per customer. The agent reads not just the shop but also the ERP, so that orders placed by phone or through a sales rep also feed into the rhythm calculation. If the system doesn't yet know a given customer's own ordering rhythm, it falls back to the experience value of comparable customers &mdash; and says so explicitly in the email, rather than pretending to know a habit that wasn't actually measured. Nothing happens without documented consent, an opt-out is final, and no customer ever receives more than two emails per week across all nine occasions combined.</p>
+</section>
+
+<section class="chapter">
+  <span class="eyebrow">4</span>
+  <h1>Connectors and the approval net</h1>
+  <p>Every agent is only as useful as what it's connected to &mdash; and only as trustworthy as the approvals wrapped around it. Both live centrally in settings, not scattered per agent.</p>
+
+  <h2>Connectors</h2>
+  <p>A central, reusable connector catalog covers analytics and visibility data, ad platforms, email, helpdesk, CRM and ERP &mdash; from Google Ads/GA4/Search Console/Merchant Center to SISTRIX, Xentral, HubSpot and Zammad. Credentials are stored encrypted and never shown again once saved. A Google permission granted once is reused across the account, instead of being set up again for every agent.</p>
+
+  <h2>Permissions: a three-way matrix per action</h2>
+  <p>For every write action &mdash; pausing a campaign, replying to a ticket, sending an invoice &mdash; you can set individually: <strong>autonomous</strong> (the agent executes on its own), <strong>ask first</strong> (the default for practically every action), or <strong>not allowed</strong>. Budget changes can additionally be locked permanently. This granularity is why &ldquo;we turned an agent on&rdquo; does not automatically mean it may do anything without asking.</p>
+
+  <h2>Read-back: the approval that actually matters</h2>
+  <p>The most important safeguard isn't a settings checkbox but a recurring behavior pattern: before an agent sends anything to a person &mdash; an email, a WhatsApp or chat message, an invoice email, a team invite &mdash; it first shows the complete message and asks. Only once the person explicitly confirms in their next message (or confirms out loud in voice mode) does anything go out. Here is what that looks like in practice:</p>
+
+  <div class="callout">
+    <span class="label">Example &mdash; how a prepared message appears in chat</span>
+    <pre>Ready to send &mdash; not sent yet
+
+Channel:     Email, new message
+From:        info@virtual-marketer.de (Gmail)
+To:          Anna Example &lt;anna@example.com&gt;
+Cc:          team@virtual-marketer.de
+Subject:     Your quote
+Attachments: Quote.pdf (about 120 KB)
+
+Hi Anna, &hellip;
+
+This will only be sent once you explicitly confirm
+in your next message.</pre>
+  </div>
+
+  <p>If even one recipient or one word changes, a new read-back is triggered &mdash; an approval does not carry over to a changed message. An approval is also time-limited (ten minutes); after that the message has to be prepared again. Scheduled runs and webhook calls never send to a third party at all &mdash; they place the result in their own response, for a human to read and approve.</p>
+
+  <div class="diagram">
+    <div class="flow-row">
+      <div class="flow-step"><span class="n">1</span>Agent prepares message</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step"><span class="n">2</span>Full text is shown</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step"><span class="n">3</span>Human confirms explicitly</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step"><span class="n">4</span>Only then does it send</div>
+    </div>
+  </div>
+
+  <h2>Optional two-factor security</h2>
+  <p>For extra protection, two-factor security can be switched on (Google or Microsoft Authenticator, or any other TOTP app): once enabled, running an agent or editing credentials additionally requires a fresh one-time code. It's optional, not a prerequisite &mdash; teams who want to get going right away can use the permission-matrix-plus-read-back approval net without 2FA as well.</p>
+</section>
+
+<section class="chapter">
+  <span class="eyebrow">5</span>
+  <h1>A realistic start: the first 90 days</h1>
+  <p>This isn't a promise, it's a starting point &mdash; adapt it to your own situation and it becomes your own roadmap.</p>
+
+  <h3>Weeks 1&ndash;2: Take stock</h3>
+  <ul>
+    <li>Which recurring task currently costs your team the most manual time &mdash; sales research, ticket triage, campaign production, or existing-customer email?</li>
+    <li>Which tools are already in use, and can one of them be connected directly?</li>
+    <li>Who on the team owns setup and the first approvals?</li>
+  </ul>
+
+  <h3>Weeks 3&ndash;4: Connect and test</h3>
+  <ul>
+    <li>Add one agent from the catalog and connect exactly one connector.</li>
+    <li>Leave every write action on &ldquo;ask first&rdquo; for now &mdash; even if it feels slower, this is the phase where trust is built.</li>
+    <li>Try the agent on a small, non-critical case before it touches real customers.</li>
+  </ul>
+
+  <h3>Weeks 5&ndash;8: Pilot with real data</h3>
+  <ul>
+    <li>Point the agent at exactly one real, recurring workflow.</li>
+    <li>Actually read every approval in the approvals inbox, don't just click through &mdash; this is the phase where you learn how good the drafts really are.</li>
+    <li>Only loosen permissions once a pattern of repeatedly correct drafts has formed &mdash; not after a fixed number of days.</li>
+  </ul>
+
+  <h3>Weeks 9&ndash;12: Add a second agent</h3>
+  <ul>
+    <li>Only now add a second agent for the next-biggest time saving.</li>
+    <li>Write down which actions now seem reliable enough for &ldquo;autonomous&rdquo; &mdash; and make that decision deliberately, not by habit.</li>
+    <li>Write a short internal playbook: which agent for what, what to expect from it, what not to.</li>
+  </ul>
+</section>
+
+<section class="chapter">
+  <span class="eyebrow">6</span>
+  <h1>When agents are not the right choice</h1>
+  <p>An honest guide names its limits too. These four cases aren't a footnote &mdash; in practice they're the most common reason for disappointment when they're skipped over beforehand.</p>
+
+  <h2>When the underlying data is messy</h2>
+  <p>An agent reads what's actually sitting in your systems. Contradictory product data, duplicate CRM records, or a helpdesk without clean categories lead to correspondingly messy drafts &mdash; no agent quietly fixes data quality in the background.</p>
+
+  <h2>When it's about brand storytelling, not routine</h2>
+  <p>Structure, outline and a first draft are a good task for an agent. The final tone of a brand story that carries a brand for years still deserves a human's final editorial read.</p>
+
+  <h2>When the setup effort outweighs the savings</h2>
+  <p>Below roughly five hours of manual work per week for a given task, the setup &mdash; connector, permissions, test phase &mdash; often isn't worth it. That's not a hard cutoff, but an honest rule of thumb before investing time in setup.</p>
+
+  <h2>When a wrongly sent message weighs heavily</h2>
+  <p>Even after trust has built up, setting an action to &ldquo;autonomous&rdquo; stays a deliberate decision. For anything where a single wrong message carries real reputational weight, &ldquo;ask first&rdquo; isn't a transitional setting &mdash; it's the right permanent one.</p>
+</section>
+
+<section class="chapter">
+  <span class="eyebrow">7</span>
+  <h1>Data, control and compliance</h1>
+
+  <h2>Where data is processed</h2>
+  <p>Virtual Marketer does not guarantee blanket &ldquo;processing exclusively in Germany.&rdquo; The actual approach: the processing location can be fixed contractually &mdash; for example exclusively Germany, or another EU location &mdash; when a customer needs that. Absent such an agreement, a cost-efficient location is chosen, not automatically the most expensive one. Anyone who needs a location guarantee arranges it in the contract; it is not an unspoken default.</p>
+
+  <h2>Consent is the prerequisite, not the exception</h2>
+  <p>The Lifecycle Agent never sends anything without documented consent, and an opt-out is final &mdash; no later data sync can override it. Newsletter signup and whitepaper download on this website work on the same principle: double opt-in, a separate, unticked checkbox for each individual consent, and a one-click unsubscribe link in every email.</p>
+
+  <h2>Credentials and traceability</h2>
+  <p>Connected credentials (API tokens, service accounts) are stored encrypted and never shown again in plain text once saved. Every action an agent takes is shown in chat &mdash; not as a summary written afterward, but as the actual text that was also sent. Optional two-factor security additionally protects running sensitive actions and editing credentials.</p>
+
+  <h2>Requests about your own data</h2>
+  <p>Requests for access, correction or deletion under GDPR are handled by the Virtual Marketer team &mdash; including for data collected through newsletter or whitepaper signups on this website. The simplest request is an email to <em>info@virtual-marketer.de</em>.</p>
+</section>
+
+<section class="chapter closing">
+  <span class="eyebrow">8</span>
+  <h1>Next steps</h1>
+  <p>This guide describes what exists today. What actually makes a difference for your team depends on which task currently costs the most manual time &mdash; and that's usually clearer after a short conversation than after another document.</p>
+  <p><strong>Book a demo:</strong> virtual-marketer.de/en/virtual-marketer-demo<br>
+  <strong>Keep reading weekly:</strong> The Agent Report, Virtual Marketer's marketing newsletter<br>
+  <strong>Questions first:</strong> info@virtual-marketer.de</p>
+</section>
+<!-- WP:CHAPTERS:END -->
+
+</body>
+</html>

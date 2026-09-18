@@ -50,4 +50,38 @@ module.exports = {
     slotMinutes: parseInt(process.env.BOOKING_SLOT_MINUTES || '30', 10),
   },
   confirmTokenTtlHours: parseInt(process.env.CONFIRM_TOKEN_TTL_HOURS || '48', 10),
+
+  // Keys the HMAC that derives one-click unsubscribe links (see
+  // src/tokens.js) without ever storing the token itself.
+  //
+  // Not in REQUIRED above, because REQUIRED applies everywhere and this
+  // must keep working for local runs and the test suite without a secret.
+  // It is required IN PRODUCTION though, and enforced here: the previous
+  // version only warned, which meant a deploy where the Secret Manager
+  // mount silently failed would come up healthy and serve forgeable
+  // unsubscribe links — anyone able to guess a subscription id could
+  // unsubscribe that person. A container that cannot read its secret
+  // should refuse to start instead, so the bad revision never takes
+  // traffic.
+  //
+  // Cloud Run always sets K_SERVICE, which is what "in production" means
+  // here; NODE_ENV is honoured too but is not set on this service today.
+  //
+  // ROTATION IS A BREAKING CHANGE. The token is derived, never stored, so
+  // changing this value invalidates every unsubscribe link already mailed
+  // — recipients would land on "link invalid" with no way to opt out,
+  // which is exactly the failure §7 UWG cares about. Only rotate with a
+  // plan to re-mail, and never as a routine hygiene step.
+  unsubscribeTokenSecret: (() => {
+    if (process.env.UNSUBSCRIBE_TOKEN_SECRET) return process.env.UNSUBSCRIBE_TOKEN_SECRET;
+    const inProduction = Boolean(process.env.K_SERVICE) || process.env.NODE_ENV === 'production';
+    if (inProduction) {
+      throw new Error(
+        'UNSUBSCRIBE_TOKEN_SECRET is not set. It is required in production so one-click unsubscribe links cannot be forged. ' +
+          'Wire it from Secret Manager (secret: vm-unsubscribe-token-secret) in deploy-service.yaml, and check the service account has roles/secretmanager.secretAccessor.'
+      );
+    }
+    console.warn('[config] UNSUBSCRIBE_TOKEN_SECRET is not set — using an insecure development-only fallback. This is allowed for local runs and tests only; production refuses to start without a real secret.');
+    return 'dev-only-insecure-unsubscribe-secret-do-not-use-in-production';
+  })(),
 };

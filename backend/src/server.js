@@ -1,7 +1,7 @@
 'use strict';
 
 const config = require('./config');
-const { bookings, contacts } = require('./db');
+const { bookings, contacts, modelRequests, newsletter, whitepaper } = require('./db');
 const app = require('./app');
 
 app.listen(config.port, () => {
@@ -19,8 +19,18 @@ app.listen(config.port, () => {
 async function sweepExpired() {
   const now = new Date().toISOString();
   try {
-    const [b, c] = await Promise.all([bookings.sweepExpired(now), contacts.sweepExpired(now)]);
-    if (b || c) console.log(`[server] swept ${b} expired booking(s), ${c} expired contact submission(s)`);
+    const [b, c, m, n, w] = await Promise.all([
+      bookings.sweepExpired(now),
+      contacts.sweepExpired(now),
+      modelRequests.sweepExpired(now),
+      newsletter.sweepExpired(now),
+      whitepaper.sweepExpired(now),
+    ]);
+    if (b || c || m || n || w) {
+      console.log(
+        `[server] swept ${b} expired booking(s), ${c} expired contact submission(s), ${m} expired model request(s), ${n} expired newsletter signup(s), ${w} expired whitepaper request(s)`
+      );
+    }
   } catch (err) {
     console.error('[server] expiry sweep failed:', err.message);
   }

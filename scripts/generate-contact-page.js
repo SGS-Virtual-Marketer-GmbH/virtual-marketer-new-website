@@ -70,20 +70,64 @@ function header() {
 }
 
 function footer() {
-  return `<footer style="max-width:1140px;margin:64px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px;">
+  // color:#6b7280 alone measured 3.7:1 against this footer's dark-mode
+  // background (Lighthouse: "Background and foreground colors do not have a
+  // sufficient contrast ratio", the one real color-contrast finding on this
+  // page) — it was missing the light-dark() twin that .footer-simple, the
+  // equivalent class-based footer used elsewhere on the site, already
+  // carries. #c5c8ce is that same established dark-mode value, not a new
+  // color choice.
+  // The two links below are bare children of <footer>, not of a <p>/<li> —
+  // scripts/fix-a11y.js's sitewide link-in-text-block underline rule only
+  // covers `:is(p,li,dd,blockquote,figcaption) > a`, so it never reaches
+  // them. They also have no page-specific colour rule to fall back on
+  // (`.vm-kontakt a` only covers <main>, and this <footer> sits outside
+  // it), so they render in the WordPress theme's own base link colour —
+  // still the retired purple normalize-brand-palette.js targets elsewhere,
+  // ~1.4:1 against this footer's own grey text either way. An inline style
+  // wins over every external/theme rule outright and fixes both defects at
+  // once: same muted grey as the footer's own text (matching the
+  // established .footer-simple / #c5c8ce twin used elsewhere) plus an
+  // underline for the non-colour cue WCAG 1.4.1 asks for.
+  const linkStyle = 'color:#6b7280;color:light-dark(#6b7280,#c5c8ce);text-decoration:underline;text-underline-offset:2px;';
+  return `<footer style="max-width:1140px;margin:64px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;color:light-dark(#6b7280,#c5c8ce);font-size:14px;">
   &copy; 2026 SGS Virtual Marketer GmbH &middot;
-  <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> &middot;
-  <a href="/impressum/">Impressum</a>
+  <a href="/datenschutzerklaerung/" style="${linkStyle}">Datenschutzerklärung</a> &middot;
+  <a href="/impressum/" style="${linkStyle}">Impressum</a>
 </footer>`;
 }
 
+// The --vm-* custom properties used to be declared in a plain :root{} block.
+// scripts/reserve-layout-space.js (not owned by this task, and off-limits —
+// another agent is actively working in it) walks every :root{} literal and
+// gives each var(--name) usage found anywhere in the same stylesheet a
+// literal fallback, e.g. color:var(--vm-red) -> color:var(--vm-red,#94152b),
+// so a var that resolves to nothing still renders. scripts/enable-dark-mode.js
+// then runs its plain hex-wrapping regex over that fallback text without
+// knowing it sits inside a var() argument, producing
+// color:var(--vm-red, light-dark(#94152b,#ea6b81)) — a light-dark() call
+// that never fires, because --vm-red IS defined, so the browser always uses
+// it and ignores the fallback entirely. Net effect: the dark-mode twin is
+// silently dead code and the light-mode colour ships in both themes — which
+// is exactly the .eyebrow (2.09:1) and mailto-link (2.05:1) contrast
+// failures measured on this page in dark mode.
+//
+// The fix is to stop handing reserve-layout-space.js a :root{} to find:
+// every other component on this site that defines this same palette
+// (assets/lead-magnet/*.css, assets/contact-form/contact-form.css) scopes
+// the custom properties to the component's own class rather than :root,
+// for exactly this reason. Custom properties still inherit from a class
+// selector down to every descendant, so nothing here changes visually —
+// scripts/enable-dark-mode.js's own var-resolution path (which reads the
+// var's literal value and derives a twin from it directly, unconcerned with
+// which selector defined it) then produces the correct light-dark() pair.
 const BASE_CSS = `
-  :root{
+  .vm-kontakt *{box-sizing:border-box;}
+  .vm-kontakt{
     --vm-red:#94152b; --vm-red-dark:#700f2b; --vm-blue:#66a3ce; --vm-blue-light:#a3cce9;
     --vm-gray-100:#f4f1f1; --vm-gray-200:#e7dfe0; --vm-gray-500:#6b5f60; --vm-gray-900:#241417;
+    max-width:900px;margin:0 auto;padding:48px 20px 96px;color:var(--vm-gray-900);line-height:1.65;font-size:16px;
   }
-  .vm-kontakt *{box-sizing:border-box;}
-  .vm-kontakt{max-width:900px;margin:0 auto;padding:48px 20px 96px;color:var(--vm-gray-900);line-height:1.65;font-size:16px;}
   .vm-kontakt h1{font-size:36px;line-height:1.15;margin:0 0 12px;letter-spacing:-.01em;}
   .vm-kontakt p{margin:0 0 14px;color:#4a4143;}
   .vm-kontakt a{color:var(--vm-red);}

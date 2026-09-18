@@ -1,20 +1,60 @@
 #!/usr/bin/env node
 
 /**
- * Branded Open Graph cards for the blog.
+ * Branded Open Graph cards — one system, every page type.
  *
- * Every blog post (DE and EN) shipped with the 128 px favicon-logo as its
- * og:image — and as a RELATIVE URL, which Open Graph consumers treat as no
- * image at all (the spec requires absolute). A shared link therefore
- * rendered as bare text in Slack/LinkedIn/WhatsApp/iMessage previews. The
- * feature pages are deliberately NOT touched: they already point at their
- * photoreal hero JPGs, which are better link previews than any text card.
+ * This started as a blog-only fix: every post shipped the 128px favicon as
+ * a RELATIVE og:image, which Open Graph consumers treat as no image at all
+ * (the spec requires absolute), so a shared blog link rendered as bare text
+ * in Slack/LinkedIn/WhatsApp/iMessage. That is still fixed here exactly as
+ * before.
  *
- * Each post gets a 1200×630 card rendered from an SVG template: white
- * ground, vm-red (#94152b) accent bar, soft vm-blue (#66a3ce) accents, the
- * post title set in the site's own Montserrat, and the logo + domain
- * footer. No new palette, no new typeface — the site's design language,
- * just at card size.
+ * The social-sharing sweep (2026-09) found the same problem, or a weaker
+ * one, on the other 88 non-blog pages: 16 with no og:image at all (404,
+ * contact, legal, the EN homepage, a straggler legacy blog post whose
+ * og:image tag never existed for this script to regex-replace into — see
+ * "INSERT, NOT JUST REPLACE" below), and 40 more falling back to the
+ * 128×128 favicon crop as their "card" — technically present, but a small
+ * square logo is a poor link preview next to a designed 1200×630 card.
+ *
+ * So the card renderer now runs over EVERY page, classified into a small
+ * set of types (home / blog post / blog archive / solutions overview /
+ * contact / legal / 404 / faq / about / custom-ai / demo / ai-services /
+ * login), each with its own kicker text (translated for /en/), all drawn
+ * from the exact same SVG template — same white ground, vm-red accent bar,
+ * vm-blue tints, Outfit type, logo + domain footer — so a LinkedIn feed
+ * full of Virtual Marketer links reads as one brand no matter which page
+ * they came from.
+ *
+ * ONE DELIBERATE EXCEPTION: the 32 individual feature/solution leaf pages
+ * (ki-loesungen/*, en/solutions/*) keep their existing photoreal hero JPGs
+ * untouched. Those are real product photography — a better link preview
+ * than any text card — and were correct before this sweep. The *listing*
+ * pages one level up (/ki-loesungen/, /en/solutions/) are a different
+ * story: they had no hero of their own and fell back to the 128px logo, so
+ * they get a generated "LÖSUNGEN"/"SOLUTIONS" archive card like any other
+ * overview page.
+ *
+ * The homepage is a card now too, DE and EN both — not because a photo
+ * hero is wrong in principle (see above), but because the DE homepage's
+ * existing og:image (home17-lllustration.png, 790×751) has always been
+ * declared as og:image:width/height 1200×630, which is simply false; and
+ * the EN homepage had no og:image of any kind (mirror-en-homepage.js runs
+ * before seo-optimize.js, so it copies the DE page before that page has
+ * any OG tags to inherit). A generated card is honestly 1200×630 in both
+ * languages, which the real photo never was.
+ *
+ * INSERT, NOT JUST REPLACE
+ *
+ * The original version only ever regex-*replaced* an existing og:image /
+ * twitter:image tag — fine when seo-optimize.js is guaranteed to have put
+ * one there first, but at least one legacy blog post never got one (its
+ * canonical+hreflang predate this pipeline, so seo-optimize.js's "already
+ * has canonical+hreflang, skip" fast path never gave it a fallback image
+ * either) and every non-blog page type this step now covers starts from
+ * zero. setImageMeta() below inserts the tag before </head> when it is
+ * missing, and replaces it in place when it already exists — the same
+ * insert-or-replace pattern og:image:width/height already used.
  *
  * FONTS — WHY A PYTHON SIDE-STEP
  *
@@ -28,12 +68,20 @@
  * sans-serif rather than failing the build — the cards render slightly
  * off-typeface but correct.
  *
+ * Outfit, not Montserrat: the Montserrat woff2 the export ships is the
+ * Vietnamese-diacritics unicode-range subset and contains no basic Latin
+ * glyphs at all. Outfit's latin subset is complete (incl. äöüß), and Outfit
+ * is the heading face on every page this project generated itself — it IS
+ * the site's current typography. Umlauts/ß are exercised directly by real
+ * page titles (e.g. "Datenschutzerklärung", "Erklärung zur Barrierefreiheit"),
+ * not a synthetic test string, so a subset regression would show up here.
+ *
  * Rendered PNGs are cached in .cache/og keyed on the SVG's content hash,
  * for the same reason generate-avif.js caches: dist/ is wiped every build
  * and only changed titles should pay for a re-render.
  *
  * Runs after enrich-structured-data.js (titles are final) and before
- * generate-sitemap.js.
+ * generate-feed.js / generate-sitemap.js.
  */
 
 const fs = require('fs');
@@ -52,11 +100,6 @@ const VM_BLUE = '#66a3ce';
 const VM_BLUE_LIGHT = '#a3cce9';
 const INK = '#23282d';
 
-// Outfit, not Montserrat: the Montserrat woff2 the export ships is the
-// Vietnamese-diacritics unicode-range subset and contains no basic Latin
-// glyphs at all. Outfit's latin subset is complete (incl. äöüß), and Outfit
-// is the heading face on every page this project generated itself — it IS
-// the site's current typography.
 const OUTFIT_VF = path.join(
   DIST,
   'wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin.woff2?ver=1667681412'
@@ -189,8 +232,118 @@ function findHtmlFiles(dir, results = []) {
   return results;
 }
 
+// ---- page classification --------------------------------------------------
+
+// Kicker text per card type, DE then EN — every EN page (rel starting
+// "en/", or the bare "en" homepage) gets the English column.
+const KICKERS = {
+  home: ['KI-MARKETING', 'AI MARKETING'],
+  'solutions-overview': ['LÖSUNGEN', 'SOLUTIONS'],
+  'blog-post': ['BLOG', 'BLOG'],
+  'blog-archive': ['BLOG', 'BLOG'],
+  contact: ['KONTAKT', 'CONTACT'],
+  legal: ['RECHTLICHES', 'LEGAL'],
+  '404': ['404', '404'],
+  faq: ['FAQ', 'FAQ'],
+  about: ['ÜBER UNS', 'ABOUT'],
+  'custom-ai': ['CUSTOM KI', 'CUSTOM AI'],
+  demo: ['DEMO', 'DEMO'],
+  'ai-services': ['AI SERVICES', 'AI SERVICES'],
+  login: ['LOGIN', 'LOGIN'],
+};
+
+const LEGAL_PATHS = new Set([
+  'datenschutzerklaerung',
+  'impressum',
+  'nutzungsbedingungen',
+  'barrierefreiheit',
+  'en/privacy-policy',
+  'en/legal-notice',
+  'en/terms-of-service',
+  'en/accessibility',
+]);
+
+/**
+ * Classify a page by its dist-relative directory (`rel`, '/'-joined, no
+ * leading/trailing slash — '' for the site root) and file basename.
+ * Returns { type, isEn } or null for pages that keep their existing image
+ * (the 32 feature/solution leaf pages — see header comment).
+ */
+function classify(rel, base) {
+  const isEn = rel === 'en' || rel.startsWith('en/');
+  if (base === '404.html') return { type: '404', isEn };
+  if (rel === '' || rel === 'en') return { type: 'home', isEn };
+  if (/^ki-loesungen\/[^/]+$/.test(rel) || /^en\/solutions\/[^/]+$/.test(rel)) return null;
+  if (rel === 'ki-loesungen' || rel === 'en/solutions') return { type: 'solutions-overview', isEn };
+  if (/^(en\/)?blog\/[^/]+$/.test(rel)) return { type: 'blog-post', isEn };
+  if (
+    rel === 'blog' ||
+    rel === 'en/blog' ||
+    /^blog\/kategorie(\/.*)?$/.test(rel) ||
+    /^en\/blog\/category(\/.*)?$/.test(rel) ||
+    /^(en\/)?blog\/page(\/.*)?$/.test(rel)
+  ) {
+    return { type: 'blog-archive', isEn };
+  }
+  if (rel === 'kontakt' || rel === 'en/contact') return { type: 'contact', isEn };
+  if (LEGAL_PATHS.has(rel)) return { type: 'legal', isEn };
+  if (rel === 'faqs' || rel === 'en/faqs') return { type: 'faq', isEn };
+  if (rel === 'management' || rel === 'en/about') return { type: 'about', isEn };
+  if (rel === 'modell-anfragen' || rel === 'en/request-custom-model') return { type: 'custom-ai', isEn };
+  if (rel === 'virtual-marketer-demo' || rel === 'en/demo') return { type: 'demo', isEn };
+  if (rel === 'virtual-marketer-ai-services') return { type: 'ai-services', isEn };
+  if (rel === 'login') return { type: 'login', isEn };
+  return null;
+}
+
+/**
+ * Prefer an already-curated og:title over the raw <title> — but strip the
+ * "| Virtual Marketer ..." brand suffix from EITHER source. Some pages
+ * only ever got seo-optimize.js's lightweight fallback og:title, which is
+ * the raw <title> verbatim (e.g. "AI-Trends | Virtual Marketer Blog"),
+ * so checking og:title first must not skip the same suffix-strip the raw
+ * <title> path already applies, or the card ends up with a redundant
+ * brand mention baked into its own headline.
+ */
+function pageTitle(html) {
+  const strip = (s) => s.replace(/\s*[|\-–—]\s*Virtual Marketer.*$/, '').trim() || s;
+  const og = html.match(/<meta property="og:title" content="([^"]*)">/);
+  if (og) return strip(decodeEntities(og[1]));
+  const t = html.match(/<title>([^<]*)<\/title>/);
+  if (!t) return null;
+  return strip(decodeEntities(t[1])) || null;
+}
+
+/** Insert-or-replace og:image / twitter:image + their width/height. */
+function setImageMeta(html, url) {
+  if (/<meta property="og:image" content="[^"]*">/.test(html)) {
+    html = html.replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${url}$2`);
+  } else {
+    html = html.replace('</head>', `  <meta property="og:image" content="${url}">\n</head>`);
+  }
+
+  if (/property="og:image:width"/.test(html)) {
+    html = html
+      .replace(/(<meta property="og:image:width" content=")[^"]*(")/, '$11200$2')
+      .replace(/(<meta property="og:image:height" content=")[^"]*(")/, '$1630$2');
+  } else {
+    html = html.replace(
+      /(<meta property="og:image" content="[^"]*">)/,
+      `$1\n  <meta property="og:image:width" content="1200">\n  <meta property="og:image:height" content="630">`
+    );
+  }
+
+  if (/<meta (?:name|property)="twitter:image" content="[^"]*">/.test(html)) {
+    html = html.replace(/(<meta (?:name|property)="twitter:image" content=")[^"]*(")/, `$1${url}$2`);
+  } else {
+    html = html.replace('</head>', `  <meta name="twitter:image" content="${url}">\n</head>`);
+  }
+
+  return html;
+}
+
 async function main() {
-  console.log('\n🪪 Generating branded OG cards for blog posts...\n');
+  console.log('\n🪪 Generating branded OG cards for every page type...\n');
 
   let sharp;
   try {
@@ -213,78 +366,61 @@ async function main() {
 
   let cards = 0;
   let fromCache = 0;
-  let absolutized = 0;
+  let skippedNoTitle = 0;
+  const byType = {};
 
   for (const file of findHtmlFiles(DIST)) {
+    const rel = path.relative(DIST, path.dirname(file)).split(path.sep).join('/');
+    const base = path.basename(file);
+    const cls = classify(rel === '.' ? '' : rel, base);
+    if (!cls) continue; // feature/solution leaf page — keep its hero photo
+
     let html = fs.readFileSync(file, 'utf-8');
     const before = html;
 
-    const rel = path.relative(DIST, path.dirname(file)).split(path.sep).join('/');
-    const isBlogPost = /^(en\/)?blog\/[^/]+$/.test(rel);
-
-    if (isBlogPost) {
-      const titleMatch = html.match(/<title>([^<]*)<\/title>/);
-      const title = titleMatch
-        ? decodeEntities(titleMatch[1]).replace(/\s*[|\-–—]\s*Virtual Marketer.*$/, '').trim()
-        : null;
-
-      if (title) {
-        const slugName = rel.replace(/\//g, '--');
-        const outFile = path.join(OG_DIR, `${slugName}.png`);
-        const ogUrl = `${BASE_URL}/assets/og/${slugName}.png`;
-
-        const svg = cardSvg(title, 'Blog', logoB64);
-        // fontsStamp in the key: a changed/instanced font must invalidate
-        // cached cards even though the SVG markup is byte-identical.
-        const hash = crypto.createHash('sha1').update(fontsStamp).update(svg).digest('hex');
-        const cached = path.join(CARD_CACHE, `${hash}.png`);
-
-        if (fs.existsSync(cached)) {
-          fs.copyFileSync(cached, outFile);
-          fromCache++;
-        } else {
-          const buf = await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toBuffer();
-          fs.writeFileSync(cached, buf);
-          fs.writeFileSync(outFile, buf);
-        }
-        cards++;
-
-        html = html.replace(
-          /(<meta property="og:image" content=")[^"]*(")/,
-          `$1${ogUrl}$2`
-        );
-        html = html.replace(
-          /(<meta name="twitter:image" content=")[^"]*(")/,
-          `$1${ogUrl}$2`
-        );
-        if (!html.includes('property="og:image:width"')) {
-          html = html.replace(
-            /(<meta property="og:image" content="[^"]*">)/,
-            `$1\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">`
-          );
-        } else {
-          html = html
-            .replace(/(<meta property="og:image:width" content=")[^"]*(")/, '$11200$2')
-            .replace(/(<meta property="og:image:height" content=")[^"]*(")/, '$1630$2');
-        }
-      }
+    const title = pageTitle(html);
+    if (!title) {
+      skippedNoTitle++;
+      continue;
     }
 
-    // Site-wide: og:image must be absolute or consumers ignore it.
-    const abs = html.replace(
-      /(<meta (?:property="og:image"|name="twitter:image") content=")\/(?!\/)/g,
-      `$1${BASE_URL}/`
-    );
-    if (abs !== html) {
-      absolutized++;
-      html = abs;
-    }
+    const kicker = KICKERS[cls.type][cls.isEn ? 1 : 0];
+    // rel is '' for BOTH index.html and 404.html at the dist root — cannot
+    // slug on rel alone there, or the homepage and the 404 page collide on
+    // the same cached file (they did, before this fix: base disambiguates).
+    const relKey = rel === '.' ? '' : rel;
+    const slugName =
+      base === '404.html' ? '404' : relKey === '' ? 'home' : relKey === 'en' ? 'en--home' : relKey.replace(/\//g, '--');
+    const outFile = path.join(OG_DIR, `${slugName}.png`);
+    const ogUrl = `${BASE_URL}/assets/og/${slugName}.png`;
 
+    const svg = cardSvg(title, kicker, logoB64);
+    // fontsStamp in the key: a changed/instanced font must invalidate
+    // cached cards even though the SVG markup is byte-identical.
+    const hash = crypto.createHash('sha1').update(fontsStamp).update(svg).digest('hex');
+    const cached = path.join(CARD_CACHE, `${hash}.png`);
+
+    if (fs.existsSync(cached)) {
+      fs.copyFileSync(cached, outFile);
+      fromCache++;
+    } else {
+      const buf = await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toBuffer();
+      fs.writeFileSync(cached, buf);
+      fs.writeFileSync(outFile, buf);
+    }
+    cards++;
+    byType[cls.type] = (byType[cls.type] || 0) + 1;
+
+    html = setImageMeta(html, ogUrl);
     if (html !== before) fs.writeFileSync(file, html);
   }
 
   console.log(`✅ ${cards} OG card(s) generated (${fromCache} from cache)`);
-  console.log(`   • ${absolutized} page(s) had relative og:/twitter:image URLs made absolute\n`);
+  Object.entries(byType)
+    .sort()
+    .forEach(([type, n]) => console.log(`   • ${type.padEnd(20)} ${n}`));
+  if (skippedNoTitle) console.log(`   ⚠ ${skippedNoTitle} classified page(s) had no extractable title — left untouched`);
+  console.log('');
 }
 
 main();

@@ -2,9 +2,47 @@
   max-width:640px;margin:28px 0;border:1px solid var(--vm-gray-200);border-radius:14px;padding:24px;background:#fff;font-family:inherit;color:var(--vm-gray-900);}
 .vm-cf *{box-sizing:border-box;}
 .vm-cf label{display:block;font-size:13px;font-weight:600;margin:0 0 4px;}
-.vm-cf input,.vm-cf textarea{width:100%;padding:10px 12px;border:1px solid var(--vm-gray-200);border-radius:8px;font:inherit;font-size:14px;margin-bottom:12px;}
+.vm-cf-field{margin-bottom:12px;}
+/* 16px minimum: below this, iOS Safari zooms the viewport on focus — a
+   genuine mobile conversion leak on the site's main conversion form, not a
+   cosmetic nit. font-size:14px used to sit under that line. */
+/* Explicit background+color, not just border/padding: the WordPress theme's
+   own global `input[type=text],...,textarea{color:#b5b5b5;background:#f6f6f6}`
+   rule (wp-content/themes/engitech/style.css) otherwise wins on these three
+   fields — the theme rule was never scoped away from a widget added on top
+   of it — and #b5b5b5-on-#f6f6f6 measures 1.89:1, nowhere near the 4.5:1
+   these fields need. Pinning both properties here, the same way this file
+   already pins font-size against a different global default two lines up,
+   keeps the fields readable regardless of what the theme does elsewhere. */
+.vm-cf input,.vm-cf textarea{width:100%;padding:10px 12px;border:1px solid var(--vm-gray-200);border-radius:8px;font:inherit;font-size:16px;background:#fff;color:var(--vm-gray-900);}
 .vm-cf textarea{resize:vertical;min-height:120px;}
 .vm-cf input:focus,.vm-cf textarea:focus{outline:none;border-color:var(--vm-blue);}
+/* Same halo technique as assets/enhance/enhance.css's global :focus-visible
+   rule, repeated here rather than relied upon from the far side of the
+   cascade: this stylesheet's own `input:focus{outline:none}` two lines up
+   already matches enhance.css's ring on specificity in the failure cases it
+   exists to cover, and this file is guaranteed to be present wherever this
+   widget is used, whereas relying on load order between two separate
+   stylesheets is not. */
+.vm-cf input:focus-visible,.vm-cf textarea:focus-visible,.vm-cf-consent input:focus-visible{
+  outline:3px solid light-dark(var(--vm-red),color-mix(in oklab,var(--vm-red),white 55%));
+  outline-offset:2px;
+  box-shadow:0 0 0 2px light-dark(#fff,var(--vm-gray-900));
+}
+.vm-cf-err{font-size:13px;color:var(--vm-red);margin:4px 0 0;min-height:0;}
+.vm-cf-err:empty{display:none;}
+.vm-cf-field-invalid input,.vm-cf-field-invalid textarea{border-color:var(--vm-red);}
+.vm-cf-consent{display:flex;align-items:flex-start;gap:10px;margin:16px 0;}
+.vm-cf-consent input[type="checkbox"]{width:auto;margin:3px 0 0;flex-shrink:0;accent-color:var(--vm-red);}
+.vm-cf-consent-label{font-size:13px;font-weight:400;color:var(--vm-gray-500);margin:0;}
+/* link-in-text-block (WCAG 1.4.1): same defect family as the newsletter/
+   whitepaper consent widgets (assets/lead-magnet/*.css) — the privacy-policy
+   link lives inside a <label>, not a <p>/<li>, so the sitewide
+   `:is(p,li,...) > a` underline rule in scripts/fix-a11y.js does not reach
+   it, and colour alone is not enough distinction against the surrounding
+   grey label text. */
+.vm-cf-consent-label a{color:var(--vm-red);text-decoration:underline;text-underline-offset:2px;}
+.vm-cf-consent .vm-cf-err{width:100%;flex-basis:100%;margin-left:0;}
 .vm-cf-btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;padding:12px 24px;border-radius:8px;border:none;background:var(--vm-red);color:#fff;cursor:pointer;font-size:15px;}
 .vm-cf-btn:hover{background:var(--vm-red-dark);}
 .vm-cf-btn:disabled{opacity:.6;cursor:not-allowed;}

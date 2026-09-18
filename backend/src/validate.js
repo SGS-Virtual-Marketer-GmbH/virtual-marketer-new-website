@@ -43,4 +43,18 @@ function cleanLocale(v) {
   return v === 'en' ? 'en' : 'de';
 }
 
-module.exports = { isValidEmail, normalizeEmail, cleanString, cleanOptionalString, cleanLocale };
+// Strict boolean check for consent checkboxes. Only the literal `true`
+// counts — a client sending the string "true", 1, or "on" does not silently
+// satisfy a check that exists to prove an unambiguous, deliberate tick.
+function isTrue(v) {
+  return v === true;
+}
+
+// Honeypot field: a form field real users never see (hidden via CSS) or
+// fill in, but a bot that fills every field on the page does. Any non-empty
+// value means the submission is spam.
+function honeypotTriggered(v) {
+  return typeof v === 'string' && v.trim() !== '';
+}
+
+module.exports = { isValidEmail, normalizeEmail, cleanString, cleanOptionalString, cleanLocale, isTrue, honeypotTriggered };

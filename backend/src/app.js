@@ -4,6 +4,8 @@ const express = require('express');
 const bookingsRouter = require('./routes/bookings');
 const contactRouter = require('./routes/contact');
 const modelRequestsRouter = require('./routes/model-requests');
+const newsletterRouter = require('./routes/newsletter');
+const whitepaperRouter = require('./routes/whitepaper');
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.set('trust proxy', 1);
 app.use('/bookings', bookingsRouter);
 app.use('/contact', contactRouter);
 app.use('/model-requests', modelRequestsRouter);
+app.use('/newsletter', newsletterRouter);
+app.use('/whitepaper', whitepaperRouter);
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 

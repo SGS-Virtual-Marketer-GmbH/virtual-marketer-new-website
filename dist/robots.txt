@@ -8,7 +8,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 # --- Search and answer engines (explicitly welcome) -----------------------
 User-agent: Googlebot
@@ -18,7 +18,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: Googlebot-Image
 Allow: /
@@ -27,7 +27,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: Google-Extended
 Allow: /
@@ -36,7 +36,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: Bingbot
 Allow: /
@@ -45,7 +45,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: DuckDuckBot
 Allow: /
@@ -54,7 +54,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: Applebot
 Allow: /
@@ -63,7 +63,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: Applebot-Extended
 Allow: /
@@ -72,7 +72,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: GPTBot
 Allow: /
@@ -81,7 +81,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: OAI-SearchBot
 Allow: /
@@ -90,7 +90,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: ChatGPT-User
 Allow: /
@@ -99,7 +99,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: ClaudeBot
 Allow: /
@@ -108,7 +108,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: Claude-User
 Allow: /
@@ -117,7 +117,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: PerplexityBot
 Allow: /
@@ -126,7 +126,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: Perplexity-User
 Allow: /
@@ -135,7 +135,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: cohere-ai
 Allow: /
@@ -144,7 +144,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 User-agent: meta-externalagent
 Allow: /
@@ -153,7 +153,7 @@ Disallow: /wp-login.php
 Disallow: /wp-includes/
 Disallow: /wp-content/plugins/
 Disallow: /wp-json/
-Disallow: /login/
+Disallow: /downloads/
 
 # --- SEO scrapers and harvesters (not welcome) ----------------------------
 User-agent: AhrefsBot

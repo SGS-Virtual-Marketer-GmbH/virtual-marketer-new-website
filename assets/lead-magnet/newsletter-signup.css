@@ -1,0 +1,119 @@
+/* Newsletter signup widget ("Der Agentic Brief" / "The Agent Report").
+ *
+ * Three placements share this one stylesheet and one JS mount function
+ * (newsletter-signup.js): --compact (footer, every page), --inline (end of
+ * every blog post — the highest-intent placement), --index (blog archive).
+ * They differ only in copy and a size/layout modifier class, not in
+ * component structure, so a fix here fixes all three at once.
+ *
+ * Dark mode: this project's automatic dark theme (scripts/enable-dark-mode.js)
+ * mechanically retrofits declarations already sitting in dist/ CSS files, but
+ * it runs earlier in the pipeline than this file is copied in
+ * (inject-newsletter-signup.js runs late, alongside inject-enhance.js) — so
+ * rather than depend on pipeline ordering, every color declaration below is
+ * hand-written in the same "light;light-dark(light,dark)" duplicate-declaration
+ * form enable-dark-mode.js itself produces, using the exact dark twins already
+ * shipped for the identical brand palette in dist/assets/contact-form/contact-form.css
+ * (same vm-red/vm-gray tokens, same component family) rather than re-deriving
+ * new ones that could drift from what the rest of the site already proved
+ * passes contrast in both themes.
+ */
+.vm-nl{
+  --vm-red:#94152b; --vm-red-dark:#700f2b; --vm-blue:#66a3ce; --vm-blue-light:#a3cce9;
+  --vm-gray-100:#f4f1f1; --vm-gray-100:light-dark(#f4f1f1,#1b1515);
+  --vm-gray-200:#e7dfe0; --vm-gray-200:light-dark(#e7dfe0,#1d1617);
+  --vm-gray-500:#6b5f60;
+  --vm-gray-900:#241417;
+  box-sizing:border-box;
+  font-family:inherit;
+  border:1px solid var(--vm-gray-200);
+  border-radius:14px;
+  color:var(--vm-gray-900); color:light-dark(var(--vm-gray-900),#ebdbde);
+  background:#fff; background:light-dark(#fff,#171717);
+}
+.vm-nl *{box-sizing:border-box;}
+.vm-nl a{color:var(--vm-red); color:light-dark(var(--vm-red),#ea6b81);}
+.vm-nl h3, .vm-nl .vm-nl-heading{margin:0 0 6px;line-height:1.25;}
+.vm-nl p.vm-nl-sub{margin:0 0 14px;color:var(--vm-gray-500); color:light-dark(var(--vm-gray-500),#cfc9ca);font-size:14px;}
+.vm-nl form{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:flex-start;}
+.vm-nl .vm-nl-field{flex:1 1 220px;min-width:0;}
+.vm-nl label.vm-nl-label{display:block;font-size:13px;font-weight:600;margin:0 0 4px;}
+.vm-nl input[type="email"]{
+  width:100%;padding:11px 12px;border:1px solid var(--vm-gray-200);border-radius:8px;
+  font:inherit;font-size:16px; /* >=16px: prevents iOS Safari zoom-on-focus */
+  background:#fff; background:light-dark(#fff,#1d1617);
+  color:var(--vm-gray-900); color:light-dark(var(--vm-gray-900),#ebdbde);
+}
+.vm-nl input[type="email"]:focus{outline:2px solid var(--vm-blue);outline-offset:1px;border-color:var(--vm-blue);}
+.vm-nl-consent{flex:1 1 100%;display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.5;color:var(--vm-gray-500); color:light-dark(var(--vm-gray-500),#cfc9ca);}
+/* link-in-text-block (WCAG 1.4.1): the privacy-policy link inside this
+   consent sentence sits on var(--vm-gray-500) body text at ~1.85:1 against
+   it, well under the 3:1 a same-colour-family link needs when distinguished
+   by contrast alone. It lives inside a <label>, not a <p>/<li>, so the
+   sitewide `:is(p,li,dd,blockquote,figcaption) > a` underline rule in
+   scripts/fix-a11y.js never reaches it. Underlining here is the direct,
+   scoped fix rather than broadening that shared selector to `label`, which
+   would also underline every other form's field label anchors site-wide. */
+.vm-nl-consent a{text-decoration:underline;text-underline-offset:2px;}
+.vm-nl-consent input[type="checkbox"]{
+  flex:0 0 auto;width:18px;height:18px;margin:1px 0 0;accent-color:var(--vm-red);
+}
+.vm-nl-consent label{cursor:pointer;}
+.vm-nl-btn{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;font-weight:700;
+  padding:12px 22px;border-radius:8px;border:none;background:var(--vm-red);color:#fff;
+  cursor:pointer;font-size:15px;white-space:nowrap;
+}
+.vm-nl-btn:hover{background:var(--vm-red-dark);}
+.vm-nl-btn:disabled{opacity:.6;cursor:not-allowed;}
+.vm-nl-msg{flex:1 1 100%;font-size:13px;}
+.vm-nl-msg.error{color:var(--vm-red); color:light-dark(var(--vm-red),#ea6b81);}
+.vm-nl-msg.ok{color:var(--vm-red); color:light-dark(var(--vm-red),#ea6b81);font-weight:600;}
+/* Honeypot: visually and functionally absent for a human, present for a bot
+   that fills every field in the DOM. NOT display:none — some bots skip
+   display:none / visibility:hidden fields on purpose, so this is off-screen
+   instead, and also removed from tab order and from the accessibility tree. */
+.vm-nl-hp{position:absolute !important;left:-5000px !important;width:1px;height:1px;overflow:hidden;}
+
+/* ---- compact (footer, every page) -------------------------------------- */
+.vm-nl--compact{max-width:560px;padding:18px 20px;margin:20px 0 0;}
+.vm-nl--compact .vm-nl-heading{font-size:15px;}
+.vm-nl--compact p.vm-nl-sub{font-size:13px;margin-bottom:10px;}
+.vm-nl--compact .vm-nl-btn{padding:10px 18px;font-size:14px;}
+
+/* ---- inline (end of every blog post) ------------------------------------ */
+.vm-nl--inline{max-width:640px;padding:26px 26px 24px;margin:40px 0;}
+.vm-nl--inline h3{font-size:20px;}
+
+/* ---- index (blog archive) ------------------------------------------------ */
+.vm-nl--index{max-width:720px;padding:28px 28px 26px;margin:32px auto 0;}
+.vm-nl--index h3{font-size:21px;}
+
+@media (max-width:520px){
+  .vm-nl form{flex-direction:column;align-items:stretch;}
+  .vm-nl-btn{width:100%;justify-content:center;}
+}
+
+/* ---- contextual whitepaper CTA, injected only into legacy blog posts that
+   otherwise carry zero conversion path (see scripts/inject-newsletter-signup.js's
+   detection via the absence of the current template's own .vm-cta marker).
+   Self-contained on purpose: these posts use the old WP theme's markup, not
+   the current template's `.vm-post` wrapper that `.vm-cta` in
+   scripts/lib/article-css.js is scoped to, so it cannot reuse that rule. */
+.vm-lm-cta{
+  --vm-red:#94152b; --vm-red-dark:#700f2b;
+  --vm-gray-200:#e7dfe0; --vm-gray-200:light-dark(#e7dfe0,#1d1617);
+  --vm-gray-900:#241417;
+  box-sizing:border-box;
+  margin:32px 0 28px;padding:22px 24px;border:1px solid var(--vm-gray-200);border-radius:14px;
+  background:#fbecee; background:light-dark(#fbecee,#241417);
+  color:var(--vm-gray-900); color:light-dark(var(--vm-gray-900),#ebdbde);
+  font-family:inherit;
+}
+.vm-lm-cta strong{display:block;font-size:17px;margin-bottom:6px;}
+.vm-lm-cta p{margin:0 0 14px;font-size:14px;line-height:1.55;}
+.vm-lm-cta a.vm-lm-cta-btn{
+  display:inline-block;font-weight:700;padding:11px 22px;border-radius:8px;
+  background:var(--vm-red);color:#fff;text-decoration:none;font-size:14px;
+}
+.vm-lm-cta a.vm-lm-cta-btn:hover{background:var(--vm-red-dark);}
