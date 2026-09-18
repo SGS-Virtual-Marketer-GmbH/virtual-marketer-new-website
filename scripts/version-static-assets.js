@@ -56,10 +56,28 @@ const crypto = require('crypto');
 const DIST = path.join(__dirname, '..', 'dist');
 
 /**
- * Already content-addressed by filename — versioning these would be
- * redundant and would churn the URL on every build for no reason.
+ * NOTHING IS EXCLUDED — INCLUDING THE vm-<hash>.css BUNDLES.
+ *
+ * They look like they need no help: bundle-css.js names each one after a
+ * hash of its contents, so new content means a new URL. That reasoning
+ * only holds if nothing touches the file afterwards, and two steps do.
+ * bundle-css.js runs at step 46, but normalize-brand-palette.js (72) and
+ * force-light-mode.js (77) both rewrite `dist/assets/css/vm-*.css` IN
+ * PLACE, long after the name was chosen — the bundles on disk right now
+ * contain zero `light-dark()` calls precisely because step 77 stripped
+ * them out of files already named.
+ *
+ * So the filename describes the bytes as they were at step 46, not the
+ * bytes we ship. A change that lands only in one of those later steps — a
+ * brand-palette tweak is the obvious one — leaves the pre-step-72 content
+ * identical, keeps the old filename, and publishes different bytes at a
+ * URL still promising `immutable, max-age=31536000`. Returning visitors
+ * would hold the stale stylesheet for a year: exactly the failure this
+ * script exists to prevent, which the exclusion had carved back out of it.
+ *
+ * Hashing them here costs one extra digest per bundle and makes the URL
+ * describe what actually ships.
  */
-const ALREADY_HASHED = /^\/assets\/css\/vm-[0-9a-f]+\.css$/;
 
 /**
  * Matches a root-relative reference and any version query we previously
@@ -121,7 +139,6 @@ function main() {
   for (const file of findHtmlFiles(DIST)) {
     const before = fs.readFileSync(file, 'utf-8');
     const after = before.replace(REF, (whole, delim, assetPath) => {
-      if (ALREADY_HASHED.test(assetPath)) return delim + assetPath;
       const v = versionFor(assetPath);
       if (!v) return whole; // unknown file: leave it exactly as it was
       rewrites++;

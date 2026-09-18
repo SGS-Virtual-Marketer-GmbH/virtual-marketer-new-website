@@ -96,7 +96,19 @@ html{line-height:1.15;-webkit-text-size-adjust:100%;overflow-x:hidden}body{margi
   color: #fff;
   cursor: pointer;
   margin-left: auto;
-}.vm-mr-btn:hover{ background: linear-gradient(90deg, var(--vm-red), var(--vm-red-dark)); }.vm-mr-btn[disabled]{ opacity: .6; cursor: default; }.vm-mr-btn-ghost:hover{ background: #f4f1f1; color: var(--vm-ink); }.vm-mr-msg{ min-height: 0; font-size: 14.5px; margin: 4px 0 14px; }.vm-mr-done{
+}.vm-mr-btn:hover{ background: linear-gradient(90deg, var(--vm-red), var(--vm-red-dark)); }.vm-mr-btn[disabled]{ opacity: .6; cursor: default; }.vm-mr-btn-ghost{
+  background: #fff;
+  color: #6b5f60;
+  border: 1px solid var(--vm-line);
+  margin-left: 0;
+  padding: 12px 20px;
+}.vm-mr-btn-ghost:hover{ background: #f4f1f1; color: var(--vm-ink); }.vm-mr-msg{ min-height: 0; font-size: 14.5px; margin: 4px 0 14px; }.vm-mr-msg.is-error{
+  color: var(--vm-red);
+  background: #fdf0f2;
+  border: 1px solid #f4d4da;
+  border-radius: 9px;
+  padding: 11px 14px;
+}.vm-mr-done{
   background: #f8f9fc;
   border: 1px solid var(--vm-line);
   border-radius: 14px;

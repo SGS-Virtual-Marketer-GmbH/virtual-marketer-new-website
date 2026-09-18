@@ -378,10 +378,75 @@ const newsletter = {
       const confirmed = snap.docs.find((d) => d.data().status === 'confirmed');
       if (confirmed) return confirmed.id; // already an active subscriber — no duplicate
 
+      // Adopt a pending record rather than creating a second one — but
+      // REWRITE ITS CONSENT FIELDS, do not inherit them.
+      //
+      // A pending record proves nothing about who created it: anyone can
+      // type any address into the newsletter form, and the record that
+      // leaves behind carries THEIR ip, user agent, consent version and
+      // timestamp. Flipping it to confirmed while keeping those fields
+      // (which is what this did) stored a stranger's drive-by submission
+      // as the GDPR proof of consent for a subscription the mailbox owner
+      // actually granted here, seconds ago, by ticking the whitepaper's
+      // newsletter box and clicking a link only they could receive.
+      //
+      // The consent that counts is the one this caller just witnessed, so
+      // that is what gets written. The doc comment above always claimed
+      // this; now the code does it.
       const pending = snap.docs.find((d) => d.data().status === 'pending');
       if (pending) {
-        tx.update(pending.ref, { status: 'confirmed', confirmed_at: nowIso });
+        tx.update(pending.ref, {
+          status: 'confirmed',
+          confirmed_at: nowIso,
+          locale,
+          ip,
+          user_agent: userAgent,
+          consent_version: consentVersion,
+          consent_timestamp: consentTimestamp,
+          source: source || 'newsletter',
+          // The pending token is spent by this adoption; leaving it live
+          // would let the original confirmation mail still "confirm" a
+          // subscription that is already active.
+          confirm_token_hash: null,
+          confirm_token_expires_at: null,
+        });
         return pending.id;
+      }
+
+      // Re-subscribing after an unsubscribe reuses the same record too.
+      //
+      // Creating a fresh document instead (the previous behaviour) left
+      // two rows for one address, one 'unsubscribed' and one 'confirmed'.
+      // Every unsubscribe link ever mailed addresses a document id, so an
+      // old link would mark the stale row unsubscribed — again — while the
+      // new row kept the subscription live. The subscriber clicks
+      // unsubscribe, sees a success page, and keeps receiving mail, which
+      // is precisely the failure §7 UWG is about.
+      //
+      // The prior unsubscribe is not erased by the reuse: it is recorded
+      // in `lifecycle` so the opt-out remains provable after the opt-in.
+      const unsubscribed = snap.docs.find((d) => d.data().status === 'unsubscribed');
+      if (unsubscribed) {
+        const prior = Array.isArray(unsubscribed.data().lifecycle) ? unsubscribed.data().lifecycle : [];
+        tx.update(unsubscribed.ref, {
+          status: 'confirmed',
+          confirmed_at: nowIso,
+          unsubscribed_at: null,
+          locale,
+          ip,
+          user_agent: userAgent,
+          consent_version: consentVersion,
+          consent_timestamp: consentTimestamp,
+          source: source || 'newsletter',
+          confirm_token_hash: null,
+          confirm_token_expires_at: null,
+          lifecycle: prior.concat({
+            event: 'unsubscribed',
+            at: unsubscribed.data().unsubscribed_at || null,
+            superseded_at: nowIso,
+          }),
+        });
+        return unsubscribed.id;
       }
 
       const ref = newsletterCol.doc();

@@ -87,9 +87,20 @@
     // native constraint validation (required / type="email") already
     // covers format, this just surfaces it inline instead of only in the
     // browser's own (inconsistently accessible) bubble.
-    input.addEventListener('blur', function () { setInvalid(!input.checkValidity()); });
+    // Only after the visitor has actually engaged with the field. Blurring
+    // alone is not a mistake: tabbing from Name to Message, or clicking
+    // into a field and back out to read something, used to light up every
+    // required field they passed through and announce an error for each —
+    // scolding someone for not yet having filled in a form they are still
+    // filling in. A field counts as touched once it has received input;
+    // submitting validates everything regardless (see the submit handler).
+    var touched = false;
     input.addEventListener('input', function () {
+      touched = true;
       if (input.getAttribute('aria-invalid') === 'true') setInvalid(!input.checkValidity());
+    });
+    input.addEventListener('blur', function () {
+      if (touched || input.value !== '') setInvalid(!input.checkValidity());
     });
     return { wrap: wrap, setInvalid: setInvalid };
   }
