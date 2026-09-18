@@ -27,7 +27,7 @@ spec:
       - env:
         - name: API_UPSTREAM
           value: 127.0.0.1:4000
-        image: europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:v41
+        image: europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:v42
         name: web
         ports:
         - containerPort: 8080
@@ -66,7 +66,12 @@ spec:
             secretKeyRef:
               key: latest
               name: vm-website-smtp-pass
-        image: europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-api:v2
+        - name: UNSUBSCRIBE_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: vm-unsubscribe-token-secret
+        image: europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-api:v3
         name: api
         resources:
           limits:

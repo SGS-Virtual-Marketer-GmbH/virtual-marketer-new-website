@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  /* Rendered by scripts/generate-lead-magnet-pages.js via puppeteer-core at a
+   * fixed 1200x1600 viewport (portrait hero/cover image for the whitepaper
+   * landing page — NOT the OG card: the site-wide generate-og-images.js step
+   * already produces a consistent 1200x630 OG card for every page, including
+   * this one, from its own <title>/branding, so this template only needs to
+   * cover the one thing that pipeline step doesn't: the on-page hero art.
+   *
+   * Locale is passed as ?locale=de|en in the file:// URL and read via
+   * URLSearchParams below — same content, same layout, only the two text
+   * strings differ.
+   */
+  @font-face{
+    font-family:'Outfit';
+    font-style:normal;
+    font-weight:100 900;
+    src:url('fonts/outfit-normal-latin.woff2') format('woff2');
+    unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+  }
+  @font-face{
+    font-family:'Outfit';
+    font-style:normal;
+    font-weight:100 900;
+    src:url('fonts/outfit-normal-latin-ext.woff2') format('woff2');
+    unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;width:1200px;height:1600px;overflow:hidden;}
+  body{
+    font-family:'Outfit','Segoe UI',Arial,sans-serif;
+    background:
+      radial-gradient(1100px 700px at 85% -10%, #b23653 0%, transparent 60%),
+      linear-gradient(160deg,#94152b 0%,#700f2b 100%);
+    color:#fff;
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:88px 84px;
+  }
+  .wordmark{font-size:30px;font-weight:800;letter-spacing:-.01em;}
+  .wordmark .dot{color:#a3cce9;}
+  .badge{
+    display:inline-block;align-self:flex-start;font-size:17px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;color:#fff;
+    background:rgba(255,255,255,.16);padding:9px 22px;border-radius:999px;
+    margin-bottom:34px;
+  }
+  h1{font-size:76px;line-height:1.08;font-weight:800;margin:0 0 28px;letter-spacing:-.02em;max-width:11.5em;}
+  .sub{font-size:30px;line-height:1.4;color:#f6dde2;max-width:15.5em;margin:0;}
+  .meta{font-size:20px;color:#f0c4cd;border-top:1px solid rgba(255,255,255,.3);padding-top:22px;}
+</style>
+</head>
+<body>
+  <div>
+    <div class="wordmark">Virtual Marketer<span class="dot">.</span></div>
+  </div>
+  <div>
+    <span class="badge" data-de="Kostenloses Whitepaper" data-en="Free whitepaper"></span>
+    <h1 data-de="Agentic Marketing 2026" data-en="Agentic Marketing 2026">Agentic Marketing 2026</h1>
+    <p class="sub"
+       data-de="Ein praktischer Leitfaden zu KI-Agenten im Marketing-Alltag."
+       data-en="A practical guide to AI agents in everyday marketing work."></p>
+  </div>
+  <div class="meta">SGS Virtual Marketer GmbH</div>
+  <script>
+    (function () {
+      var locale = new URLSearchParams(location.search).get('locale') === 'en' ? 'en' : 'de';
+      document.querySelectorAll('[data-' + locale + ']').forEach(function (el) {
+        el.textContent = el.getAttribute('data-' + locale);
+      });
+    })();
+  </script>
+</body>
+</html>

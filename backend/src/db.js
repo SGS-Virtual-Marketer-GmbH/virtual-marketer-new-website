@@ -49,6 +49,8 @@ const prefix = config.firestore.collectionPrefix;
 const bookingsCol = firestore.collection(`${prefix}bookings`);
 const contactsCol = firestore.collection(`${prefix}contact_submissions`);
 const modelRequestsCol = firestore.collection(`${prefix}model_requests`);
+const newsletterCol = firestore.collection(`${prefix}newsletter_subscriptions`);
+const whitepaperCol = firestore.collection(`${prefix}whitepaper_downloads`);
 
 function withId(doc) {
   return doc.exists ? { id: doc.id, ...doc.data() } : null;
@@ -222,4 +224,230 @@ const modelRequests = {
   },
 };
 
-module.exports = { firestore, bookings, contacts, modelRequests };
+/**
+ * Newsletter double opt-in with one-click unsubscribe.
+ *
+ * Same create/countRecentByEmail/getById/confirm/sweep shape as `contacts`,
+ * plus a third terminal status, 'unsubscribed', reachable from either
+ * 'pending' or 'confirmed'. Unsubscribing never deletes the document —
+ * German law requires the operator to be able to prove consent existed
+ * later, and deleting the record on unsubscribe would destroy exactly that
+ * proof. The unsubscribe token itself is never stored (see
+ * src/tokens.js's unsubscribeToken/verifyUnsubscribeToken — it's an HMAC of
+ * the document id, verified without a stored secret-per-row), so there is
+ * no `unsubscribe_token_hash` field here to manage or rotate.
+ */
+/**
+ * How many confirmation mails a single address may be sent in 24 hours.
+ *
+ * The guard this feeds used to count DOCUMENTS created per address, which
+ * never fired: a repeat signup for an address that is already pending goes
+ * through `reissueToken`, which updates the existing document instead of
+ * creating a second one, so the count sat at 1 no matter how many mails
+ * went out. That made the per-address cap dead code and left a stranger's
+ * inbox floodable with confirmation mail (the per-IP limiter is the only
+ * other brake, and an attacker picks their own IPs).
+ *
+ * So the record now carries the timestamp of every confirmation mail it
+ * caused, and the cap counts those. `create` seeds the list, `reissueToken`
+ * appends to it.
+ */
+const MAX_CONFIRM_SENDS_PER_DAY = 5;
+/** Kept per record so an attacked address cannot grow the document without bound. */
+const CONFIRM_SENDS_KEPT = 20;
+
+const newsletter = {
+  async create(row) {
+    const nowIso = new Date().toISOString();
+    const ref = newsletterCol.doc();
+    await ref.create({
+      ...row,
+      status: 'pending',
+      created_at: nowIso,
+      confirmed_at: null,
+      unsubscribed_at: null,
+      confirm_sends: [nowIso],
+    });
+    return ref.id;
+  },
+
+  /**
+   * Confirmation mails sent to this address since `sinceIso`, across all of
+   * its records.
+   *
+   * `confirm_sends` is read from the records the caller already fetched via
+   * findByEmail rather than re-queried, so this costs nothing extra. Records
+   * written before that field existed fall back to their creation time, so
+   * one legacy document still counts as the one mail it did cause.
+   */
+  countRecentConfirmSends(records, sinceIso) {
+    return records.reduce((total, r) => {
+      if (Array.isArray(r.confirm_sends)) {
+        return total + r.confirm_sends.filter((t) => t > sinceIso).length;
+      }
+      return total + (r.created_at > sinceIso ? 1 : 0);
+    }, 0);
+  },
+
+  /**
+   * Every record for an address, newest first. Lets a repeat POST be
+   * idempotent (never creates a second pending/confirmed document for the
+   * same address) without the caller ever learning which case applied —
+   * see routes/newsletter.js, which returns the identical response for all
+   * of them.
+   */
+  async findByEmail(email) {
+    const snap = await newsletterCol.where('email', '==', email).limit(50).get();
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+  },
+
+  async getById(id) {
+    if (!id) return null;
+    return withId(await newsletterCol.doc(id).get());
+  },
+
+  async confirm(id, nowIso) {
+    return firestore.runTransaction(async (tx) => {
+      const ref = newsletterCol.doc(id);
+      const doc = await tx.get(ref);
+      if (!doc.exists || doc.data().status !== 'pending') return false;
+      tx.update(ref, { status: 'confirmed', confirmed_at: nowIso });
+      return true;
+    });
+  },
+
+  /**
+   * Rotates the confirm token on an existing pending record instead of
+   * creating a second document — a re-submitted signup form ("I didn't get
+   * the email") is the common case this avoids piling up duplicates for.
+   *
+   * Transactional, and it appends to `confirm_sends`, because that list is
+   * what the per-address flood cap counts (see countRecentConfirmSends). A
+   * plain update with arrayUnion would work for the append but could not
+   * trim the list, so a hammered address would grow its document forever;
+   * reading and rewriting the trimmed tail inside the transaction keeps it
+   * bounded and keeps two concurrent signups from losing one another's
+   * entry.
+   */
+  async reissueToken(id, { confirm_token_hash, confirm_token_expires_at }, nowIso = new Date().toISOString()) {
+    await firestore.runTransaction(async (tx) => {
+      const ref = newsletterCol.doc(id);
+      const doc = await tx.get(ref);
+      if (!doc.exists) return;
+      const prior = Array.isArray(doc.data().confirm_sends) ? doc.data().confirm_sends : [];
+      tx.update(ref, {
+        confirm_token_hash,
+        confirm_token_expires_at,
+        confirm_sends: prior.concat(nowIso).slice(-CONFIRM_SENDS_KEPT),
+      });
+    });
+  },
+
+  /**
+   * One-click unsubscribe. Idempotent by construction: a second click on an
+   * already-processed link, or an old link from a much earlier mail, must
+   * still land on a success page rather than an error, and a document once
+   * 'unsubscribed' is never touched again (no revert, no delete).
+   */
+  async unsubscribe(id, nowIso) {
+    return firestore.runTransaction(async (tx) => {
+      const ref = newsletterCol.doc(id);
+      const doc = await tx.get(ref);
+      if (!doc.exists) return false;
+      if (doc.data().status === 'unsubscribed') return true;
+      tx.update(ref, { status: 'unsubscribed', unsubscribed_at: nowIso });
+      return true;
+    });
+  },
+
+  /**
+   * Used when the whitepaper route's separate newsletter checkbox was
+   * ticked: the whitepaper confirmation click already proved the address,
+   * so this activates the subscription immediately instead of emailing a
+   * second confirmation link to the same mailbox for the same purpose.
+   * Still idempotent (never creates a duplicate active subscription) and
+   * still records its own consent fields, passed in by the caller exactly
+   * as captured at the moment the checkbox was ticked — not backfilled
+   * with the confirmation-time timestamp, which would misstate when
+   * consent was actually given. See routes/whitepaper.js.
+   */
+  async upsertConfirmed({ email, locale, ip, userAgent, consentVersion, consentTimestamp, source }) {
+    const nowIso = new Date().toISOString();
+    return firestore.runTransaction(async (tx) => {
+      const snap = await tx.get(newsletterCol.where('email', '==', email).limit(50));
+      const confirmed = snap.docs.find((d) => d.data().status === 'confirmed');
+      if (confirmed) return confirmed.id; // already an active subscriber — no duplicate
+
+      const pending = snap.docs.find((d) => d.data().status === 'pending');
+      if (pending) {
+        tx.update(pending.ref, { status: 'confirmed', confirmed_at: nowIso });
+        return pending.id;
+      }
+
+      const ref = newsletterCol.doc();
+      tx.create(ref, {
+        email,
+        locale,
+        status: 'confirmed',
+        created_at: nowIso,
+        confirmed_at: nowIso,
+        unsubscribed_at: null,
+        confirm_token_hash: null,
+        confirm_token_expires_at: null,
+        ip,
+        user_agent: userAgent,
+        consent_version: consentVersion,
+        consent_timestamp: consentTimestamp,
+        source: source || 'newsletter',
+      });
+      return ref.id;
+    });
+  },
+
+  sweepExpired(nowIso) {
+    return sweep(newsletterCol, nowIso);
+  },
+};
+
+/**
+ * Whitepaper gated downloads. Same shape as `contacts` again — the only
+ * addition is the `slug` field (validated against a closed allowlist in
+ * routes/whitepaper.js, never a caller-supplied URL) and, when the
+ * requester also ticked the separate newsletter checkbox, the
+ * newsletter_opt_in fields the confirm handler reads to (idempotently)
+ * activate a real newsletter subscription via `newsletter.upsertConfirmed`.
+ */
+const whitepaper = {
+  async create(row) {
+    const nowIso = new Date().toISOString();
+    const ref = whitepaperCol.doc();
+    await ref.create({ ...row, status: 'pending', created_at: nowIso, confirmed_at: null });
+    return ref.id;
+  },
+
+  async countRecentByEmail(email, sinceIso) {
+    const snap = await whitepaperCol.where('email', '==', email).limit(200).get();
+    return snap.docs.filter((d) => d.data().created_at > sinceIso).length;
+  },
+
+  async getById(id) {
+    if (!id) return null;
+    return withId(await whitepaperCol.doc(id).get());
+  },
+
+  async confirm(id, nowIso) {
+    return firestore.runTransaction(async (tx) => {
+      const ref = whitepaperCol.doc(id);
+      const doc = await tx.get(ref);
+      if (!doc.exists || doc.data().status !== 'pending') return false;
+      tx.update(ref, { status: 'confirmed', confirmed_at: nowIso });
+      return true;
+    });
+  },
+
+  sweepExpired(nowIso) {
+    return sweep(whitepaperCol, nowIso);
+  },
+};
+
+module.exports = { firestore, bookings, contacts, modelRequests, newsletter, whitepaper, MAX_CONFIRM_SENDS_PER_DAY };

@@ -6,8 +6,9 @@ const config = require('../config');
 const tokens = require('../tokens');
 const mailer = require('../mailer');
 const { copy, confirmPageHtml } = require('../emails');
-const { isValidEmail, normalizeEmail, cleanString, cleanLocale } = require('../validate');
+const { isValidEmail, normalizeEmail, cleanString, cleanLocale, isTrue } = require('../validate');
 const { submitLimiter, confirmLimiter } = require('../rateLimit');
+const { CONTACT_CONSENT_VERSION } = require('../consent');
 
 const router = express.Router();
 
@@ -18,9 +19,18 @@ router.post('/', submitLimiter, express.json({ limit: '10kb' }), async (req, res
     const email = isValidEmail(body.email) ? normalizeEmail(body.email) : null;
     const message = cleanString(body.message, { max: 4000 });
     const locale = cleanLocale(body.locale);
+    const consentGiven = isTrue(body.consent);
 
     if (!name || !email || !message) {
       return res.status(400).json({ error: 'invalid_input', message: 'name, email and message are required.' });
+    }
+    // The form has had a required consent checkbox since the 2026 sweep,
+    // but it was enforced in the browser only and never sent — so nothing
+    // was recorded, and the GDPR record the checkbox exists to create did
+    // not exist. Enforced here so the stored consent is the server's own
+    // observation rather than a promise the client made about itself.
+    if (!consentGiven) {
+      return res.status(400).json({ error: 'consent_required', message: 'Consent to the privacy policy is required to send a message.' });
     }
 
     const dayAgo = new Date(Date.now() - 24 * 3600000).toISOString();
@@ -37,6 +47,9 @@ router.post('/', submitLimiter, express.json({ limit: '10kb' }), async (req, res
       confirm_token_hash: hash,
       confirm_token_expires_at: expiresAt,
       ip: req.ip,
+      user_agent: String(req.headers['user-agent'] || '').slice(0, 500),
+      consent_version: CONTACT_CONSENT_VERSION,
+      consent_timestamp: new Date().toISOString(),
     });
 
     const confirmUrl = `${config.publicBaseUrl}/api/contact/confirm?id=${id}&token=${raw}`;

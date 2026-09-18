@@ -239,13 +239,60 @@ http {
       proxy_connect_timeout 5s;
     }
 
+    # ---- Whitepaper lead-magnet gate (defect 1) ----
+    # The gate itself is a content-hashed, unguessable filename (see
+    # scripts/generate-lead-magnet-pages.js) plus robots.txt's parallel
+    # `Disallow: /downloads/` (scripts/generate-sitemap.js, applied to
+    # every allowed bot, not just the default policy). robots.txt is only
+    # ever a request a well-behaved crawler chooses to honour; this header
+    # is the enforced half for anything that fetches the file anyway (a
+    # search engine that already learned the URL from an emailed link
+    # shared elsewhere, say) — X-Robots-Tag tells it not to index what it
+    # just fetched, same signal as a per-page <meta name="robots"> but
+    # usable on a binary that can't carry a <meta> tag at all. `^~` so this
+    # always wins over the extension-based caching locations below for
+    # anything under this one prefix — the PDFs still get real long-lived
+    # caching (their filename is itself content-addressed, so "immutable"
+    # is correct: a content change always produces a new filename, never a
+    # new build overwriting an old one at the same URL).
+    location ^~ /downloads/ {
+      # Throttled like `location /`, unlike the other static locations. Those
+      # serve the many small files one page load legitimately pulls at once,
+      # so a rate limit there would break ordinary browsing. This prefix
+      # serves single 350-385 KB PDFs, one deliberate click at a time, which
+      # makes it both safe to throttle and the most attractive thing here to
+      # pull in a loop.
+      limit_req zone=site_zone burst=10 nodelay;
+      include /etc/nginx/security-headers.conf;
+      add_header X-Robots-Tag "noindex, nofollow" always;
+      add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
     # ---- Caching ----
+    #
+    # NO `expires` DIRECTIVE ANYWHERE IN HERE — ON PURPOSE.
+    #
+    # `expires 1y` does not only set the legacy `Expires:` header; it also
+    # emits its own `Cache-Control: max-age=...`. Paired with an explicit
+    # `add_header Cache-Control`, every response went out with the header
+    # twice:
+    #
+    #   cache-control: max-age=31536000
+    #   cache-control: public, max-age=31536000, immutable
+    #
+    # RFC 9111 §5.2 lets a recipient combine repeated Cache-Control fields
+    # into one comma-separated list, so in practice this parsed fine and
+    # nothing broke — but it is ambiguous, a strict cache is entitled to
+    # treat the field as invalid, and `expires` cannot express `immutable`
+    # or `must-revalidate` in the first place. So the explicit add_header is
+    # the single source of truth and `expires` is gone. Dropping `Expires:`
+    # costs nothing: any HTTP/1.1 cache prefers Cache-Control over it.
+    #
     # Images get their own location so they can content-negotiate AVIF (see
     # the $vm_avif map above). Vary: Accept keeps any cache in front from
     # serving an AVIF body to a browser that never asked for one.
     location ~* \.(?:png|jpe?g|gif|webp)$ {
       include /etc/nginx/security-headers.conf;
-      expires 1y;
       add_header Cache-Control "public, max-age=31536000, immutable";
       add_header Vary "Accept";
       try_files $uri$vm_avif $uri =404;
@@ -254,7 +301,6 @@ http {
 
     location ~* \.(?:css|js|woff2?|ttf|eot|svg|avif|ico)$ {
       include /etc/nginx/security-headers.conf;
-      expires 1y;
       add_header Cache-Control "public, max-age=31536000, immutable";
       access_log off;
     }
@@ -263,23 +309,19 @@ http {
     # picked up quickly rather than sitting in a CDN for a day.
     location = /sitemap.xml {
       include /etc/nginx/security-headers.conf;
-      expires 1h;
       add_header Cache-Control "public, max-age=3600";
     }
     location = /sitemap_index.xml {
       include /etc/nginx/security-headers.conf;
-      expires 1h;
       add_header Cache-Control "public, max-age=3600";
     }
     location = /robots.txt {
       include /etc/nginx/security-headers.conf;
-      expires 1h;
       add_header Cache-Control "public, max-age=3600";
     }
     location = /llms.txt {
       include /etc/nginx/security-headers.conf;
       default_type text/plain;
-      expires 1h;
       add_header Cache-Control "public, max-age=3600";
     }
 

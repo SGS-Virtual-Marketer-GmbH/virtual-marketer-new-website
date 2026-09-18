@@ -706,6 +706,55 @@ gcloud run services replace deploy-service.yaml --region=europe-west1 --project=
 The v39 image stays in Artifact Registry, so the production rollback is one
 `services replace` away and independent of the git state.
 
+## Rolling back the 2026 sweep (SEO / social / lead magnets / newsletter)
+
+The full SEO + social + UI/UX sweep shipped as website **v42** and api **v3**
+off branch `sweep/full-2026`. It is the first deploy that moves **both**
+containers, so a rollback has to move both or the site and the API disagree
+about which endpoints exist.
+
+```bash
+# Code: main immediately before the sweep is tagged
+git checkout pre-sweep          # inspect, or: git revert -m 1 <merge-commit>
+
+# Production: both images back together (no rebuild needed)
+sed -i 's/virtual-marketer-website:v42/virtual-marketer-website:v41/' deploy-service.yaml
+sed -i 's/virtual-marketer-api:v3/virtual-marketer-api:v2/' deploy-service.yaml
+gcloud run services replace deploy-service.yaml --region=europe-west1 --project=virtual-marketer-chat-bot
+```
+
+v41 and v2 both stay in Artifact Registry. Roll back **api v3 → v2 only
+together with website v42 → v41**: v42's pages post to `/api/newsletter` and
+`/api/whitepaper`, which exist only in v3. Reverting the API alone leaves the
+newsletter and whitepaper forms on a live page returning 404.
+
+What the sweep added that a rollback also has to account for:
+
+- **`UNSUBSCRIBE_TOKEN_SECRET`** (api container) — HMAC key for one-click
+  unsubscribe links. `backend/src/config.js` **soft-fails to a development
+  fallback with a warning** rather than refusing to boot, so a missing secret
+  does not show up as a crash; it shows up as forgeable unsubscribe tokens.
+  It must exist in Secret Manager before v3 is deployed:
+  ```bash
+  openssl rand -base64 48 | tr -d '\n' | gcloud secrets create vm-unsubscribe-token-secret \
+    --data-file=- --replication-policy=automatic --project=virtual-marketer-chat-bot
+  ```
+  Rotating it invalidates unsubscribe links already sitting in subscribers'
+  inboxes — those recipients fall back to the `mailto:` unsubscribe in the same
+  `List-Unsubscribe` header, so rotation degrades rather than breaks, but do
+  not rotate casually.
+- **Firestore collections** `newsletter_subscriptions` and
+  `whitepaper_downloads` — created on first write, untouched by a rollback.
+  Subscriber records therefore **survive** a rollback to v2; they are simply
+  not reachable through the API until v3 is redeployed. Nothing to clean up.
+- **`/downloads/*.pdf`** — content-hashed whitepaper PDFs baked into the
+  website image and `noindex`ed in nginx. The hash is over the deterministic
+  *source* (HTML + print CSS), not the compiled PDF bytes, so a rebuild keeps
+  the same filenames and download links already emailed out stay valid.
+  Rolling the website image back to v41 removes the files, breaking links in
+  already-delivered mail; the API's own confirm page regenerates a link, so
+  re-deploying v42 restores them.
+
 ## Operational notes
 
 - **AVIF content negotiation.** nginx serves `<file>.avif` siblings to

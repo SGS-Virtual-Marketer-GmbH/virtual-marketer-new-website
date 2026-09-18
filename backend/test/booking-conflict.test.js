@@ -28,6 +28,25 @@ function listen() {
   });
 }
 
+// `slots.isValidSlotStart` rejects anything not strictly in the future, so a
+// hardcoded calendar date bit-rots the moment the wall clock passes it (this
+// suite's original 2026-09-08/09 literals broke exactly that way once "now"
+// caught up to them). Picking a weekday well ahead of whenever the suite
+// actually runs keeps it valid indefinitely instead of just "at the time it
+// was written".
+function futureWeekdayDateStr(minDaysAhead) {
+  let d = new Date(Date.now() + minDaysAhead * 86400000);
+  for (let i = 0; i < 14; i++) {
+    const parts = slots.berlinParts(d);
+    const weekdayIdx = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[parts.weekday];
+    if (weekdayIdx >= 1 && weekdayIdx <= 5) {
+      return `${parts.year}-${String(parts.month).padStart(2, '0')}-${String(parts.day).padStart(2, '0')}`;
+    }
+    d = new Date(d.getTime() + 86400000);
+  }
+  throw new Error('futureWeekdayDateStr: no weekday found in range');
+}
+
 function post(server, path, body) {
   const { port } = server.address();
   return new Promise((resolve, reject) => {
@@ -64,7 +83,7 @@ test('concurrent booking requests for the same slot: exactly one succeeds', asyn
   const server = await listen();
   t.after(() => server.close());
 
-  const [slot] = slots.slotsForDate('2026-09-08'); // a Tuesday, far in the future
+  const [slot] = slots.slotsForDate(futureWeekdayDateStr(60)); // a weekday, well in the future
   const slotStart = slot.toISOString();
 
   const N = 10;
@@ -86,7 +105,7 @@ test('a slot rejected once as taken stays taken for a later, non-concurrent requ
   const server = await listen();
   t.after(() => server.close());
 
-  const [, secondSlot] = slots.slotsForDate('2026-09-09'); // different date than the concurrency test, avoids cross-test interference
+  const [, secondSlot] = slots.slotsForDate(futureWeekdayDateStr(67)); // different date than the concurrency test, avoids cross-test interference
   const slotStart = secondSlot.toISOString();
 
   const first = await post(server, '/bookings', { name: 'First', email: 'first@example.com', slotStart });
@@ -101,8 +120,15 @@ test('booking rejects a slot outside business hours even with a well-formed requ
   const server = await listen();
   t.after(() => server.close());
 
+  // A future date is required here specifically so this asserts the
+  // business-hours check, not the (separate) in-the-past check — a stale
+  // past date would return the same 400/invalid_slot for the wrong reason
+  // and this test would stay green even if the business-hours logic broke.
+  const [y, m, d] = futureWeekdayDateStr(75).split('-');
+  const offHoursIso = new Date(Date.UTC(Number(y), Number(m) - 1, Number(d), 5, 0, 0)).toISOString(); // ~7am Berlin, before the window
+
   const res = await post(server, '/bookings', {
-    name: 'Off Hours', email: 'offhours@example.com', slotStart: '2026-09-08T05:00:00.000Z', // ~7am Berlin, before the window
+    name: 'Off Hours', email: 'offhours@example.com', slotStart: offHoursIso,
   });
   assert.equal(res.status, 400);
   assert.equal(res.body.error, 'invalid_slot');

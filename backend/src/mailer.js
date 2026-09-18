@@ -20,8 +20,11 @@ transport.verify().then(
   (err) => console.error(`[mailer] SMTP verification FAILED for ${config.smtp.host}:${config.smtp.port} — ${err.message}`)
 );
 
-function send({ to, subject, text, html }) {
-  return transport.sendMail({ from: config.smtp.from, to, subject, text, html }).catch((err) => {
+// `headers` is optional and passed straight through to nodemailer — used by
+// the newsletter routes to set List-Unsubscribe / List-Unsubscribe-Post so
+// Gmail/Outlook show a native one-click unsubscribe control (RFC 8058).
+function send({ to, subject, text, html, headers }) {
+  return transport.sendMail({ from: config.smtp.from, to, subject, text, html, headers }).catch((err) => {
     // Swallow at the call site's discretion: callers decide whether a mail
     // failure should fail the HTTP request. Logged here either way so
     // delivery problems are visible in server logs.

@@ -1,0 +1,61 @@
+/* Gated whitepaper download form, mounted on the /whitepaper/<slug>/ landing
+ * pages only. Same component family as newsletter-signup.css (same tokens,
+ * same hand-written light-dark() twins reusing the already-shipped
+ * contact-form.css dark values) but kept as its own file: this widget has a
+ * name field, two SEPARATE consent checkboxes (privacy-policy vs. also-join-
+ * the-newsletter — bundling them is unlawful under GDPR, so they are not
+ * visually merged into one either) and a more prominent, landing-page-scale
+ * presentation than the compact/inline newsletter widget.
+ */
+.vm-wpf{
+  --vm-red:#94152b; --vm-red-dark:#700f2b; --vm-blue:#66a3ce; --vm-blue-light:#a3cce9;
+  --vm-gray-100:#f4f1f1; --vm-gray-100:light-dark(#f4f1f1,#1b1515);
+  --vm-gray-200:#e7dfe0; --vm-gray-200:light-dark(#e7dfe0,#1d1617);
+  --vm-gray-500:#6b5f60;
+  --vm-gray-900:#241417;
+  box-sizing:border-box;
+  font-family:inherit;
+  max-width:520px;
+  border:1px solid var(--vm-gray-200);
+  border-radius:16px;
+  padding:28px 28px 26px;
+  color:var(--vm-gray-900); color:light-dark(var(--vm-gray-900),#ebdbde);
+  background:#fff; background:light-dark(#fff,#171717);
+  box-shadow:0 10px 30px -12px rgba(36,20,23,.18);
+}
+.vm-wpf *{box-sizing:border-box;}
+.vm-wpf a{color:var(--vm-red); color:light-dark(var(--vm-red),#ea6b81);}
+.vm-wpf h3{margin:0 0 6px;font-size:20px;line-height:1.25;}
+.vm-wpf p.vm-wpf-sub{margin:0 0 18px;color:var(--vm-gray-500); color:light-dark(var(--vm-gray-500),#cfc9ca);font-size:14px;}
+.vm-wpf .vm-wpf-field{margin-bottom:14px;}
+.vm-wpf label.vm-wpf-label{display:block;font-size:13px;font-weight:600;margin:0 0 4px;}
+.vm-wpf input[type="text"],
+.vm-wpf input[type="email"]{
+  width:100%;padding:11px 12px;border:1px solid var(--vm-gray-200);border-radius:8px;
+  font:inherit;font-size:16px; /* >=16px: no iOS zoom-on-focus */
+  background:#fff; background:light-dark(#fff,#1d1617);
+  color:var(--vm-gray-900); color:light-dark(var(--vm-gray-900),#ebdbde);
+}
+.vm-wpf input:focus{outline:2px solid var(--vm-blue);outline-offset:1px;border-color:var(--vm-blue);}
+.vm-wpf-consent{display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.5;margin-bottom:12px;color:var(--vm-gray-500); color:light-dark(var(--vm-gray-500),#cfc9ca);}
+/* link-in-text-block (WCAG 1.4.1) — same defect and same fix as
+   newsletter-signup.css's .vm-nl-consent: the privacy-policy/newsletter-opt-in
+   links here sit inside a <label>, outside the sitewide `p,li,...` underline
+   rule in scripts/fix-a11y.js, at ~1.85:1 against the surrounding grey text. */
+.vm-wpf-consent a{text-decoration:underline;text-underline-offset:2px;}
+.vm-wpf-consent input[type="checkbox"]{flex:0 0 auto;width:18px;height:18px;margin:1px 0 0;accent-color:var(--vm-red);}
+.vm-wpf-consent label{cursor:pointer;}
+.vm-wpf-btn{
+  width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;
+  padding:14px 22px;border-radius:8px;border:none;background:var(--vm-red);color:#fff;
+  cursor:pointer;font-size:16px;margin-top:4px;
+}
+.vm-wpf-btn:hover{background:var(--vm-red-dark);}
+.vm-wpf-btn:disabled{opacity:.6;cursor:not-allowed;}
+.vm-wpf-msg{font-size:13px;margin-top:10px;min-height:1px;}
+.vm-wpf-msg.error{color:var(--vm-red); color:light-dark(var(--vm-red),#ea6b81);}
+.vm-wpf-success{text-align:center;padding:8px 4px;}
+.vm-wpf-success svg{color:var(--vm-red); color:light-dark(var(--vm-red),#ea6b81);margin-bottom:10px;}
+.vm-wpf-success h3{margin-bottom:8px;}
+.vm-wpf-success p{color:var(--vm-gray-500); color:light-dark(var(--vm-gray-500),#cfc9ca);font-size:14px;margin:0;}
+.vm-wpf-hp{position:absolute !important;left:-5000px !important;width:1px;height:1px;overflow:hidden;}

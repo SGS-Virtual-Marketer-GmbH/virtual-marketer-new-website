@@ -11,7 +11,13 @@ const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 
-const DIST_DIR = path.join(__dirname, 'dist');
+// Defaults to ./dist. DIST_DIR lets a second instance serve a variant build on
+// another port with byte-identical serving behaviour (gzip, cache headers,
+// security headers) — the only way an A/B Lighthouse comparison measures the
+// build difference rather than the difference between two static servers.
+const DIST_DIR = process.env.DIST_DIR
+  ? path.resolve(process.env.DIST_DIR)
+  : path.join(__dirname, 'dist');
 const PORT = process.env.PORT || 3000;
 const HOST = '127.0.0.1';
 

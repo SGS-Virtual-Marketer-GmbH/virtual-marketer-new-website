@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
+<link rel="preload" as="font" type="font/woff2" href="/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin.woff2%3Fver=1667681412" crossorigin id="vm-font-preload">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Trends | Virtual Marketer Blog</title>
 <link rel="next" href="https://virtual-marketer.de/en/blog/category/ai-trends/page/2/">
-<link rel="stylesheet" href="/assets/css/vm-a80b91e97a.css" media="all">
+<link rel="stylesheet" href="/assets/css/vm-5679698eca.css" media="all">
 
 <style>
   
@@ -13,13 +14,13 @@
     position:sticky;top:0;z-index:9990;
     max-width:1140px;margin:16px auto 0;padding:14px 24px;
     display:flex;align-items:center;justify-content:space-between;gap:24px;
-    background:#fff;background:light-dark(#fff,#171717);border-radius:14px;
+    background:#fff;border-radius:14px;
     box-shadow:0 6px 24px rgba(36,20,23,.10);
   }
   .vm-header-simple > a{display:flex;align-items:center;flex:0 0 auto}
   .vm-header-simple nav{display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:flex-end}
-  .vm-header-simple nav a{color:#241417;color:light-dark(#241417,#ebdbde);text-decoration:none;font-weight:500;font-size:15px;white-space:nowrap}
-  .vm-header-simple nav a:hover{color:#94152b;color:light-dark(#94152b,#ea6b81)}
+  .vm-header-simple nav a{color:#241417;text-decoration:none;font-weight:500;font-size:15px;white-space:nowrap}
+  .vm-header-simple nav a:hover{color:#94152b}
 
   /* The solutions dropdown is a <details>/<summary>, not an <a>, so none of
      the rules above reach it. Left alone it falls back to the browser default
@@ -27,11 +28,11 @@
      item that looks like it belongs to a different site. Values copied from
      the anchor rule above so the two cannot drift apart. */
   .vm-header-simple nav > details > summary{
-    color:#241417;color:light-dark(#241417,#ebdbde);font-weight:500;font-size:15px;white-space:nowrap;
+    color:#241417;font-weight:500;font-size:15px;white-space:nowrap;
     cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:4px;
   }
   .vm-header-simple nav > details > summary::-webkit-details-marker{display:none}
-  .vm-header-simple nav > details > summary:hover{color:#94152b;color:light-dark(#94152b,#ea6b81)}
+  .vm-header-simple nav > details > summary:hover{color:#94152b}
 
   /* position:sticky is disabled by ANY ancestor that is a scroll container,
      and the scraped theme sets overflow-x:hidden on BOTH the root element
@@ -103,16 +104,16 @@
     .vm-header-simple nav a[href*="login.virtual-marketer.de"]{padding:9px 20px}
   }
 
-  .vm-footer-simple{max-width:1140px;margin:40px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;border-top:1px solid light-dark(#e5e7eb,#252931);color:#6b7280;color:light-dark(#6b7280,#c5c8ce);font-size:14px}
-  .vm-footer-simple a{color:#6b7280;color:light-dark(#6b7280,#c5c8ce)}
+  .vm-footer-simple{max-width:1140px;margin:40px auto 0;padding:24px 20px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:14px}
+  .vm-footer-simple a{color:#6b7280}
 
   
   .vm-blog-tools{margin:24px 0 8px}
   .vm-blog-search{position:relative;display:block}
   .vm-blog-search input{
     width:100%;box-sizing:border-box;font-size:16px;
-    padding:13px 16px 13px 44px;border:1px solid #e5e7eb;border:1px solid light-dark(#e5e7eb,#252931);border-radius:12px;
-    background:#fff;background:light-dark(#fff,#171717);color:#111827;color:light-dark(#111827,#d8dfee);outline:none;
+    padding:13px 16px 13px 44px;border:1px solid #e5e7eb;border-radius:12px;
+    background:#fff;color:#111827;outline:none;
   }
   .vm-blog-search input:focus{border-color:#66a3ce;box-shadow:0 0 0 3px rgba(102,163,206,.18)}
   .vm-blog-search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);
@@ -120,35 +121,472 @@
   .vm-blog-chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
   .vm-blog-chips a,.vm-blog-chips button{
     font:inherit;font-size:14px;font-weight:600;cursor:pointer;
-    padding:7px 14px;border-radius:999px;border:1px solid #e5e7eb;border:1px solid light-dark(#e5e7eb,#252931);
-    background:#fff;background:light-dark(#fff,#171717);color:#4b5563;color:light-dark(#4b5563,#c8cdd5);text-decoration:none;
+    padding:7px 14px;border-radius:999px;border:1px solid #e5e7eb;
+    background:#fff;color:#4b5563;text-decoration:none;
   }
-  .vm-blog-chips a:hover,.vm-blog-chips button:hover{border-color:#94152b;color:#94152b;color:light-dark(#94152b,#ea6b81)}
+  .vm-blog-chips a:hover,.vm-blog-chips button:hover{border-color:#94152b;color:#94152b}
   .vm-blog-chips .is-active{background:#94152b;border-color:#94152b;color:#fff}
-  .vm-blog-count{color:#6b7280;color:light-dark(#6b7280,#c5c8ce);font-size:14px;margin:16px 0 0}
+  .vm-blog-count{color:#6b7280;font-size:14px;margin:16px 0 0}
 
-  .vm-post{border-bottom:1px solid #e5e7eb;border-bottom:1px solid light-dark(#e5e7eb,#252931);padding:24px 0}
-  .vm-post .vm-cat{display:inline-block;background:#fbecee;background:light-dark(#fbecee,#1f1113);color:#94152b;color:light-dark(#94152b,#ea6b81);font-size:12px;
+  .vm-post{border-bottom:1px solid #e5e7eb;padding:24px 0}
+  .vm-post .vm-cat{display:inline-block;background:#fbecee;color:#94152b;font-size:12px;
     font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:8px}
   .vm-post h2{font-size:1.4rem;margin:0 0 8px}
-  .vm-post h2 a{color:#111827;color:light-dark(#111827,#d8dfee);text-decoration:none}
-  .vm-post h2 a:hover{color:#94152b;color:light-dark(#94152b,#ea6b81)}
-  .vm-post .vm-date{color:#6b7280;color:light-dark(#6b7280,#c5c8ce);font-size:14px;margin-bottom:8px}
-  .vm-post p{color:#374151;color:light-dark(#374151,#aeb8c8);line-height:1.6;margin:0 0 10px}
-  .vm-post .vm-more{color:#94152b;color:light-dark(#94152b,#ea6b81);font-weight:600;text-decoration:none}
+  .vm-post h2 a{color:#111827;text-decoration:none}
+  .vm-post h2 a:hover{color:#94152b}
+  .vm-post .vm-date{color:#6b7280;font-size:14px;margin-bottom:8px}
+  .vm-post p{color:#374151;line-height:1.6;margin:0 0 10px}
+  .vm-post .vm-more{color:#94152b;font-weight:600;text-decoration:none}
 
   .vm-pagination{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:32px 0 8px}
   .vm-pagination a,.vm-pagination span{
     min-width:42px;min-height:42px;display:inline-flex;align-items:center;justify-content:center;
-    padding:0 12px;border-radius:10px;border:1px solid #e5e7eb;border:1px solid light-dark(#e5e7eb,#252931);background:#fff;background:light-dark(#fff,#171717);
-    color:#4b5563;color:light-dark(#4b5563,#c8cdd5);text-decoration:none;font-weight:600;
+    padding:0 12px;border-radius:10px;border:1px solid #e5e7eb;background:#fff;
+    color:#4b5563;text-decoration:none;font-weight:600;
   }
-  .vm-pagination a:hover{border-color:#94152b;color:#94152b;color:light-dark(#94152b,#ea6b81)}
+  .vm-pagination a:hover{border-color:#94152b;color:#94152b}
   .vm-pagination .is-current{background:#94152b;border-color:#94152b;color:#fff}
-  .vm-empty{padding:40px 0;color:#6b7280;color:light-dark(#6b7280,#c5c8ce)}
+  .vm-empty{padding:40px 0;color:#6b7280}
 
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"AI Trends — Virtual Marketer Blog","url":"https://virtual-marketer.de/en/blog/category/ai-trends/","inLanguage":"en"}</script>
+<style id="vm-a11y-links">
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):not([aria-hidden="true"]){
+  text-decoration:underline;
+  text-underline-offset:2px;
+  text-decoration-thickness:1px;
+}
+:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):hover{
+  text-decoration-thickness:2px;
+}
+/* The share row and any icon-only link inside a list item: an underline under
+   a glyph is noise, and the link is not a text link. */
+:is(p,li) > a:has(> svg:only-child),
+:is(p,li) > a:has(> i:only-child){text-decoration:none}
+</style>
+
+
+  <!-- SEO: canonical + hreflang (auto) -->
+  <meta name="description" content="All posts on AI Trends — articles, analysis and practical examples from Virtual Marketer.">
+  <link rel="canonical" href="https://virtual-marketer.de/en/blog/category/ai-trends/">
+  <link rel="alternate" hreflang="en" href="https://virtual-marketer.de/en/blog/category/ai-trends/">
+  <link rel="alternate" hreflang="x-default" href="https://virtual-marketer.de/en/blog/category/ai-trends/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AI Trends | Virtual Marketer Blog">
+  <meta property="og:description" content="All posts on AI Trends — articles, analysis and practical examples from Virtual Marketer.">
+  <meta property="og:image" content="https://virtual-marketer.de/assets/og/en--blog--category--ai-trends.png">
+  <meta property="og:image:alt" content="AI Trends | Virtual Marketer Blog">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","@id":"https://virtual-marketer.de/en/blog/category/ai-trends/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://virtual-marketer.de/en/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://virtual-marketer.de/en/blog/"},{"@type":"ListItem","position":3,"name":"Category","item":"https://virtual-marketer.de/en/blog/category/"},{"@type":"ListItem","position":4,"name":"AI Trends","item":"https://virtual-marketer.de/en/blog/category/ai-trends/"}]}</script>
+  <meta name="twitter:image" content="https://virtual-marketer.de/assets/og/en--blog--category--ai-trends.png">
+  <link rel="alternate" type="application/rss+xml" title="Virtual Marketer Blog (English)" href="https://virtual-marketer.de/en/blog/feed.xml">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/icon-512.png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:url" content="https://virtual-marketer.de/en/blog/category/ai-trends/">
+  <meta property="og:site_name" content="Virtual Marketer">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://virtual-marketer.de/en/blog/category/ai-trends/">
+  <meta name="twitter:title" content="AI Trends | Virtual Marketer Blog">
+  <meta name="twitter:description" content="All posts on AI Trends — articles, analysis and practical examples from Virtual Marketer.">
+<style id="vm-fonts-inline">/* One typeface for the whole site — see scripts/consolidate-fonts.js */
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin-ext.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin-ext.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'DM Sans';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin-ext.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'DM Sans';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Roboto Slab';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin-ext.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Roboto Slab';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Roboto';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin-ext.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Roboto';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin-ext.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Outfit';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin-ext.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:'Outfit';font-style:normal;font-weight:100 900;font-display:swap;src:url('/wp-content/uploads/omgf/elementor-gf-local-outfit/outfit-normal-latin.woff2%3Fver=1667681412')format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+</style>
+<link rel="stylesheet" href="/assets/lead-magnet/newsletter-signup.css?v=255b1262c8" id="vm-lead-magnet-css">
+<script src="/assets/lead-magnet/newsletter-signup.js?v=3ab9260fbe" defer id="vm-lead-magnet-js"></script>
+<style id="vm-enhance-inline">/* Virtual Marketer — site-wide enhancement layer (Track B).
+ *
+ * Injected on every page by scripts/inject-enhance.js. Everything here is
+ * progressive enhancement on top of the EXISTING design language: no color,
+ * font or layout redefinitions — those live in their own steps — only
+ * tokens, motion and navigation polish. Browsers without a given feature
+ * (scroll-driven animations, view transitions, backdrop-filter) simply keep
+ * the current behavior, and prefers-reduced-motion turns all of it off.
+ */
+
+/* ---- 1. Design tokens --------------------------------------------------
+ * The product CI colors (vm-customer-web-ui/tailwind.config.js) as custom
+ * properties, with hover/tint ramps derived via color-mix so no new hex
+ * values enter the codebase. Consumed by the motion layer below and by the
+ * dark theme; also available to any future page work.
+ */
+:root {
+  --vm-red: #94152b;
+  --vm-red-dark: #700f2b;
+  --vm-blue: #66a3ce;
+  --vm-blue-light: #a3cce9;
+  --vm-ink: #23282d;
+  --vm-surface: #ffffff;
+  --vm-muted: #6b7280;
+
+  --vm-red-hover: color-mix(in oklab, var(--vm-red), black 12%);
+  --vm-red-tint: color-mix(in oklab, var(--vm-red), white 92%);
+  --vm-blue-tint: color-mix(in oklab, var(--vm-blue), white 85%);
+
+  --vm-shadow-card: 0 10px 30px -12px color-mix(in oklab, var(--vm-ink), transparent 72%);
+  --vm-shadow-cta: 0 10px 24px -10px color-mix(in oklab, var(--vm-red), transparent 55%);
+
+  --vm-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---- 2. Cross-document view transitions --------------------------------
+ * With the speculation-rules prerender already shipping (Track A), a soft
+ * cross-fade makes same-origin navigation feel like one continuous app.
+ * Kept fast (180ms) — a transition longer than the prerendered load feels
+ * slower, not smoother.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+  ::view-transition-old(root) {
+    animation-duration: 0.18s;
+    animation-timing-function: ease-out;
+  }
+  ::view-transition-new(root) {
+    animation-duration: 0.18s;
+    animation-timing-function: ease-in;
+  }
+}
+
+/* ---- 3. Scroll-driven section reveals ----------------------------------
+ * Card-level, never section-level: animating Elementor sections breaks
+ * their own positioning contexts. `translate`/`opacity` only, so these
+ * compose cleanly with the hover effects below (which use `scale`) and
+ * with any legacy `transform` rules. CSS-only: browsers without
+ * animation-timeline render everything exactly as today.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .vm-home-sol-card,
+    .vm-post,
+    .value-item,
+    .faq-item,
+    .vm-model-card,
+    .audience-card,
+    .impact-card {
+      animation: vm-reveal both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 45%;
+    }
+  }
+}
+
+@keyframes vm-reveal {
+  from {
+    opacity: 0;
+    translate: 0 22px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* ---- 4. Micro-interactions ---------------------------------------------
+ * Hovers use `scale` + shadow (never `translate`/`transform`, which the
+ * reveal above and legacy Elementor rules already own). Focus gets the
+ * same affordance as hover plus a visible ring, per the site's BFSG
+ * accessibility commitment.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .vm-home-sol-card,
+  .vm-post,
+  .vm-model-card,
+  .audience-card,
+  .impact-card {
+    transition: scale 0.28s var(--vm-ease), box-shadow 0.28s var(--vm-ease);
+  }
+  .vm-home-sol-card:hover,
+  .vm-post:hover,
+  .vm-model-card:hover,
+  .audience-card:hover,
+  .impact-card:hover {
+    scale: 1.02;
+    box-shadow: var(--vm-shadow-card);
+  }
+
+  .elementor-button,
+  .hero-cta,
+  .demo-step-btn,
+  .vm-more {
+    transition: scale 0.22s var(--vm-ease), box-shadow 0.22s var(--vm-ease);
+  }
+  .elementor-button:hover,
+  .hero-cta:hover {
+    scale: 1.03;
+    box-shadow: var(--vm-shadow-cta);
+  }
+  .elementor-button:active,
+  .hero-cta:active {
+    scale: 0.98;
+  }
+}
+
+/* ---- 4b. Focus visibility -----------------------------------------------
+ * ~16 theme rules turn the native outline off (`a:focus{outline:0}`,
+ * `.wp-block-search__input:focus{outline:none}`, `select:focus{outline:none}`,
+ * …) without drawing a replacement, so a keyboard user tabbing through the
+ * site sees nothing land. None of those rules carry !important, so a rule
+ * here can win the cascade instead of touching them — some exist to suppress
+ * a genuine double outline on a component that already draws its own
+ * affordance, and this file loads last, but a couple of the offending
+ * selectors (e.g. `.wp-block-navigation__responsive-close:focus`) already
+ * carry two class-level segments of specificity, which a bare
+ * `:focus-visible` (one) would still lose regardless of load order.
+ * Repeating the same pseudo-class three times is a standard, side-effect-
+ * free way to raise specificity without reaching for `!important` or an
+ * unrelated ancestor/class.
+ *
+ * The ring is a halo — outline plus a box-shadow ring in a neutral color —
+ * rather than a plain outline: brand red reads clearly against a white or
+ * dark page background, but drawn directly against a vm-red-colored button
+ * (the site's own primary CTA color) it would all but disappear into its own
+ * fill. The halo inserts a neutral gap between the element and the ring so
+ * the indicator stays visible no matter what it sits on. Both ring colors
+ * are  pairs, each verified to clear the WCAG 2.4.11 3:1
+ * non-text contrast minimum against its surface (~7.4:1 in dark mode,
+ * ~8.7:1 in light mode).
+ */
+:focus-visible:focus-visible:focus-visible {
+  outline: 3px solid var(--vm-red);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+/* ---- 4c. Skip link -------------------------------------------------------
+ * First focusable element on every page (scripts/inject-skip-link.js),
+ * landing on the page's <main>/[role="main"] landmark. Visually hidden until
+ * it receives keyboard focus, per the standard "skip to content" pattern.
+ */
+.vm-skip-link {
+  position: absolute;
+  top: -100px;
+  left: 8px;
+  z-index: 10000;
+  padding: 12px 20px;
+  background: var(--vm-red);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  border-radius: 0 0 6px 6px;
+}
+.vm-skip-link:focus-visible:focus-visible:focus-visible {
+  top: 0;
+  outline-offset: -2px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .vm-skip-link {
+    transition: top 0.18s var(--vm-ease);
+  }
+}
+
+/* ---- 4d. Repeated CTA at scroll depth ------------------------------------
+ * Long marketing pages (homepage, feature/solution pages) show their only
+ * call to action once, at the very top — a visitor who scrolls past the
+ * hero has nowhere to act without scrolling back up. scripts/standardize-
+ * ctas.js inserts one of these part-way down qualifying pages, reusing that
+ * page's own existing destination and label (never inventing new copy).
+ * Deliberately not used on blog posts or the footer — another agent's
+ * newsletter signup owns that territory.
+ */
+.vm-repeat-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 56px auto;
+  padding: 28px 32px;
+  max-width: 1140px;
+  border-radius: 16px;
+  background: var(--vm-red-tint);
+  border: 1px solid color-mix(in oklab, var(--vm-red), white 70%);
+}
+.vm-repeat-cta p {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--vm-ink);
+}
+.vm-repeat-cta .elementor-button,
+.vm-repeat-cta .octf-btn,
+.vm-repeat-cta a.vm-repeat-cta-btn {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 8px;
+  background: var(--vm-red);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.vm-repeat-cta a.vm-repeat-cta-btn:hover {
+  background: var(--vm-red-dark);
+}
+
+/* ---- 5. Header glass ---------------------------------------------------
+ * Strengthens the existing scrolled-header treatment (make-header-sticky.js
+ * sets a 2px blur) into a proper translucent glass bar. Guarded by
+ * @supports; without backdrop-filter the header keeps its current look.
+ */
+@supports (backdrop-filter: blur(12px)) {
+  #site-header.site-header.vm-scrolled {
+    background-color: color-mix(in srgb, var(--vm-surface), transparent 18%);
+    backdrop-filter: saturate(1.4) blur(12px);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  }
+}
+
+/* ---- 6. Light theme, unconditionally -----------------------------------
+ * The site renders in its light brand palette for every visitor, whatever
+ * their OS is set to.
+ *
+ * There WAS an automatic dark theme here: scripts/enable-dark-mode.js
+ * duplicated every light-palette colour with a  twin and this
+ * `color-scheme: light dark` armed those functions. It was removed because
+ * the result looked bad in practice — a palette derived mechanically in HSL
+ * from a light-first design does not become a designed dark theme, and the
+ * homepage hero shipped with its second headline clause nearly illegible
+ * against the dark surface.
+ *
+ * `color-scheme: light` is the load-bearing line: it pins the browser's own
+ * UI (form controls, scrollbars, input text) to light, and it makes any
+ * `` that survives anywhere in the CSS resolve to its LIGHT
+ * value. scripts/force-light-mode.js collapses those at build time as well,
+ * so this holds even in a browser that does not support .
+ *
+ * To bring dark mode back, this is not the place to start — it needs a
+ * designed dark palette, not a derived one.
+ */
+:root {
+  color-scheme: light;
+}
+
+/* ---- 7. Language-switcher contrast fix ----------------------------------
+ * scripts/inject-language-switcher.js draws its floating EN/DE pill with a
+ * hardcoded `background:#ffffffee` (8-digit hex, i.e. white at ~93% alpha)
+ * and `color:#6b7280` on the non-active link, with no  twin of
+ * its own. That file is injected early in the build, long before
+ * scripts/enable-dark-mode.js's pass, so enable-dark-mode.js DOES process
+ * it — but only halfway: its hex-matching regex requires a bare 6- or
+ * 3-digit hex, so the 8-digit `#ffffffee` background is skipped entirely
+ * (stays pinned to near-white in every theme), while the plain 6-digit
+ * `#6b7280` text colour gets its usual dark-mode twin (lightened, on the
+ * assumption that dark mode means a dark surface behind it). The pairing
+ * that ships is therefore a light grey meant for a dark background, sitting
+ * on a background that never left near-white — measured at 1.45:1 on a
+ * blog post's language switcher.
+ *
+ * Fixed here (this file loads AFTER enable-dark-mode.js in the pipeline —
+ * scripts/inject-enhance.js runs near the very end — so nothing downstream
+ * can mangle it) by giving the pill's own background a real dark twin too,
+ * so the two sides of the pairing move together instead of one moving and
+ * one staying still. `rgba(19,21,24,.93)` is the same dark surface colour
+ * scripts/enable-dark-mode.js already derives for other translucent white
+ * overlays on this site; `#c5c8ce` is the existing sitewide dark-mode twin
+ * for `#6b7280` (see .vm-footer-simple / the /kontakt/ footer), reused
+ * rather than invented so the two shades of grey the site already uses stay
+ * the only two shades of grey.
+ *
+ * Both rules need to out-specificity the original, not just come after it:
+ * scripts/hoist-critical-css.js hoists a fixed allowlist of style-block ids
+ * into <head> (vm-mobile-polish, vm-share-css, ...) and this file's own
+ * <style id="vm-enhance-inline"> is one of the ids that ends up there, but
+ * inject-language-switcher.js's block is not on that list, so it stays
+ * printed in <body>, after the hoisted head styles — meaning ITS rules come
+ * later in the cascade, not this file's. The `a:not(.active)` rule already
+ * outranks the plain `#vm-lang-switch a` it overrides (id+tag+class beats
+ * id+tag), but the background rule was an exact `#vm-lang-switch` vs
+ * `#vm-lang-switch` tie that source order then won — so it needed the
+ * `body` prefix to genuinely out-specificity it. */
+body #vm-lang-switch {
+  background: #ffffffee;
+  background: #ffffffee;
+}
+#vm-lang-switch a:not(.active) {
+  color: #6b7280;
+  color: #6b7280;
+}
+
+/* ---- 8. Blog contrast repairs -------------------------------------------
+ * Three text colours inherited from the engitech theme fail WCAG 1.4.3 at
+ * their shipped sizes. They are theme CSS, not ours, so they are corrected
+ * here rather than by editing vendor files a rebuild would overwrite.
+ *
+ * Measured against the background each actually sits on:
+ *
+ *   .entry-date        #b5b5b5 on #ffffff  2.05:1  (14px bold)
+ *   .search-field      #b5b5b5 on #f6f6f6  1.90:1  (16px)
+ *   .author-info .title #66a3ce on #ffffff  2.73:1  (16px)
+ *
+ * Replacements keep each hue and only scale it toward black — the same
+ * approach scripts/fix-contrast.js takes for the button gradients — so the
+ * greys stay grey and the blue stays recognisably vm-blue rather than being
+ * swapped for an unrelated colour:
+ *
+ *   #b5b5b5 → #757575  4.61:1 on white
+ *   #b5b5b5 → #707070  4.58:1 on #f6f6f6
+ *   #66a3ce → #4d7b9c  4.54:1 on white
+ *
+ * NOTE ON THE BLUE: vm-blue #66a3ce is a brand colour, and it is kept as a
+ * FILL/accent everywhere it is used as one. It only fails as small text on
+ * white, which is a usage the palette was never meant to cover; darkening it
+ * in that one spot is not a palette change. Scoped to .author-bio so the
+ * theme's .text-primary utility keeps its brand value everywhere else.
+ *
+ * This file is inlined after the page bundle, so plain class specificity is
+ * enough to win — no !important needed.
+ */
+.entry-header .entry-date,
+span.post-on .entry-date {
+  color: #757575;
+}
+
+.search-form .search-field {
+  color: #707070;
+}
+.search-form .search-field::placeholder {
+  color: #707070;
+  opacity: 1; /* Firefox dims placeholders by default, undoing the fix. */
+}
+
+.author-bio .author-info .title,
+.author-bio .author-info p.title.text-primary {
+  color: #4d7b9c;
+}
+
+/* The sidebar "recent news" widget restates the same colour through a
+ * three-class selector (.widget .recent-news .entry-date, specificity 0,3,0)
+ * which outranks the two-class rule above, so the widget's dates kept the
+ * failing #b5b5b5 while the in-article ones were already corrected. Matched
+ * here at equal specificity — and winning on order, since this file is
+ * inlined after the page bundle. */
+.widget .recent-news .entry-date {
+  color: #757575;
+}
+</style>
+<script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"href_matches":"/wp-admin/*"}}]},"eagerness":"moderate"}]}</script>
 <style id="vm-mobile-polish">
 /* ==========================================================================
    Mobile polish — see scripts/mobile-polish.js
@@ -199,7 +637,58 @@ img, video { height: auto; }
 /* In-page anchors landed underneath the fixed header. */
 html { scroll-padding-top: 76px; }
 
+/* --- Bootstrap grid gutters (.container/.row/.col-*) --------------------
+   Every regular content page (blog posts especially — measured on
+   /blog/der-virtual-marketer/, a long one) uses the theme's Bootstrap-
+   derived grid for its main column: .container adds 15px padding each
+   side, .row cancels it with a -15px margin, and the .col-* the content
+   actually sits in re-adds its own 15px each side — net 15px of gutter,
+   unconditionally, at every viewport width (verified in the built bundle:
+   none of these three rules sit behind a media query). Before the
+   deferred bundle applies, the column is 30px WIDER than its final width
+   (0 gutter instead of 15px+15px), so a long article reflows across fewer,
+   longer lines and then snaps to more, shorter ones the moment the real
+   CSS lands — measured at a 400px+ height change on that post alone, by
+   far the largest shift found on any page. These three declarations are
+   copied verbatim from the bundle rather than approximated, and are
+   layout-establishing only (no color, no decoration), so duplicating them
+   here changes nothing once the deferred bundle also applies it — same
+   values, same result. */
+.container { margin-left: auto; margin-right: auto; padding-left: 15px; padding-right: 15px; }
+.row { margin-left: -15px; margin-right: -15px; }
+.col-lg-9, .col-md-3, .col-md-9, .col-sm-12, .col-xs-12 { padding-left: 15px; padding-right: 15px; }
+
+@media (min-width: 1025px) {
+  /* Mirrors the theme's own "@media (min-width:1025px){.header-mobile{display:none}}"
+     rule — see the "--- 0." block below for why this needs to be inline
+     rather than left to the (now deferred) theme bundle. */
+  .header-mobile { display: none; }
+}
+
 @media (max-width: 1024px) {
+
+  /* --- 0. Desktop/mobile header toggle ------------------------------------
+     THE BIGGEST MEASURED SHIFT ON THE SITE. #site-header renders BOTH
+     .header-desktop and .header-mobile as plain sibling <div>s with no
+     display rule of their own in the static HTML — the toggle that shows
+     one and hides the other lives entirely in the theme's bundled
+     stylesheet ("@media (max-width:1024px){.header-desktop{display:none}
+     .header-mobile{display:block}}"). Once hoist-critical-css.js defers
+     that bundle off the render-blocking path, there is a real window where
+     NEITHER rule has applied yet, so on a phone both headers render at
+     once, stacked — the full desktop nav on top of the mobile bar — until
+     the deferred stylesheet loads and .header-desktop collapses back to
+     nothing. Lighthouse's layout-shift trace names the resulting jump
+     against .header-mobile (0.288, by far the largest single contributor)
+     and the desktop header's own first widget wrapper
+     (.elementor-widget-wrap.elementor-element-populated, 0.116) — both are
+     this one cause. The fix is exactly the theme's own rule, duplicated
+     here so it is present at first paint; the deferred bundle reapplies
+     the identical rule later at equal specificity, so nothing changes once
+     it loads. Must come before "1." below: .header-mobile's background/
+     sizing rules only matter once it is the visible one. */
+  .header-desktop { display: none; }
+  .header-mobile { display: block; }
 
   /* Long tables and code blocks scroll in their own box rather than widening
      the page. Scoped to mobile deliberately: display:block is what makes a
@@ -217,7 +706,7 @@ html { scroll-padding-top: 76px; }
   #site-header.site-header,
   #site-header .header-mobile > .elementor > .elementor-section,
   #site-header .header-mobile .elementor-top-section {
-    background-color: rgba(255, 255, 255, 0.94);background-color:light-dark(rgba(255,255,255,0.94),rgba(19,21,24,0.94));
+    background-color: rgba(255, 255, 255, 0.94);
     -webkit-backdrop-filter: saturate(1.7) blur(16px);
     backdrop-filter: saturate(1.7) blur(16px);
   }
@@ -431,42 +920,14 @@ html { scroll-padding-top: 76px; }
   }
 }
 </style>
-<style id="vm-a11y-links">
-:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):not([aria-hidden="true"]){
-  text-decoration:underline;
-  text-underline-offset:2px;
-  text-decoration-thickness:1px;
-}
-:is(p,li,dd,blockquote,figcaption) > a:not(.octf-btn):not(.elementor-button):not(.wp-block-button__link):not(.vm-btn):not([class*="btn"]):hover{
-  text-decoration-thickness:2px;
-}
-/* The share row and any icon-only link inside a list item: an underline under
-   a glyph is noise, and the link is not a text link. */
-:is(p,li) > a:has(> svg:only-child),
-:is(p,li) > a:has(> i:only-child){text-decoration:none}
-</style>
-<link rel="stylesheet" href="/assets/enhance/fonts.css" id="vm-fonts">
-
-
-  <!-- SEO: canonical + hreflang (auto) -->
-  <meta name="description" content="All posts on AI Trends — articles, analysis and practical examples from Virtual Marketer.">
-  <link rel="canonical" href="https://virtual-marketer.de/en/blog/category/ai-trends/">
-  <link rel="alternate" hreflang="en" href="https://virtual-marketer.de/en/blog/category/ai-trends/">
-  <link rel="alternate" hreflang="x-default" href="https://virtual-marketer.de/en/blog/category/ai-trends/">
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="AI Trends | Virtual Marketer Blog">
-  <meta property="og:description" content="All posts on AI Trends — articles, analysis and practical examples from Virtual Marketer.">
-  <meta property="og:image" content="https://virtual-marketer.de/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","@id":"https://virtual-marketer.de/en/blog/category/ai-trends/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://virtual-marketer.de/en/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://virtual-marketer.de/en/blog/"},{"@type":"ListItem","position":3,"name":"Category","item":"https://virtual-marketer.de/en/blog/category/"},{"@type":"ListItem","position":4,"name":"AI Trends","item":"https://virtual-marketer.de/en/blog/category/ai-trends/"}]}</script>
-<link rel="stylesheet" href="/assets/enhance/enhance.css" id="vm-enhance">
-<script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"href_matches":"/wp-admin/*"}}]},"eagerness":"moderate"}]}</script>
 </head>
 <body>
+<a href="#main-content" class="vm-skip-link">Skip to content</a>
 <!-- Shared chrome from lib/page-chrome.js — see the note in
      generate-blog-posts.js. The inline-styled copy that used to live here had
      the same overlap bug on narrow screens. -->
 <header class="vm-header-simple">
-  <a href="/en/"><img src="/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.webp" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none" width="512" height="512"></a>
+  <a href="/en/"><img alt="Virtual Marketer" style="height:40px;width:auto;max-width:none;aspect-ratio:1/1" width="60" height="60" src="/wp-content/uploads/2023/04/vm-logo-header-60.webp" srcset="/wp-content/uploads/2023/04/vm-logo-header-60.webp 1x, /wp-content/uploads/2023/04/vm-logo-header-120.webp 2x"></a>
   <nav>
     <details class="vm-solutions-dd">
     <summary>Solutions</summary>
@@ -530,7 +991,7 @@ html { scroll-padding-top: 76px; }
   .vm-solutions-panel{
     position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
     width:min(820px,calc(100vw - 32px));
-    background:#fff;background:light-dark(#fff,#171717);border:1px solid #ece4e5;border:1px solid light-dark(#ece4e5,#332425);border-radius:18px;
+    background:#fff;border:1px solid #ece4e5;border-radius:18px;
     box-shadow:0 28px 68px rgba(36,20,23,.20);
     padding:18px;margin:0;z-index:99999;
   }
@@ -547,7 +1008,7 @@ html { scroll-padding-top: 76px; }
   .vm-solutions-panel .vm-solutions-grid a{
     display:flex;align-items:center;gap:11px;
     padding:10px 11px;border-radius:10px;
-    color:#241417;color:light-dark(#241417,#ebdbde);text-decoration:none;
+    color:#241417;text-decoration:none;
     /* The theme uppercases and nowraps its nav links. Inherited into a
        three-column grid that produced the overlap this panel was reported
        for: labels ran straight through their neighbours instead of wrapping.
@@ -555,20 +1016,20 @@ html { scroll-padding-top: 76px; }
     text-transform:none;white-space:normal;
     font-size:13.5px;font-weight:500;line-height:1.3;letter-spacing:0;
   }
-  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;background:light-dark(#fbecee,#1f1113);color:#94152b;color:light-dark(#94152b,#ea6b81);}
+  .vm-solutions-panel .vm-solutions-grid a:hover{background:#fbecee;color:#94152b;}
   .vm-sol-ic{
     flex:0 0 auto;display:grid;place-items:center;
     width:32px;height:32px;border-radius:9px;
-    background:#f6eff0;background:light-dark(#f6eff0,#1f1113);color:#94152b;color:light-dark(#94152b,#ea6b81);
+    background:#f6eff0;color:#94152b;
   }
   .vm-sol-ic svg{width:17px;height:17px;display:block;}
   .vm-solutions-panel .vm-solutions-grid a:hover .vm-sol-ic{background:#94152b;color:#fff;}
   .vm-sol-tx{min-width:0;}
   .vm-solutions-foot{
-    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;border-top:1px solid light-dark(#ece4e5,#332425);list-style:none;
+    margin:14px 0 0;padding-top:12px;border-top:1px solid #ece4e5;list-style:none;
   }
   .vm-solutions-panel .vm-solutions-foot a{
-    display:inline-block;color:#94152b;color:light-dark(#94152b,#ea6b81);font-weight:600;font-size:14px;
+    display:inline-block;color:#94152b;font-weight:600;font-size:14px;
     text-decoration:none;padding:4px 12px;text-transform:none;
   }
   .vm-solutions-foot a:hover{text-decoration:underline;}
@@ -592,8 +1053,8 @@ html { scroll-padding-top: 76px; }
       content:attr(data-title);
       position:fixed;top:0;left:0;right:0;height:56px;
       display:flex;align-items:center;padding:0 16px;
-      background:#fff;background:light-dark(#fff,#171717);border-bottom:1px solid #ece4e5;border-bottom:1px solid light-dark(#ece4e5,#332425);
-      font-weight:700;font-size:16px;color:#241417;color:light-dark(#241417,#ebdbde);
+      background:#fff;border-bottom:1px solid #ece4e5;
+      font-weight:700;font-size:16px;color:#241417;
     }
     .vm-solutions-grid{grid-template-columns:1fr;gap:4px;}
     .vm-solutions-panel .vm-solutions-grid a{padding:13px 10px;font-size:15px;}
@@ -627,7 +1088,7 @@ html { scroll-padding-top: 76px; }
     .vm-solutions-close{
       display:block;position:fixed;top:8px;right:10px;z-index:1;
       width:40px;height:40px;border:0;background:none;
-      font-size:30px;line-height:1;color:#241417;color:light-dark(#241417,#ebdbde);cursor:pointer;
+      font-size:30px;line-height:1;color:#241417;cursor:pointer;
     }
   }
 </style>
@@ -661,7 +1122,7 @@ html { scroll-padding-top: 76px; }
     <a href="https://login.virtual-marketer.de/">Login</a>
   </nav>
 </header>
-<main style="max-width:820px;margin:0 auto;padding:20px;">
+<main style="max-width:820px;margin:0 auto;padding:20px;" id="main-content">
   <h1>AI Trends</h1>
   <p style="color:#6b7280;">All posts in the &ldquo;AI Trends&rdquo; category.</p>
   <div class="vm-blog-tools">
@@ -791,6 +1252,7 @@ html { scroll-padding-top: 76px; }
   &copy; 2026 SGS Virtual Marketer GmbH &middot;
   <a href="/en/privacy-policy/">Privacy Policy</a> &middot;
   <a href="/en/legal-notice/">Legal Notice</a> <a href="/en/accessibility/">Accessibility</a>
+<div data-vm-newsletter data-locale="en" data-variant="compact" id="vm-newsletter-footer"></div>
 </footer>
 <script id="vm-blog-index" type="application/json">[{"t":"From Request to Custom Model: How Your Individual AI Model Comes to Life at Virtual Marketer","s":"custom-ki-modell-anfrage-prozess","d":"What happens after a model request: initial conversation, data assessment, pilot phase, and rollout — a transparent look at the path to your Custom AI model.","c":"Use Cases","k":"Custom AI Model, Individual AI Model, Request a Model, AI Onboarding","f":"20 October 2026"},{"t":"Brand Consistency for AI Content at Scale: Governance Frameworks for 2026","s":"ki-content-governance-markenkonsistenz","d":"Why scaling AI content is a governance question: risk-based approval processes, sample-based review, and versioned brand voice guidelines.","c":"Regulation & Compliance","k":"AI Content Governance, Brand Consistency, Brand Voice, AI Quality Assurance","f":"13 October 2026"},{"t":"Google &amp; Meta Ads with AI: Automated Ad Copy That Converts","s":"google-meta-ads-ki-anzeigentexte","d":"How AI-generated, product-data-based ad copy scales for Google RSA and Meta Ads without compromising brand consistency or compliance.","c":"Use Cases","k":"AI Ad Copy, Google Ads Automation, Meta Ads AI, Ad Copy Generation","f":"6 October 2026"},{"t":"Fine-Tuning Smaller AI Models Instead of GPT-4: Cost Efficiency in 2026","s":"fine-tuning-kleinerer-modelle-kosteneffizienz","d":"Why specialized, fine-tuned small language models are often cheaper and more reliable than generic large models for high-volume marketing tasks.","c":"AI Trends","k":"Fine-Tuning, Small Language Models, Cost Efficiency, Open-Source LLMs, Custom AI","f":"29 September 2026"},{"t":"Real-Time Marketing with Edge AI: Campaigns at the Moment of Truth","s":"real-time-marketing-edge-ai","d":"Why personalization decisions have to happen in milliseconds – and how edge AI eliminates latency before the page has even loaded.","c":"AI Trends","k":"Edge AI, Real-Time Marketing, Instant Personalization, Edge Computing","f":"22 September 2026"},{"t":"Synthetic Data for Marketing Training: Data Protection Through AI","s":"synthetische-daten-marketing-training","d":"How artificially generated datasets accelerate AI model training in marketing without using real customer data – and where the limits of synthetic data lie.","c":"Regulation & Compliance","k":"Synthetic Data, Synthetic Data, Privacy-First AI, Training Data, GDPR","f":"15 September 2026"},{"t":"AI-Driven Predictive Analytics for Universities: Predicting Academic Success","s":"predictive-analytics-universitaeten","d":"How German universities use early warning systems to detect student dropout risk sooner – and why data protection, bias review and human decision-making authority remain central.","c":"Education","k":"Predictive Analytics, Universities, Student Success, Student Dropout, Germany","f":"8 September 2026"},{"t":"Neural Search & Ranking for E-Commerce: The Future of Product Search","s":"neural-search-ranking-ecommerce","d":"How semantic, vector-based search reduces zero-result searches and guides customers to the right product even with colloquial, imprecise search queries.","c":"Use Cases","k":"Neural Search, Semantic Search, E-Commerce, Product Search, Vector Search","f":"1 September 2026"},{"t":"Voice Marketing & Conversational AI: The Next E-Commerce Channel","s":"voice-marketing-conversational-ai","d":"Why voice search and voicebots are becoming relevant for German online shops, how voice search differs from text search, and how to optimize your shop.","c":"Use Cases","k":"Voice Search, Conversational AI, Voice Search, Voicebots, Chatbots","f":"25 August 2026"},{"t":"Multimodal AI in Retail: Text, Image and Video United","s":"multimodale-ki-im-einzelhandel","d":"Visual search, automatic image tagging and AI-generated product images: how multimodal AI models are transforming catalogs, search and content production in retail.","c":"Use Cases","k":"Multimodal AI, Visual Search, Retail, Image Analysis, AI Video","f":"18 August 2026"},{"t":"RAG for E-Commerce Product Descriptions: Smarter Copy, More Conversions","s":"rag-fuer-ecommerce-produktbeschreibungen","d":"How Retrieval-Augmented Generation produces fact-based, unique product descriptions at scale – without hallucinations and without duplicate content.","c":"Use Cases","k":"RAG, Retrieval-Augmented Generation, Product Descriptions, E-Commerce, AI Copy","f":"11 August 2026"},{"t":"AI-Driven Personalization vs. Privacy: GDPR-Compliant in 2026","s":"personalisierung-vs-datenschutz-gdpr-2026","d":"How AI personalization and GDPR/EU AI Act can be reconciled: first-party data, consent management, edge processing and synthetic training data.","c":"Regulation & Compliance","k":"Personalization, Data Privacy, GDPR, EU AI Act, First-Party Data","f":"4 August 2026"},{"t":"SEO in the Age of AI Search: From Keywords to E-E-A-T","s":"seo-im-zeitalter-der-ki-suche","d":"Generative Engine Optimization (GEO) explained: how to make your content visible to ChatGPT, Perplexity, Claude and Google AI Overviews – not just for classic rankings.","c":"SEO","k":"Generative Engine Optimization, GEO, AI Search, E-E-A-T, Google AI Overviews","f":"28 July 2026"},{"t":"Agentic AI for Automated Marketing Campaigns","s":"agentic-ai-marketing-kampagnen","d":"How autonomous AI agents independently plan, test and optimize marketing campaigns – and why marketing automation returns an average of $5.44 for every dollar invested.","c":"AI Trends","k":"Agentic AI, Marketing Automation, Campaign Management, AI Marketing Germany","f":"21 July 2026"},{"t":"Edge AI: The Revolution of Artificial Intelligence – How Smart Devices Are Shaping Our Future","s":"edge-ai-die-revolution-der-kuenstlichen-intelligenz-wie-intelligente-geraete-unsere-zukunft-gestalten","d":"An overview of Edge AI, explaining how running artificial intelligence directly on devices reduces latency, improves privacy, and enables new applications in autonomous vehicles, healthcare, and smart homes.","c":"AI Trends","k":"Edge AI, artificial intelligence, IoT, autonomous vehicles, smart devices","f":"22 July 2025"},{"t":"The Rise of Multimodal AI: How Models Now Understand Text, Image & Sound","s":"multimodale-ki-die-zukunft-des-verstaendnisses-von-text-bild-und-ton","d":"An overview of multimodal AI models that can process text, images, and sound simultaneously, covering the underlying technology, key application areas in medicine, autonomous vehicles, and entertainment, and the challenges ahead.","c":"AI Trends","k":"multimodal AI, artificial intelligence trends, AI in healthcare, autonomous systems, deep learning","f":"21 July 2025"},{"t":"The Future of Shopping: Visual Search and AI Are Revolutionizing Online Retail","s":"die-zukunft-des-shoppings-visual-search-und-ki-revolutionieren-das-einkaufen-online","d":"An overview of Visual Search, an AI-powered image recognition technology that lets shoppers find and buy products using photos instead of keywords. The article explains how it works, cites real-world platforms already using it, and outlines the benefits for consumers and businesses.","c":"AI Trends","k":"visual search, AI shopping, image recognition, e-commerce, online retail","f":"15 May 2024"},{"t":"Fighting Fraud in Online Retail with AI: How Artificial Intelligence Ensures Security and Builds Trust","s":"mit-ki-gegen-betrug-im-online-handel-wie-kuenstliche-intelligenz-fuer-sicherheit-sorgt-und-vertrauen-aufbaut","d":"An overview of how AI-based fraud prevention systems help e-commerce businesses detect and stop fraudulent transactions in real time, reducing chargebacks while building consumer trust. It covers early detection, real-time decisioning, customer authentication, and compliance considerations.","c":"Use Cases","k":"AI fraud prevention, e-commerce security, machine learning, chargeback reduction, customer trust","f":"8 May 2024"},{"t":"What Does AI Technology Tell Us About the Efficiency of Warehousing and Goods Delivery?","s":"was-sagt-die-ki-technologie-ueber-die-effizienz-der-lagerhaltung-und-warenlieferung-aus","d":"An examination of how AI improves supply chain optimization through demand forecasting, warehouse management, route planning, risk management, and personalized delivery.","c":"Use Cases","k":"AI supply chain optimization, demand forecasting, warehouse management, route optimization, risk management","f":"1 May 2024"},{"t":"Automated Product Reviews: How AI Builds Trust and Supports Informed Decisions","s":"automatisierte-produktbewertungen-wie-ki-das-vertrauen-steigert-und-informierte-entscheidungen-unterstuetzt","d":"This article examines how AI-powered automated product reviews can build consumer trust through transparency and support more informed purchasing decisions, while also addressing the challenges and concerns that come with them.","c":"Use Cases","k":"automated product reviews, AI trust, informed purchasing decisions, transparency in AI, consumer decision-making","f":"24 April 2024"},{"t":"Through Tailored Recommendations","s":"durch-massgeschneiderte-empfehlungen","d":"An overview of AI-powered personalization in e-commerce, covering its benefits for customer satisfaction and conversion, and the challenges around data privacy, prediction accuracy, and cost.","c":"Use Cases","k":"AI personalization, e-commerce, customer experience, product recommendations, data privacy","f":"17 April 2024"},{"t":"Toward a Better Society with Artificial Intelligence: How AI Can Help Address Societal Challenges","s":"mit-kuenstlicher-intelligenz-zu-einer-besseren-gesellschaft-wie-ki-bei-der-bewaeltigung-gesellschaftlicher-probleme-helfen-kann","d":"An overview of how artificial intelligence can help tackle major societal challenges across healthcare, environmental protection, education, social justice, and the economy and labor market.","c":"AI Trends","k":"artificial intelligence, AI for society, healthcare AI, environmental protection, social justice, economy and labor market","f":"10 April 2024"},{"t":"The Future of Creativity: AI as Partner or Rival?","s":"die-zukunft-der-kreativitaet-ki-als-partner-oder-rivalen","d":"This article explores whether artificial intelligence will become a collaborator or a competitor to human creativity, examining AI's growing role in art, music, and literature and weighing the case for cooperation against the risk of AI displacing human artists.","c":"AI Trends","k":"artificial intelligence, creativity, AI and art, human-AI collaboration, AI ethics","f":"3 April 2024"},{"t":"Shaping the Future: Responsible Development and Use of AI Technologies","s":"die-zukunft-gestalten-verantwortungsvolle-entwicklung-und-nutzung-von-ki-technologien","d":"An overview of the ethical principles needed for responsible AI development and use, covering transparency, fairness, safety, data protection, key challenges like bias and autonomous weapons, and recommendations for governance going forward.","c":"Regulation & Compliance","k":"AI ethics, responsible AI, AI regulation, data protection, algorithmic bias","f":"27 March 2024"},{"t":"The Fight Against Bias in AI Systems: Fairness and Diversity as Top Priorities","s":"der-kampf-gegen-bias-in-ki-systemen-fairness-und-diversitaet-als-oberste-prioritaet","d":"This article outlines why bias in AI systems is a critical societal issue and presents concrete measures — from data diversity to ethical guidelines and regulation — needed to ensure fairness and diversity in AI systems.","c":"Regulation & Compliance","k":"AI bias, fairness in AI, diversity in AI systems, AI ethics, AI regulation","f":"20 March 2024"},{"t":"Understanding Machine Learning: Introduction, Fundamentals and Practical Applications in Everyday Life","s":"maschinelles-lernen-verstehen-einfuehrung-grundlagen-und-praktische-anwendungen-im-taeglichen-leben","d":"An introduction to machine learning that explains supervised, unsupervised, and reinforcement learning, and shows how these techniques already power everyday applications in streaming, healthcare, finance, and autonomous driving.","c":"Education","k":"machine learning, artificial intelligence, supervised learning, unsupervised learning, reinforcement learning","f":"13 March 2024"},{"t":"AI in Research: How Artificial Intelligence Accelerates Discoveries and Innovation","s":"ki-in-der-forschung-wie-kuenstliche-intelligenz-entdeckungen-und-innovationen-beschleunigt-die-macht-von-ki-in-der-forschung-neuartige-entdeckungen-und-bahnbrechende-innovationen-von","d":"An overview of how artificial intelligence is transforming research, from data analysis and virtual simulations to breakthroughs in medicine, materials science, and climate research.","c":"AI Trends","k":"AI in research, artificial intelligence, scientific discovery, data analysis, innovation","f":"6 March 2024"},{"t":"Assessing Fairly and Efficiently: How AI Supports the Automation of Student Performance Evaluation","s":"fair-und-effizient-bewerten-wie-ki-die-automatisierung-von-studentenleistungen-unterstuetzt","d":"This article examines how AI-based grading systems can improve the efficiency, fairness, and individualization of student performance evaluation, while also addressing their current limitations.","c":"Education","k":"AI grading, automated assessment, education technology, fairness in evaluation, personalized feedback","f":"28 February 2024"},{"t":"with Artificial Intelligence","s":"mit-kuenstlicher-intelligenz","d":"An overview of how AI-powered career counseling systems analyze skills, interests, and goals to deliver personalized study and career recommendations, while weighing efficiency gains against ethics and data privacy concerns.","c":"Use Cases","k":"AI career counseling, personalized recommendations, education guidance, data privacy, career planning","f":"21 February 2024"},{"t":"Artificial Intelligence in University Life: How Virtual Campus Assistants Are Revolutionizing the Study Process","s":"kuenstliche-intelligenz-im-hochschulalltag-wie-virtuelle-campus-assistenten-den-studienablauf-revolutionieren","d":"This article explains how AI-powered virtual campus assistants support students and faculty around the clock, from answering questions and managing administrative tasks to organizing schedules and improving accessibility, while also weighing the data-quality and user-acceptance challenges of adopting them.","c":"Education","k":"virtual campus assistant, AI in higher education, university chatbot, student support automation, education technology","f":"14 February 2024"},{"t":"Revolution in the Classroom: How AI Is Transforming Learning and Teaching","s":"revolution-im-klassenzimmer-wie-ki-das-lernen-und-lehren-transformiert","d":"An overview of how artificial intelligence is reshaping education through personalized learning, automated grading, and learning analytics, while examining the data privacy, bias, and ethical challenges that come with it.","c":"Education","k":"AI in education, personalized learning, automated grading, learning analytics, AI ethics in schools","f":"7 February 2024"},{"t":"The Future of Market Research: AI-Driven Insights for Advanced Business Strategies","s":"die-zukunft-der-marktforschung-ki-gesteuerte-insights-fuer-fortschrittliche-geschaeftsstrategien","d":"This article explores how artificial intelligence is transforming market research, from sentiment analysis and consumer segmentation to product development, while weighing the data privacy and transparency challenges that come with it.","c":"AI Trends","k":"AI market research, sentiment analysis, consumer segmentation, data-driven insights, AI ethics and privacy","f":"31 January 2024"},{"t":"Communication in Customer Service: How Chatbots Optimize Interactions with the Help of Artificial Intelligence","s":"kommunikation-im-kundenservice-wie-chatbots-mithilfe-von-kuenstlicher-intelligenz-interaktionen-optimieren","d":"An overview of how AI-powered chatbots are transforming customer service by providing round-the-clock availability, scalability, and more personalized responses, while still requiring smooth handoffs to human agents for complex requests.","c":"Use Cases","k":"AI chatbots, customer service automation, conversational AI, customer experience, artificial intelligence","f":"24 January 2024"},{"t":"The Key to Successful Targeting: AI-Powered Customer Analysis","s":"der-schluessel-zum-erfolgreichen-targeting-ki-gestuetzte-kundenanalyse","d":"An overview of how AI-powered customer analysis helps businesses build real-time customer profiles, sharpen targeting, and personalize marketing while respecting data privacy.","c":"Use Cases","k":"customer analysis, AI targeting, customer profiling, marketing personalization, data ethics","f":"17 January 2024"},{"t":"I Suggest: \"Efficient Content Production Through AI-Powered Automation\"","s":"ich-schlage-vor-effizienter-content-produktion-durch-ki-gestuetzte-automatisierung","d":"An overview of how AI-powered automated content creation helps agencies and businesses boost efficiency, scale content output, personalize messaging, and improve quality, while stressing that human creativity remains essential.","c":"AI Trends","k":"AI content creation, content automation, marketing efficiency, personalization, AI agencies","f":"10 January 2024"},{"t":"Artificial Creativity: How AI Tools Are Revolutionizing the Advertising Industry","s":"kuenstliche-kreativitaet-wie-ki-tools-die-werbebranche-revolutionieren","d":"An overview of how creative AI tools are transforming the advertising industry by automating content creation, personalization, and audience analysis, while also examining the challenges around creativity, data privacy, and responsibility that come with them.","c":"AI Trends","k":"AI tools, advertising industry, creative automation, personalization, audience analysis","f":"3 January 2024"},{"t":"From Chaos to Efficiency: How Automated Warehouse Management Is Revolutionizing E-Commerce Logistics","s":"vom-chaos-zur-effizienz-wie-automatisierte-lagerverwaltung-den-e-commerce-logistikbetrieb-revolutioniert","d":"An overview of how automated warehouse management systems—conveyor belts, storage and retrieval units, pick-by-light systems, and warehouse software—are boosting efficiency, accuracy, and safety in e-commerce logistics.","c":"Use Cases","k":"automated warehouse management, e-commerce logistics, pick-by-light systems, inventory control, warehouse automation","f":"27 December 2023"},{"t":"The Revolution of Fashion Shopping: Virtual Try-On Thanks to AI","s":"die-revolution-des-mode-einkaufs-virtuelle-anprobe-dank-ki","d":"AI-powered virtual try-on lets online shoppers see how clothing looks on their own digital image before buying, cutting returns and boosting efficiency for retailers. This article explains how the computer vision technology works and the benefits and challenges it brings for customers and businesses alike.","c":"Use Cases","k":"virtual try-on, AI fashion, computer vision, online shopping, e-commerce returns","f":"20 December 2023"},{"t":"AI in E-Commerce: Maximizing Profit Through Dynamic Pricing","s":"ki-im-e-commerce-gewinnmaximierung-durch-dynamische-preisgestaltung","d":"An overview of how AI-driven dynamic pricing helps e-commerce businesses optimize prices in real time to maximize conversion rates and profit, while addressing the transparency and data-privacy challenges involved.","c":"Use Cases","k":"dynamic pricing, AI price optimization, e-commerce, personalized pricing, conversion rate optimization","f":"13 December 2023"},{"t":"The Key to Success in E-Commerce: How AI-Powered Personalized Product Recommendations Boost Revenue","s":"der-schluessel-zum-erfolg-im-e-commerce-wie-ki-personalisierte-produktvorschlaege-den-umsatz-steigern","d":"How AI-driven personalization of product recommendations helps online retailers better understand customers, increase conversion, and grow revenue in e-commerce.","c":"Use Cases","k":"AI personalization, product recommendations, e-commerce, collaborative filtering, customer data","f":"6 December 2023"},{"t":"AI in E-Commerce: The Future of Customer Experience","s":"ki-im-e-commerce-die-zukunft-des-kundenerlebnisses","d":"An overview of how artificial intelligence is transforming online retail, from personalized product recommendations and virtual shopping assistants to smarter search, fraud prevention, and warehouse logistics.","c":"Use Cases","k":"AI in e-commerce, personalized recommendations, virtual assistants, fraud prevention, inventory management","f":"29 November 2023"},{"t":"Revolution in Healthcare: How AI Can Save Our Lives","s":"revolution-des-gesundheitswesens-wie-ki-unser-leben-retten-kann","d":"An overview of how artificial intelligence is being applied across healthcare today, from medical imaging and personalized medicine to patient care robotics, alongside the data quality, bias, and regulatory risks that come with it.","c":"Use Cases","k":"AI in healthcare, medical imaging AI, personalized medicine, healthcare robotics, AI regulation","f":"22 November 2023"},{"t":"Revolution in Product Recommendations: How AI Personalizes Our Shopping Experience","s":"revolution-der-produktvorschlaege-wie-ki-unser-shopping-erlebnis-personalisiert","d":"An overview of how AI-driven product recommendations use machine learning to personalize online shopping, explaining how the technology works and the benefits it brings to both consumers and retailers.","c":"Use Cases","k":"AI product recommendations, personalization, e-commerce, machine learning, collaborative filtering","f":"15 November 2023"},{"t":"Succeeding Through AI: Virtual Learning Assistants Are Revolutionizing Higher Education","s":"dank-ki-zum-erfolg-virtuelle-lernassistenten-revolutionieren-das-hochschulwesen","d":"This article explores how AI-based virtual learning assistants are transforming higher education by supporting course selection, personalized learning, round-the-clock access, automated grading, and progress analysis, while also discussing the associated challenges.","c":"Education","k":"virtual learning assistants, AI in higher education, personalized learning, automated grading, education technology","f":"8 November 2023"},{"t":"The Future of Customer Service: How AI Is Revolutionizing Customer Service","s":"die-zukunft-des-kundenservice-wie-ki-den-kundenservice-revolutioniert","d":"An overview of how artificial intelligence is transforming customer service through chatbots, voice recognition, automated email replies, personalized recommendations, sentiment analysis, and automated conflict resolution.","c":"Use Cases","k":"AI customer service, chatbots, sentiment analysis, voice recognition, customer service automation","f":"1 November 2023"},{"t":"The Role of Mathematical Foundations in Artificial Intelligence","s":"die-rolle-der-mathematischen-grundlagen-fuer-kuenstliche-intelligenz","d":"An overview of the core branches of mathematics — probability and statistics, linear algebra, calculus, optimization, decision theory, and graph theory — that underpin the algorithms and models used in artificial intelligence.","c":"Education","k":"mathematical foundations of AI, linear algebra, probability theory, optimization, machine learning mathematics","f":"25 October 2023"},{"t":"The Balancing Act Between AI and Data Protection: How Do We Protect Our Data in the Evolving AI Landscape?","s":"die-gratwanderung-zwischen-ki-und-datenschutz-wie-schuetzen-wir-unsere-daten-in-der-sich-entwickelnden-ki-landschaft","d":"An outline of the key challenges and solutions at the intersection of artificial intelligence and data protection, from GDPR principles to privacy-by-design and anonymization techniques.","c":"Regulation & Compliance","k":"AI and data protection, GDPR, privacy by design, data anonymization, AI ethics","f":"18 October 2023"},{"t":"Why Custom AI Is the Better Choice: Advantages Over Generic AI Models Like ChatGPT","s":"warum-custom-ai-die-bessere-wahl-ist-vorteile-gegenueber-generischen-ki-modellen-wie-chat-gpt","d":"A comparison of custom, business-specific AI models against generic AI models like ChatGPT, covering domain expertise, data privacy, controllability, and process understanding.","c":"AI Trends","k":"custom AI, ChatGPT, generic AI models, data privacy, domain-specific AI","f":"11 October 2023"},{"t":"The Diversity of Artificial Intelligence: An Introduction to Different Types of AI","s":"die-vielfalt-der-kuenstlichen-intelligenz-eine-einfuehrung-in-verschiedene-arten-von-ai","d":"An introductory overview of the main types of artificial intelligence, from weak and strong AI to symbolic AI, machine learning, neural networks, deep learning, and genetic algorithms.","c":"Education","k":"artificial intelligence, types of AI, weak AI, strong AI, machine learning, deep learning","f":"4 October 2023"},{"t":"Revolution of Work: How Artificial Intelligence Is Transforming the World of Work","s":"revolution-der-arbeit-wie-kuenstliche-intelligenz-die-arbeitswelt-umkrempelt","d":"An overview of how artificial intelligence is reshaping the workplace through automation, data analysis, and product innovation, while raising new ethical and labor-market challenges.","c":"AI Trends","k":"artificial intelligence, future of work, workplace automation, AI ethics, job displacement","f":"27 September 2023"},{"t":"The Future of Blogging: AI as a Writing Assistant","s":"die-zukunft-des-bloggens-ki-als-schreibassistent","d":"An overview of how artificial intelligence is transforming blog content creation, covering automated content generation, keyword research, personalization, editing, and sentiment analysis.","c":"Use Cases","k":"AI writing assistant, blog content generation, SEO keyword research, content personalization, sentiment analysis","f":"20 September 2023"},{"t":"The Future of Customer Service: How Artificial Intelligence Is Improving Chatbots","s":"die-zukunft-des-kundenservice-wie-kuenstliche-intelligenz-chatbots-verbessert","d":"An overview of how AI-powered chatbots use machine learning and natural language processing to deliver more efficient, personalized customer service, along with their benefits and current limitations.","c":"Use Cases","k":"AI chatbots, customer service, machine learning, natural language processing, conversational AI","f":"13 September 2023"},{"t":"Intelligent Product Descriptions: How AI Is Revolutionizing E-Commerce","s":"intelligente-produktbeschreibungen-wie-ki-den-e-commerce-revolutioniert","d":"An overview of how AI, particularly natural language processing, is used to generate, personalize, and optimize e-commerce product descriptions, along with the quality and ethical challenges this raises.","c":"Use Cases","k":"AI product descriptions, e-commerce AI, natural language processing, personalization, content optimization","f":"6 September 2023"},{"t":"Revolution in Email Marketing: How AI Optimizes Customer Communication","s":"revolution-im-e-mail-marketing-wie-ki-die-kundenkommunikation-optimiert","d":"An overview of how artificial intelligence and machine learning are transforming email marketing, from behavior-based recommendations and automated segmentation to churn prediction and optimized send times.","c":"Use Cases","k":"AI email marketing, personalization, customer communication, churn prediction, marketing automation","f":"30 August 2023"},{"t":"AI in Marketing: Revolutionary Examples That Are Changing the Industry","s":"ki-im-marketing-revolutionaere-beispiele-die-die-branche-veraendern","d":"An overview of how artificial intelligence is being applied across marketing today, from chatbots and personalized email to predictive analytics and automated advertising.","c":"Use Cases","k":"AI in marketing, chatbots, personalized email marketing, predictive analytics, marketing automation","f":"25 August 2023"},{"t":"How Can Companies Use Generative AI in Marketing?","s":"wie-koennen-unternehmen-generative-ki-im-marketing-nutzen","d":"An exploration of how generative AI enables personalized marketing content, ads, SEO/SEA copy, and email campaigns, along with the data privacy and ethical challenges involved.","c":"Use Cases","k":"generative AI marketing, personalized advertising, SEO content generation, email campaigns, AI chatbots","f":"19 April 2023"},{"t":"What Is Generative AI and How Does It Differ From Other Types of AI?","s":"was-ist-generative-ai-und-wie-unterscheidet-es-sich-von-anderen-kis","d":"An introduction to generative AI, how it differs from descriptive AI, how it works, and its applications and challenges across industries such as art, medicine, finance, and gaming.","c":"Education","k":"generative AI, descriptive AI, artificial intelligence, AI applications, custom AI models","f":"18 April 2023"},{"t":"The Virtual Marketer","s":"der-virtual-marketer","d":"An introduction to the Virtual Marketer, a German-developed virtual marketing assistant that handles routine marketing tasks and is trained specifically for each business.","c":"AI Trends","k":"virtual marketing assistant, AI marketing, German AI, API-first, marketing automation","f":"30 December 2022"}]</script>
 <script>
@@ -907,6 +1369,21 @@ html { scroll-padding-top: 76px; }
  *
  * Re-evaluated on resize so rotating a phone to landscape past the
  * breakpoint restores the desktop effect.
+ *
+ * READS BEFORE WRITES, NOT INTERLEAVED
+ *
+ * The original version of this loop read getComputedStyle(el) and then
+ * immediately wrote el.style.marginTop inside the SAME forEach iteration,
+ * for every section in the NodeList. Each write invalidates layout, so the
+ * next iteration's read forces the browser to recompute it synchronously
+ * right then instead of on its own schedule — one forced reflow per
+ * section, measured as the forced-reflow warning attributed to this file
+ * in the Lighthouse trace. The fix is the standard batching pattern: every
+ * section is read first and its measurement pushed onto a plain array,
+ * and only once every read is done do the writes happen, in a second loop.
+ * Layout is invalidated at most once for the whole pass instead of once
+ * per section. Nothing about which sections get neutralised, or what they
+ * end up at, changes — only the order read and write happen in.
  */
 (function () {
   var BP = 1024;
@@ -923,11 +1400,18 @@ html { scroll-padding-top: 76px; }
     if (touched.length) return; // already neutralised
 
     var sections = document.querySelectorAll('.elementor-section.elementor-top-section');
+
+    // Pass 1: read only. No write happens between any two reads, so none of
+    // them can trigger a synchronous layout recalculation.
+    var negative = [];
     Array.prototype.forEach.call(sections, function (el) {
-      if (parseFloat(window.getComputedStyle(el).marginTop) < 0) {
-        touched.push({ el: el, original: el.style.marginTop });
-        el.style.marginTop = '0px';
-      }
+      if (parseFloat(window.getComputedStyle(el).marginTop) < 0) negative.push(el);
+    });
+
+    // Pass 2: write only, against the layout already settled above.
+    negative.forEach(function (el) {
+      touched.push({ el: el, original: el.style.marginTop });
+      el.style.marginTop = '0px';
     });
   }
 
@@ -940,7 +1424,7 @@ html { scroll-padding-top: 76px; }
 })();
 </script>
 <!-- vm-search:start -->
-<link rel="stylesheet" href="/assets/search/search.css">
+<link rel="stylesheet" href="/assets/search/search.css?v=d2813496ae">
 <div class="vm-search">
   <button type="button" class="vm-search-toggle" aria-expanded="false" aria-controls="vm-search-panel" aria-label="Open search">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -956,7 +1440,7 @@ html { scroll-padding-top: 76px; }
     <ul class="vm-search-results" id="vm-search-results" role="listbox" hidden></ul>
   </div>
 </div>
-<script defer src="/assets/search/search.js"></script>
+<script defer src="/assets/search/search.js?v=96d6bfc5a8"></script>
 <!-- vm-search:end -->
 </body>
 </html>

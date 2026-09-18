@@ -52,7 +52,13 @@ async function firestoreAvailable() {
 /** Removes every document this run created. */
 async function cleanup() {
   const { firestore } = require('../src/db');
-  for (const name of [`${prefix}bookings`, `${prefix}contact_submissions`]) {
+  for (const name of [
+    `${prefix}bookings`,
+    `${prefix}contact_submissions`,
+    `${prefix}model_requests`,
+    `${prefix}newsletter_subscriptions`,
+    `${prefix}whitepaper_downloads`,
+  ]) {
     const snap = await firestore.collection(name).get();
     if (snap.empty) continue;
     const batch = firestore.batch();

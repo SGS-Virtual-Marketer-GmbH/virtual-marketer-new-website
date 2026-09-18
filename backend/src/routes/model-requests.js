@@ -187,8 +187,8 @@ router.get('/confirm', confirmLimiter, async (req, res, next) => {
     const ok =
       row &&
       row.status === 'pending' &&
-      tokens.isFresh(row.confirm_token_expires_at) &&
-      tokens.matches(token, row.confirm_token_hash) &&
+      !tokens.isExpired(row.confirm_token_expires_at) &&
+      tokens.verifyToken(token, row.confirm_token_hash) &&
       (await modelRequests.confirm(id, new Date().toISOString()));
 
     if (ok) {

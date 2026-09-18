@@ -1,0 +1,165 @@
+/* Print stylesheet for the "Agentic Marketing 2026" whitepaper.
+ *
+ * Rendered by scripts/generate-lead-magnet-pages.js via puppeteer-core
+ * driving the real /usr/bin/google-chrome binary (page.pdf()), which is
+ * what makes running headers/footers and real page numbers possible in the
+ * first place — Chromium's plain `--print-to-pdf` CLI flag does not expose
+ * header/footer templates at all (that's a DevTools Protocol feature,
+ * `Page.printToPDF({headerTemplate, footerTemplate})`, only reachable
+ * through a CDP client). puppeteer-core happened to already be present in
+ * node_modules (not a new install) purely to drive that one call; the
+ * generator falls back to the plain CLI (no running header/footer/page
+ * numbers, documented as a known degradation) if it's ever absent.
+ *
+ * No light-dark() anywhere in this file: a PDF has no viewer-level theme
+ * to react to (prefers-color-scheme has no meaning for a printed/exported
+ * document), so this is fixed-light, on purpose.
+ *
+ * Physical page margins (top/bottom/left/right) are set by the Puppeteer
+ * page.pdf() call, not by @page here — @page stays margin:0 so the two
+ * settings can't fight each other; the header/footer templates render in
+ * the margin band Puppeteer reserves.
+ */
+
+@font-face{
+  font-family:'Outfit';
+  font-style:normal;
+  font-weight:100 900;
+  src:url('fonts/outfit-normal-latin.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:'Outfit';
+  font-style:normal;
+  font-weight:100 900;
+  src:url('fonts/outfit-normal-latin-ext.woff2') format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+:root{
+  --vm-red:#94152b;
+  --vm-red-dark:#700f2b;
+  --vm-blue:#66a3ce;
+  --vm-blue-light:#a3cce9;
+  --ink:#241417;
+  --muted:#5b5254;
+  --line:#e7dfe0;
+  --tint-red:#fbecee;
+  --tint-blue:#eef5fa;
+}
+
+@page{ size:A4; margin:0; }
+
+*{ box-sizing:border-box; }
+
+html,body{
+  margin:0; padding:0;
+  font-family:'Outfit', 'Segoe UI', Arial, sans-serif;
+  font-weight:400;
+  font-size:11.5pt;
+  line-height:1.55;
+  color:var(--ink);
+  background:#fff;
+}
+
+h1,h2,h3{ font-weight:700; color:var(--ink); letter-spacing:-0.01em; }
+h1{ font-size:24pt; margin:0 0 6pt; line-height:1.2; }
+h2{ font-size:16pt; margin:26pt 0 8pt; color:var(--vm-red); break-after:avoid-page; page-break-after:avoid; }
+h3{ font-size:12.5pt; margin:16pt 0 6pt; break-after:avoid-page; page-break-after:avoid; }
+p{ margin:0 0 9pt; orphans:3; widows:3; }
+ul,ol{ margin:0 0 12pt; padding-left:1.2em; }
+li{ margin-bottom:4pt; }
+strong{ font-weight:700; }
+em{ font-style:italic; }
+
+a{ color:var(--vm-red); text-decoration:none; }
+
+section.chapter{ break-before:page; page-break-before:always; }
+section.chapter:first-of-type{ break-before:auto; page-break-before:auto; }
+
+.eyebrow{
+  display:inline-block; font-size:9pt; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--vm-red); background:var(--tint-red);
+  padding:3pt 9pt; border-radius:999px; margin-bottom:8pt;
+}
+
+/* ---- Cover page --------------------------------------------------------- */
+.cover{
+  height:297mm; /* fills the A4 page exactly since @page margin is 0 */
+  display:flex; flex-direction:column; justify-content:space-between;
+  background:var(--vm-red); color:#fff;
+  padding:26mm 20mm;
+  break-after:page; page-break-after:always;
+}
+.cover .wordmark{ font-size:15pt; font-weight:800; letter-spacing:-.01em; }
+.cover .wordmark .dot{ color:var(--vm-blue-light); }
+.cover .cover-title{ font-size:34pt; line-height:1.12; font-weight:800; color:#fff; margin:0 0 14pt; }
+.cover .cover-sub{ font-size:14pt; font-weight:400; color:#f6dde2; max-width:34em; margin:0; }
+.cover .cover-meta{ font-size:10pt; color:#f0c4cd; border-top:1px solid rgba(255,255,255,.3); padding-top:10pt; }
+
+/* ---- Table of contents --------------------------------------------------
+ * Deliberately no page numbers in this list: a single-pass render (this
+ * script does not run a two-pass "measure then re-render" step) cannot know
+ * final pagination in advance, and a guessed number would be exactly the
+ * kind of unverifiable figure this document is not allowed to ship. */
+.toc{ break-after:page; page-break-after:always; padding-top:8mm; }
+.toc h1{ color:var(--vm-red); }
+.toc ol{ list-style:none; padding:0; margin-top:18pt; counter-reset:toc; }
+.toc li{
+  counter-increment:toc; display:flex; gap:10pt; align-items:baseline;
+  padding:9pt 0; border-bottom:1px solid var(--line); font-size:12.5pt;
+}
+.toc li::before{
+  content:counter(toc,decimal-leading-zero); color:var(--vm-blue); font-weight:700;
+  font-size:11pt; flex:0 0 auto;
+}
+
+/* ---- Diagrams (real mechanisms, not stock stat charts) ------------------ */
+.diagram{ margin:14pt 0 18pt; break-inside:avoid; page-break-inside:avoid; }
+.diagram-caption{ font-size:9pt; color:var(--muted); margin-top:6pt; text-align:center; }
+
+.trigger-row{ display:flex; gap:10pt; }
+.trigger-card{
+  flex:1; border:1px solid var(--line); border-radius:8pt; padding:10pt 11pt;
+  background:var(--tint-blue);
+}
+.trigger-card h4{ margin:0 0 4pt; font-size:11pt; color:var(--vm-red); }
+.trigger-card p{ margin:0; font-size:9.5pt; color:var(--muted); }
+
+.agent-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10pt; }
+.agent-card{
+  border:1px solid var(--line); border-radius:8pt; padding:11pt 12pt;
+  background:#fff;
+}
+.agent-card h4{ margin:0 0 4pt; font-size:11pt; }
+.agent-card p{ margin:0; font-size:9.5pt; color:var(--muted); }
+
+.flow-row{ display:flex; align-items:stretch; gap:6pt; }
+.flow-step{
+  flex:1; border:1px solid var(--line); border-radius:8pt; padding:9pt 8pt;
+  text-align:center; background:var(--tint-red); font-size:9pt;
+}
+.flow-step .n{ display:block; font-weight:800; color:var(--vm-red); font-size:13pt; margin-bottom:3pt; }
+.flow-arrow{ align-self:center; color:var(--vm-blue); font-size:14pt; }
+
+/* ---- Callout: verbatim product UI text, quoted, not paraphrased --------- */
+.callout{
+  border-left:3px solid var(--vm-blue); background:var(--tint-blue);
+  padding:10pt 13pt; margin:12pt 0; border-radius:0 8pt 8pt 0;
+  break-inside:avoid; page-break-inside:avoid;
+}
+.callout .label{ font-size:8.5pt; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--vm-blue); }
+.callout pre{
+  font-family:'Courier New', monospace; font-size:9pt; white-space:pre-wrap;
+  margin:6pt 0 0; line-height:1.5;
+}
+
+.checklist{ list-style:none; padding:0; }
+.checklist li{ padding-left:1.4em; position:relative; }
+.checklist li::before{
+  content:'\2713'; position:absolute; left:0; color:var(--vm-red); font-weight:700;
+}
+
+.closing{ text-align:center; padding-top:20mm; }
+.closing .eyebrow{ margin-bottom:14pt; }
+.closing h1{ color:var(--vm-red); }

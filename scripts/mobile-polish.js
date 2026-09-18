@@ -111,7 +111,58 @@ img, video { height: auto; }
 /* In-page anchors landed underneath the fixed header. */
 html { scroll-padding-top: 76px; }
 
+/* --- Bootstrap grid gutters (.container/.row/.col-*) --------------------
+   Every regular content page (blog posts especially — measured on
+   /blog/der-virtual-marketer/, a long one) uses the theme's Bootstrap-
+   derived grid for its main column: .container adds 15px padding each
+   side, .row cancels it with a -15px margin, and the .col-* the content
+   actually sits in re-adds its own 15px each side — net 15px of gutter,
+   unconditionally, at every viewport width (verified in the built bundle:
+   none of these three rules sit behind a media query). Before the
+   deferred bundle applies, the column is 30px WIDER than its final width
+   (0 gutter instead of 15px+15px), so a long article reflows across fewer,
+   longer lines and then snaps to more, shorter ones the moment the real
+   CSS lands — measured at a 400px+ height change on that post alone, by
+   far the largest shift found on any page. These three declarations are
+   copied verbatim from the bundle rather than approximated, and are
+   layout-establishing only (no color, no decoration), so duplicating them
+   here changes nothing once the deferred bundle also applies it — same
+   values, same result. */
+.container { margin-left: auto; margin-right: auto; padding-left: 15px; padding-right: 15px; }
+.row { margin-left: -15px; margin-right: -15px; }
+.col-lg-9, .col-md-3, .col-md-9, .col-sm-12, .col-xs-12 { padding-left: 15px; padding-right: 15px; }
+
+@media (min-width: ${BP + 1}px) {
+  /* Mirrors the theme's own "@media (min-width:1025px){.header-mobile{display:none}}"
+     rule — see the "--- 0." block below for why this needs to be inline
+     rather than left to the (now deferred) theme bundle. */
+  .header-mobile { display: none; }
+}
+
 @media (max-width: ${BP}px) {
+
+  /* --- 0. Desktop/mobile header toggle ------------------------------------
+     THE BIGGEST MEASURED SHIFT ON THE SITE. #site-header renders BOTH
+     .header-desktop and .header-mobile as plain sibling <div>s with no
+     display rule of their own in the static HTML — the toggle that shows
+     one and hides the other lives entirely in the theme's bundled
+     stylesheet ("@media (max-width:1024px){.header-desktop{display:none}
+     .header-mobile{display:block}}"). Once hoist-critical-css.js defers
+     that bundle off the render-blocking path, there is a real window where
+     NEITHER rule has applied yet, so on a phone both headers render at
+     once, stacked — the full desktop nav on top of the mobile bar — until
+     the deferred stylesheet loads and .header-desktop collapses back to
+     nothing. Lighthouse's layout-shift trace names the resulting jump
+     against .header-mobile (0.288, by far the largest single contributor)
+     and the desktop header's own first widget wrapper
+     (.elementor-widget-wrap.elementor-element-populated, 0.116) — both are
+     this one cause. The fix is exactly the theme's own rule, duplicated
+     here so it is present at first paint; the deferred bundle reapplies
+     the identical rule later at equal specificity, so nothing changes once
+     it loads. Must come before "1." below: .header-mobile's background/
+     sizing rules only matter once it is the visible one. */
+  .header-desktop { display: none; }
+  .header-mobile { display: block; }
 
   /* Long tables and code blocks scroll in their own box rather than widening
      the page. Scoped to mobile deliberately: display:block is what makes a
@@ -362,6 +413,21 @@ html { scroll-padding-top: 76px; }
  *
  * Re-evaluated on resize so rotating a phone to landscape past the
  * breakpoint restores the desktop effect.
+ *
+ * READS BEFORE WRITES, NOT INTERLEAVED
+ *
+ * The original version of this loop read getComputedStyle(el) and then
+ * immediately wrote el.style.marginTop inside the SAME forEach iteration,
+ * for every section in the NodeList. Each write invalidates layout, so the
+ * next iteration's read forces the browser to recompute it synchronously
+ * right then instead of on its own schedule — one forced reflow per
+ * section, measured as the forced-reflow warning attributed to this file
+ * in the Lighthouse trace. The fix is the standard batching pattern: every
+ * section is read first and its measurement pushed onto a plain array,
+ * and only once every read is done do the writes happen, in a second loop.
+ * Layout is invalidated at most once for the whole pass instead of once
+ * per section. Nothing about which sections get neutralised, or what they
+ * end up at, changes — only the order read and write happen in.
  */
 (function () {
   var BP = ${BP};
@@ -378,11 +444,18 @@ html { scroll-padding-top: 76px; }
     if (touched.length) return; // already neutralised
 
     var sections = document.querySelectorAll('.elementor-section.elementor-top-section');
+
+    // Pass 1: read only. No write happens between any two reads, so none of
+    // them can trigger a synchronous layout recalculation.
+    var negative = [];
     Array.prototype.forEach.call(sections, function (el) {
-      if (parseFloat(window.getComputedStyle(el).marginTop) < 0) {
-        touched.push({ el: el, original: el.style.marginTop });
-        el.style.marginTop = '0px';
-      }
+      if (parseFloat(window.getComputedStyle(el).marginTop) < 0) negative.push(el);
+    });
+
+    // Pass 2: write only, against the layout already settled above.
+    negative.forEach(function (el) {
+      touched.push({ el: el, original: el.style.marginTop });
+      el.style.marginTop = '0px';
     });
   }
 
