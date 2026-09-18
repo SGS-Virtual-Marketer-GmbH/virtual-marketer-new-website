@@ -75,8 +75,12 @@
    instead, and also removed from tab order and from the accessibility tree. */
 .vm-nl-hp{position:absolute !important;left:-5000px !important;width:1px;height:1px;overflow:hidden;}
 
-/* ---- compact (footer, every page) -------------------------------------- */
-.vm-nl--compact{max-width:560px;padding:18px 20px;margin:20px 0 0;}
+/* ---- compact (footer, every page) --------------------------------------
+   `auto` side margins, not `0`: the mount sits in a full-width,
+   single-column footer row, so a 560px card pinned left leaves the rest of
+   the row empty and the footer reads as lopsided. The `--index` variant
+   below already centres for the same reason. */
+.vm-nl--compact{max-width:560px;padding:18px 20px;margin:20px auto 0;}
 .vm-nl--compact .vm-nl-heading{font-size:15px;}
 .vm-nl--compact p.vm-nl-sub{font-size:13px;margin-bottom:10px;}
 .vm-nl--compact .vm-nl-btn{padding:10px 18px;font-size:14px;}
