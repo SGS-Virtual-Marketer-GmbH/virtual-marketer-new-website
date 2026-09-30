@@ -13,16 +13,15 @@
  *   <span class="stitle-dots">About us</span>     → Über uns
  *   <span class="stitle-dots">Next Steps</span>   → Nächste Schritte
  *   <span class="stitle-dots">FAQ's</span>        → FAQ
- *   Unique Models - Einzigartig                   → Eigene Modelle – einzigartig
- *   German Solutions - Regional                   → Deutsche Lösungen – regional
+ *   Unique Models - Einzigartig                   → Eigene Modelle: einzigartig
+ *   German Solutions - Regional                   → Deutsche Lösungen: regional
  *   Flow-Setup & Client Testing                   → Flow-Setup & Kundentests
  *
  * "FAQ's" is also wrong in English — the apostrophe makes it a possessive,
  * not a plural — so neither language wanted it.
  *
- * The hyphens in the two list items are replaced with en dashes at the same
- * time: German typography sets an apposition with "–", and the surrounding
- * bullets already do.
+ * The hyphens in the four list items become a colon: house rule, no en or em
+ * dashes in outward-facing copy.
  *
  * WHY THIS RUNS LATE, AND WHY IT SKIPS /en/
  *
@@ -56,10 +55,10 @@ const EYEBROWS = new Map([
 
 /** Whole-element text, matched inside the tag that holds it. */
 const TEXTS = new Map([
-  ['Unique Models - Einzigartig', 'Eigene Modelle – einzigartig'],
-  ['German Solutions - Regional', 'Deutsche Lösungen – regional'],
-  ['API First - Flexibel', 'API First – flexibel'],
-  ['Nahtlose Integration - Individuell', 'Nahtlose Integration – individuell'],
+  ['Unique Models - Einzigartig', 'Eigene Modelle: einzigartig'],
+  ['German Solutions - Regional', 'Deutsche Lösungen: regional'],
+  ['API First - Flexibel', 'API First: flexibel'],
+  ['Nahtlose Integration - Individuell', 'Nahtlose Integration: individuell'],
   ['Flow-Setup & Client Testing', 'Flow-Setup & Kundentests'],
   ['Flow-Setup &amp; Client Testing', 'Flow-Setup &amp; Kundentests'],
   ["FAQ's", 'FAQs'],

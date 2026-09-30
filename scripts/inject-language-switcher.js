@@ -68,8 +68,11 @@ const DE_TO_EN = {
 const BLOG_POSTS_EN_JSON = path.join(__dirname, '../blog-posts-en.json');
 if (fs.existsSync(BLOG_POSTS_EN_JSON)) {
   const { posts } = JSON.parse(fs.readFileSync(BLOG_POSTS_EN_JSON, 'utf-8'));
+  // Only where BOTH language versions were actually generated. A German post
+  // that is still scheduled has no page yet, and linking to it is a 404.
   posts.forEach(({ slug }) => {
-    DE_TO_EN[`/blog/${slug}/`] = `/en/blog/${slug}/`;
+    const both = ['blog', 'en/blog'].every((d) => fs.existsSync(path.join(DIST, d, slug, 'index.html')));
+    if (both) DE_TO_EN[`/blog/${slug}/`] = `/en/blog/${slug}/`;
   });
 }
 

@@ -16,7 +16,8 @@ COPY dist ./dist-src
 # llms.txt generators so both always reflect this exact build.
 RUN mkdir -p dist && cp -r dist-src/. dist/ \
   && node scripts/generate-sitemap.js \
-  && node scripts/generate-llms-txt.js
+  && node scripts/generate-llms-txt.js \
+  && node scripts/normalize-dashes.js
 
 # ---- Stage 2: Serve ----
 FROM nginx:1.27-alpine

@@ -172,14 +172,23 @@ function generateArchive({ pagePosts, allPosts, categories, activeCategory, page
   const cards = pagePosts.map((p) => BI.postCard(p, formatDateEN, 'en')).join('\n');
 
   const canonical = `${BASE_URL}${urlPath}`;
+
+  // A category holding fewer than 3 posts is a thin page (a few lines of
+  // intro and one card): noindex it rather than have Google file it under
+  // "crawled, currently not indexed". Links stay followable, and
+  // scripts/generate-sitemap.js leaves noindex pages out.
+  const thinCategory = Boolean(activeCategory) && allPosts.filter((p) => p.category === activeCategory).length < 3;
+  // Unique title and description per archive page (see the German generator).
+  const pageTitle = page > 1 ? ` (page ${page})` : '';
+  const pageDesc = page > 1 ? ` Page ${page} of ${totalPages}.` : '';
   const title = activeCategory
-    ? `${activeCategory} | Virtual Marketer Blog`
+    ? `${activeCategory}${pageTitle} | Virtual Marketer Blog`
     : page > 1
-      ? `Blog – page ${page} | Virtual Marketer`
+      ? `Blog, page ${page} | Virtual Marketer`
       : 'Blog | Virtual Marketer - AI &amp; Marketing Insights';
   const description = activeCategory
-    ? `All posts on ${activeCategory} — articles, analysis and practical examples from Virtual Marketer.`
-    : 'Everything about AI, machine learning and modern marketing strategy. Articles, tips and best practices from Virtual Marketer.';
+    ? `All posts on ${activeCategory}: articles, analysis and practical examples from Virtual Marketer.${pageDesc}`
+    : `Everything about AI, machine learning and modern marketing strategy. Articles, tips and best practices from Virtual Marketer.${pageDesc}`;
 
   const indexJson = JSON.stringify(
     allPosts.map((p) => ({
@@ -219,7 +228,7 @@ function generateArchive({ pagePosts, allPosts, categories, activeCategory, page
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${title}</title>
 <meta name="description" content="${description}">
-<link rel="canonical" href="${canonical}">
+${thinCategory ? '<meta name="robots" content="noindex, follow">\n' : ''}<link rel="canonical" href="${canonical}">
 ${hreflang}
 ${prevNext}
 <link rel="stylesheet" href="/${THEME_CSS.bootstrap}">
@@ -279,9 +288,25 @@ function main() {
     console.warn('\n⚠ blog-posts-en.json not found — skipping English blog generation\n');
     return;
   }
-  const { posts } = JSON.parse(fs.readFileSync(POSTS_EN_JSON, 'utf-8'));
+  const allEn = JSON.parse(fs.readFileSync(POSTS_EN_JSON, 'utf-8')).posts;
 
-  console.log(`\n📝 Generating ${posts.length} English blog posts...\n`);
+  // Same publish gate as the German blog (scripts/generate-blog-posts.js): a
+  // translation dated in the future stays unpublished until its date. Without
+  // it the English article goes live first, and its language switcher points
+  // at a German page that does not exist yet (a 404 that Search Console
+  // reports and that the DE/EN hreflang pair cannot recover from).
+  const buildDate = process.env.VM_BUILD_DATE || new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Berlin', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).format(new Date());
+  const { published: posts, scheduled: heldEn } = BI.splitByDate(
+    allEn.map((p) => ({ ...p, date: (p.dateISO || '').slice(0, 10) })),
+    buildDate
+  );
+  for (const held of heldEn) {
+    fs.rmSync(path.join(DIST_EN_BLOG, held.slug), { recursive: true, force: true });
+  }
+
+  console.log(`\n📝 Generating ${posts.length} English blog posts (${heldEn.length} scheduled, held back)...\n`);
 
   posts.forEach((post, idx) => {
     const related = posts

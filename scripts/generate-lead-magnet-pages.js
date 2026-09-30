@@ -336,10 +336,10 @@ function headerEn() {
   return `<header class="vm-header-simple">
   <a href="/en/"><img src="${LOGO}" alt="Virtual Marketer" style="height:40px;width:auto;max-width:none"></a>
   <nav>
-    <a href="/en/ai-solutions/">Solutions</a>
+    <a href="/en/solutions/">Solutions</a>
     <a href="/en/blog/">Blog</a>
     <a href="https://api.virtual-marketer.de/documentation/">API</a>
-    <a href="/en/request-model/">Request a model</a>
+    <a href="/en/request-custom-model/">Request a model</a>
     <a href="/en/contact/">Contact</a>
     <a href="https://login.virtual-marketer.de/">Login</a>
   </nav>
@@ -348,7 +348,7 @@ function headerEn() {
 
 function footer(locale) {
   const privacy = locale === 'en' ? '/en/privacy-policy/' : '/datenschutzerklaerung/';
-  const impressum = locale === 'en' ? '/en/imprint/' : '/impressum/';
+  const impressum = locale === 'en' ? '/en/legal-notice/' : '/impressum/';
   const privacyLabel = locale === 'en' ? 'Privacy Policy' : 'Datenschutzerklärung';
   const impressumLabel = locale === 'en' ? 'Imprint' : 'Impressum';
   // Same defect and same fix as scripts/generate-contact-page.js's footer():

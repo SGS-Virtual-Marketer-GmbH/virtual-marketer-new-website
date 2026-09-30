@@ -63,6 +63,34 @@ function priorityFor(urlPath) {
   return { priority: '0.8', changefreq: 'monthly' };
 }
 
+/**
+ * A real modification date, or none. The file mtime is the build time for
+ * every page (the whole of dist/ is regenerated), so publishing it as
+ * <lastmod> tells Google that all pages changed on every build. Google then
+ * learns to ignore the field. Posts carry a genuine date in their own
+ * article:modified_time / article:published_time meta; other pages omit it.
+ */
+function lastmodOf(html) {
+  if (!/<meta[^>]+property=["']og:type["'][^>]*content=["']article["']/i.test(html)) return null;
+  const m = html.match(/<meta[^>]+property=["']article:modified_time["'][^>]*content=["'](\d{4}-\d{2}-\d{2})/i)
+    || html.match(/<meta[^>]+property=["']article:published_time["'][^>]*content=["'](\d{4}-\d{2}-\d{2})/i);
+  return m ? m[1] : null;
+}
+
+/** hreflang alternates declared in the page head, as [{lang, path}] on this origin. */
+function alternatesOf(html) {
+  const head = (html.match(/<head[\s\S]*?<\/head>/i) || [''])[0];
+  const out = [];
+  for (const tag of head.match(/<link\b[^>]*>/gi) || []) {
+    if (!/rel=["']alternate["']/i.test(tag)) continue;
+    const lang = (tag.match(/hreflang=["']([^"']+)["']/i) || [])[1];
+    const href = (tag.match(/href=["']([^"']+)["']/i) || [])[1];
+    if (!lang || !href || !href.startsWith(BASE_URL)) continue;
+    out.push({ lang, path: href.slice(BASE_URL.length) || '/' });
+  }
+  return out;
+}
+
 function walk(dir, base, results) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   for (const entry of entries) {
@@ -76,22 +104,31 @@ function walk(dir, base, results) {
 
       const urlPath = relDir.length === 0 ? '/' : `/${relDir.join('/')}/`;
       if (EXCLUDE_PATH_PREFIXES.some((prefix) => urlPath.startsWith(prefix))) continue;
-      const stat = fs.statSync(path.join(dir, entry.name));
-      results.push({ urlPath, lastmod: stat.mtime.toISOString().split('T')[0] });
+      const html = fs.readFileSync(path.join(dir, entry.name), 'utf-8');
+      // Robots noindex pages do not belong in a sitemap.
+      if (/<meta[^>]+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) continue;
+      results.push({ urlPath, lastmod: lastmodOf(html), alternates: alternatesOf(html) });
     }
   }
 }
 
 function generateSitemapXML(pages) {
+  const known = new Set(pages.map((p) => p.urlPath));
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n';
   for (const page of pages.sort((a, b) => a.urlPath.localeCompare(b.urlPath))) {
     const { priority, changefreq } = priorityFor(page.urlPath);
     xml += '  <url>\n';
     xml += `    <loc>${BASE_URL}${page.urlPath}</loc>\n`;
-    xml += `    <lastmod>${page.lastmod}</lastmod>\n`;
+    if (page.lastmod) xml += `    <lastmod>${page.lastmod}</lastmod>\n`;
     xml += `    <changefreq>${changefreq}</changefreq>\n`;
     xml += `    <priority>${priority}</priority>\n`;
+    // Only alternates that are themselves in this sitemap, so every hreflang
+    // link points at an indexable page.
+    const alts = (page.alternates || []).filter((a) => known.has(a.path));
+    if (alts.length > 1) {
+      for (const a of alts) xml += `    <xhtml:link rel="alternate" hreflang="${a.lang}" href="${BASE_URL}${a.path}"/>\n`;
+    }
     xml += '  </url>\n';
   }
   xml += '</urlset>\n';
@@ -172,6 +209,11 @@ function generateRobotsTxt() {
   // meant to prevent. sitemap generation above independently keeps it out
   // of sitemap.xml via EXCLUDE_PATH_PREFIXES.
   //
+  // /wp-includes/ and /wp-content/plugins/ are NOT disallowed either: pages
+  // still load scripts and styles from there, and Google needs them to
+  // render the page (a blocked render resource shows up in Search Console
+  // as a rendering problem and can cost rankings).
+  //
   // /downloads/ is the whitepaper lead-magnet gate (see scripts/
   // generate-lead-magnet-pages.js and backend/src/routes/whitepaper.js):
   // the PDFs living there are only ever supposed to be reached through a
@@ -187,8 +229,6 @@ function generateRobotsTxt() {
   const shared = [
     'Disallow: /wp-admin/',
     'Disallow: /wp-login.php',
-    'Disallow: /wp-includes/',
-    'Disallow: /wp-content/plugins/',
     'Disallow: /wp-json/',
     'Disallow: /downloads/',
   ].join('\n');

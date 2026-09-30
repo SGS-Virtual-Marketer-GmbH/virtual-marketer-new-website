@@ -157,6 +157,17 @@ http {
       return 301 https://virtual-marketer.de$request_uri;
     }
 
+    # ---- /some/path/index.html is the same page as /some/path/ ----
+    # Both answered 200 with the same body, so Google saw two URLs per page
+    # ("duplicate, Google chose a different canonical"). Redirect the
+    # explicit file name to the directory URL. $request_uri is the URL the
+    # client asked for and is NOT rewritten by the `index`/try_files internal
+    # redirect, so serving /blog/ (which reads /blog/index.html internally)
+    # cannot loop back into this rule.
+    if ($request_uri ~ ^(?<vm_dir>/(?:[^?]*/)?)index\.html(?:\?.*)?$) {
+      return 301 $vm_dir;
+    }
+
     # ---- Legacy WordPress URL redirects (301, permanent) ----
     # /home/ was a duplicate legacy WordPress homepage — canonicalize to /
     location = /home/ { return 301 /; }

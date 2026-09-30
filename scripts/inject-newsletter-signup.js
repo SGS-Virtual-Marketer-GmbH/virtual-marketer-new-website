@@ -72,12 +72,12 @@ const WHITEPAPER_PATH = {
 const CTA_COPY = {
   de: {
     heading: 'Kostenloses Whitepaper',
-    body: 'Wie KI-Agenten Recherche, Kundenservice und Kampagnen übernehmen — mit einem realistischen Einstiegsplan, ohne erfundene Zahlen.',
+    body: 'Wie KI-Agenten Recherche, Kundenservice und Kampagnen übernehmen, mit einem realistischen Einstiegsplan und ohne erfundene Zahlen.',
     button: 'Whitepaper herunterladen',
   },
   en: {
     heading: 'Free whitepaper',
-    body: 'How AI agents take on research, customer service and campaigns — with a realistic starting roadmap, no invented numbers.',
+    body: 'How AI agents take on research, customer service and campaigns, with a realistic starting roadmap and no invented numbers.',
     button: 'Download the whitepaper',
   },
 };
@@ -179,7 +179,10 @@ function main() {
     //    posts with no existing conversion path) a whitepaper CTA before it.
     if (isBlogPost(relSegments)) {
       const hasOwnCta = html.includes('vm-cta');
-      if (!hasOwnCta) {
+      // English posts always get it: the English whitepaper page has no other
+      // inbound link, and an unlinked page is what Search Console reports as
+      // "discovered, currently not indexed".
+      if (!hasOwnCta || locale === 'en') {
         const ctaInsert = insertBeforeLastClosing(html, '</article>', 'vm-lm-cta', ctaHtml(locale));
         if (ctaInsert !== null) { html = ctaInsert; anyInsert = true; ctaCount++; }
       }

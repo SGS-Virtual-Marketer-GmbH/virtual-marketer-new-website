@@ -6,28 +6,7 @@
     <atom:link href="https://virtual-marketer.de/en/blog/feed.xml" rel="self" type="application/rss+xml"/>
     <description>AI and marketing insights from Virtual Marketer.</description>
     <language>en-US</language>
-    <lastBuildDate>Tue, 20 Oct 2026 00:00:00 +0000</lastBuildDate>
-    <item>
-      <title>How Your Individual AI Model Comes to Life at Virtual Marketer</title>
-      <link>https://virtual-marketer.de/en/blog/custom-ki-modell-anfrage-prozess/</link>
-      <guid isPermaLink="true">https://virtual-marketer.de/en/blog/custom-ki-modell-anfrage-prozess/</guid>
-      <description>What happens after a model request: initial conversation, data assessment, pilot phase, and rollout — a transparent look at the path to your Custom AI model.</description>
-      <pubDate>Tue, 20 Oct 2026 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Brand Consistency for AI Content at Scale</title>
-      <link>https://virtual-marketer.de/en/blog/ki-content-governance-markenkonsistenz/</link>
-      <guid isPermaLink="true">https://virtual-marketer.de/en/blog/ki-content-governance-markenkonsistenz/</guid>
-      <description>Why scaling AI content is a governance question: risk-based approval processes, sample-based review, and versioned brand voice guidelines.</description>
-      <pubDate>Tue, 13 Oct 2026 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Google &amp; Meta Ads with AI: Automated Ad Copy That Converts</title>
-      <link>https://virtual-marketer.de/en/blog/google-meta-ads-ki-anzeigentexte/</link>
-      <guid isPermaLink="true">https://virtual-marketer.de/en/blog/google-meta-ads-ki-anzeigentexte/</guid>
-      <description>How AI-generated, product-data-based ad copy scales for Google RSA and Meta Ads without compromising brand consistency or compliance.</description>
-      <pubDate>Tue, 06 Oct 2026 00:00:00 +0000</pubDate>
-    </item>
+    <lastBuildDate>Tue, 29 Sep 2026 00:00:00 +0000</lastBuildDate>
     <item>
       <title>Fine-Tuning Smaller AI Models Instead of GPT-4</title>
       <link>https://virtual-marketer.de/en/blog/fine-tuning-kleinerer-modelle-kosteneffizienz/</link>
@@ -39,21 +18,21 @@
       <title>Real-Time Marketing with Edge AI</title>
       <link>https://virtual-marketer.de/en/blog/real-time-marketing-edge-ai/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/en/blog/real-time-marketing-edge-ai/</guid>
-      <description>Why personalization decisions have to happen in milliseconds – and how edge AI eliminates latency before the page has even loaded.</description>
+      <description>Why personalization decisions have to happen in milliseconds, and how edge AI eliminates latency before the page has even loaded.</description>
       <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Synthetic Data for Marketing Training: Data Protection Through AI</title>
       <link>https://virtual-marketer.de/en/blog/synthetische-daten-marketing-training/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/en/blog/synthetische-daten-marketing-training/</guid>
-      <description>How artificially generated datasets accelerate AI model training in marketing without using real customer data – and where the limits of synthetic data lie.</description>
+      <description>How artificially generated datasets accelerate AI model training in marketing without using real customer data, and where the limits of synthetic data lie.</description>
       <pubDate>Tue, 15 Sep 2026 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>AI-Driven Predictive Analytics for Universities</title>
       <link>https://virtual-marketer.de/en/blog/predictive-analytics-universitaeten/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/en/blog/predictive-analytics-universitaeten/</guid>
-      <description>How German universities use early warning systems to detect student dropout risk sooner – and why data protection, bias review and human decision-making…</description>
+      <description>How German universities use early warning systems to detect student dropout risk sooner, and why data protection, bias review and human decision-making…</description>
       <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
     </item>
     <item>
@@ -81,7 +60,7 @@
       <title>RAG for E-Commerce Product Descriptions</title>
       <link>https://virtual-marketer.de/en/blog/rag-fuer-ecommerce-produktbeschreibungen/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/en/blog/rag-fuer-ecommerce-produktbeschreibungen/</guid>
-      <description>How Retrieval-Augmented Generation produces fact-based, unique product descriptions at scale – without hallucinations and without duplicate content.</description>
+      <description>How Retrieval-Augmented Generation produces fact-based, unique product descriptions at scale, without hallucinations and without duplicate content.</description>
       <pubDate>Tue, 11 Aug 2026 00:00:00 +0000</pubDate>
     </item>
     <item>
@@ -95,14 +74,14 @@
       <title>SEO in the Age of AI Search: From Keywords to E-E-A-T</title>
       <link>https://virtual-marketer.de/en/blog/seo-im-zeitalter-der-ki-suche/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/en/blog/seo-im-zeitalter-der-ki-suche/</guid>
-      <description>Generative Engine Optimization (GEO) explained: how to make your content visible to ChatGPT, Perplexity, Claude and Google AI Overviews – not just for…</description>
+      <description>Generative Engine Optimization (GEO) explained: how to make your content visible to ChatGPT, Perplexity, Claude and Google AI Overviews, not just for…</description>
       <pubDate>Tue, 28 Jul 2026 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>Agentic AI for Automated Marketing Campaigns</title>
       <link>https://virtual-marketer.de/en/blog/agentic-ai-marketing-kampagnen/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/en/blog/agentic-ai-marketing-kampagnen/</guid>
-      <description>How autonomous AI agents independently plan, test and optimize marketing campaigns – and why marketing automation returns an average of $5.44 for every…</description>
+      <description>How autonomous AI agents independently plan, test and optimize marketing campaigns, and why marketing automation returns an average of $5.44 for every…</description>
       <pubDate>Tue, 21 Jul 2026 00:00:00 +0000</pubDate>
     </item>
     <item>
@@ -179,7 +158,7 @@
       <title>The Fight Against Bias in AI Systems</title>
       <link>https://virtual-marketer.de/en/blog/der-kampf-gegen-bias-in-ki-systemen-fairness-und-diversitaet-als-oberste-prioritaet/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/en/blog/der-kampf-gegen-bias-in-ki-systemen-fairness-und-diversitaet-als-oberste-prioritaet/</guid>
-      <description>This article outlines why bias in AI systems is a critical societal issue and presents concrete measures — from data diversity to ethical guidelines and…</description>
+      <description>This article outlines why bias in AI systems is a critical societal issue and presents concrete measures, from data diversity to ethical guidelines and…</description>
       <pubDate>Wed, 20 Mar 2024 00:00:00 +0000</pubDate>
     </item>
     <item>
@@ -263,7 +242,7 @@
       <title>Automated Warehouse Management for E-Commerce</title>
       <link>https://virtual-marketer.de/en/blog/vom-chaos-zur-effizienz-wie-automatisierte-lagerverwaltung-den-e-commerce-logistikbetrieb-revolutioniert/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/en/blog/vom-chaos-zur-effizienz-wie-automatisierte-lagerverwaltung-den-e-commerce-logistikbetrieb-revolutioniert/</guid>
-      <description>An overview of how automated warehouse management systems—conveyor belts, storage and retrieval units, pick-by-light systems, and warehouse software—are…</description>
+      <description>An overview of how automated warehouse management systems, conveyor belts, storage and retrieval units, pick-by-light systems, and warehouse software, are…</description>
       <pubDate>Wed, 27 Dec 2023 00:00:00 +0000</pubDate>
     </item>
     <item>
@@ -326,7 +305,7 @@
       <title>The Role of Mathematical Foundations in Artificial Intelligence</title>
       <link>https://virtual-marketer.de/en/blog/die-rolle-der-mathematischen-grundlagen-fuer-kuenstliche-intelligenz/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/en/blog/die-rolle-der-mathematischen-grundlagen-fuer-kuenstliche-intelligenz/</guid>
-      <description>An overview of the core branches of mathematics — probability and statistics, linear algebra, calculus, optimization, decision theory, and graph theory…</description>
+      <description>An overview of the core branches of mathematics, probability and statistics, linear algebra, calculus, optimization, decision theory, and graph theory…</description>
       <pubDate>Wed, 25 Oct 2023 00:00:00 +0000</pubDate>
     </item>
     <item>

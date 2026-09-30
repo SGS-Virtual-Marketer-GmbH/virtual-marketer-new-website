@@ -192,14 +192,25 @@ function generateArchive({ pagePosts, allPosts, categories, activeCategory, page
   const cards = pagePosts.map((p) => BI.postCard(p, formatDateDE)).join('\n');
 
   const canonical = `${BASE_URL}${urlPath}`;
+
+  // A category holding fewer than 3 posts is a thin page (a few lines of
+  // intro and one card): noindex it rather than have Google file it under
+  // "crawled, currently not indexed". Links stay followable, and
+  // scripts/generate-sitemap.js leaves noindex pages out.
+  const thinCategory = Boolean(activeCategory) && allPosts.filter((p) => p.category === activeCategory).length < 3;
+  // Every page of an archive gets its own title and description: paginated
+  // copies that repeat page 1's metadata are read as duplicates and end up in
+  // Search Console's "crawled, currently not indexed".
+  const pageTitle = page > 1 ? ` (Seite ${page})` : '';
+  const pageDesc = page > 1 ? ` Seite ${page} von ${totalPages}.` : '';
   const title = activeCategory
-    ? `${activeCategory} | Virtual Marketer Blog`
+    ? `${activeCategory}${pageTitle} | Virtual Marketer Blog`
     : page > 1
-      ? `Blog – Seite ${page} | Virtual Marketer`
+      ? `Blog, Seite ${page} | Virtual Marketer`
       : 'Blog | Virtual Marketer - KI &amp; Marketing Insights';
   const description = activeCategory
-    ? `Alle Beiträge zum Thema ${activeCategory} — Artikel, Analysen und Praxisbeispiele von Virtual Marketer.`
-    : 'Erfahren Sie alles über KI, Machine Learning und moderne Marketingstrategien. Artikel, Tipps und Best Practices von Virtual Marketer.';
+    ? `Alle Beiträge zum Thema ${activeCategory}: Artikel, Analysen und Praxisbeispiele von Virtual Marketer.${pageDesc}`
+    : `Erfahren Sie alles über KI, Machine Learning und moderne Marketingstrategien. Artikel, Tipps und Best Practices von Virtual Marketer.${pageDesc}`;
 
   // The search index is a compact shape ({t,s,d,c,k,f}) rather than the full
   // post objects: it is inlined into every archive page, so the difference
@@ -246,7 +257,7 @@ function generateArchive({ pagePosts, allPosts, categories, activeCategory, page
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${title}</title>
 <meta name="description" content="${description}">
-<link rel="canonical" href="${canonical}">
+${thinCategory ? '<meta name="robots" content="noindex, follow">\n' : ''}<link rel="canonical" href="${canonical}">
 ${hreflang}
 ${prevNext}
 <link rel="stylesheet" href="/${THEME_CSS.bootstrap}">

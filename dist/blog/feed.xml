@@ -6,19 +6,33 @@
     <atom:link href="https://virtual-marketer.de/blog/feed.xml" rel="self" type="application/rss+xml"/>
     <description>KI- und Marketing-Insights von Virtual Marketer.</description>
     <language>de-DE</language>
-    <lastBuildDate>Tue, 15 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 29 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Fine-Tuning kleinerer KI-Modelle statt GPT-4</title>
+      <link>https://virtual-marketer.de/blog/fine-tuning-kleinerer-modelle-kosteneffizienz/</link>
+      <guid isPermaLink="true">https://virtual-marketer.de/blog/fine-tuning-kleinerer-modelle-kosteneffizienz/</guid>
+      <description>Warum spezialisierte, fein-abgestimmte kleine Sprachmodelle für hochvolumige Marketingaufgaben oft günstiger und zuverlässiger sind als generische…</description>
+      <pubDate>Tue, 29 Sep 2026 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Real-Time Marketing mit Edge AI: Kampagnen im Moment der Wahrheit</title>
+      <link>https://virtual-marketer.de/blog/real-time-marketing-edge-ai/</link>
+      <guid isPermaLink="true">https://virtual-marketer.de/blog/real-time-marketing-edge-ai/</guid>
+      <description>Warum Personalisierungsentscheidungen in Millisekunden fallen müssen, und wie Edge AI Latenz eliminiert, bevor die Seite überhaupt geladen ist.</description>
+      <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Synthetische Daten für Marketing-Training: Datenschutz durch KI</title>
       <link>https://virtual-marketer.de/blog/synthetische-daten-marketing-training/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/blog/synthetische-daten-marketing-training/</guid>
-      <description>Wie künstlich generierte Datensätze KI-Modelltraining im Marketing beschleunigen, ohne echte Kundendaten zu verwenden – und wo die Grenzen synthetischer…</description>
+      <description>Wie künstlich generierte Datensätze KI-Modelltraining im Marketing beschleunigen, ohne echte Kundendaten zu verwenden, und wo die Grenzen synthetischer…</description>
       <pubDate>Tue, 15 Sep 2026 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>KI-gesteuerte Predictive Analytics für Universitäten</title>
       <link>https://virtual-marketer.de/blog/predictive-analytics-universitaeten/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/blog/predictive-analytics-universitaeten/</guid>
-      <description>Wie deutsche Hochschulen mit Frühwarnsystemen Studienabbrüche früher erkennen – und warum Datenschutz, Bias-Prüfung und menschliche Entscheidungshoheit…</description>
+      <description>Wie deutsche Hochschulen mit Frühwarnsystemen Studienabbrüche früher erkennen, und warum Datenschutz, Bias-Prüfung und menschliche Entscheidungshoheit…</description>
       <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
     </item>
     <item>
@@ -46,7 +60,7 @@
       <title>RAG für E-Commerce Produktbeschreibungen</title>
       <link>https://virtual-marketer.de/blog/rag-fuer-ecommerce-produktbeschreibungen/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/blog/rag-fuer-ecommerce-produktbeschreibungen/</guid>
-      <description>Wie Retrieval-Augmented Generation faktenbasierte, einzigartige Produktbeschreibungen in großem Maßstab erzeugt – ohne Halluzinationen und ohne Duplicate…</description>
+      <description>Wie Retrieval-Augmented Generation faktenbasierte, einzigartige Produktbeschreibungen in großem Maßstab erzeugt, ohne Halluzinationen und ohne Duplicate…</description>
       <pubDate>Tue, 11 Aug 2026 00:00:00 +0000</pubDate>
     </item>
     <item>
@@ -74,7 +88,7 @@
       <title>Agentic AI für automatisierte Marketing-Kampagnen</title>
       <link>https://virtual-marketer.de/blog/agentic-ai-marketing-kampagnen/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/blog/agentic-ai-marketing-kampagnen/</guid>
-      <description>Wie autonome KI-Agenten Marketing-Kampagnen selbstständig planen, testen und optimieren – und warum Marketing Automation im Schnitt 5,44 USD pro investiertem…</description>
+      <description>Wie autonome KI-Agenten Marketing-Kampagnen selbstständig planen, testen und optimieren, und warum Marketing Automation im Schnitt 5,44 USD pro investiertem…</description>
       <pubDate>Tue, 21 Jul 2026 00:00:00 +0000</pubDate>
     </item>
     <item>
@@ -228,7 +242,7 @@
       <title>Edge AI: Die Revolution der Künstlichen Intelligenz</title>
       <link>https://virtual-marketer.de/blog/edge-ai-die-revolution-der-kuenstlichen-intelligenz-wie-intelligente-geraete-unsere-zukunft-gestalten/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/blog/edge-ai-die-revolution-der-kuenstlichen-intelligenz-wie-intelligente-geraete-unsere-zukunft-gestalten/</guid>
-      <description>Edge AI: Künstliche Intelligenz direkt auf Geräten – was das für die Zukunft bedeutet Die Entwicklung der Künstlichen Intelligenz (KI) hat in den letzten…</description>
+      <description>Edge AI: Künstliche Intelligenz direkt auf Geräten, was das für die Zukunft bedeutet Die Entwicklung der Künstlichen Intelligenz (KI) hat in den letzten…</description>
       <pubDate>Tue, 22 Jul 2025 10:38:46 +0000</pubDate>
     </item>
     <item>
@@ -277,7 +291,7 @@
       <title>KI-Kompetenz im Marketing-Team aufbauen</title>
       <link>https://virtual-marketer.de/blog/ki-kompetenz-marketing-team-aufbauen/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/blog/ki-kompetenz-marketing-team-aufbauen/</guid>
-      <description>Seit dem 2. Februar 2025 verlangt Artikel 4 des EU AI Act nachweisbare KI-Kompetenz. Was das für Marketing-Teams konkret bedeutet — und wie der Aufbau…</description>
+      <description>Seit dem 2. Februar 2025 verlangt Artikel 4 des EU AI Act nachweisbare KI-Kompetenz. Was das für Marketing-Teams konkret bedeutet, und wie der Aufbau…</description>
       <pubDate>Tue, 04 Feb 2025 00:00:00 +0000</pubDate>
     </item>
     <item>
@@ -452,7 +466,7 @@
       <title>Gmail- und Yahoo-Regeln: E-Mail-Marketing anpassen</title>
       <link>https://virtual-marketer.de/blog/gmail-yahoo-anforderungen-e-mail-marketing/</link>
       <guid isPermaLink="true">https://virtual-marketer.de/blog/gmail-yahoo-anforderungen-e-mail-marketing/</guid>
-      <description>Seit Februar 2024 verlangen Gmail und Yahoo SPF, DKIM, DMARC und Ein-Klick-Abmeldung. Was Massenversender jetzt umsetzen müssen – Schritt für Schritt.</description>
+      <description>Seit Februar 2024 verlangen Gmail und Yahoo SPF, DKIM, DMARC und Ein-Klick-Abmeldung. Was Massenversender jetzt umsetzen müssen, Schritt für Schritt.</description>
       <pubDate>Thu, 15 Feb 2024 00:00:00 +0000</pubDate>
     </item>
     <item>
