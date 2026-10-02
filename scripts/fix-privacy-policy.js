@@ -88,7 +88,7 @@ const path = require('path');
 const DIST = path.join(__dirname, '../dist');
 
 /** Revision date printed as "Stand: …" on the German policy. */
-const STAND = '9. September 2026';
+const STAND = '2. Oktober 2026';
 
 /**
  * The sub-processors, disclosed per Art. 13(1)(e) / Art. 28 GDPR. Single
@@ -330,6 +330,48 @@ const SECTIONS = [
 <p class="wp-block-paragraph">Beide Löschungen sind endgültig und werden erst nach einer ausdrücklichen Bestätigung ausgeführt: Sie müssen angemeldet sein, einen aktuellen Code Ihrer Zwei-Faktor-App eingeben und die Löschung durch Eingabe einer Bestätigungsformel freigeben. Das ist bewusst strenger als eine Anmeldung – eine Löschfunktion, die schwächer gesichert wäre als der Zugang selbst, wäre ein Weg zur Übernahme fremder Konten. <strong>Haben Sie keinen Zugriff mehr auf Ihre Zwei-Faktor-App</strong>, wenden Sie sich an <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>: wir prüfen Ihre Identität dann auf anderem Weg und führen die Löschung für Sie aus.</p>
 <p class="wp-block-paragraph">Unabhängig davon können Sie sämtliche Betroffenenrechte nach Art. 15 bis 21 DSGVO jederzeit formlos unter <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a> geltend machen. Gesetzliche Aufbewahrungspflichten, etwa aus dem Handels- und Steuerrecht, bleiben von einer Löschung unberührt; in diesem Fall werden die betroffenen Daten gesperrt statt gelöscht (siehe „Löschung von Daten“).</p>`,
   },
+  {
+    // Google user data. Written for the Google OAuth brand verification and
+    // the Google Ads API access review, which both read this page: it has to
+    // state how Google user data is accessed, used, stored and shared, and
+    // carry the Limited Use statement. Checked against vm-customer-web-ui
+    // (server/google/*): refresh token encrypted at rest, disconnect deletes
+    // it, Customer Match rows are staged hashed and removed when the action
+    // ends.
+    match: /^Virtual Marketer App für Android/i,
+    lang: 'de',
+    append: true,
+    guard: /Verbundene Google-Konten/,
+    body: `
+<h2 class="wp-block-heading">Verbundene Google-Konten (Ads, Analytics, Search Console, Merchant Center, Gmail, Kalender)</h2>
+<p class="wp-block-paragraph">Wenn Sie in Virtual Marketer ein Google-Konto verbinden, greifen wir auf Ihre ausdrückliche Anweisung auf Daten dieses Kontos zu. Die Verbindung kommt nur zustande, wenn Sie sie selbst auf dem Zustimmungsbildschirm von Google bestätigen. Welche Daten wir erhalten, richtet sich nach den Berechtigungen, die Sie dort erteilen.</p>
+
+<h3 class="wp-block-heading">Welche Google-Daten wir verarbeiten und wofür</h3>
+<ul>
+<li><strong>Google Ads:</strong> Konto-, Kampagnen-, Anzeigen- und Budgetdaten sowie Leistungskennzahlen. Wir lesen sie, um Auswertungen und Vorschläge zu erstellen, und ändern Einstellungen nur, wenn Sie das beauftragen. Änderungen an Budgets und der Upload von Kundenlisten werden erst nach Ihrer ausdrücklichen Freigabe in Virtual Marketer ausgeführt.</li>
+<li><strong>Analytics und Search Console von Google:</strong> Berichts- und Suchleistungsdaten, ausschließlich lesend.</li>
+<li><strong>Google Merchant Center:</strong> Produkt- und Kontodaten für die Auswertung und Pflege Ihrer Produktdaten.</li>
+<li><strong>Gmail und Google Kalender:</strong> nur wenn Sie diese Berechtigungen gesondert erteilen, und ausschließlich lesend (Nachrichten bzw. Termine). Sie dienen dazu, dass ein von Ihnen eingesetzter Agent Ihre Fragen zu Nachrichten und Terminen beantworten kann.</li>
+</ul>
+<p class="wp-block-paragraph">Wir verwenden diese Daten ausschließlich, um Ihnen die von Ihnen angeforderten Funktionen innerhalb von Virtual Marketer bereitzustellen. Rechtsgrundlage ist die Erfüllung des Vertrags mit Ihnen (Art. 6 Abs. 1 S. 1 lit. b DSGVO). Enthalten die Daten personenbezogene Daten Dritter, etwa Kontakte in einem Postfach oder Mitglieder einer Kundenliste, sind Sie dafür verantwortlich, dass Ihnen deren Verarbeitung durch uns erlaubt ist; wir handeln in diesem Fall als Auftragsverarbeiter nach Art. 28 DSGVO.</p>
+
+<h3 class="wp-block-heading">Kundenlisten (Customer Match)</h3>
+<p class="wp-block-paragraph">Laden Sie über Virtual Marketer eine Kundenliste in Google Ads hoch, normalisieren und verschlüsseln (hashen) wir E-Mail-Adressen und Telefonnummern vor der Übermittlung nach dem von Google vorgegebenen Verfahren. Beim Hashen bleibt der Personenbezug bestehen; es ist keine Anonymisierung. Die Liste wird erst nach Ihrer Freigabe übertragen. Bis dahin liegen die gehashten Werte höchstens sieben Tage in einem Zwischenspeicher und werden gelöscht, sobald die Aktion ausgeführt, abgelehnt oder abgebrochen wurde. Sie müssen vor dem Upload angeben, auf welche Rechtsgrundlage Sie die Verwendung der Daten stützen und dass die erforderlichen Einwilligungen vorliegen.</p>
+
+<h3 class="wp-block-heading">Speicherung, Weitergabe und Schutz</h3>
+<ul>
+<li><strong>Zugangsdaten.</strong> Den Zugriffsschlüssel (Token), den Google uns nach Ihrer Zustimmung ausstellt, speichern wir verschlüsselt. Er wird nur verwendet, um Ihre Anfragen auszuführen.</li>
+<li><strong>Inhalte.</strong> Daten aus Ihrem Google-Konto rufen wir nur ab, wenn Sie oder ein von Ihnen eingerichteter Agent sie benötigen, und verarbeiten sie für die Dauer dieser Anfrage. Gibt ein Agent daraus Inhalte in seiner Antwort wieder, werden sie wie jede Antwort Teil des Konversationsprotokolls, für das die im Abschnitt zur App beschriebenen Regeln gelten (keine automatische Löschfrist, Löschung mit dem Unternehmenskonto).</li>
+<li><strong>Weitergabe.</strong> Wir verkaufen Google-Nutzerdaten nicht und verwenden sie nicht für Werbung. Zur Beantwortung Ihrer Anfragen werden die Inhalte an die im Abschnitt „Einsatz Künstlicher Intelligenz“ genannten Unterauftragsverarbeiter übermittelt; dort ist auch geregelt, dass Ihre Daten nicht zum Training von Modellen verwendet werden. Darüber hinaus geben wir sie nur weiter, wenn das Gesetz es verlangt.</li>
+<li><strong>Zugriff durch Menschen.</strong> Mitarbeitende von uns lesen Ihre Google-Daten nicht, außer Sie bitten uns zur Fehlerbehebung ausdrücklich darum, es ist aus Sicherheitsgründen oder zur Aufklärung von Missbrauch erforderlich oder das Gesetz verlangt es.</li>
+</ul>
+
+<h3 class="wp-block-heading">Einhaltung der Google-Richtlinien (Limited Use)</h3>
+<p class="wp-block-paragraph">Die Nutzung und Weitergabe von Informationen, die wir von Google-APIs erhalten, entspricht der <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Nutzerdatenrichtlinie für Google-API-Dienste</a> (Google API Services User Data Policy), einschließlich der Anforderungen zur eingeschränkten Nutzung (Limited Use). Wir verwenden diese Daten nicht, um generalisierte KI-Modelle zu trainieren.</p>
+
+<h3 class="wp-block-heading">Verbindung trennen und Daten löschen</h3>
+<p class="wp-block-paragraph">Sie können die Verbindung jederzeit in den Einstellungen von Virtual Marketer unter „Zugänge“ trennen; wir löschen dann die gespeicherten Zugangsdaten. Unabhängig davon können Sie den Zugriff jederzeit in Ihrem Google-Konto unter <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">myaccount.google.com/permissions</a> entziehen. Wünschen Sie darüber hinaus die Löschung weiterer Daten, wenden Sie sich an <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>.</p>`,
+  },
 ];
 
 function findHtmlFiles(dir, results = []) {
@@ -528,6 +570,12 @@ const EN_REQUIRED = [
   ['attachment file names retained', /file name/i],
   ['conversation records kept indefinitely', /indefinitely/i],
   ['self-service deletion URL', /konto-loeschen/],
+  // Added 2026-10-02 for the Google OAuth and Google Ads API reviews.
+  ['Google user data section', /Connected Google accounts/],
+  ['Google Limited Use statement', /Limited Use/],
+  ['Google API Services User Data Policy', /API Services User Data Policy/],
+  ['hashing is not anonymisation', /not anonymisation/i],
+  ['no sale of Google user data', /not sell Google user data/i],
   ['deletion needs the second factor', /two-factor/i],
 ];
 

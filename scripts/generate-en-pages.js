@@ -466,6 +466,35 @@ Frankfurter Landstraße 50<br>
 </ul>
 <p>Both deletions are final and are carried out only after an explicit confirmation: you must be signed in, enter a current code from your two-factor app, and type a confirmation phrase. That is deliberately stricter than signing in &#8211; a deletion route secured more weakly than the login itself would be a route to taking over other people's accounts. <strong>If you no longer have access to your two-factor app</strong>, write to <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>: we will verify your identity by other means and carry out the deletion for you.</p>
 
+<h2>Connected Google accounts (Ads, Analytics, Search Console, Merchant Center, Gmail, Calendar)</h2>
+<p>When you connect a Google account in Virtual Marketer, we access data from that account on your explicit instruction. The connection is only established if you confirm it yourself on Google's consent screen. The data we receive depends on the permissions you grant there.</p>
+
+<h3>Which Google data we process and why</h3>
+<ul>
+  <li><strong>Google Ads:</strong> account, campaign, ad and budget data as well as performance metrics. We read them to prepare analyses and suggestions, and we change settings only when you instruct us to. Changes to budgets and uploads of customer lists are executed only after your explicit approval in Virtual Marketer.</li>
+  <li><strong>Analytics and Search Console from Google:</strong> reporting and search performance data, read-only.</li>
+  <li><strong>Google Merchant Center:</strong> product and account data to analyse and maintain your product data.</li>
+  <li><strong>Gmail and Google Calendar:</strong> only if you grant these permissions separately, and read-only (messages or events). They allow an agent you have set up to answer your questions about messages and appointments.</li>
+</ul>
+<p>We use this data solely to provide the features you request inside Virtual Marketer. The legal basis is performance of the contract with you (Art. 6(1)(b) GDPR). Where the data contains personal data of third parties, such as contacts in a mailbox or members of a customer list, you are responsible for being entitled to have us process it; in that case we act as a processor under Art. 28 GDPR.</p>
+
+<h3>Customer lists (Customer Match)</h3>
+<p>If you upload a customer list to Google Ads through Virtual Marketer, we normalise and hash email addresses and phone numbers before transmission, following the procedure Google specifies. Hashing does not remove the personal reference; it is not anonymisation. The list is transmitted only after your approval. Until then the hashed values are held in an intermediate store for at most seven days and deleted as soon as the action has been executed, rejected or cancelled. Before an upload you must state the legal basis on which you rely and confirm that the required consents are in place.</p>
+
+<h3>Storage, disclosure and protection</h3>
+<ul>
+  <li><strong>Credentials.</strong> The access token that Google issues to us after your consent is stored encrypted. It is used only to carry out your requests.</li>
+  <li><strong>Content.</strong> We retrieve data from your Google account only when you or an agent you have set up need it, and we process it for the duration of that request. If an agent reproduces some of it in a reply, it becomes part of the conversation record like any reply, and the rules described in the section on the app apply (no automatic retention limit, deletion together with the company account).</li>
+  <li><strong>Disclosure.</strong> We do not sell Google user data and do not use it for advertising. To answer your requests, the content is passed to the sub-processors named in the section on the use of artificial intelligence, where it is also set out that your data is not used to train models. Beyond that we disclose it only where the law requires.</li>
+  <li><strong>Access by people.</strong> Our staff do not read your Google data unless you expressly ask us to for troubleshooting, it is necessary for security reasons or to investigate abuse, or the law requires it.</li>
+</ul>
+
+<h3>Compliance with Google's policies (Limited Use)</h3>
+<p>Our use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements. We do not use this data to train generalised AI models.</p>
+
+<h3>Disconnecting and deleting data</h3>
+<p>You can disconnect at any time in Virtual Marketer under &ldquo;Connections&rdquo;; we then delete the stored credentials. Independently of that, you can revoke access at any time in your Google account at <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">myaccount.google.com/permissions</a>. If you want further data deleted, contact <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>.</p>
+
 <h2>Your rights under the GDPR</h2>
 <ul>
   <li>Right of access to your personal data (Art. 15 GDPR)</li>
@@ -482,7 +511,7 @@ Frankfurter Landstraße 50<br>
 <h2>Contact</h2>
 <p>For any privacy-related request, contact us at <a href="mailto:info@virtual-marketer.de">info@virtual-marketer.de</a>.</p>
 
-<p>Last updated: 9 September 2026.</p>
+<p>Last updated: 2 October 2026.</p>
 
 <p><em>This page is a translation of the German-language privacy policy at <a href="/datenschutzerklaerung/">/datenschutzerklaerung/</a>, which remains the authoritative version for legal purposes.</em></p>`,
   }));
