@@ -35,7 +35,7 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
-const SCRAPE_SOURCE = path.join(require('os').homedir(), 'tmp_vm_scrape/virtual-marketer.de');
+const SCRAPE_SOURCE = process.env.VM_SOURCE_DIR || path.join(require('os').homedir(), 'tmp_vm_scrape/virtual-marketer.de');
 
 function findFiles(dir, pattern, results = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
