@@ -117,15 +117,27 @@ function fixHtml(html) {
   let prev = '';
   let inTitle = false;
   return html.replace(TOKEN, (tok) => {
-    if (tok.startsWith('<!--')) return tok;
+    if (tok.startsWith('<!--')) return tok.replace(/ [\u2013\u2014] /g, ', ').replace(/[\u2013\u2014]/g, '-');
     if (/^<script/i.test(tok)) {
-      if (!/type=["']application\/(?:ld\+)?json["']/i.test(tok) || !DASH.test(decodeDashEntities(tok))) return tok;
+      if (!/type=["']application\/(?:ld\+)?json["']/i.test(tok)) {
+        // Plain inline JS. An en/em dash can only sit in a string (demo text a visitor
+        // sees), a comment, or a regex class like [\u2013\u2014], so a line-wise swap is
+        // syntax-safe; lines holding such a class are left alone.
+        return tok.replace(/^.*[\u2013\u2014].*$/gm, (line) => (/\[[\u2013\u2014]|[\u2013\u2014]\]|[\u2013\u2014]{2}/.test(line)
+          ? line
+          : line.replace(/ [\u2013\u2014] /g, ', ').replace(/[\u2013\u2014]/g, '-')));
+      }
+      if (!DASH.test(decodeDashEntities(tok))) return tok;
       return tok.replace(/^(<script\b[^>]*>)([\s\S]*)(<\/script>)$/i, (m, open, body, close) => {
         try { return open + JSON.stringify(fixJsonStrings(JSON.parse(body))).replace(/</g, '\\u003c') + close; }
         catch { return tok; }
       });
     }
-    if (/^<(style|pre|code|textarea)\b/i.test(tok)) return tok;
+    // <style>: only the /* comments */ are prose; the rules themselves are left alone.
+    if (/^<style\b/i.test(tok)) {
+      return tok.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/ [\u2013\u2014] /g, ', ').replace(/[\u2013\u2014]/g, '-'));
+    }
+    if (/^<(pre|code|textarea)\b/i.test(tok)) return tok;
     if (tok[0] === '<') {
       inTitle = /^<title\b/i.test(tok) ? true : /^<\/title/i.test(tok) ? false : inTitle;
       if (BLOCK_TAG.test(tok)) prev = '';
@@ -136,6 +148,13 @@ function fixHtml(html) {
     if (visible) prev = visible.slice(-1);
     return out;
   });
+}
+
+/** Standalone first-party .js / .css: same line-wise rule as inline scripts, comments only for CSS. */
+function fixAsset(src, ext) {
+  const swap = (t) => t.replace(/ [\u2013\u2014] /g, ', ').replace(/[\u2013\u2014]/g, '-');
+  if (ext === '.css') return src.replace(/\/\*[\s\S]*?\*\//g, swap);
+  return src.replace(/^.*[\u2013\u2014].*$/gm, (line) => (/\[[\u2013\u2014]|[\u2013\u2014]\]|[\u2013\u2014]{2}/.test(line) ? line : swap(line)));
 }
 
 function walk(dir, out = []) {
@@ -155,12 +174,13 @@ function main() {
   let left = 0;
   for (const file of walk(DIST)) {
     const ext = path.extname(file).toLowerCase();
-    if (!['.html', '.json', '.txt', '.xml', '.webmanifest'].includes(ext)) continue;
+    if (!['.html', '.json', '.txt', '.xml', '.webmanifest', '.js', '.css'].includes(ext)) continue;
     const before = fs.readFileSync(file, 'utf-8');
     if (!DASH.test(before) && !/&(?:ndash|mdash|#8211|#8212|#x2013|#x2014);/i.test(before)) continue;
 
     let after;
     if (ext === '.html') after = fixHtml(before);
+    else if (ext === '.js' || ext === '.css') after = fixAsset(before, ext);
     else if (ext === '.json' || ext === '.webmanifest') {
       try { after = JSON.stringify(fixJsonStrings(JSON.parse(before))); } catch { after = fixRun(before, 'meta', ''); }
     } else after = fixRun(before, 'text', '');
