@@ -13,6 +13,10 @@
  *   dateModified  <- article:modified_time, else the node's datePublished
  *   datePublished <- article:published_time, only when the node has none
  *
+ * It also drops JSON-LD blocks that carry nothing but an @context (three legal
+ * pages had one: an empty `{"@context":"https://schema.org"}` is invalid
+ * structured data and shows up as an error in Search Console).
+ *
  * Runs after scripts/inject-social-meta.js, because that is what puts the
  * og:image meta tags on the page.
  */
@@ -48,9 +52,20 @@ function main() {
   console.log('\n🧩 Completing Article structured data (image, dateModified)...\n');
   let pages = 0;
   let nodesFixed = 0;
+  let emptyDropped = 0;
 
   for (const file of walk(DIST)) {
-    const html = fs.readFileSync(file, 'utf-8');
+    let html = fs.readFileSync(file, 'utf-8');
+    // Empty blocks first, on every page.
+    const stripped = html.replace(LD_RE, (whole, open, body) => {
+      try {
+        const j = JSON.parse(body);
+        if (j && !Array.isArray(j) && Object.keys(j).every((k) => k === '@context')) { emptyDropped++; return ''; }
+      } catch { /* leave it for the validators */ }
+      return whole;
+    });
+    if (stripped !== html) { fs.writeFileSync(file, stripped); html = stripped; }
+
     if (!/"@type"\s*:\s*"(?:Article|BlogPosting|NewsArticle)"/.test(html)) continue;
 
     const ogImage = meta(html, 'og:image');
@@ -78,7 +93,7 @@ function main() {
     if (changed) { fs.writeFileSync(file, out); pages++; }
   }
 
-  console.log(`   ✓ ${nodesFixed} Article node(s) completed on ${pages} page(s)\n`);
+  console.log(`   ✓ ${nodesFixed} Article node(s) completed on ${pages} page(s), ${emptyDropped} empty block(s) dropped\n`);
 }
 
 main();

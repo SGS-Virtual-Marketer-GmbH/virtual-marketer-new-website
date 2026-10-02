@@ -5,7 +5,8 @@ build/
 .env
 .env.local
 *.swp
-# dist/ is intentionally committed — see README.md "Note on dist/"
+# dist/ is build output, produced by npm run build and by the pipeline in ci/
+dist/
 
 # backend/ (booking + contact API) — local SQLite data, never committed
 *.sqlite3

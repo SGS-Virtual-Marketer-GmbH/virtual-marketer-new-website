@@ -9,7 +9,7 @@
  * regenerated from scratch on every build and the compiled CSS needs to
  * exist before/independently of that step.
  */
-const SOURCE = '/home/fabian-stamminger/tmp_vm_scrape/virtual-marketer.de';
+const SOURCE = process.env.VM_SOURCE_DIR || '/home/fabian-stamminger/tmp_vm_scrape/virtual-marketer.de';
 
 module.exports = {
   content: [

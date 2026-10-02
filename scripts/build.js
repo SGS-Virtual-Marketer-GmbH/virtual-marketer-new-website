@@ -15,7 +15,7 @@ const fs = require('fs');
 const path = require('path');
 const fse = require('fs').promises;
 
-const SOURCE = '/home/fabian-stamminger/tmp_vm_scrape/virtual-marketer.de';
+const SOURCE = process.env.VM_SOURCE_DIR || '/home/fabian-stamminger/tmp_vm_scrape/virtual-marketer.de';
 const DIST = path.join(__dirname, '../dist');
 
 console.log('\n🔨 Building Static Site\n');

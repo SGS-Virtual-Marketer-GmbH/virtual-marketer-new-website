@@ -9,7 +9,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SITE_PATH = '/home/fabian-stamminger/tmp_vm_scrape/virtual-marketer.de';
+const SITE_PATH = process.env.VM_SOURCE_DIR || '/home/fabian-stamminger/tmp_vm_scrape/virtual-marketer.de';
 
 // Simple glob without external dependency
 function globSync(pattern, opts) {

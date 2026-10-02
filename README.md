@@ -33,7 +33,7 @@ docker compose up --build   # http://localhost:8080
 ## Project structure
 
 ```
-├── dist/                    # Build output — deployable static site (gitignored... see note below)
+├── dist/                    # Build output, gitignored (see note below)
 ├── content/blog/            # Body content (HTML fragments) for the 11 new posts
 ├── blog-posts.json          # Metadata for the 11 new posts (title, date, keywords, ...)
 ├── scripts/                  # ~53-step build pipeline; `npm run build` runs them in order
@@ -60,7 +60,7 @@ docker compose up --build   # http://localhost:8080
 └── .claude/launch.json       # Preview-tool config for local development
 ```
 
-> **Note on `dist/`:** it's currently committed so this repo is deployable as-is without an npm install step. If you'd rather build it in CI, add `dist/` to `.gitignore` and add a build step to your deploy pipeline — `npm run build` has zero external dependencies (Node stdlib only), so this is a trivial change.
+> **Note on `dist/`:** it is build output and is not committed. Production is built and deployed by the pipeline in `ci/` (Cloud Build, triggered by Cloud Scheduler, see DEPLOYMENT.md "Automatic build and deploy"). Locally, `npm run build` regenerates it; the scraped source site it starts from is read from `VM_SOURCE_DIR` (default `~/tmp_vm_scrape/virtual-marketer.de`, a copy lives in `gs://virtual-marketer-chat-bot-site-build/scrape/`).
 
 ## Documentation index
 

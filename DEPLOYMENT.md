@@ -795,3 +795,33 @@ What the sweep added that a rollback also has to account for:
   in one line (`minScale: 0`) if that trade is ever wrong.
 - **Logs.** `gcloud run services logs read virtual-marketer-website
   --region=europe-west1 --project=virtual-marketer-chat-bot`
+
+
+---
+
+# Automatic build and deploy (current)
+
+Nothing is built on a laptop any more. `ci/` holds the whole pipeline:
+
+| File | Job |
+|---|---|
+| `ci/cloudbuild.json` | the Cloud Build config: clone main, plan, fetch scrape, `npm run build`, verify, image, deploy |
+| `ci/plan.js` | decides whether a build is needed (new commit on main, or a post date reached since the last deploy); otherwise the run ends after a few seconds |
+| `ci/verify.js` | gate before going live: page count, key files, `audit-seo.js --strict` |
+| `ci/deploy.sh` | `gcloud run services replace` with the new tag, smoke test, automatic rollback, state record, keeps the newest 5 images |
+| `ci/install.sh` | one-time, idempotent setup: private bucket, two service accounts with minimal roles, scrape upload, Cloud Scheduler job |
+| `ci/deploy-now.sh` | build and deploy main right now |
+
+Runs: Cloud Scheduler job `vm-site-build` fires at 00:05, 06:05, 12:05 and 18:05
+(Europe/Berlin). A push to `main` therefore goes live within 6 hours; for
+"now", push and run `bash ci/deploy-now.sh`. Scheduled blog posts go live on
+their date without anyone doing anything.
+
+State and inputs live in `gs://virtual-marketer-chat-bot-site-build`:
+`scrape/` (the scraped WordPress source, read via `VM_SOURCE_DIR`) and
+`state/last-build.json` (commit, date and tag of the deployed build).
+If the scrape changes, re-run `bash ci/install.sh`.
+
+`deploy-service.yaml` carries the placeholder `__WEBSITE_TAG__`; only
+`ci/deploy.sh` fills it in. The API image tag in that file is still edited by hand.
+Rollback by hand: `gcloud run services update-traffic virtual-marketer-website --to-revisions <revision>=100 --region europe-west1`.

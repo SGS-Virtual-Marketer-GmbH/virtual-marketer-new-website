@@ -11,9 +11,9 @@ COPY blog-posts.json ./blog-posts.json
 COPY blog-posts-en.json ./blog-posts-en.json
 COPY dist ./dist-src
 
-# The dist/ folder is pre-built and committed (static content generated from
-# the WordPress export). We copy it as-is and just re-run the sitemap and
-# llms.txt generators so both always reflect this exact build.
+# dist/ is built before this image (npm run build, see ci/cloudbuild.json) and
+# arrives in the build context. We copy it as-is and just re-run the sitemap,
+# llms.txt and dash generators so they always reflect this exact build.
 RUN mkdir -p dist && cp -r dist-src/. dist/ \
   && node scripts/generate-sitemap.js \
   && node scripts/generate-llms-txt.js \

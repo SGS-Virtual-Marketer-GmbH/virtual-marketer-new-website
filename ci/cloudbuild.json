@@ -1,0 +1,80 @@
+{
+  "steps": [
+    {
+      "id": "clone",
+      "name": "gcr.io/cloud-builders/git",
+      "args": [
+        "clone",
+        "--depth=1",
+        "--branch=main",
+        "https://github.com/SGS-Virtual-Marketer-GmbH/virtual-marketer-new-website.git",
+        "/workspace/repo"
+      ]
+    },
+    {
+      "id": "plan",
+      "name": "node:22-bookworm",
+      "dir": "repo",
+      "entrypoint": "node",
+      "args": [
+        "ci/plan.js"
+      ],
+      "env": [
+        "FORCE=${_FORCE}"
+      ]
+    },
+    {
+      "id": "fetch",
+      "name": "gcr.io/google.com/cloudsdktool/cloud-sdk:slim",
+      "dir": "repo",
+      "entrypoint": "bash",
+      "args": [
+        "ci/fetch.sh"
+      ]
+    },
+    {
+      "id": "build",
+      "name": "node:22-bookworm",
+      "dir": "repo",
+      "entrypoint": "bash",
+      "args": [
+        "-c",
+        "[ -f /workspace/build.flag ] || { echo \"nothing to build\"; exit 0; }; npm ci --no-audit --no-fund && npm run build && node ci/verify.js"
+      ],
+      "env": [
+        "VM_SOURCE_DIR=/workspace/scrape/virtual-marketer.de",
+        "NODE_OPTIONS=--max-old-space-size=1536"
+      ]
+    },
+    {
+      "id": "image",
+      "name": "gcr.io/cloud-builders/docker",
+      "dir": "repo",
+      "entrypoint": "bash",
+      "args": [
+        "-c",
+        "[ -f /workspace/build.flag ] || { echo \"nothing to build\"; exit 0; }; TAG=$(cat /workspace/tag); docker build -t europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:$$TAG . && docker push europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:$$TAG"
+      ]
+    },
+    {
+      "id": "deploy",
+      "name": "gcr.io/google.com/cloudsdktool/cloud-sdk:slim",
+      "dir": "repo",
+      "entrypoint": "bash",
+      "args": [
+        "-c",
+        "[ -f /workspace/build.flag ] || { echo \"nothing to build\"; exit 0; }; bash ci/deploy.sh"
+      ]
+    }
+  ],
+  "substitutions": {
+    "_FORCE": "false"
+  },
+  "timeout": "1800s",
+  "serviceAccount": "projects/virtual-marketer-chat-bot/serviceAccounts/vm-site-builder@virtual-marketer-chat-bot.iam.gserviceaccount.com",
+  "options": {
+    "machineType": "E2_MEDIUM",
+    "logging": "CLOUD_LOGGING_ONLY",
+    "dynamicSubstitutions": true
+  }
+}
