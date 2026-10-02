@@ -7,6 +7,6 @@ REPO_URL=https://github.com/SGS-Virtual-Marketer-GmbH/virtual-marketer-new-websi
 IMAGE_BASE=europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website
 BUILDER_SA=vm-site-builder@virtual-marketer-chat-bot.iam.gserviceaccount.com
 SCHEDULER_SA=vm-site-scheduler@virtual-marketer-chat-bot.iam.gserviceaccount.com
-SCHEDULE='5 0,6,12,18 * * *'
+SCHEDULE='5 0 * * *'
 SCHEDULE_TZ=Europe/Berlin
 KEEP_IMAGES=5
