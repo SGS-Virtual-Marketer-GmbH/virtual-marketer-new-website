@@ -152,7 +152,7 @@ const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 const BASE_URL = 'https://virtual-marketer.de';
 const LOGO = '/wp-content/uploads/2023/04/cropped-Virtual-Marketer-Logo-128x128-New.png';
-const CHROME_BIN = '/usr/bin/google-chrome';
+const CHROME_BIN = process.env.CHROME_BIN || '/usr/bin/google-chrome';
 
 const CONTENT_DIR = path.join(ROOT, 'content/whitepaper');
 const FORM_ASSET_SRC = path.join(ROOT, 'assets/lead-magnet');
