@@ -39,7 +39,7 @@
       "entrypoint": "bash",
       "args": [
         "-c",
-        "[ -f /workspace/build.flag ] || { echo \"nothing to build\"; exit 0; }; apt-get update -qq && apt-get install -y -qq --no-install-recommends chromium >/dev/null && npm ci --no-audit --no-fund && npm run build && node ci/verify.js"
+        "[ -f /workspace/build.flag ] || { echo \"nothing to build\"; exit 0; }; apt-get update -qq && apt-get install -y -qq --no-install-recommends chromium poppler-utils python3-fonttools fontconfig >/dev/null && npm ci --no-audit --no-fund && npm run build && node ci/verify.js"
       ],
       "env": [
         "VM_SOURCE_DIR=/workspace/scrape/virtual-marketer.de",
