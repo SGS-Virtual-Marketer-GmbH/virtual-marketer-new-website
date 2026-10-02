@@ -812,8 +812,8 @@ Nothing is built on a laptop any more. `ci/` holds the whole pipeline:
 | `ci/install.sh` | one-time, idempotent setup: private bucket, two service accounts with minimal roles, scrape upload, Cloud Scheduler job |
 | `ci/deploy-now.sh` | build and deploy main right now |
 
-Runs: Cloud Scheduler job `vm-site-build` fires at 00:05, 06:05, 12:05 and 18:05
-(Europe/Berlin). A push to `main` therefore goes live within 6 hours; for
+Runs: Cloud Scheduler job `vm-site-build` fires daily at 13:05
+(Europe/Berlin). A push to `main` therefore goes live by the next 13:05; for
 "now", push and run `bash ci/deploy-now.sh`. Scheduled blog posts go live on
 their date without anyone doing anything.
 
