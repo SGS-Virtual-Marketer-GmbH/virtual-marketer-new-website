@@ -43,7 +43,18 @@
       ],
       "env": [
         "VM_SOURCE_DIR=/workspace/scrape/virtual-marketer.de",
-        "NODE_OPTIONS=--max-old-space-size=1536"
+        "NODE_OPTIONS=--max-old-space-size=1536",
+        "DRY_RUN=${_DRY_RUN}"
+      ]
+    },
+    {
+      "id": "dryrun",
+      "name": "gcr.io/google.com/cloudsdktool/cloud-sdk:slim",
+      "dir": "repo",
+      "entrypoint": "bash",
+      "args": [
+        "-c",
+        "[ -f /workspace/build.flag ] || { echo \"nothing to build\"; exit 0; }; if [ \"${_DRY_RUN}\" = \"true\" ]; then tar czf /workspace/dist.tgz dist && gcloud storage cp /workspace/dist.tgz gs://virtual-marketer-chat-bot-site-build/dryrun/dist.tgz && touch /workspace/dryrun; fi"
       ]
     },
     {
@@ -53,7 +64,7 @@
       "entrypoint": "bash",
       "args": [
         "-c",
-        "[ -f /workspace/build.flag ] || { echo \"nothing to build\"; exit 0; }; TAG=$(cat /workspace/tag); docker build -t europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:$$TAG . && docker push europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:$$TAG"
+        "[ -f /workspace/build.flag ] || { echo \"nothing to build\"; exit 0; }; [ ! -f /workspace/dryrun ] || { echo \"dry run: not deploying\"; exit 0; }; TAG=$(cat /workspace/tag); docker build -t europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:$$TAG . && docker push europe-west1-docker.pkg.dev/virtual-marketer-chat-bot/cloud-run-source-deploy/virtual-marketer-website:$$TAG"
       ]
     },
     {
@@ -63,12 +74,13 @@
       "entrypoint": "bash",
       "args": [
         "-c",
-        "[ -f /workspace/build.flag ] || { echo \"nothing to build\"; exit 0; }; bash ci/deploy.sh"
+        "[ -f /workspace/build.flag ] || { echo \"nothing to build\"; exit 0; }; [ ! -f /workspace/dryrun ] || { echo \"dry run: not deploying\"; exit 0; }; bash ci/deploy.sh"
       ]
     }
   ],
   "substitutions": {
-    "_FORCE": "false"
+    "_FORCE": "false",
+    "_DRY_RUN": "false"
   },
   "timeout": "1800s",
   "serviceAccount": "projects/virtual-marketer-chat-bot/serviceAccounts/vm-site-builder@virtual-marketer-chat-bot.iam.gserviceaccount.com",

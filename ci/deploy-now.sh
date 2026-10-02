@@ -4,5 +4,5 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 source ci/config.sh
-gcloud builds submit --no-source --config ci/cloudbuild.json --substitutions _FORCE=true \
+gcloud builds submit --no-source --config ci/cloudbuild.json --substitutions _FORCE=true,_DRY_RUN=${DRY_RUN:-false} \
   --project "$PROJECT" --region "$REGION"
